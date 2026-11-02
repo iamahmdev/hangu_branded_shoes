@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { WA, wa } from "../data/config";
 import { WhatsAppIcon } from "./WhatsAppButton";
+import { Search } from "lucide-react";
 
 const NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -17,7 +18,7 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenu, setMobileMenu] = useState(false);
-  const { count } = useCart();
+  const { count, openSearch } = useCart();
   const router = useRouter();
 
   useEffect(() => {
@@ -59,6 +60,17 @@ export default function Navbar() {
 
         {/* Right Action Cluster */}
         <div className="nb-actions">
+          {/* Quick Search Button */}
+          <button
+            type="button"
+            className="nb-search-btn"
+            onClick={openSearch}
+            title="Search Shoes"
+            aria-label="Search Shoes"
+          >
+            <Search size={18} />
+          </button>
+
           {/* Quick WhatsApp Concierge Button */}
           <a
             href={wa("Assalam-o-Alaikum! I have a question regarding Hangu Branded Shoes.")}

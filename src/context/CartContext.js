@@ -10,5 +10,35 @@ export function CartProvider({ children }) {
   const setQ = (k, q) => setItems((s) => (q < 1 ? s.filter((i) => i.k !== k) : s.map((i) => (i.k === k ? { ...i, q } : i))));
   const clear = () => setItems([]);
   const sub = items.reduce((a, i) => a + i.price * i.q, 0), ship = !sub || sub >= FREE ? 0 : FEE;
-  return <C.Provider value={{ items, add, setQ, clear, sub, ship, total: sub + ship, count: items.reduce((a, i) => a + i.q, 0) }}>{children}</C.Provider>;
+  const [quickProduct, setQuickProduct] = useState(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  const openQuickOrder = (p) => setQuickProduct(p);
+  const closeQuickOrder = () => setQuickProduct(null);
+  const openSearch = () => setSearchOpen(true);
+  const closeSearch = () => setSearchOpen(false);
+
+  return (
+    <C.Provider
+      value={{
+        items,
+        add,
+        setQ,
+        clear,
+        sub,
+        ship,
+        total: sub + ship,
+        count: items.reduce((a, i) => a + i.q, 0),
+        quickProduct,
+        openQuickOrder,
+        closeQuickOrder,
+        searchOpen,
+        setSearchOpen,
+        openSearch,
+        closeSearch,
+      }}
+    >
+      {children}
+    </C.Provider>
+  );
 }

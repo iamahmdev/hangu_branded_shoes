@@ -1,24 +1,27 @@
 import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
-import { useProducts } from "../hooks/useApi";
+import { useProducts, useRecentSales } from "../hooks/useApi";
 import { CheckCircle2, X } from "lucide-react";
+import { Product } from "../types";
 
-interface RecentCustomerOrder {
-  city: string;
-  name: string;
-  size: string;
-  time: string;
+function formatTimeAgo(isoString: string): string {
+  try {
+    const diffMs = Date.now() - new Date(isoString).getTime();
+    if (diffMs < 0) return "Just now";
+    const diffSec = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSec / 60);
+    const diffHour = Math.floor(diffMin / 60);
+    const diffDay = Math.floor(diffHour / 24);
+
+    if (diffMin < 1) return "Just now";
+    if (diffMin < 60) return `${diffMin} min${diffMin > 1 ? "s" : ""} ago`;
+    if (diffHour < 24) return `${diffHour} hr${diffHour > 1 ? "s" : ""} ago`;
+    if (diffDay < 30) return `${diffDay} day${diffDay > 1 ? "s" : ""} ago`;
+    return "Recently";
+  } catch {
+    return "Recently";
+  }
 }
-
-const RECENT_CUSTOMER_CITIES: RecentCustomerOrder[] = [
-  { city: "Islamabad", name: "Hamza R.", size: "42", time: "3 mins ago" },
-  { city: "Lahore", name: "Bilal K.", size: "43", time: "7 mins ago" },
-  { city: "Peshawar", name: "Zahid Khan", size: "41", time: "12 mins ago" },
-  { city: "Rawalpindi", name: "Usman A.", size: "44", time: "18 mins ago" },
-  { city: "Karachi", name: "Fahad M.", size: "42", time: "25 mins ago" },
-  { city: "Hangu", name: "Zeeshan Khan", size: "40", time: "32 mins ago" },
-  { city: "Kohat", name: "Tariq Shah", size: "43", time: "41 mins ago" },
-];
 
 export default function RecentSalesToast() {
   const [index, setIndex] = useState<number>(0);
@@ -26,34 +29,68 @@ export default function RecentSalesToast() {
   const [closed, setClosed] = useState<boolean>(false);
   const { openQuickOrder } = useCart();
 
-  // Query live shoes from TanStack Query
+  // Query genuine customer orders and live products from TanStack Query
+  const { data: recentSales } = useRecentSales();
   const { data: products } = useProducts();
 
   useEffect(() => {
-    if (closed) return;
+    if (closed || !recentSales || recentSales.length === 0) {
+      setVisible(false);
+      return;
+    }
 
+    // Initial popup delay
     const initialTimer = setTimeout(() => {
       setVisible(true);
     }, 4000);
 
+    // Rotate across genuine sales every 15 seconds
     const interval = setInterval(() => {
       setVisible(false);
       setTimeout(() => {
-        setIndex((prev) => (prev + 1) % RECENT_CUSTOMER_CITIES.length);
+        setIndex((prev) => (prev + 1) % recentSales.length);
         setVisible(true);
       }, 800);
-    }, 16000);
+    }, 15000);
 
     return () => {
       clearTimeout(initialTimer);
       clearInterval(interval);
     };
-  }, [closed]);
+  }, [closed, recentSales]);
 
-  if (closed || !visible || !products || products.length === 0) return null;
+  // If dismissed, or if NO genuine orders exist in MongoDB Atlas, do not show popup
+  if (closed || !visible || !recentSales || recentSales.length === 0) {
+    return null;
+  }
 
-  const current = RECENT_CUSTOMER_CITIES[index % RECENT_CUSTOMER_CITIES.length];
-  const shoe = products[index % products.length] || products[0];
+  const current = recentSales[index % recentSales.length];
+  if (!current) return null;
+
+  // Resolve matching product or build fallback
+  const handleOpenProduct = () => {
+    const matched = products?.find((p) => p.id === current.productId);
+    if (matched) {
+      openQuickOrder(matched);
+    } else {
+      openQuickOrder({
+        id: current.productId,
+        name: current.name,
+        cat: "Shoes",
+        price: current.price,
+        old: current.price + 1000,
+        img: current.img,
+        inStock: true,
+        sizes: [current.size || "42"],
+      } as Product);
+    }
+  };
+
+  const imageSrc = !current.img
+    ? "/images/shoe1.png"
+    : current.img.startsWith("http") || current.img.startsWith("/")
+    ? current.img
+    : `/images/${current.img}`;
 
   return (
     <aside
@@ -65,29 +102,34 @@ export default function RecentSalesToast() {
     >
       <div className="flex items-center gap-3">
         <img
-          src={`/images/${shoe.img}`}
-          alt={shoe.name}
+          src={imageSrc}
+          alt={current.name}
           className="w-12 h-12 rounded-xl object-cover bg-zinc-950 border border-white/10 shrink-0"
         />
         <div className="flex-1 min-w-0 text-left">
           <div className="flex items-center gap-1 text-[11px] text-[#25d366] font-semibold">
             <CheckCircle2 size={12} />
-            <span>Someone in {current.city} purchased</span>
+            <span>
+              {current.customerName
+                ? `${current.customerName} in ${current.city}`
+                : `Someone in ${current.city}`}{" "}
+              purchased
+            </span>
           </div>
           <b
-            onClick={() => openQuickOrder(shoe)}
+            onClick={handleOpenProduct}
             className="text-xs text-white block truncate cursor-pointer hover:text-brand-gold transition-colors"
           >
-            {shoe.name}
+            {current.name}
           </b>
           <div className="flex items-center gap-2 text-[10px] text-zinc-400">
             <span>Size {current.size}</span>
             <span>•</span>
             <span className="font-mono text-brand-gold font-bold">
-              Rs. {shoe.price.toLocaleString()}
+              Rs. {current.price.toLocaleString()}
             </span>
             <span>•</span>
-            <span>{current.time}</span>
+            <span>{formatTimeAgo(current.createdAt)}</span>
           </div>
         </div>
         <button

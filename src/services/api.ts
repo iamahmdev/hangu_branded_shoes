@@ -70,6 +70,18 @@ export interface CreateReviewPayload {
   verified?: boolean;
 }
 
+export interface RecentSale {
+  id: string;
+  customerName: string;
+  city: string;
+  productId: number;
+  name: string;
+  img: string;
+  price: number;
+  size: string;
+  createdAt: string;
+}
+
 export interface CouponVerifyResult {
   success: boolean;
   valid?: boolean;
@@ -139,6 +151,20 @@ export const api = {
       body: JSON.stringify(payload),
     });
     return await res.json();
+  },
+
+  /**
+   * Fetch genuine recent customer orders for RecentSalesToast
+   */
+  async getRecentSales(): Promise<RecentSale[]> {
+    try {
+      const res = await requestApi(`/orders/recent`);
+      if (!res.ok) return [];
+      const json = await res.json();
+      return Array.isArray(json.data) ? json.data : [];
+    } catch {
+      return [];
+    }
   },
 
   /**

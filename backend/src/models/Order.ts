@@ -39,6 +39,8 @@ export interface IOrder extends Document {
   timeline: IOrderTimeline[];
   cancelledAt?: Date;
   cancelReason?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 const OrderSchema = new Schema<IOrder>(

@@ -6,12 +6,14 @@ import {
   getOrders,
   updateOrderStatus,
   deleteOrder,
+  getRecentPublicSales,
 } from "../controllers/orderController.js";
 import { authenticate } from "../middleware/auth.js";
 
 const router = Router();
 
 // Public Order Lifecycle
+router.get("/recent", getRecentPublicSales);
 router.get("/track", trackOrder);
 router.post("/", createOrder);
 router.patch("/:id/cancel", cancelOrder);

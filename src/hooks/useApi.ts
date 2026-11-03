@@ -4,6 +4,7 @@ import {
   CreateOrderPayload,
   CreateInquiryPayload,
   CreateReviewPayload,
+  RecentSale,
 } from "../services/api";
 import { Product } from "../types";
 
@@ -58,6 +59,15 @@ export function useStoreSettings() {
   return useQuery<{ success: boolean; data?: any }>({
     queryKey: ["store-settings"],
     queryFn: () => api.getStoreSettings(),
+  });
+}
+
+export function useRecentSales() {
+  return useQuery<RecentSale[]>({
+    queryKey: ["recentSales"],
+    queryFn: () => api.getRecentSales(),
+    staleTime: 30 * 1000,
+    refetchInterval: 60 * 1000,
   });
 }
 

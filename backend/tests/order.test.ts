@@ -192,5 +192,54 @@ describe("📦 Order Lifecycle & Management API Tests", () => {
     const check = await Order.findOne({ orderId });
     expect(check).toBeNull();
   });
+
+  it("GET /api/orders/recent - returns empty array when no orders exist", async () => {
+    const res = await request(app).get("/api/orders/recent");
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.count).toBe(0);
+    expect(res.body.data).toEqual([]);
+  });
+
+  it("GET /api/orders/recent - returns genuine sales with strict privacy protection", async () => {
+    // Create an order with full customer details
+    await request(app)
+      .post("/api/orders")
+      .send({
+        customer: {
+          name: "Muhammad Bilal",
+          phone: "03001234567",
+          city: "Lahore",
+          address: "House 123, Street 4, Gulberg III",
+        },
+        items: [
+          {
+            productId: 1,
+            name: "Skylite Slip-On Sneaker",
+            quantity: 1,
+            size: "43",
+          },
+        ],
+        paymentMethod: "cod",
+      });
+
+    const res = await request(app).get("/api/orders/recent");
+    expect(res.status).toBe(200);
+    expect(res.body.success).toBe(true);
+    expect(res.body.count).toBe(1);
+
+    const sale = res.body.data[0];
+    expect(sale.customerName).toBe("Muhammad B.");
+    expect(sale.city).toBe("Lahore");
+    expect(sale.name).toBe("Skylite Slip-On Sneaker");
+    expect(sale.size).toBe("43");
+    expect(sale.price).toBe(6000);
+    expect(sale.createdAt).toBeDefined();
+
+    // STRICT PRIVACY CHECKS: No sensitive customer data exposed
+    expect(res.text).not.toContain("03001234567");
+    expect(res.text).not.toContain("House 123");
+    expect(res.text).not.toContain("Gulberg III");
+  });
 });
 

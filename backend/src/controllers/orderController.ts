@@ -251,6 +251,68 @@ export async function updateOrderStatus(req: Request, res: Response): Promise<vo
   }
 }
 
+export async function getRecentPublicSales(req: Request, res: Response): Promise<void> {
+  try {
+    const orders = await Order.find({ status: { $ne: "cancelled" } })
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .select("customer.name customer.city items createdAt");
+
+    const recentSales: Array<{
+      id: string;
+      customerName: string;
+      city: string;
+      productId: number;
+      name: string;
+      img: string;
+      price: number;
+      size: string;
+      createdAt: string;
+    }> = [];
+
+    for (const order of orders) {
+      const rawName = order.customer?.name?.trim() || "";
+      let maskedName = "Someone";
+      if (rawName) {
+        const parts = rawName.split(/\s+/);
+        if (parts.length === 1) {
+          maskedName = parts[0];
+        } else {
+          const first = parts[0];
+          const lastInitial = parts[parts.length - 1][0]?.toUpperCase() || "";
+          maskedName = lastInitial ? `${first} ${lastInitial}.` : first;
+        }
+      }
+
+      const city = order.customer?.city?.trim() || "Pakistan";
+
+      if (Array.isArray(order.items)) {
+        for (const item of order.items) {
+          recentSales.push({
+            id: `${order._id}-${item.productId}-${item.size || "default"}`,
+            customerName: maskedName,
+            city,
+            productId: item.productId,
+            name: item.name,
+            img: item.img,
+            price: item.price,
+            size: item.size || "42",
+            createdAt: order.createdAt ? order.createdAt.toISOString() : new Date().toISOString(),
+          });
+        }
+      }
+    }
+
+    res.json({
+      success: true,
+      count: recentSales.length,
+      data: recentSales.slice(0, 10),
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
 export async function deleteOrder(req: Request, res: Response): Promise<void> {
   try {
     const { id } = req.params;

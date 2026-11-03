@@ -72,7 +72,12 @@ export async function getCategories(req: Request, res: Response): Promise<void> 
     const counts = await Promise.all(
       distinctCategories.map(async (name) => {
         const count = await Product.countDocuments({ cat: name });
-        return { name, count };
+        const sampleProduct = await Product.findOne({ cat: name }).select("img");
+        return {
+          name,
+          count,
+          img: sampleProduct?.img || "/images/p1.jpg",
+        };
       })
     );
 

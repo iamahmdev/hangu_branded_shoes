@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useCategories } from "../hooks/useApi";
+import { resolveProductImage } from "../utils/image";
 
 export default function Categories() {
   const { data: categories, isLoading, isError } = useCategories();
@@ -27,7 +28,7 @@ export default function Categories() {
           className="cat glass group relative overflow-hidden rounded-3xl block h-64 border border-white/10"
         >
           <img
-            src={`/images/${c.img}`}
+            src={resolveProductImage(c.img)}
             alt={c.name}
             className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
           />

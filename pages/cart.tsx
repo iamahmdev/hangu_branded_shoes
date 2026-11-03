@@ -4,6 +4,7 @@ import Layout from "../src/components/Layout";
 import { useCart } from "../src/context/CartContext";
 import { useVerifyCoupon } from "../src/hooks/useApi";
 import { Tag, Check, ArrowRight } from "lucide-react";
+import { resolveProductImage } from "../src/utils/image";
 
 export default function Cart() {
   const { items, setQ, sub, ship } = useCart();
@@ -74,7 +75,7 @@ export default function Cart() {
                   key={i.k}
                 >
                   <img
-                    src={"/images/" + i.img}
+                    src={resolveProductImage(i.img)}
                     alt={i.name}
                     className="w-20 h-20 rounded-xl object-cover bg-zinc-900 border border-white/10"
                   />

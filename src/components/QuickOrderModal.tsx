@@ -5,6 +5,7 @@ import { useCart } from "../context/CartContext";
 import { SIZES, wa } from "../data/config";
 import { WhatsAppIcon } from "./WhatsAppButton";
 import { X, ShieldCheck, PackageCheck, RotateCcw, ArrowRight } from "lucide-react";
+import { resolveProductImage } from "../utils/image";
 
 export default function QuickOrderModal() {
   const { quickProduct, closeQuickOrder, add } = useCart();
@@ -81,7 +82,7 @@ export default function QuickOrderModal() {
           {/* Left: Product Image */}
           <div className="qorder-img-col flex flex-col">
             <div className="qorder-img-box relative bg-zinc-900 rounded-2xl overflow-hidden border border-white/10 aspect-square">
-              <img src={"/images/" + p.img} alt={p.name} className="w-full h-full object-cover" />
+              <img src={resolveProductImage(p.img)} alt={p.name} className="w-full h-full object-cover" />
               {p.tag && <span className="qorder-tag absolute top-3 left-3 bg-brand-red text-white text-[11px] font-bold px-2.5 py-1 rounded-full uppercase">{p.tag}</span>}
               <span className="qorder-discount absolute bottom-3 left-3 bg-black/75 backdrop-blur-md text-brand-gold border border-brand-gold/40 text-[11px] font-bold px-2.5 py-1 rounded-full">Save {discount}%</span>
             </div>

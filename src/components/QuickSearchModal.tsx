@@ -4,6 +4,7 @@ import { useCart } from "../context/CartContext";
 import { useProducts } from "../hooks/useApi";
 import { Product } from "../types";
 import { Search, X, ArrowRight } from "lucide-react";
+import { resolveProductImage } from "../utils/image";
 
 export default function QuickSearchModal() {
   const { searchOpen, closeSearch, openQuickOrder } = useCart();
@@ -96,7 +97,7 @@ export default function QuickSearchModal() {
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <img
-                    src={`/images/${p.img}`}
+                    src={resolveProductImage(p.img)}
                     alt={p.name}
                     className="w-14 h-14 rounded-xl object-cover bg-zinc-900 border border-white/10 shrink-0"
                   />

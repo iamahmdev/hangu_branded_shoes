@@ -7,6 +7,7 @@ import { SIZES, wa } from "../../src/data/config";
 import { useProduct } from "../../src/hooks/useApi";
 import { WhatsAppIcon } from "../../src/components/WhatsAppButton";
 import { PackageCheck, RotateCcw, ShieldCheck, Zap } from "lucide-react";
+import { resolveProductImage } from "../../src/utils/image";
 
 export default function Product() {
   const { query, push } = useRouter();
@@ -82,7 +83,7 @@ export default function Product() {
         {/* Left: Product Image & Badges */}
         <div>
           <div className="pimg glass p-4 relative rounded-3xl overflow-hidden bg-zinc-950/80 border border-white/10">
-            <img src={"/images/" + p.img} alt={p.name} className="w-full object-cover rounded-2xl" />
+            <img src={resolveProductImage(p.img)} alt={p.name} className="w-full object-cover rounded-2xl" />
             {p.tag && (
               <span className="badge absolute top-6 left-6 bg-brand-red text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                 {p.tag}

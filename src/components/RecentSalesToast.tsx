@@ -3,6 +3,7 @@ import { useCart } from "../context/CartContext";
 import { useProducts, useRecentSales } from "../hooks/useApi";
 import { CheckCircle2, X } from "lucide-react";
 import { Product } from "../types";
+import { resolveProductImage } from "../utils/image";
 
 function formatTimeAgo(isoString: string): string {
   try {
@@ -86,11 +87,7 @@ export default function RecentSalesToast() {
     }
   };
 
-  const imageSrc = !current.img
-    ? "/images/shoe1.png"
-    : current.img.startsWith("http") || current.img.startsWith("/")
-    ? current.img
-    : `/images/${current.img}`;
+  const imageSrc = resolveProductImage(current.img);
 
   return (
     <aside

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useCart } from "../context/CartContext";
 import { Product } from "../types";
 import { Zap, Eye } from "lucide-react";
+import { resolveProductImage } from "../utils/image";
 
 interface ProductCardProps {
   p: Product;
@@ -30,7 +31,7 @@ export default function ProductCard({ p }: ProductCardProps) {
     <div className="card glass card-enhanced relative flex flex-col group transition-all duration-300" ref={r} onMouseMove={mv} onMouseLeave={lv}>
       <div className="im relative overflow-hidden rounded-t-[20px]">
         <Link href={"/product/" + p.id} className="card-img-link block">
-          <img src={"/images/" + p.img} alt={p.name} loading="lazy" className="w-full object-cover transition-transform duration-500 group-hover:scale-105" />
+          <img src={resolveProductImage(p.img)} alt={p.name} loading="lazy" className="w-full object-cover transition-transform duration-500 group-hover:scale-105" />
         </Link>
         {p.tag && <span className="badge absolute top-3 left-3 bg-brand-red text-white text-[11px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">{p.tag}</span>}
         {savings > 0 && <span className="card-savings-tag absolute bottom-3 left-3 bg-black/75 backdrop-blur-md text-[#25d366] text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-[#25d366]/30">Save Rs. {savings.toLocaleString()}</span>}

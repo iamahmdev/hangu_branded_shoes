@@ -1,6 +1,6 @@
-import { Product, PaymentAccounts, SocialLinks } from "../types";
+import { PaymentAccounts, SocialLinks } from "../types";
 
-// 👉 WhatsApp number (country code ke saath, + ke baghair)
+// 👉 WhatsApp Configuration
 export const WA: string = "923333147691";
 export const SHOP: string = "Hangu Branded Shoes";
 
@@ -9,28 +9,20 @@ export const wa = (t?: string): string => {
   return `https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
 };
 
-// 👉 Social Media Links
+// 👉 Official Social Media Links
 export const SOCIALS: SocialLinks = {
   instagram: "https://instagram.com/hangubrandedshoes",
   tiktok: "https://tiktok.com/@hangubrandedshoes",
 };
 
-export const products: Product[] = [
-  { id: 1, name: "Skylite Slip-On Sneaker", cat: "Sneakers", price: 6499, old: 7999, img: "p1.jpg", tag: "New" },
-  { id: 2, name: "Cloud Run Pro", cat: "Sneakers", price: 8999, old: 10999, img: "p2.jpg", tag: "Hot" },
-  { id: 3, name: "Xarasoft Air Comfort", cat: "Comfort", price: 7499, old: 8999, img: "p3.jpg", tag: "Best Seller" },
-  { id: 4, name: "Executive Derby", cat: "Formal", price: 7999, old: 9499, img: "p4.jpg", tag: "Premium" },
-  { id: 5, name: "Gentleman Loafer", cat: "Formal", price: 6999, old: 8499, img: "p5.jpg", tag: "New" },
-  { id: 6, name: "Classic Driving Loafer", cat: "Loafers", price: 5999, old: 7299, img: "p6.jpg", tag: "Sale" },
-  { id: 7, name: "Street Sport Runner", cat: "Sneakers", price: 5499, old: 6999, img: "p7.jpg", tag: "Sale" },
-  { id: 8, name: "Leather Casual Slip-On", cat: "Comfort", price: 6299, old: 7599, img: "p9.jpg", tag: "Limited" },
-];
-
+// Available standard EU/PK shoe sizes
 export const SIZES: string[] = ["40", "41", "42", "43", "44", "45"];
-export const FREE: number = 5000;
-export const FEE: number = 250; // Rs. 5000 se upar delivery free
 
-// 👉 Online payment accounts
+// Free shipping threshold and standard fee
+export const FREE: number = 5000;
+export const FEE: number = 250;
+
+// 👉 Payment Accounts
 export const PAY: PaymentAccounts = {
   jazzcash: { name: "JazzCash", acc: "0333-3147691", title: "Hangu Branded Shoes" },
   easypaisa: { name: "EasyPaisa", acc: "0333-3147691", title: "Hangu Branded Shoes" },

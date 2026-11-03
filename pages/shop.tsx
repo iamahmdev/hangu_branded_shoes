@@ -1,54 +1,58 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
+import { useRouter } from "next/router";
 import Layout from "../src/components/Layout";
 import ProductCard from "../src/components/ProductCard";
-import Reveal from "../src/components/Reveal";
-import { products, SIZES } from "../src/data/config";
-import { Product } from "../src/types";
+import { useProducts, useCategories } from "../src/hooks/useApi";
 import { Search, SlidersHorizontal, RotateCcw } from "lucide-react";
 
 export default function Shop() {
-  const cats = ["All", ...Array.from(new Set(products.map((p) => p.cat)))];
+  const router = useRouter();
   const [selectedCat, setSelectedCat] = useState<string>("All");
-  const [selectedSize, setSelectedSize] = useState<string>("All");
-  const [searchQuery, setSearchQuery] = useState<string>("" );
+  const [searchQuery, setSearchQuery] = useState<string>("");
   const [sortBy, setSortBy] = useState<string>("featured");
 
-  const filteredProducts = useMemo(() => {
-    let list: Product[] = [...products];
-
-    if (selectedCat !== "All") {
-      list = list.filter((p) => p.cat === selectedCat);
+  // Sync category with URL query param if present
+  useEffect(() => {
+    if (router.isReady && router.query.cat) {
+      setSelectedCat(String(router.query.cat));
     }
+  }, [router.isReady, router.query.cat]);
 
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      list = list.filter(
-        (p) =>
-          p.name.toLowerCase().includes(q) ||
-          p.cat.toLowerCase().includes(q) ||
-          (p.tag && p.tag.toLowerCase().includes(q))
-      );
+  // Query categories from API
+  const { data: categoriesData } = useCategories();
+  const cats = useMemo(() => {
+    const list = ["All"];
+    if (categoriesData && categoriesData.length > 0) {
+      categoriesData.forEach((c) => {
+        if (!list.includes(c.name)) list.push(c.name);
+      });
+    } else {
+      list.push("Sneakers", "Comfort", "Formal", "Loafers");
     }
-
-    if (sortBy === "price-low") {
-      list.sort((a, b) => a.price - b.price);
-    } else if (sortBy === "price-high") {
-      list.sort((a, b) => b.price - a.price);
-    } else if (sortBy === "discount") {
-      list.sort((a, b) => b.old - b.price - (a.old - a.price));
-    }
-
     return list;
-  }, [selectedCat, searchQuery, sortBy]);
+  }, [categoriesData]);
+
+  // Query products directly from database API using TanStack Query
+  const {
+    data: products,
+    isLoading,
+    isError,
+  } = useProducts({
+    cat: selectedCat !== "All" ? selectedCat : undefined,
+    search: searchQuery.trim() || undefined,
+    sort: sortBy !== "featured" ? sortBy : undefined,
+  });
 
   const hasActiveFilters =
-    selectedCat !== "All" || selectedSize !== "All" || searchQuery.trim() !== "" || sortBy !== "featured";
+    selectedCat !== "All" || searchQuery.trim() !== "" || sortBy !== "featured";
 
   const handleResetFilters = () => {
     setSelectedCat("All");
-    setSelectedSize("All");
     setSearchQuery("");
     setSortBy("featured");
+    if (router.query.cat) {
+      router.push("/shop", undefined, { shallow: true });
+    }
   };
 
   return (
@@ -57,15 +61,19 @@ export default function Shop() {
         <div className="wrap">
           {/* Section Header */}
           <div className="title text-center mb-8">
-            <small className="text-brand-red uppercase tracking-wider text-xs font-bold">EXCLUSIVE FOOTWEAR</small>
-            <h2 className="text-3xl md:text-5xl font-extrabold text-white mt-1">Our Complete Collection</h2>
+            <small className="text-brand-red uppercase tracking-wider text-xs font-bold">
+              EXCLUSIVE FOOTWEAR
+            </small>
+            <h2 className="text-3xl md:text-5xl font-extrabold text-white mt-1">
+              Our Complete Collection
+            </h2>
             <p className="text-zinc-400 max-w-xl mx-auto mt-2.5 text-sm">
               Browse premium sneakers, executive formals, and comfort slip-ons with direct Cash on Delivery all across Pakistan.
             </p>
           </div>
 
           {/* Search & Filter Toolbar */}
-          <div className="shop-filter-panel glass flex flex-wrap items-center justify-between gap-4 p-4 rounded-3xl mb-6">
+          <div className="shop-filter-panel glass flex flex-wrap items-center justify-between gap-4 p-4 rounded-3xl mb-6 border border-white/10">
             {/* Search Input */}
             <div className="shop-search-bar flex items-center gap-2.5 flex-1 min-w-[260px] bg-white/5 border border-white/10 rounded-2xl px-4 py-2.5">
               <Search size={18} className="shop-search-icon text-zinc-400" />
@@ -98,10 +106,11 @@ export default function Shop() {
                   onChange={(e) => setSortBy(e.target.value)}
                   className="shop-sort-select bg-zinc-900 border border-white/10 text-white rounded-xl px-3 py-2 text-xs outline-none"
                 >
-                  <option value="featured">Featured / New</option>
+                  <option value="featured">Featured / Default</option>
                   <option value="price-low">Price: Low to High</option>
                   <option value="price-high">Price: High to Low</option>
-                  <option value="discount">Biggest Discount</option>
+                  <option value="discount">Highest Discount</option>
+                  <option value="newest">Newest Arrivals</option>
                 </select>
               </div>
 
@@ -109,98 +118,58 @@ export default function Shop() {
                 <button
                   type="button"
                   onClick={handleResetFilters}
-                  className="shop-reset-btn inline-flex items-center gap-1.5 bg-brand-red/15 border border-brand-red text-white text-xs font-semibold px-3.5 py-2 rounded-xl"
-                  title="Clear all filters"
+                  className="shop-reset-btn text-xs text-brand-gold hover:underline flex items-center gap-1"
                 >
-                  <RotateCcw size={14} />
+                  <RotateCcw size={13} />
                   <span>Reset</span>
                 </button>
               )}
             </div>
           </div>
 
-          {/* Category Filter Pills */}
-          <div className="shop-cat-pills flex gap-2.5 justify-center flex-wrap mb-5">
-            {cats.map((cat) => (
+          {/* Category Tabs */}
+          <div className="shop-cat-tabs flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
+            {cats.map((c) => (
               <button
-                key={cat}
+                key={c}
                 type="button"
-                onClick={() => setSelectedCat(cat)}
-                className={`shop-pill-btn px-5 py-2 rounded-full text-sm font-semibold transition-all border ${
-                  cat === selectedCat
-                    ? "active bg-gradient-to-r from-brand-red to-brand-redDark border-transparent text-white shadow-glow"
-                    : "border-white/10 text-zinc-400 hover:text-white hover:border-brand-gold"
-                }`}
+                onClick={() => setSelectedCat(c)}
+                className={`shop-cat-pill px-5 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${selectedCat === c
+                  ? "bg-brand-red text-white shadow-lg"
+                  : "glass text-zinc-300 hover:text-white hover:bg-white/10"
+                  }`}
               >
-                {cat}
+                {c}
               </button>
             ))}
           </div>
 
-          {/* Size Filter Pills */}
-          <div className="shop-size-filter-row flex items-center justify-center gap-3 flex-wrap mb-7 p-2.5 px-4 bg-white/[0.02] rounded-2xl">
-            <span className="shop-size-label text-xs font-semibold text-zinc-400">Filter by Size (EU):</span>
-            <div className="shop-size-pills flex gap-2 flex-wrap">
-              <button
-                type="button"
-                onClick={() => setSelectedSize("All")}
-                className={`shop-sz-pill px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                  selectedSize === "All"
-                    ? "active bg-brand-gold border-brand-gold text-black font-bold"
-                    : "bg-white/5 border-white/10 text-zinc-300 hover:text-white"
-                }`}
-              >
-                All Sizes
-              </button>
-              {SIZES.map((sz) => (
-                <button
-                  key={sz}
-                  type="button"
-                  onClick={() => setSelectedSize(sz)}
-                  className={`shop-sz-pill px-3.5 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                    selectedSize === sz
-                      ? "active bg-brand-gold border-brand-gold text-black font-bold"
-                      : "bg-white/5 border-white/10 text-zinc-300 hover:text-white"
-                  }`}
-                >
-                  {sz}
-                </button>
+          {/* Product Results Grid */}
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <div
+                  key={i}
+                  className="glass rounded-3xl h-80 animate-pulse bg-white/5 border border-white/10"
+                />
               ))}
             </div>
-          </div>
-
-          {/* Results Summary Bar */}
-          <div className="shop-results-meta flex justify-between items-center text-xs text-zinc-400 mb-6 px-2">
-            <span>
-              Showing <strong className="text-white">{filteredProducts.length}</strong> {filteredProducts.length === 1 ? "pair" : "pairs"}
-              {selectedCat !== "All" && ` in "${selectedCat}"`}
-              {selectedSize !== "All" && ` (Size ${selectedSize} Available)`}
-            </span>
-            <span className="shop-delivery-pill text-[#25d366]">
-              🚚 Free Delivery Over Rs. 5,000 • 💵 COD Available
-            </span>
-          </div>
-
-          {/* Products Grid */}
-          {filteredProducts.length === 0 ? (
-            <div className="shop-no-results glass text-center p-12 max-w-lg mx-auto rounded-3xl">
-              <h3 className="text-xl font-bold text-white mb-2">No matching shoes found</h3>
-              <p className="text-zinc-400 text-sm">Try searching with another keyword or resetting the category filter.</p>
-              <button
-                type="button"
-                className="btn mt-4"
-                onClick={handleResetFilters}
-              >
-                Show All Shoes
-              </button>
+          ) : products && products.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {products.map((p) => (
+                <ProductCard key={p.id} p={p} />
+              ))}
             </div>
           ) : (
-            <div className="grid">
-              {filteredProducts.map((p, i) => (
-                <Reveal key={p.id} delay={i * 60}>
-                  <ProductCard p={p} />
-                </Reveal>
-              ))}
+            <div className="shop-empty glass p-12 text-center rounded-3xl max-w-md mx-auto my-12 border border-white/10">
+              <span className="text-4xl block mb-3">👟</span>
+              <h3 className="text-lg font-bold text-white">No footwear found</h3>
+              <p className="text-zinc-400 text-xs mt-1 mb-4">
+                No shoes currently match your search or filter parameters.
+              </p>
+              <button type="button" onClick={handleResetFilters} className="btn py-2 px-4 text-xs">
+                Reset All Filters
+              </button>
             </div>
           )}
         </div>

@@ -1,0 +1,29 @@
+import mongoose, { Document, Schema } from "mongoose";
+
+export interface ISetting extends Document {
+  announcementText: string;
+  phone: string;
+  whatsappNumber: string;
+  email: string;
+  address: string;
+  shippingFee: number;
+  freeShippingThreshold: number;
+  isStoreOpen: boolean;
+}
+
+const SettingSchema = new Schema<ISetting>(
+  {
+    announcementText: { type: String, default: "Special 10% OFF with code: HANGU10 | Free Delivery Across Pakistan on Rs. 5000+" },
+    phone: { type: String, default: "+92 345 9680373" },
+    whatsappNumber: { type: String, default: "923459680373" },
+    email: { type: String, default: "info@hangubrandedshoes.com" },
+    address: { type: String, default: "Main Bazar, Hangu, KP, Pakistan" },
+    shippingFee: { type: Number, default: 250 },
+    freeShippingThreshold: { type: Number, default: 5000 },
+    isStoreOpen: { type: Boolean, default: true },
+  },
+  { timestamps: true }
+);
+
+export const Setting = mongoose.model<ISetting>("Setting", SettingSchema);
+

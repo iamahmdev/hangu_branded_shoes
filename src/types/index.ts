@@ -7,6 +7,11 @@ export interface Product {
   img: string;
   tag?: string;
   desc?: string;
+  sizes?: string[];
+  inStock?: boolean;
+  stockCount?: number;
+  brand?: string;
+  featured?: boolean;
 }
 
 export interface CartItem {

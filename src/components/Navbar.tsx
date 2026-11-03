@@ -14,6 +14,7 @@ interface NavLink {
 const NAV_LINKS: NavLink[] = [
   { href: "/", label: "Home" },
   { href: "/shop", label: "Shop" },
+  { href: "/track", label: "Track Order" },
   { href: "/size-guide", label: "Size Guide" },
   { href: "/about", label: "About" },
   { href: "/reviews", label: "Reviews" },
@@ -54,7 +55,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`nb-link relative px-4 py-2 text-[13.5px] font-medium rounded-full transition-all duration-200 ${
+                className={`nb-link relative px-3.5 py-1.5 text-[13px] font-medium rounded-full transition-all duration-200 ${
                   isActive ? "active text-white font-semibold" : "text-zinc-400 hover:text-white"
                 }`}
               >

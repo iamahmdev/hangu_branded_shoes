@@ -1,8 +1,8 @@
-import { useEffect, useState, FormEvent, ChangeEvent } from "react";
-import { products } from "../data/config";
+import { useState, FormEvent, ChangeEvent } from "react";
+import { useReviews, useCreateReview, useProducts } from "../hooks/useApi";
 
 interface ReviewItem {
-  id: number;
+  id: string | number;
   n: string;
   c?: string;
   r: number;
@@ -12,55 +12,80 @@ interface ReviewItem {
   v?: number;
 }
 
-const SEED: ReviewItem[] = [
-  { id: 1, n: "Ali Khan", c: "Peshawar", r: 5, p: "Cloud Run Pro", t: "Incredibly comfortable and the quality feels premium. Delivery took only 3 days.", d: "2 weeks ago", v: 1 },
-  { id: 2, n: "Usman Ghani", c: "Kohat", r: 5, p: "Executive Derby", t: "The finishing on these formal shoes is outstanding. Looks exactly like the photos.", d: "3 weeks ago", v: 1 },
-  { id: 3, n: "Hamza Shah", c: "Islamabad", r: 4, p: "Xarasoft Air Comfort", t: "Very light and cushioned. Perfect for long walks. Would love more colors.", d: "1 month ago", v: 1 },
-  { id: 4, n: "Bilal Ahmad", c: "Hangu", r: 5, p: "Classic Driving Loafer", t: "Cash on Delivery gave me confidence to order. Great service and fast replies on WhatsApp.", d: "1 month ago", v: 1 },
-  { id: 5, n: "Faisal Iqbal", c: "Rawalpindi", r: 4, p: "Street Sport Runner", t: "Good grip and stylish design. Exchange process was smooth when I needed a different size.", d: "2 months ago", v: 1 },
-];
-
 const Stars = ({ n }: { n: number }) => (
   <span className="stars text-brand-gold">
-    {"★".repeat(n)}
-    <i className="text-zinc-600 not-italic">{"★".repeat(5 - n)}</i>
+    {"★".repeat(Math.max(1, Math.min(5, n)))}
+    <i className="text-zinc-600 not-italic">{"★".repeat(Math.max(0, 5 - Math.max(1, Math.min(5, n))))}</i>
   </span>
 );
 
 export default function Reviews() {
-  const [mine, setMine] = useState<ReviewItem[]>([]);
-  const [f, setF] = useState<number>(0);
-  const [r, setR] = useState<number>(0);
-  const [err, setErr] = useState<string>("");
-  const [thx, setThx] = useState<boolean>(false);
-  const [form, setForm] = useState({ n: "", c: "", p: products[0].name, t: "" });
+  const { data: reviewsResponse, isLoading } = useReviews();
+  const { data: products } = useProducts();
+  const createReviewMutation = useCreateReview();
 
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("reviews");
-      if (saved) setMine(JSON.parse(saved));
-    } catch (e) {}
-  }, []);
+  const [filterRating, setFilterRating] = useState<number>(0);
+  const [selectedRating, setSelectedRating] = useState<number>(5);
+  const [errorMsg, setErrorMsg] = useState<string>("");
+  const [successToast, setSuccessToast] = useState<boolean>(false);
+  const [form, setForm] = useState({
+    n: "",
+    c: "",
+    p: "",
+    t: "",
+  });
 
-  const all = [...mine, ...SEED];
-  const avg = (all.reduce((a, x) => a + x.r, 0) / all.length).toFixed(1);
+  const reviewsList: ReviewItem[] = (reviewsResponse?.data || []).map((r: any) => ({
+    id: r._id || r.id,
+    n: r.name,
+    c: r.city || "Pakistan",
+    r: r.rating,
+    p: r.shoeName,
+    t: r.comment,
+    d: r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "Recently",
+    v: r.verified ? 1 : 0,
+  }));
 
-  const set = (k: string) => (e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
-    setForm({ ...form, [k]: e.target.value });
+  const totalReviews = reviewsList.length;
+  const avg =
+    totalReviews > 0
+      ? (reviewsList.reduce((acc, r) => acc + r.r, 0) / totalReviews).toFixed(1)
+      : "5.0";
 
-  const submit = (e: FormEvent) => {
+  const handleChange = (k: string) => (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => setForm({ ...form, [k]: e.target.value });
+
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (!r) return setErr("Please select a star rating.");
-    const m: ReviewItem[] = [{ id: Date.now(), ...form, r, d: "Just now", v: 0 }, ...mine];
-    setMine(m);
-    try {
-      localStorage.setItem("reviews", JSON.stringify(m));
-    } catch (x) {}
-    setForm({ ...form, n: "", c: "", t: "" });
-    setR(0);
-    setErr("");
-    setThx(true);
-    setTimeout(() => setThx(false), 5000);
+    if (!selectedRating) {
+      setErrorMsg("Please select a star rating.");
+      return;
+    }
+
+    const shoeSelection = form.p || products?.[0]?.name || "Skylite Slip-On Sneaker";
+
+    createReviewMutation.mutate(
+      {
+        name: form.n,
+        city: form.c,
+        shoeName: shoeSelection,
+        rating: selectedRating,
+        comment: form.t,
+      },
+      {
+        onSuccess: () => {
+          setForm({ n: "", c: "", p: "", t: "" });
+          setSelectedRating(5);
+          setErrorMsg("");
+          setSuccessToast(true);
+          setTimeout(() => setSuccessToast(false), 5000);
+        },
+        onError: (err: any) => {
+          setErrorMsg(err?.message || "Failed to submit review.");
+        },
+      }
+    );
   };
 
   return (
@@ -70,22 +95,24 @@ export default function Reviews() {
         <h2 className="text-3xl md:text-4xl font-extrabold text-white mt-1">What Our Customers Say</h2>
       </div>
 
-      <div className="glass rsum p-6 rounded-3xl flex flex-wrap items-center justify-around gap-6 mb-10">
+      {/* Aggregate Stats Summary Card */}
+      <div className="glass rsum p-6 rounded-3xl flex flex-wrap items-center justify-around gap-6 mb-10 border border-white/10">
         <div className="avg text-center">
           <b className="text-4xl md:text-5xl font-extrabold text-white block">{avg}</b>
           <Stars n={Math.round(Number(avg))} />
-          <p className="text-zinc-400 text-xs mt-1">Based on {all.length} reviews</p>
+          <p className="text-zinc-400 text-xs mt-1">Based on {totalReviews} customer reviews</p>
         </div>
         <div className="flex flex-col gap-1.5 min-w-[240px]">
           {[5, 4, 3, 2, 1].map((s) => {
-            const c = all.filter((x) => x.r === s).length;
+            const count = reviewsList.filter((x) => x.r === s).length;
+            const pct = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
             return (
               <div className="bar flex items-center gap-2 text-xs text-zinc-400" key={s}>
-                <span className="w-6">{s}★</span>
+                <span className="w-6 font-mono">{s}★</span>
                 <div className="flex-1 bg-white/5 h-2 rounded-full overflow-hidden">
-                  <i className="block bg-brand-gold h-full rounded-full" style={{ width: (c / all.length) * 100 + "%" }} />
+                  <i className="block bg-brand-gold h-full rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
                 </div>
-                <span className="w-6 text-right">{c}</span>
+                <span className="w-6 text-right font-mono">{count}</span>
               </div>
             );
           })}
@@ -93,61 +120,140 @@ export default function Reviews() {
       </div>
 
       <div className="rw grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-8">
-        <form className="glass rform p-6 rounded-3xl flex flex-col gap-3.5" onSubmit={submit}>
+        {/* Write a Review Form */}
+        <form className="glass rform p-6 rounded-3xl flex flex-col gap-3.5 border border-white/10 h-fit" onSubmit={handleSubmit}>
           <h3 className="text-xl font-bold text-white">Write a Review</h3>
-          <p className="text-zinc-400 text-sm">Bought from us? Share your experience.</p>
+          <p className="text-zinc-400 text-xs">Bought from us? Share your experience with shoe fit and sole comfort.</p>
+
           <div className="rate flex gap-1 text-2xl cursor-pointer">
             {[1, 2, 3, 4, 5].map((n) => (
-              <span key={n} className={n <= r ? "on text-brand-gold" : "text-zinc-600"} onClick={() => { setR(n); setErr(""); }}>
+              <span
+                key={n}
+                className={n <= selectedRating ? "on text-brand-gold" : "text-zinc-600"}
+                onClick={() => {
+                  setSelectedRating(n);
+                  setErrorMsg("");
+                }}
+              >
                 ★
               </span>
             ))}
           </div>
-          {err && <div className="rerr text-brand-red text-xs">{err}</div>}
-          <input className="inp w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-brand-red" required placeholder="Your name" value={form.n} onChange={set("n")} />
-          <input className="inp w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-brand-red" placeholder="City" value={form.c} onChange={set("c")} />
-          <select className="inp w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-brand-red" value={form.p} onChange={set("p")}>
-            {products.map((p) => (
-              <option key={p.id} value={p.name}>{p.name}</option>
+
+          {errorMsg && <div className="rerr text-brand-red text-xs">{errorMsg}</div>}
+
+          <input
+            className="inp w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-brand-red"
+            required
+            placeholder="Your full name"
+            value={form.n}
+            onChange={handleChange("n")}
+          />
+
+          <input
+            className="inp w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-brand-red"
+            placeholder="City (e.g. Peshawar, Lahore, Kohat)"
+            value={form.c}
+            onChange={handleChange("c")}
+          />
+
+          <select
+            className="inp w-full bg-zinc-900 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-brand-red"
+            value={form.p || products?.[0]?.name || ""}
+            onChange={handleChange("p")}
+          >
+            {products?.map((p) => (
+              <option key={p.id} value={p.name}>
+                {p.name}
+              </option>
             ))}
           </select>
-          <textarea className="inp w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white text-sm outline-none focus:border-brand-red" required rows={4} placeholder="Tell us about the fit, comfort and quality…" value={form.t} onChange={set("t")} />
-          <button className="btn w-full">Submit Review</button>
+
+          <textarea
+            className="inp w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs outline-none focus:border-brand-red"
+            required
+            rows={3}
+            placeholder="Tell us about the fit, sole cushioning and finish…"
+            value={form.t}
+            onChange={handleChange("t")}
+          />
+
+          <button
+            type="submit"
+            disabled={createReviewMutation.isPending}
+            className="btn w-full py-2.5 text-xs font-bold disabled:opacity-50"
+          >
+            {createReviewMutation.isPending ? "Submitting..." : "Submit Review"}
+          </button>
         </form>
 
+        {/* Reviews List & Filter Chips */}
         <div className="flex flex-col gap-4">
-          {thx && <div className="glass thx p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-[#25d366] text-sm">✅ Thank you! Your review has been posted.</div>}
+          {successToast && (
+            <div className="glass thx p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/40 text-[#25d366] text-sm font-semibold animate-fadeIn">
+              ✅ Thank you! Your review has been saved to the database.
+            </div>
+          )}
+
           <div className="chips flex gap-2 flex-wrap mb-2">
             {[0, 5, 4, 3].map((s) => (
-              <button key={s} className={"sz px-3 py-1.5 rounded-xl text-xs font-semibold border " + (f === s ? "on bg-brand-red border-brand-red text-white" : "border-white/10 text-zinc-400 hover:text-white")} onClick={() => setF(s)}>
-                {s ? s + " ★" : "All"}
+              <button
+                key={s}
+                className={
+                  "sz px-3 py-1.5 rounded-xl text-xs font-semibold border " +
+                  (filterRating === s
+                    ? "on bg-brand-red border-brand-red text-white"
+                    : "border-white/10 text-zinc-400 hover:text-white")
+                }
+                onClick={() => setFilterRating(s)}
+              >
+                {s ? s + " ★" : "All Reviews"}
               </button>
             ))}
           </div>
-          {all
-            .filter((x) => !f || x.r === f)
-            .map((x) => (
-              <div className="glass rcard p-5 rounded-2xl flex flex-col gap-2" key={x.id}>
-                <div className="rtop flex items-center gap-3">
-                  <div className="av w-10 h-10 rounded-full bg-brand-red/20 text-brand-red border border-brand-red/30 flex items-center justify-center font-bold text-sm">{x.n[0]}</div>
-                  <div>
-                    <b className="text-white text-sm block">{x.n}</b>
-                    {x.v ? (
-                      <span className="vb text-[11px] text-[#25d366] font-semibold">✔ Verified Buyer</span>
-                    ) : (
-                      <span className="vb text-[11px] text-brand-gold font-semibold">New</span>
-                    )}
-                    <br />
-                    <small className="text-zinc-500 text-xs">{x.c || "Pakistan"} • {x.d}</small>
+
+          {isLoading ? (
+            <div className="flex flex-col gap-3">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="glass p-5 rounded-2xl h-24 animate-pulse bg-white/5 border border-white/10" />
+              ))}
+            </div>
+          ) : (
+            reviewsList
+              .filter((x) => !filterRating || x.r === filterRating)
+              .map((x) => (
+                <div className="glass rcard p-5 rounded-2xl flex flex-col gap-2 border border-white/10" key={x.id}>
+                  <div className="rtop flex items-center gap-3">
+                    <div className="av w-10 h-10 rounded-full bg-brand-red/20 text-brand-red border border-brand-red/30 flex items-center justify-center font-bold text-sm">
+                      {x.n[0] || "U"}
+                    </div>
+                    <div>
+                      <b className="text-white text-sm block">{x.n}</b>
+                      {x.v ? (
+                        <span className="vb text-[11px] text-[#25d366] font-semibold">✔ Verified Buyer</span>
+                      ) : (
+                        <span className="vb text-[11px] text-brand-gold font-semibold">Verified Review</span>
+                      )}
+                      <br />
+                      <small className="text-zinc-500 text-xs">
+                        {x.c || "Pakistan"} • {x.d}
+                      </small>
+                    </div>
+                    <div style={{ marginLeft: "auto" }}>
+                      <Stars n={x.r} />
+                    </div>
                   </div>
-                  <div style={{ marginLeft: "auto" }}>
-                    <Stars n={x.r} />
-                  </div>
+                  <p className="text-zinc-300 text-sm mt-1 leading-relaxed">{x.t}</p>
+                  <small className="text-zinc-500 text-xs">Shoe: {x.p}</small>
                 </div>
-                <p className="text-zinc-300 text-sm mt-1">{x.t}</p>
-                <small className="text-zinc-500 text-xs">Purchased: {x.p}</small>
-              </div>
-            ))}
+              ))
+          )}
+
+          {!isLoading && reviewsList.length === 0 && (
+            <div className="glass p-8 text-center rounded-2xl text-zinc-400 text-xs">
+              No reviews available yet. Be the first customer to leave feedback!
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -9,7 +9,8 @@ import Offer from "../src/components/Offer";
 import FeatureStrip from "../src/components/FeatureStrip";
 import Reviews from "../src/components/Reviews";
 import { WhatsAppIcon } from "../src/components/WhatsAppButton";
-import { products, wa } from "../src/data/config";
+import { wa } from "../src/data/config";
+import { useProducts } from "../src/hooks/useApi";
 
 const T = (s: string, h: string) => (
   <Reveal>
@@ -21,6 +22,8 @@ const T = (s: string, h: string) => (
 );
 
 export default function Home() {
+  const { data: products, isLoading } = useProducts();
+
   return (
     <Layout title="Hangu Branded Shoes — Luxury Footwear Pakistan">
       <HeroSlider />
@@ -41,9 +44,15 @@ export default function Home() {
       <section className="py-14" style={{ paddingLeft: 0, paddingRight: 0 }}>
         <div className="wrap">{T("NEW ARRIVALS", "Latest Pairs")}</div>
         <div className="srow">
-          {products.map((p) => (
-            <ProductCard key={p.id} p={p} />
-          ))}
+          {isLoading ? (
+            <div className="flex gap-4 overflow-hidden px-4 w-full justify-center">
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="glass w-64 h-80 rounded-2xl animate-pulse bg-white/5 border border-white/10" />
+              ))}
+            </div>
+          ) : (
+            products?.map((p) => <ProductCard key={p.id} p={p} />)
+          )}
         </div>
       </section>
 

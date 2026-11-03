@@ -44,16 +44,17 @@ export async function getReviews(req: Request, res: Response): Promise<void> {
 
 export async function createReview(req: Request, res: Response): Promise<void> {
   try {
-    const { shoeName, userName, city, rating, comment, productId } = req.body;
+    const { shoeName, city, rating, comment, productId } = req.body;
+    const authorName = (req.body.userName || req.body.name || "").trim();
 
-    if (!shoeName || !userName || !city || !rating || !comment) {
+    if (!shoeName || !authorName || !city || !rating || !comment) {
       res.status(400).json({ success: false, message: "Shoe name, your name, city, rating, and comment are required." });
       return;
     }
 
     const review = await Review.create({
       shoeName: shoeName.trim(),
-      userName: userName.trim(),
+      userName: authorName,
       city: city.trim(),
       rating: Number(rating),
       comment: comment.trim(),

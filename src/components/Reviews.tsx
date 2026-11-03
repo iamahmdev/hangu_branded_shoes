@@ -37,11 +37,11 @@ export default function Reviews() {
 
   const reviewsList: ReviewItem[] = (reviewsResponse?.data || []).map((r: any) => ({
     id: r._id || r.id,
-    n: r.name,
+    n: r.userName || r.name || r.n || "Customer",
     c: r.city || "Pakistan",
-    r: r.rating,
-    p: r.shoeName,
-    t: r.comment,
+    r: r.rating || 5,
+    p: r.shoeName || r.productName || "Hangu Branded Shoe",
+    t: r.comment || r.text || "",
     d: r.createdAt ? new Date(r.createdAt).toLocaleDateString() : "Recently",
     v: r.verified ? 1 : 0,
   }));
@@ -68,6 +68,7 @@ export default function Reviews() {
     createReviewMutation.mutate(
       {
         name: form.n,
+        userName: form.n,
         city: form.c,
         shoeName: shoeSelection,
         rating: selectedRating,
@@ -225,10 +226,10 @@ export default function Reviews() {
                 <div className="glass rcard p-5 rounded-2xl flex flex-col gap-2 border border-white/10" key={x.id}>
                   <div className="rtop flex items-center gap-3">
                     <div className="av w-10 h-10 rounded-full bg-brand-red/20 text-brand-red border border-brand-red/30 flex items-center justify-center font-bold text-sm">
-                      {x.n[0] || "U"}
+                      {(x.n && x.n[0]) || "U"}
                     </div>
                     <div>
-                      <b className="text-white text-sm block">{x.n}</b>
+                      <b className="text-white text-sm block">{x.n || "Anonymous Customer"}</b>
                       {x.v ? (
                         <span className="vb text-[11px] text-[#25d366] font-semibold">✔ Verified Buyer</span>
                       ) : (

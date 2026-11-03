@@ -60,7 +60,8 @@ export interface CreateInquiryPayload {
 }
 
 export interface CreateReviewPayload {
-  name: string;
+  name?: string;
+  userName?: string;
   city?: string;
   shoeName: string;
   productId?: number;

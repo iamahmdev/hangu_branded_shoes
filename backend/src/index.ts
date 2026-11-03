@@ -6,8 +6,12 @@ import { seedDatabase } from "./seed.js";
 const DEFAULT_PORT = Number(process.env.PORT) || 5001;
 
 async function startServer(): Promise<void> {
-  await connectDB();
-  await seedDatabase();
+  try {
+    await connectDB();
+    await seedDatabase();
+  } catch (err: any) {
+    console.warn("⚠️ Initial DB connection/seeding notice:", err.message || err);
+  }
 
   const listenOnPort = (port: number) => {
     const server = app.listen(port, () => {

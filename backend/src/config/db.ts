@@ -22,20 +22,9 @@ export async function connectDB(uri?: string): Promise<void> {
   }
 
   try {
-    const isAtlas = mongoUri.includes("mongodb+srv://") || mongoUri.includes(".mongodb.net");
-    const connectionOptions: mongoose.ConnectOptions = {
-      serverSelectionTimeoutMS: 8000,
-      ...(isAtlas
-        ? ({
-            tls: true,
-            secureContext: {
-              secureOptions: crypto.constants.SSL_OP_LEGACY_SERVER_CONNECT,
-            },
-          } as any)
-        : {}),
-    };
-
-    const conn = await mongoose.connect(mongoUri, connectionOptions);
+    const conn = await mongoose.connect(mongoUri, {
+      serverSelectionTimeoutMS: 10000,
+    });
     if (process.env.NODE_ENV !== "test") {
       console.log(`✅ MongoDB Atlas Connected: ${conn.connection.host}`);
     }

@@ -55,9 +55,8 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`nb-link relative px-3.5 py-1.5 text-[13px] font-medium rounded-full transition-all duration-200 ${
-                  isActive ? "active text-white font-semibold" : "text-zinc-400 hover:text-white"
-                }`}
+                className={`nb-link relative px-3.5 py-1.5 text-[13px] font-medium rounded-full transition-all duration-200 ${isActive ? "active text-white font-semibold" : "text-zinc-400 hover:text-white"
+                  }`}
               >
                 {link.label}
                 {isActive && <span className="nb-active-indicator" />}

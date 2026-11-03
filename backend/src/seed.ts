@@ -1,3 +1,4 @@
+import "dotenv/config";
 import bcrypt from "bcryptjs";
 import { connectDB, disconnectDB } from "./config/db.js";
 import { Admin } from "./models/Admin.js";

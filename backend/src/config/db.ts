@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import dns from "dns";
+import crypto from "crypto";
 
 // Ensure SRV records can be resolved on Windows networks where local DNS lacks SRV support
 if (typeof dns.setDefaultResultOrder === "function") {
@@ -21,16 +22,27 @@ export async function connectDB(uri?: string): Promise<void> {
   }
 
   try {
-    const conn = await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 5000,
-    });
+    const isAtlas = mongoUri.includes("mongodb+srv://") || mongoUri.includes(".mongodb.net");
+    const connectionOptions: mongoose.ConnectOptions = {
+      serverSelectionTimeoutMS: 8000,
+      ...(isAtlas
+        ? ({
+            tls: true,
+            secureContext: {
+              secureOptions: crypto.constants.SSL_OP_LEGACY_SERVER_CONNECT,
+            },
+          } as any)
+        : {}),
+    };
+
+    const conn = await mongoose.connect(mongoUri, connectionOptions);
     if (process.env.NODE_ENV !== "test") {
       console.log(`✅ MongoDB Atlas Connected: ${conn.connection.host}`);
     }
   } catch (error: any) {
     console.error("❌ MongoDB Connection Error:", error.message || error);
-    if (process.env.NODE_ENV !== "test" && !mongoUri.includes("<db_password>")) {
-      process.exit(1);
+    if (error.message?.includes("IP") || error.message?.includes("whitelist")) {
+      console.warn("👉 Make sure your IP address is whitelisted (or 0.0.0.0/0 allowed) in MongoDB Atlas Network Access!");
     }
   }
 }

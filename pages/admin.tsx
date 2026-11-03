@@ -46,6 +46,7 @@ import {
   RefreshCw,
   Copy,
 } from "lucide-react";
+import { resolveProductImage } from "../src/utils/image";
 
 type AdminTab =
   | "dashboard"
@@ -709,7 +710,7 @@ export default function AdminPage() {
                               {ord.items.map((it: any, i: number) => (
                                 <img
                                   key={i}
-                                  src={`/images/${it.img}`}
+                                  src={resolveProductImage(it.img)}
                                   alt={it.name}
                                   title={`${it.name} (${it.size}) x${it.quantity}`}
                                   className="w-7 h-7 rounded-full object-cover border border-white/20"
@@ -832,7 +833,7 @@ export default function AdminPage() {
                         <div key={i} className="py-2.5 flex items-center justify-between text-xs">
                           <div className="flex items-center gap-3">
                             <img
-                              src={`/images/${it.img}`}
+                              src={resolveProductImage(it.img)}
                               alt={it.name}
                               className="w-12 h-12 rounded-xl object-cover bg-zinc-900"
                             />
@@ -960,7 +961,7 @@ export default function AdminPage() {
                         <tr key={p.id} className="hover:bg-white/5 transition-colors">
                           <td className="p-3 flex items-center gap-3">
                             <img
-                              src={`/images/${p.img}`}
+                              src={resolveProductImage(p.img)}
                               alt={p.name}
                               className="w-12 h-12 rounded-xl object-cover bg-zinc-900 border border-white/10"
                             />

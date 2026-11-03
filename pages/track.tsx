@@ -13,6 +13,7 @@ import {
   AlertCircle,
   Copy,
 } from "lucide-react";
+import { resolveProductImage } from "../src/utils/image";
 
 export default function TrackOrderPage() {
   const router = useRouter();
@@ -328,7 +329,7 @@ export default function TrackOrderPage() {
                     {order.items.map((item: any, idx: number) => (
                       <div key={idx} className="py-3.5 flex items-center gap-4">
                         <img
-                          src={`/images/${item.img}`}
+                          src={resolveProductImage(item.img)}
                           alt={item.name}
                           className="w-16 h-16 rounded-xl object-cover bg-zinc-900 border border-white/10"
                         />

@@ -12,3 +12,4 @@ export function resolveProductImage(img?: string | null, fallback: string = "/im
   }
   return `/images/${clean}`;
 }
+

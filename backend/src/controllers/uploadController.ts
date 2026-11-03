@@ -28,7 +28,6 @@ export async function uploadImage(req: AuthRequest, res: Response): Promise<void
           {
             folder: "hangu-branded-shoes",
             resource_type: "image",
-            transformation: [{ quality: "auto", fetch_format: "auto" }],
           },
           (error, result) => {
             if (error) return reject(error);

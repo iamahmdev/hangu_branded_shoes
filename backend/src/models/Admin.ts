@@ -4,7 +4,8 @@ import bcrypt from "bcryptjs";
 export interface IAdmin extends Document {
   username: string;
   email: string;
-  passwordHash: string;
+  passwordHash?: string;
+  password?: string;
   name: string;
   role: "superadmin" | "manager" | "support";
   permissions: string[];
@@ -19,8 +20,9 @@ const AdminSchema = new Schema<IAdmin>(
   {
     username: { type: String, required: true, unique: true, trim: true, lowercase: true },
     email: { type: String, required: true, unique: true, trim: true, lowercase: true },
-    passwordHash: { type: String, required: true },
-    name: { type: String, required: true, trim: true },
+    passwordHash: { type: String },
+    password: { type: String },
+    name: { type: String, default: "Admin", trim: true },
     role: { type: String, enum: ["superadmin", "manager", "support"], default: "superadmin" },
     permissions: { type: [String], default: ["*"] },
     isActive: { type: Boolean, default: true },
@@ -32,7 +34,9 @@ const AdminSchema = new Schema<IAdmin>(
 );
 
 AdminSchema.methods.comparePassword = async function (candidate: string): Promise<boolean> {
-  return bcrypt.compare(candidate, this.passwordHash);
+  const hash = this.passwordHash || (this as any).password;
+  if (!hash) return false;
+  return bcrypt.compare(candidate, hash);
 };
 
 export const Admin = mongoose.model<IAdmin>("Admin", AdminSchema);

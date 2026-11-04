@@ -1,7 +1,7 @@
 import Layout from "../src/components/Layout";
 import Reveal from "../src/components/Reveal";
-import { WhatsAppIcon } from "../src/components/WhatsAppButton";
-import { SHOP, WA, wa } from "../src/data/config";
+import { WhatsAppIcon, FacebookIcon, TikTokIcon, InstagramIcon } from "../src/components/WhatsAppButton";
+import { SHOP, WA, wa, SOCIALS } from "../src/data/config";
 import { useStoreSettings } from "../src/hooks/useApi";
 import { Phone, MapPin, Clock, MessageCircle, ShieldCheck, Truck, RotateCcw } from "lucide-react";
 
@@ -12,7 +12,7 @@ export default function Contact() {
   const shopName = settings?.shopName?.trim() || SHOP;
   const whatsappNum = settings?.whatsappNumber?.trim() || WA;
   const phoneNum = settings?.phone?.trim() || "0333-3147691";
-  const address = settings?.address?.trim() || "Main Commercial Bazaar, Hangu District, Khyber Pakhtunkhwa (KP), Pakistan";
+  const address = settings?.address?.trim() || "Hangu tall road tahir markit hangu brand shoes 👟";
   const shopTiming = settings?.shopTiming?.trim() || "8:00 AM to 5:00 PM";
 
   const whatsappMsg = `Assalam-o-Alaikum ${shopName}! I would like to inquire about footwear availability and sizes.`;
@@ -160,6 +160,45 @@ export default function Contact() {
               </div>
             </Reveal>
           </div>
+
+          {/* Official Social Media Channels */}
+          <Reveal delay={450}>
+            <div className="glass p-6 rounded-3xl border border-white/10 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div>
+                <b className="text-white text-base block">Connect on Social Media</b>
+                <p className="text-zinc-400 text-xs">Watch live shoe unboxings, new arrivals & reviews</p>
+              </div>
+              <div className="flex flex-wrap items-center gap-3">
+                <a
+                  href={SOCIALS.tiktok}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-black border border-white/15 hover:border-zinc-400 text-white text-xs font-semibold transition-all"
+                >
+                  <TikTokIcon size={16} color="#fff" />
+                  <span>TikTok</span>
+                </a>
+                <a
+                  href={SOCIALS.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1877f2]/20 border border-[#1877f2]/40 hover:bg-[#1877f2] text-white text-xs font-semibold transition-all"
+                >
+                  <FacebookIcon size={16} color="#fff" />
+                  <span>Facebook</span>
+                </a>
+                <a
+                  href={SOCIALS.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-pink-600/20 border border-pink-500/40 hover:bg-pink-600 text-white text-xs font-semibold transition-all"
+                >
+                  <InstagramIcon size={16} color="#fff" />
+                  <span>Instagram</span>
+                </a>
+              </div>
+            </div>
+          </Reveal>
 
           {/* Reassurance Features Bar */}
           <Reveal delay={500}>

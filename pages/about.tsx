@@ -420,7 +420,7 @@ export default function About() {
                 <div className="ab-store-details flex flex-col gap-2 text-xs text-zinc-300">
                   <div className="ab-store-detail-row flex items-center gap-2">
                     <Store size={18} color="var(--red)" style={{ flexShrink: 0 }} />
-                    <span><strong>Address:</strong> Main Commercial Bazaar, Hangu, KPK, Pakistan</span>
+                    <span><strong>Address:</strong> Hangu tall road tahir markit hangu brand shoes 👟</span>
                   </div>
                   <div className="ab-store-detail-row flex items-center gap-2">
                     <Clock size={18} color="var(--gold)" style={{ flexShrink: 0 }} />

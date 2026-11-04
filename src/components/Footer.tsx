@@ -1,8 +1,14 @@
 import Link from "next/link";
 import { SHOP, WA, wa, SOCIALS } from "../data/config";
-import { WhatsAppIcon, InstagramIcon, TikTokIcon } from "./WhatsAppButton";
+import { WhatsAppIcon, InstagramIcon, TikTokIcon, FacebookIcon } from "./WhatsAppButton";
+import { useStoreSettings } from "../hooks/useApi";
 
 export default function Footer() {
+  const { data: storeSettingsData } = useStoreSettings();
+  const settings = storeSettingsData?.data;
+  const address = settings?.address?.trim() || "Hangu tall road tahir markit hangu brand shoes 👟";
+  const whatsappNum = settings?.whatsappNumber?.trim() || WA;
+  const shopTiming = settings?.shopTiming?.trim() || "8:00 AM to 5:00 PM";
 
   return (
     <footer className="ft-wrap">
@@ -56,7 +62,7 @@ export default function Footer() {
 
           <div className="ft-contact-list mt-4 flex flex-col gap-2.5">
             <a
-              href={wa("Hello! I have a question regarding Hangu Branded Shoes.")}
+              href={wa("Hello! I have a question regarding Hangu Branded Shoes.", whatsappNum)}
               target="_blank"
               rel="noopener noreferrer"
               className="ft-contact-item flex items-center gap-2.5 text-zinc-300 hover:text-white"
@@ -64,28 +70,28 @@ export default function Footer() {
               <span className="ft-icon">📱</span>
               <div>
                 <small className="block text-zinc-500 text-xs">WhatsApp Concierge</small>
-                <b className="text-white text-sm">+{WA}</b>
+                <b className="text-white text-sm">+{whatsappNum}</b>
               </div>
             </a>
             <div className="ft-contact-item flex items-center gap-2.5 text-zinc-300">
               <span className="ft-icon">📍</span>
               <div>
                 <small className="block text-zinc-500 text-xs">Physical Showroom</small>
-                <b className="text-white text-sm">Main Commercial Bazaar, Hangu, KPK</b>
+                <b className="text-white text-sm">{address}</b>
               </div>
             </div>
             <div className="ft-contact-item flex items-center gap-2.5 text-zinc-300">
               <span className="ft-icon">🕒</span>
               <div>
                 <small className="block text-zinc-500 text-xs">Operating Hours</small>
-                <b className="text-white text-sm">Mon – Sun: 10:00 AM – 10:00 PM</b>
+                <b className="text-white text-sm">{shopTiming}</b>
               </div>
             </div>
           </div>
 
           <div className="ft-socials flex items-center gap-3 mt-4">
             <a
-              href={wa("Assalam-o-Alaikum! I want to inquire about footwear.")}
+              href={wa("Assalam-o-Alaikum! I want to inquire about footwear.", whatsappNum)}
               target="_blank"
               rel="noopener noreferrer"
               title="WhatsApp"
@@ -93,6 +99,26 @@ export default function Footer() {
               className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#25d366] hover:border-[#25d366] transition-colors"
             >
               <WhatsAppIcon size={18} color="#fff" />
+            </a>
+            <a
+              href={SOCIALS.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Facebook"
+              aria-label="Facebook"
+              className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#1877f2] hover:border-[#1877f2] transition-colors"
+            >
+              <FacebookIcon size={18} color="#fff" />
+            </a>
+            <a
+              href={SOCIALS.tiktok}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="TikTok"
+              aria-label="TikTok"
+              className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-black hover:border-zinc-600 transition-colors"
+            >
+              <TikTokIcon size={18} color="#fff" />
             </a>
             <a
               href={SOCIALS.instagram}
@@ -103,16 +129,6 @@ export default function Footer() {
               className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-pink-600 hover:border-pink-600 transition-colors"
             >
               <InstagramIcon size={18} color="#fff" />
-            </a>
-            <a
-              href={SOCIALS.tiktok}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="TikTok"
-              aria-label="TikTok"
-              className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-zinc-800 hover:border-zinc-700 transition-colors"
-            >
-              <TikTokIcon size={18} color="#fff" />
             </a>
           </div>
         </div>

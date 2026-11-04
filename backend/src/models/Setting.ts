@@ -24,7 +24,7 @@ const SettingSchema = new Schema<ISetting>(
     phone: { type: String, default: "+92 333 3147691", trim: true },
     whatsappNumber: { type: String, default: "923333147691", trim: true },
     email: { type: String, default: "info@hangubrandedshoes.com", trim: true },
-    address: { type: String, default: "Main Commercial Bazaar, Hangu, KP, Pakistan", trim: true },
+    address: { type: String, default: "Hangu tall road tahir markit hangu brand shoes 👟", trim: true },
     shopTiming: { type: String, default: "8:00 AM to 5:00 PM", trim: true },
     shippingFee: { type: Number, default: 250, min: 0 },
     freeShippingThreshold: { type: Number, default: 5000, min: 0 },

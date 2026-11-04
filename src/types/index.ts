@@ -36,8 +36,9 @@ export interface PaymentAccounts {
 }
 
 export interface SocialLinks {
-  instagram: string;
+  facebook: string;
   tiktok: string;
+  instagram: string;
 }
 
 export interface CartContextType {

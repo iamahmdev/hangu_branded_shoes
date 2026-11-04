@@ -12,8 +12,9 @@ export const wa = (t?: string, customNumber?: string): string => {
 
 // 👉 Official Social Media Links
 export const SOCIALS: SocialLinks = {
+  facebook: "https://www.facebook.com/share/19iiUCxH6i/?mibextid=",
+  tiktok: "https://www.tiktok.com/@hangubrandshoes?_r=1&_t=ZS-9B83WXlEltd",
   instagram: "https://instagram.com/hangubrandedshoes",
-  tiktok: "https://tiktok.com/@hangubrandedshoes",
 };
 
 // Available standard EU/PK shoe sizes

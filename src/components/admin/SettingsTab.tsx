@@ -36,7 +36,7 @@ export default function SettingsTab({
     phone: "0333-3147691",
     whatsappNumber: "923333147691",
     email: "info@hangubrandedshoes.com",
-    address: "Main Commercial Bazaar, Hangu District, Khyber Pakhtunkhwa (KP), Pakistan",
+    address: "Hangu tall road tahir markit hangu brand shoes 👟",
     shopTiming: "8:00 AM to 5:00 PM",
     shippingFee: 250,
     freeShippingThreshold: 5000,

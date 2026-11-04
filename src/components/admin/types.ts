@@ -55,10 +55,6 @@ export interface StoreSettingsFormData {
   jazzcashTitle: string;
   easypaisaNumber: string;
   easypaisaTitle: string;
-  bankName: string;
-  bankAccountTitle: string;
-  bankAccountNumber: string;
-  bankIban: string;
 }
 
 export const ORDER_STATUS_COLORS: Record<string, { bg: string; text: string; border: string }> = {
@@ -69,3 +65,4 @@ export const ORDER_STATUS_COLORS: Record<string, { bg: string; text: string; bor
   delivered: { bg: "bg-green-500/15", text: "text-green-400", border: "border-green-500/30" },
   cancelled: { bg: "bg-red-500/15", text: "text-red-400", border: "border-red-500/30" },
 };
+

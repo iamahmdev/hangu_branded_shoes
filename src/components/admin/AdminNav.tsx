@@ -58,3 +58,4 @@ export default function AdminNav({ activeTab, onTabChange, counts }: AdminNavPro
     </div>
   );
 }
+

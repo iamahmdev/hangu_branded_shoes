@@ -42,7 +42,7 @@ export interface CreateOrderPayload {
   discountAmount?: number;
   couponCode?: string;
   totalAmount: number;
-  paymentMethod: "cod" | "jazzcash" | "easypaisa" | "bank";
+  paymentMethod: "cod" | "jazzcash" | "easypaisa";
   transactionId?: string;
   notes?: string;
 }

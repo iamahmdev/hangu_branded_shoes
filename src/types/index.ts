@@ -33,7 +33,6 @@ export interface PaymentAccount {
 export interface PaymentAccounts {
   jazzcash: PaymentAccount;
   easypaisa: PaymentAccount;
-  bank: PaymentAccount;
 }
 
 export interface SocialLinks {

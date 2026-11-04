@@ -27,10 +27,6 @@ export default function SettingsTab({
     jazzcashTitle: "Hangu Branded Shoes",
     easypaisaNumber: "03333147691",
     easypaisaTitle: "Hangu Branded Shoes",
-    bankName: "Meezan Bank Limited",
-    bankAccountTitle: "Hangu Branded Shoes",
-    bankAccountNumber: "01020304050607",
-    bankIban: "PK00MEZN0000000102030405",
   });
 
   const [saving, setSaving] = useState<boolean>(false);
@@ -47,10 +43,6 @@ export default function SettingsTab({
         jazzcashTitle: initialSettings.jazzcashTitle || prev.jazzcashTitle,
         easypaisaNumber: initialSettings.easypaisaNumber || prev.easypaisaNumber,
         easypaisaTitle: initialSettings.easypaisaTitle || prev.easypaisaTitle,
-        bankName: initialSettings.bankName || prev.bankName,
-        bankAccountTitle: initialSettings.bankAccountTitle || prev.bankAccountTitle,
-        bankAccountNumber: initialSettings.bankAccountNumber || prev.bankAccountNumber,
-        bankIban: initialSettings.bankIban || prev.bankIban,
       }));
     }
   }, [initialSettings]);
@@ -81,7 +73,7 @@ export default function SettingsTab({
             <span>Store Configuration & Payment Accounts</span>
           </h3>
           <p className="text-xs text-zinc-400 mt-0.5">
-            Manage live contact channels, delivery rates, and genuine JazzCash / EasyPaisa / Bank accounts
+            Manage live contact channels, delivery rates, and genuine JazzCash / EasyPaisa accounts
           </p>
         </div>
 
@@ -224,19 +216,19 @@ export default function SettingsTab({
           </div>
         </div>
 
-        {/* Section 3: Genuine Payment Accounts (JazzCash, EasyPaisa, Bank Transfer) */}
+        {/* Section 3: Genuine Mobile Payment Accounts (JazzCash & EasyPaisa) */}
         <div className="glass p-6 rounded-3xl border border-white/10">
           <div className="mb-4">
             <h4 className="text-sm font-bold text-white flex items-center gap-2">
               <CreditCard size={16} className="text-brand-gold" />
-              <span>Official Payment Accounts (Displayed on Checkout & WhatsApp Invoices)</span>
+              <span>Official Mobile Payment Accounts (Displayed on Checkout & WhatsApp Invoices)</span>
             </h4>
             <p className="text-xs text-zinc-400 mt-1">
-              Customers who select JazzCash, EasyPaisa, or Direct Bank Transfer will see these exact credentials to make payments.
+              Customers who select JazzCash or EasyPaisa will see these exact mobile account credentials to make payments.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs">
             {/* JazzCash Box */}
             <div className="p-4 rounded-2xl bg-black/40 border border-white/10 flex flex-col gap-3">
               <div className="flex items-center gap-2 text-brand-gold font-bold">
@@ -300,50 +292,6 @@ export default function SettingsTab({
                 />
               </div>
             </div>
-
-            {/* Bank Transfer Box */}
-            <div className="p-4 rounded-2xl bg-black/40 border border-white/10 flex flex-col gap-3">
-              <div className="flex items-center gap-2 text-cyan-400 font-bold">
-                <Building2 size={16} />
-                <span>🏦 Bank Transfer Account</span>
-              </div>
-
-              <div>
-                <label className="text-zinc-400 block mb-1">Bank Name</label>
-                <input
-                  type="text"
-                  required
-                  value={form.bankName}
-                  onChange={(e) => setForm({ ...form, bankName: e.target.value })}
-                  placeholder="Meezan Bank Limited"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white outline-none focus:border-brand-gold"
-                />
-              </div>
-
-              <div>
-                <label className="text-zinc-400 block mb-1">Account Title</label>
-                <input
-                  type="text"
-                  required
-                  value={form.bankAccountTitle}
-                  onChange={(e) => setForm({ ...form, bankAccountTitle: e.target.value })}
-                  placeholder="Hangu Branded Shoes"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white outline-none focus:border-brand-gold"
-                />
-              </div>
-
-              <div>
-                <label className="text-zinc-400 block mb-1">Account / IBAN Number</label>
-                <input
-                  type="text"
-                  required
-                  value={form.bankIban || form.bankAccountNumber}
-                  onChange={(e) => setForm({ ...form, bankIban: e.target.value, bankAccountNumber: e.target.value })}
-                  placeholder="PK00MEZN0000000102030405"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-brand-gold"
-                />
-              </div>
-            </div>
           </div>
         </div>
 
@@ -362,3 +310,4 @@ export default function SettingsTab({
     </div>
   );
 }
+

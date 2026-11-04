@@ -279,9 +279,6 @@ export default function Footer() {
               <span className="pay-chip text-xs bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-zinc-300">
                 📱 EasyPaisa
               </span>
-              <span className="pay-chip text-xs bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-zinc-300">
-                🏦 Bank Transfer
-              </span>
             </div>
           </div>
         </div>

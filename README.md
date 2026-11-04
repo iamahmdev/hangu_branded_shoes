@@ -10,7 +10,7 @@ A modern, high-performance luxury footwear e-commerce web application engineered
 - **📏 Interactive Shoe Size Guide**: Real-time converter for EU (39–46), UK, US Men, and foot length in centimeters and inches, plus home foot measurement instructions.
 - **✨ Luxury Dark Mode Aesthetics**: Custom glassmorphism, fluid SVG waves, ambient radial glows, and micro-interactions.
 - **📱 100% Mobile Responsive**: Dedicated mobile navigation drawer, touch-friendly tap targets, and safe cursor handling.
-- **💳 Payment Methods**: Built-in support for Cash on Delivery (COD), JazzCash, EasyPaisa, and Bank Transfer.
+- **💳 Payment Methods**: Built-in support for Cash on Delivery (COD), JazzCash, and EasyPaisa.
 - **⚡ SEO & Performance Optimized**: Clean semantic markup, structured headings, fast static rendering, and instant navigation.
 
 ---

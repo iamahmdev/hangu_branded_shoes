@@ -13,10 +13,6 @@ export interface ISetting extends Document {
   jazzcashTitle: string;
   easypaisaNumber: string;
   easypaisaTitle: string;
-  bankName: string;
-  bankAccountTitle: string;
-  bankAccountNumber: string;
-  bankIban: string;
 }
 
 const SettingSchema = new Schema<ISetting>(
@@ -33,10 +29,6 @@ const SettingSchema = new Schema<ISetting>(
     jazzcashTitle: { type: String, default: "Hangu Branded Shoes" },
     easypaisaNumber: { type: String, default: "03333147691" },
     easypaisaTitle: { type: String, default: "Hangu Branded Shoes" },
-    bankName: { type: String, default: "Meezan Bank" },
-    bankAccountTitle: { type: String, default: "Hangu Branded Shoes" },
-    bankAccountNumber: { type: String, default: "01020304050607" },
-    bankIban: { type: String, default: "PK00MEZN0000000102030405" },
   },
   { timestamps: true }
 );

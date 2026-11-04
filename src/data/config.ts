@@ -26,5 +26,4 @@ export const FEE: number = 250;
 export const PAY: PaymentAccounts = {
   jazzcash: { name: "JazzCash", acc: "0333-3147691", title: "Hangu Branded Shoes" },
   easypaisa: { name: "EasyPaisa", acc: "0333-3147691", title: "Hangu Branded Shoes" },
-  bank: { name: "Bank Transfer", acc: "PK00 BANK 0000 0000 0000 0000", title: "Hangu Branded Shoes" },
 };

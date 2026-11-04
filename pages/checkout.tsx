@@ -7,7 +7,7 @@ import { PAY, wa } from "../src/data/config";
 import { useVerifyCoupon, useCreateOrder, useStoreSettings } from "../src/hooks/useApi";
 import { Tag, Check, ShieldCheck } from "lucide-react";
 
-type PaymentMethod = "cod" | "jazzcash" | "easypaisa" | "bank";
+type PaymentMethod = "cod" | "jazzcash" | "easypaisa";
 
 export default function Checkout() {
   const { items, sub, ship, clear } = useCart();
@@ -29,7 +29,7 @@ export default function Checkout() {
   const { data: storeSettingsData } = useStoreSettings();
   const liveSettings = storeSettingsData?.data;
 
-  const currentPay = {
+  const currentPay: Record<"jazzcash" | "easypaisa", { name: string; acc: string; title: string }> = {
     jazzcash: {
       name: "JazzCash",
       acc: liveSettings?.jazzcashNumber || PAY.jazzcash.acc,
@@ -39,11 +39,6 @@ export default function Checkout() {
       name: "EasyPaisa",
       acc: liveSettings?.easypaisaNumber || PAY.easypaisa.acc,
       title: liveSettings?.easypaisaTitle || PAY.easypaisa.title,
-    },
-    bank: {
-      name: liveSettings?.bankName || PAY.bank.name,
-      acc: liveSettings?.bankIban || liveSettings?.bankAccountNumber || PAY.bank.acc,
-      title: liveSettings?.bankAccountTitle || PAY.bank.title,
     },
   };
 
@@ -200,7 +195,6 @@ export default function Checkout() {
               ["cod", "💵 Cash on Delivery (Inspect shoes before payment)"],
               ["jazzcash", "📱 JazzCash"],
               ["easypaisa", "📱 EasyPaisa"],
-              ["bank", "🏦 Bank Transfer"],
             ].map(([k, l]) => (
               <div
                 key={k}

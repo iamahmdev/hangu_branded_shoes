@@ -30,7 +30,7 @@ export interface IOrder extends Document {
   discountAmount: number;
   couponCode?: string;
   totalAmount: number;
-  paymentMethod: "cod" | "jazzcash" | "easypaisa" | "bank";
+  paymentMethod: "cod" | "jazzcash" | "easypaisa";
   transactionId?: string;
   notes?: string;
   status: "pending" | "confirmed" | "dispatched" | "delivered" | "cancelled";
@@ -70,7 +70,7 @@ const OrderSchema = new Schema<IOrder>(
     totalAmount: { type: Number, required: true },
     paymentMethod: {
       type: String,
-      enum: ["cod", "jazzcash", "easypaisa", "bank"],
+      enum: ["cod", "jazzcash", "easypaisa"],
       default: "cod",
     },
     transactionId: { type: String },

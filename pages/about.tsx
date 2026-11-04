@@ -381,7 +381,6 @@ export default function About() {
                   <li>Cash on Delivery (COD) available nationwide</li>
                   <li>Pay only after verifying the package at your doorstep</li>
                   <li>JazzCash & EasyPaisa instant mobile transfers</li>
-                  <li>Direct Bank Wire Transfer with instant confirmation</li>
                 </ul>
               </div>
             </Reveal>

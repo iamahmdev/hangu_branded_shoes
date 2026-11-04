@@ -13,6 +13,9 @@ export interface ISetting extends Document {
   isStoreOpen: boolean;
   easypaisaNumber: string;
   easypaisaTitle: string;
+  enableCod: boolean;
+  codFee: number;
+  blockedPhoneNumbers: string[];
 }
 
 const SettingSchema = new Schema<ISetting>(
@@ -33,6 +36,9 @@ const SettingSchema = new Schema<ISetting>(
     // Empty by default for production - configured via Admin Settings tab
     easypaisaNumber: { type: String, default: "", trim: true },
     easypaisaTitle: { type: String, default: "", trim: true },
+    enableCod: { type: Boolean, default: true },
+    codFee: { type: Number, default: 0, min: 0 },
+    blockedPhoneNumbers: { type: [String], default: [] },
   },
   { timestamps: true }
 );

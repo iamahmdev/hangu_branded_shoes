@@ -6,6 +6,8 @@ import {
   getOrders,
   updateOrderStatus,
   updateOrderPaymentStatus,
+  markCashCollected,
+  markFakeOrder,
   deleteOrder,
   getRecentPublicSales,
 } from "../controllers/orderController.js";
@@ -23,6 +25,8 @@ router.patch("/:id/cancel", cancelOrder);
 router.get("/", authenticate, getOrders);
 router.patch("/:id/status", authenticate, updateOrderStatus);
 router.patch("/:id/payment", authenticate, updateOrderPaymentStatus);
+router.patch("/:id/cash-collected", authenticate, markCashCollected);
+router.patch("/:id/fake", authenticate, markFakeOrder);
 router.delete("/:id", authenticate, deleteOrder);
 
 export default router;

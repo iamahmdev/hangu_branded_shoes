@@ -129,6 +129,7 @@ export interface AdminDashboardData {
     pendingOrders: number;
     deliveredOrders: number;
     pendingPaymentsCount: number;
+    codPendingCount?: number;
     lowStockCount: number;
     todayOrders: number;
   };
@@ -147,7 +148,7 @@ export function useAdminDashboard(token: string | null) {
 
 export function useAdminOrders(
   token: string | null,
-  params?: { status?: string; paymentStatus?: string; search?: string }
+  params?: { status?: string; paymentStatus?: string; paymentMethod?: string; search?: string }
 ) {
   return useQuery({
     queryKey: ["admin-orders", token, params],
@@ -170,12 +171,56 @@ export function useAdminUpdateOrderStatus() {
     }: {
       token: string;
       orderId: string;
-      payload: { status?: string; courierName?: string; trackingNumber?: string; note?: string };
+      payload: { status?: string; courierName?: string; trackingNumber?: string; deliveryNote?: string; note?: string };
     }) => api.adminUpdateOrderStatus(token, orderId, payload),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
       queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
       queryClient.invalidateQueries({ queryKey: ["order-tracking"] });
+    },
+  });
+}
+
+export function useAdminMarkCashCollected() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      token,
+      orderId,
+      note,
+    }: {
+      token: string;
+      orderId: string;
+      note?: string;
+    }) => api.adminMarkCashCollected(token, orderId, note),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["order-tracking"] });
+    },
+  });
+}
+
+export function useAdminMarkFakeOrder() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      token,
+      orderId,
+      blockPhone,
+      reason,
+    }: {
+      token: string;
+      orderId: string;
+      blockPhone?: boolean;
+      reason?: string;
+    }) => api.adminMarkFakeOrder(token, orderId, blockPhone, reason),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-settings"] });
+      queryClient.invalidateQueries({ queryKey: ["store-settings"] });
     },
   });
 }

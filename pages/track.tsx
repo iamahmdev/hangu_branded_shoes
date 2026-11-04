@@ -81,6 +81,7 @@ export default function TrackOrderPage() {
 
   const getStepProgressIndex = (status: string) => {
     switch (status) {
+      case "awaiting_confirmation":
       case "pending":
         return 0;
       case "confirmed":
@@ -192,16 +193,23 @@ export default function TrackOrderPage() {
 
                   <div className="flex items-center gap-3">
                     <span
-                      className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider ${order.status === "delivered"
-                        ? "bg-green-500/20 text-green-400 border border-green-500/40"
-                        : order.status === "dispatched"
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider ${
+                        order.status === "delivered"
+                          ? "bg-green-500/20 text-green-400 border border-green-500/40"
+                          : order.status === "dispatched"
                           ? "bg-blue-500/20 text-blue-400 border border-blue-500/40"
                           : order.status === "cancelled"
-                            ? "bg-red-500/20 text-red-400 border border-red-500/40"
-                            : "bg-brand-gold/20 text-brand-gold border border-brand-gold/40"
-                        }`}
+                          ? "bg-red-500/20 text-red-400 border border-red-500/40"
+                          : order.status === "awaiting_confirmation"
+                          ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                          : "bg-brand-gold/20 text-brand-gold border border-brand-gold/40"
+                      }`}
                     >
-                      {order.status === "dispatched" ? "🚚 Dispatched" : order.status}
+                      {order.status === "dispatched"
+                        ? "🚚 Dispatched"
+                        : order.status === "awaiting_confirmation"
+                        ? "⏳ Awaiting Confirmation"
+                        : order.status}
                     </span>
 
                     {order.status !== "dispatched" && order.status !== "delivered" && order.status !== "cancelled" && (
@@ -373,8 +381,15 @@ export default function TrackOrderPage() {
                       </div>
                     ) : null}
 
+                    {order.codFee ? (
+                      <div className="flex justify-between text-amber-300">
+                        <span>COD Handling Fee:</span>
+                        <span className="font-mono">Rs. {Number(order.codFee).toLocaleString()}</span>
+                      </div>
+                    ) : null}
+
                     <div className="border-t border-white/10 pt-2 flex justify-between text-base font-extrabold text-white">
-                      <span>Total Amount Payable:</span>
+                      <span>{order.paymentMethod === "cod" ? "Total Payable on Delivery:" : "Total Amount Payable:"}</span>
                       <span className="text-brand-gold font-mono text-lg">
                         Rs. {order.totalAmount.toLocaleString()}
                       </span>
@@ -405,6 +420,14 @@ export default function TrackOrderPage() {
                           {order.customer.address}
                         </p>
                       </div>
+                      {order.deliveryNote && (
+                        <div>
+                          <span className="text-xs text-zinc-500 uppercase block">Delivery Note</span>
+                          <p className="text-zinc-300 text-xs italic leading-relaxed mt-0.5">
+                            {order.deliveryNote}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   </div>
 

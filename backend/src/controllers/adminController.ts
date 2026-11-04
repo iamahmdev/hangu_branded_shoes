@@ -9,11 +9,16 @@ export async function getDashboard(_req: AuthRequest, res: Response): Promise<vo
     const products = await Product.find();
 
     const deliveredOrders = orders.filter((o) => o.status === "delivered").length;
-    const pendingOrders = orders.filter((o) => o.status === "pending").length;
-    const pendingPaymentsCount = orders.filter((o) => o.paymentStatus === "pending_verification").length;
+    const pendingOrders = orders.filter((o) => o.status === "pending" || o.status === "awaiting_confirmation").length;
+    const pendingPaymentsCount = orders.filter(
+      (o) => o.paymentMethod === "easypaisa" && o.paymentStatus === "pending_verification" && o.status !== "cancelled"
+    ).length;
+    const codPendingCount = orders.filter(
+      (o) => o.paymentMethod === "cod" && (o.paymentStatus === "cod_pending" || o.status === "awaiting_confirmation") && o.status !== "cancelled"
+    ).length;
     const totalOrders = orders.length;
 
-    // Total revenue excluding cancelled
+    // Total revenue excluding cancelled (paid orders)
     const totalRevenue = orders
       .filter((o) => o.status !== "cancelled" && o.paymentStatus === "paid")
       .reduce((acc, o) => acc + (o.totalAmount || 0), 0);
@@ -45,6 +50,7 @@ export async function getDashboard(_req: AuthRequest, res: Response): Promise<vo
         pendingOrders,
         deliveredOrders,
         pendingPaymentsCount,
+        codPendingCount,
         lowStockCount,
         todayOrders,
       },

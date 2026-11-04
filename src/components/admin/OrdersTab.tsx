@@ -9,6 +9,8 @@ interface OrdersTabProps {
   onFilterChange: (status: string) => void;
   paymentFilterStatus?: string;
   onPaymentFilterChange?: (status: string) => void;
+  paymentMethodFilter?: string;
+  onPaymentMethodFilterChange?: (method: string) => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onSelectOrder: (order: any) => void;
@@ -19,6 +21,7 @@ interface OrdersTabProps {
 
 const ORDER_STATUS_OPTIONS = [
   "all",
+  "awaiting_confirmation",
   "pending",
   "confirmed",
   "dispatched",
@@ -28,9 +31,16 @@ const ORDER_STATUS_OPTIONS = [
 
 const PAYMENT_STATUS_OPTIONS = [
   { id: "all", label: "All Payments" },
-  { id: "pending_verification", label: "Pending Verification" },
+  { id: "cod_pending", label: "COD Pending" },
+  { id: "pending_verification", label: "EasyPaisa Verification" },
   { id: "paid", label: "Paid" },
   { id: "rejected", label: "Rejected" },
+];
+
+const PAYMENT_METHOD_OPTIONS = [
+  { id: "all", label: "All Methods" },
+  { id: "cod", label: "Cash on Delivery (COD)" },
+  { id: "easypaisa", label: "EasyPaisa" },
 ];
 
 export default function OrdersTab({
@@ -39,6 +49,8 @@ export default function OrdersTab({
   onFilterChange,
   paymentFilterStatus = "all",
   onPaymentFilterChange,
+  paymentMethodFilter = "all",
+  onPaymentMethodFilterChange,
   searchQuery,
   onSearchChange,
   onSelectOrder,
@@ -47,8 +59,12 @@ export default function OrdersTab({
   isLoading = false,
 }: OrdersTabProps) {
   const filteredOrders = orders.filter((o) => {
-    // Payment status filter (client side safeguard)
-    if (paymentFilterStatus !== "all" && (o.paymentStatus || "pending_verification") !== paymentFilterStatus) {
+    // Payment method filter
+    if (paymentMethodFilter !== "all" && (o.paymentMethod || "cod") !== paymentMethodFilter) {
+      return false;
+    }
+    // Payment status filter
+    if (paymentFilterStatus !== "all" && (o.paymentStatus || "cod_pending") !== paymentFilterStatus) {
       return false;
     }
     // Search query
@@ -59,7 +75,8 @@ export default function OrdersTab({
     const phoneMatch = o.customer?.phone?.includes(q);
     const cityMatch = o.customer?.city?.toLowerCase().includes(q);
     const tidMatch = o.transactionId?.toLowerCase().includes(q);
-    return idMatch || nameMatch || phoneMatch || cityMatch || tidMatch;
+    const methodMatch = (o.paymentMethod || "").toLowerCase().includes(q);
+    return idMatch || nameMatch || phoneMatch || cityMatch || tidMatch || methodMatch;
   });
 
   return (
@@ -115,41 +132,80 @@ export default function OrdersTab({
           </div>
         </div>
 
-        {/* Second row: Payment Verification Status Filter */}
-        {onPaymentFilterChange && (
-          <div className="flex items-center gap-2 pt-2 border-t border-white/5 overflow-x-auto no-scrollbar">
-            <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mr-1">
-              Payment:
-            </span>
-            {PAYMENT_STATUS_OPTIONS.map((pst) => {
-              const count =
-                pst.id === "all"
-                  ? orders.length
-                  : orders.filter((o) => (o.paymentStatus || "pending_verification") === pst.id).length;
-              const isSelected = paymentFilterStatus === pst.id;
-              return (
-                <button
-                  key={pst.id}
-                  onClick={() => onPaymentFilterChange(pst.id)}
-                  className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
-                    isSelected
-                      ? "bg-brand-gold text-black font-bold shadow-md"
-                      : "bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  <span>{pst.label}</span>
-                  <span
-                    className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                      isSelected ? "bg-black/20 text-black font-mono font-bold" : "bg-white/10 text-zinc-300"
+        {/* Second row: Payment Method & Payment Verification Status Filters */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/5">
+          {/* Payment Method Pills */}
+          {onPaymentMethodFilterChange && (
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mr-1">
+                Method:
+              </span>
+              {PAYMENT_METHOD_OPTIONS.map((pm) => {
+                const count =
+                  pm.id === "all"
+                    ? orders.length
+                    : orders.filter((o) => (o.paymentMethod || "cod") === pm.id).length;
+                const isSelected = paymentMethodFilter === pm.id;
+                return (
+                  <button
+                    key={pm.id}
+                    onClick={() => onPaymentMethodFilterChange(pm.id)}
+                    className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                      isSelected
+                        ? "bg-brand-gold text-black font-bold shadow-md"
+                        : "bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10"
                     }`}
                   >
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        )}
+                    <span>{pm.label}</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                        isSelected ? "bg-black/20 text-black font-mono font-bold" : "bg-white/10 text-zinc-300"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Payment Status Pills */}
+          {onPaymentFilterChange && (
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mr-1">
+                Payment:
+              </span>
+              {PAYMENT_STATUS_OPTIONS.map((pst) => {
+                const count =
+                  pst.id === "all"
+                    ? orders.length
+                    : orders.filter((o) => (o.paymentStatus || "cod_pending") === pst.id).length;
+                const isSelected = paymentFilterStatus === pst.id;
+                return (
+                  <button
+                    key={pst.id}
+                    onClick={() => onPaymentFilterChange(pst.id)}
+                    className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                      isSelected
+                        ? "bg-white/20 text-white font-bold shadow-md"
+                        : "bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10"
+                    }`}
+                  >
+                    <span>{pst.label}</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                        isSelected ? "bg-white/30 text-white font-mono" : "bg-white/10 text-zinc-300"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Orders Table */}
@@ -252,9 +308,20 @@ export default function OrdersTab({
 
                       {/* Total & Payment Verification Status */}
                       <td className="p-4">
-                        <b className="text-brand-gold font-mono text-sm block font-bold">
-                          Rs. {(ord.totalAmount || 0).toLocaleString()}
-                        </b>
+                        <div className="flex items-center gap-2 mb-1">
+                          <b className="text-brand-gold font-mono text-sm font-bold">
+                            Rs. {(ord.totalAmount || 0).toLocaleString()}
+                          </b>
+                          {ord.paymentMethod === "cod" ? (
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                              COD
+                            </span>
+                          ) : (
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-green-500/20 text-green-300 border border-green-500/30">
+                              EP
+                            </span>
+                          )}
+                        </div>
                         <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                           <span
                             className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase border ${paymentMeta.bg} ${paymentMeta.text} ${paymentMeta.border}`}
@@ -271,7 +338,13 @@ export default function OrdersTab({
                           )}
                         </div>
                         <span className="text-[10px] text-zinc-400 font-mono block mt-1">
-                          TID: <strong className="text-white">{ord.transactionId || "—"}</strong>
+                          {ord.paymentMethod === "cod" ? (
+                            <span className="text-amber-200/80">Cash on Delivery</span>
+                          ) : (
+                            <>
+                              TID: <strong className="text-white">{ord.transactionId || "—"}</strong>
+                            </>
+                          )}
                         </span>
                       </td>
 
@@ -280,7 +353,7 @@ export default function OrdersTab({
                         <span
                           className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase border ${statusMeta.bg} ${statusMeta.text} ${statusMeta.border}`}
                         >
-                          {ord.status}
+                          {ord.status.replace("_", " ")}
                         </span>
                         {ord.courierName && (
                           <div className="flex items-center gap-1 text-[11px] text-zinc-400 mt-1">
@@ -291,6 +364,11 @@ export default function OrdersTab({
                         {ord.trackingNumber && (
                           <span className="text-[10px] text-brand-gold font-mono block">
                             TRK: {ord.trackingNumber}
+                          </span>
+                        )}
+                        {ord.deliveryNote && (
+                          <span className="text-[10px] text-zinc-400 italic block mt-0.5" title={ord.deliveryNote}>
+                            📝 {ord.deliveryNote}
                           </span>
                         )}
                       </td>

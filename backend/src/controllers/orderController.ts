@@ -9,14 +9,124 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     const {
       customer,
       items,
+      paymentMethod = "cod",
       transactionId,
       paymentScreenshot,
       notes,
+      hp,
+      website,
     } = req.body;
 
-    // Validate customer details
+    // 1. Honeypot check for automated bot protection
+    if (hp || website) {
+      res.status(400).json({ success: false, message: "Bot activity detected." });
+      return;
+    }
+
+    // 2. Validate customer information presence
     if (!customer || !customer.name || !customer.phone || !customer.city || !customer.address) {
       res.status(400).json({ success: false, message: "Complete customer information is required." });
+      return;
+    }
+
+    // 3. Delivery address minimum length check (at least 10 characters)
+    const cleanAddress = String(customer.address).trim();
+    if (cleanAddress.length < 10) {
+      res.status(400).json({
+        success: false,
+        message: "Please provide a complete delivery address (at least 10 characters with house/street details).",
+      });
+      return;
+    }
+
+    // 4. Strict Pakistani phone number validation
+    const rawPhone = String(customer.phone).trim();
+    const digitsOnly = rawPhone.replace(/\D/g, "");
+    const isValidPakistaniMobile = /^(03\d{9}|923\d{9})$/.test(digitsOnly);
+
+    if (!isValidPakistaniMobile) {
+      res.status(400).json({
+        success: false,
+        message: "Please provide a valid Pakistani mobile number (e.g. 0333-1234567).",
+      });
+      return;
+    }
+
+    const normalizedPhone = digitsOnly.startsWith("92") ? "0" + digitsOnly.slice(2) : digitsOnly;
+
+    // 5. Check if phone number is on the admin blocked list
+    const storeSettings = await Setting.findOne();
+    if (storeSettings?.blockedPhoneNumbers && Array.isArray(storeSettings.blockedPhoneNumbers)) {
+      const isBlocked = storeSettings.blockedPhoneNumbers.some((bp) => {
+        const cleanBp = bp.replace(/\D/g, "");
+        return cleanBp && (digitsOnly.includes(cleanBp) || cleanBp.includes(digitsOnly.slice(-9)));
+      });
+
+      if (isBlocked) {
+        res.status(403).json({
+          success: false,
+          message: "This phone number is restricted from placing orders. Please contact customer support directly on WhatsApp.",
+        });
+        return;
+      }
+    }
+
+    // 6. Fake Order Rate Limiting (24 Hours Window)
+    const past24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
+    const phoneSuffix = digitsOnly.slice(-9);
+
+    // At most 3 orders per phone number per 24 hours
+    const recentPhoneOrdersCount = await Order.countDocuments({
+      "customer.phone": { $regex: phoneSuffix },
+      createdAt: { $gte: past24Hours },
+      status: { $ne: "cancelled" },
+    });
+
+    if (recentPhoneOrdersCount >= 3) {
+      res.status(429).json({
+        success: false,
+        message: "Daily order limit reached (maximum 3 orders per phone number in 24 hours). Please contact support on WhatsApp.",
+      });
+      return;
+    }
+
+    // At most 5 orders per IP address per 24 hours
+    const clientIp =
+      (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() ||
+      req.socket.remoteAddress ||
+      "127.0.0.1";
+
+    if (clientIp && clientIp !== "127.0.0.1" && clientIp !== "::1") {
+      const recentIpOrdersCount = await Order.countDocuments({
+        customerIp: clientIp,
+        createdAt: { $gte: past24Hours },
+        status: { $ne: "cancelled" },
+      });
+
+      if (recentIpOrdersCount >= 5) {
+        res.status(429).json({
+          success: false,
+          message: "Daily order limit reached from this network (maximum 5 orders per 24 hours). Please contact support on WhatsApp.",
+        });
+        return;
+      }
+    }
+
+    // 7. Validate payment method ("cod" or "easypaisa")
+    const method = String(paymentMethod).toLowerCase().trim();
+    if (method !== "cod" && method !== "easypaisa") {
+      res.status(400).json({
+        success: false,
+        message: "Invalid payment method. Only Cash on Delivery ('cod') and EasyPaisa ('easypaisa') are supported.",
+      });
+      return;
+    }
+
+    if (method === "cod" && storeSettings && storeSettings.enableCod === false) {
+      res.status(400).json({
+        success: false,
+        message: "Cash on Delivery is currently disabled by store management. Please select EasyPaisa or contact WhatsApp.",
+      });
       return;
     }
 
@@ -25,29 +135,45 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    // EasyPaisa TID validation & duplicate check
-    const cleanTid = String(transactionId || "").trim();
-    if (!cleanTid || cleanTid.length < 5) {
-      res.status(400).json({
-        success: false,
-        message: "Valid EasyPaisa Transaction ID (TID) is required to place your order.",
+    // 8. Payment Method Specific Validation
+    let cleanTid = "";
+    let orderPaymentStatus: "cod_pending" | "pending_verification" = "cod_pending";
+    let orderStatus: "awaiting_confirmation" | "pending" = "awaiting_confirmation";
+    let codFee = 0;
+
+    if (method === "easypaisa") {
+      cleanTid = String(transactionId || "").trim();
+      if (!cleanTid || cleanTid.length < 5) {
+        res.status(400).json({
+          success: false,
+          message: "Valid EasyPaisa Transaction ID (TID) is required to place your order.",
+        });
+        return;
+      }
+
+      // Block duplicate TIDs for EasyPaisa
+      const existingOrderWithTid = await Order.findOne({
+        transactionId: { $regex: new RegExp(`^${cleanTid}$`, "i") },
       });
-      return;
+      if (existingOrderWithTid) {
+        res.status(400).json({
+          success: false,
+          message: "This EasyPaisa Transaction ID (TID) has already been submitted for another order. Duplicate TIDs are rejected.",
+        });
+        return;
+      }
+
+      orderPaymentStatus = "pending_verification";
+      orderStatus = "pending";
+    } else {
+      // Cash on Delivery
+      orderPaymentStatus = "cod_pending";
+      orderStatus = "awaiting_confirmation";
+      cleanTid = `COD-${Date.now().toString().slice(-6)}`;
+      codFee = storeSettings?.codFee ?? 0;
     }
 
-    // Security check: Block duplicate TIDs
-    const existingOrderWithTid = await Order.findOne({
-      transactionId: { $regex: new RegExp(`^${cleanTid}$`, "i") },
-    });
-    if (existingOrderWithTid) {
-      res.status(400).json({
-        success: false,
-        message: "This EasyPaisa Transaction ID (TID) has already been submitted for another order. Duplicate TIDs are rejected.",
-      });
-      return;
-    }
-
-    // Security check: Calculate order totals strictly on the server from DB
+    // 9. Calculate order totals strictly on the server from DB
     let calculatedSubtotal = 0;
     const validatedItems = [];
 
@@ -84,17 +210,14 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
         total: itemTotal,
       });
 
-      // Decrement inventory stock atomically
+      // Atomic inventory stock decrement
       await Product.updateOne({ id: product.id }, { $inc: { stock: -item.quantity } });
     }
 
-    // Fetch dynamic store shipping settings from DB
-    const storeSettings = await Setting.findOne();
     const standardFee = storeSettings?.shippingFee ?? 250;
     const freeThreshold = storeSettings?.freeShippingThreshold ?? 5000;
-
     const shippingFee = calculatedSubtotal >= freeThreshold ? 0 : standardFee;
-    const totalAmount = calculatedSubtotal + shippingFee;
+    const totalAmount = calculatedSubtotal + shippingFee + codFee;
 
     const generatedOrderId =
       req.body.orderId ||
@@ -104,25 +227,30 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
       orderId: generatedOrderId,
       customer: {
         name: customer.name.trim(),
-        phone: customer.phone.trim(),
+        phone: normalizedPhone,
         city: customer.city.trim(),
-        address: customer.address.trim(),
+        address: cleanAddress,
       },
       items: validatedItems,
       subtotal: calculatedSubtotal,
       shippingFee,
+      codFee,
       totalAmount,
-      paymentMethod: "easypaisa",
-      paymentStatus: "pending_verification",
+      paymentMethod: method,
+      paymentStatus: orderPaymentStatus,
       transactionId: cleanTid,
       paymentScreenshot: paymentScreenshot ? String(paymentScreenshot).trim() : undefined,
       notes: notes ? String(notes).trim() : undefined,
-      status: "pending",
+      customerIp: clientIp,
+      status: orderStatus,
       timeline: [
         {
-          status: "pending",
+          status: orderStatus,
           timestamp: new Date(),
-          note: `Order placed via EasyPaisa (TID: ${cleanTid}). Pending payment verification.`,
+          note:
+            method === "cod"
+              ? "Order placed via Cash on Delivery. Stock reserved, awaiting shop confirmation call/WhatsApp."
+              : `Order placed via EasyPaisa (TID: ${cleanTid}). Pending payment verification.`,
         },
       ],
     });
@@ -131,7 +259,10 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
       success: true,
       data: order,
       orderId: order.orderId,
-      message: "Order placed successfully! Please send payment screenshot via WhatsApp for instant confirmation.",
+      message:
+        method === "cod"
+          ? "Order placed successfully! We will confirm your order via WhatsApp/Call before dispatch."
+          : "Order placed successfully! Please send payment screenshot via WhatsApp for instant confirmation.",
     });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
@@ -195,18 +326,18 @@ export async function cancelOrder(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    // Restore inventory stock
+    // Restore inventory stock for both COD and EasyPaisa
     for (const item of order.items) {
       await Product.updateOne({ id: item.productId }, { $inc: { stock: item.quantity } });
     }
 
     order.status = "cancelled";
     order.cancelledAt = new Date();
-    order.cancelReason = reason || "Cancelled by customer";
+    order.cancelReason = reason || "Cancelled by customer/admin";
     order.timeline.push({
       status: "cancelled",
       timestamp: new Date(),
-      note: reason || "Cancelled by customer",
+      note: reason || "Cancelled and inventory stock restored",
     });
 
     await order.save();
@@ -223,7 +354,7 @@ export async function cancelOrder(req: Request, res: Response): Promise<void> {
 
 export async function getOrders(req: Request, res: Response): Promise<void> {
   try {
-    const { status, paymentStatus, search } = req.query;
+    const { status, paymentStatus, paymentMethod, search } = req.query;
     const filter: any = {};
 
     if (status && status !== "all") {
@@ -232,6 +363,10 @@ export async function getOrders(req: Request, res: Response): Promise<void> {
 
     if (paymentStatus && paymentStatus !== "all") {
       filter.paymentStatus = paymentStatus;
+    }
+
+    if (paymentMethod && paymentMethod !== "all") {
+      filter.paymentMethod = paymentMethod;
     }
 
     if (search) {
@@ -255,7 +390,7 @@ export async function getOrders(req: Request, res: Response): Promise<void> {
 export async function updateOrderStatus(req: Request, res: Response): Promise<void> {
   try {
     const { id } = req.params;
-    const { status, courierName, trackingNumber, note } = req.body;
+    const { status, courierName, trackingNumber, deliveryNote, note } = req.body;
 
     const order = await Order.findOne({
       $or: [{ orderId: id }, { _id: id.match(/^[0-9a-fA-F]{24}$/) ? id : null }],
@@ -266,8 +401,8 @@ export async function updateOrderStatus(req: Request, res: Response): Promise<vo
       return;
     }
 
-    // Business Constraint: An order can be confirmed ONLY after payment is "paid"
-    if (status === "confirmed" && order.paymentStatus !== "paid") {
+    // Business Rule: EasyPaisa orders can only be confirmed after payment is marked "paid"
+    if (status === "confirmed" && order.paymentMethod === "easypaisa" && order.paymentStatus !== "paid") {
       res.status(400).json({
         success: false,
         message: "Order cannot be confirmed until payment status is marked as 'paid'. Please verify customer EasyPaisa transfer first.",
@@ -284,8 +419,10 @@ export async function updateOrderStatus(req: Request, res: Response): Promise<vo
       });
     }
 
-    if (courierName) order.courierName = courierName;
-    if (trackingNumber) order.trackingNumber = trackingNumber;
+    // Courier and tracking are manual/optional
+    if (courierName !== undefined) order.courierName = courierName;
+    if (trackingNumber !== undefined) order.trackingNumber = trackingNumber;
+    if (deliveryNote !== undefined) order.deliveryNote = deliveryNote;
 
     await order.save();
 
@@ -300,10 +437,10 @@ export async function updateOrderPaymentStatus(req: Request, res: Response): Pro
     const { id } = req.params;
     const { paymentStatus, note } = req.body;
 
-    if (!paymentStatus || !["pending_verification", "paid", "rejected"].includes(paymentStatus)) {
+    if (!paymentStatus || !["pending_verification", "cod_pending", "paid", "rejected"].includes(paymentStatus)) {
       res.status(400).json({
         success: false,
-        message: "Invalid payment status. Must be 'pending_verification', 'paid', or 'rejected'.",
+        message: "Invalid payment status. Must be 'pending_verification', 'cod_pending', 'paid', or 'rejected'.",
       });
       return;
     }
@@ -329,7 +466,99 @@ export async function updateOrderPaymentStatus(req: Request, res: Response): Pro
     res.json({
       success: true,
       data: order,
-      message: `Payment status updated to ${paymentStatus}`,
+      message: `Payment status updated to '${paymentStatus}' successfully`,
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+// Mark COD Cash as collected upon delivery
+export async function markCashCollected(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+    const { note } = req.body;
+
+    const order = await Order.findOne({
+      $or: [{ orderId: id }, { _id: id.match(/^[0-9a-fA-F]{24}$/) ? id : null }],
+    });
+
+    if (!order) {
+      res.status(404).json({ success: false, message: "Order not found" });
+      return;
+    }
+
+    order.paymentStatus = "paid";
+    order.status = "delivered";
+    order.timeline.push({
+      status: "delivered",
+      timestamp: new Date(),
+      note: note || "Cash collected from customer upon delivery. Order completed.",
+    });
+
+    await order.save();
+
+    res.json({
+      success: true,
+      data: order,
+      message: "Cash marked as collected and order marked as delivered.",
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+// Mark order as Fake / Unreachable (cancels order, restores stock, optionally blocks phone)
+export async function markFakeOrder(req: Request, res: Response): Promise<void> {
+  try {
+    const { id } = req.params;
+    const { blockPhone = true, reason = "Marked as fake / unreachable" } = req.body;
+
+    const order = await Order.findOne({
+      $or: [{ orderId: id }, { _id: id.match(/^[0-9a-fA-F]{24}$/) ? id : null }],
+    });
+
+    if (!order) {
+      res.status(404).json({ success: false, message: "Order not found" });
+      return;
+    }
+
+    if (order.status !== "cancelled") {
+      // Restore inventory stock
+      for (const item of order.items) {
+        await Product.updateOne({ id: item.productId }, { $inc: { stock: item.quantity } });
+      }
+
+      order.status = "cancelled";
+      order.cancelledAt = new Date();
+      order.cancelReason = reason;
+      order.timeline.push({
+        status: "cancelled",
+        timestamp: new Date(),
+        note: `Cancelled: ${reason}`,
+      });
+      await order.save();
+    }
+
+    // Add phone to blocked list if requested
+    let phoneBlocked = false;
+    if (blockPhone && order.customer?.phone) {
+      const cleanPhone = order.customer.phone.trim();
+      const setting = await Setting.findOne();
+      if (setting) {
+        if (!setting.blockedPhoneNumbers.includes(cleanPhone)) {
+          setting.blockedPhoneNumbers.push(cleanPhone);
+          await setting.save();
+          phoneBlocked = true;
+        }
+      }
+    }
+
+    res.json({
+      success: true,
+      data: order,
+      phoneBlocked,
+      message: `Order #${order.orderId} cancelled, stock restored${phoneBlocked ? `, and phone ${order.customer?.phone} blocked` : ""}.`,
     });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
@@ -339,6 +568,7 @@ export async function updateOrderPaymentStatus(req: Request, res: Response): Pro
 export async function deleteOrder(req: Request, res: Response): Promise<void> {
   try {
     const { id } = req.params;
+
     const order = await Order.findOneAndDelete({
       $or: [{ orderId: id }, { _id: id.match(/^[0-9a-fA-F]{24}$/) ? id : null }],
     });

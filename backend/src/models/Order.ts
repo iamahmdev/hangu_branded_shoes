@@ -27,13 +27,16 @@ export interface IOrder extends Document {
   items: IOrderItem[];
   subtotal: number;
   shippingFee: number;
+  codFee: number;
   totalAmount: number;
-  paymentMethod: "easypaisa";
-  paymentStatus: "pending_verification" | "paid" | "rejected";
-  transactionId: string;
+  paymentMethod: "cod" | "easypaisa";
+  paymentStatus: "cod_pending" | "pending_verification" | "paid" | "rejected";
+  transactionId?: string;
   paymentScreenshot?: string;
   notes?: string;
-  status: "pending" | "confirmed" | "dispatched" | "delivered" | "cancelled";
+  deliveryNote?: string;
+  customerIp?: string;
+  status: "awaiting_confirmation" | "pending" | "confirmed" | "dispatched" | "delivered" | "cancelled";
   courierName?: string;
   trackingNumber?: string;
   timeline: IOrderTimeline[];
@@ -65,26 +68,30 @@ const OrderSchema = new Schema<IOrder>(
     ],
     subtotal: { type: Number, required: true },
     shippingFee: { type: Number, required: true, default: 0 },
+    codFee: { type: Number, required: true, default: 0 },
     totalAmount: { type: Number, required: true },
     paymentMethod: {
       type: String,
-      enum: ["easypaisa"],
-      default: "easypaisa",
+      enum: ["cod", "easypaisa"],
+      default: "cod",
       required: true,
+      index: true,
     },
     paymentStatus: {
       type: String,
-      enum: ["pending_verification", "paid", "rejected"],
-      default: "pending_verification",
+      enum: ["cod_pending", "pending_verification", "paid", "rejected"],
+      default: "cod_pending",
       index: true,
     },
-    transactionId: { type: String, required: true, trim: true, index: true },
+    transactionId: { type: String, trim: true, index: true },
     paymentScreenshot: { type: String, trim: true },
     notes: { type: String },
+    deliveryNote: { type: String, trim: true },
+    customerIp: { type: String, trim: true, index: true },
     status: {
       type: String,
-      enum: ["pending", "confirmed", "dispatched", "delivered", "cancelled"],
-      default: "pending",
+      enum: ["awaiting_confirmation", "pending", "confirmed", "dispatched", "delivered", "cancelled"],
+      default: "awaiting_confirmation",
       index: true,
     },
     courierName: { type: String },

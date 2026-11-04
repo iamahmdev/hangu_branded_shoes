@@ -10,6 +10,8 @@ import {
   MessageCircle,
   Settings,
   Package,
+  Banknote,
+  Smartphone,
 } from "lucide-react";
 import { wa } from "../../data/config";
 
@@ -32,8 +34,8 @@ export default function DashboardOverview({
 
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
-      {/* 5 Key Analytics Metric Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+      {/* 6 Key Analytics Metric Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
         {/* 1. Revenue */}
         <div className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
@@ -78,26 +80,45 @@ export default function DashboardOverview({
           </div>
         </div>
 
-        {/* 4. Pending Payments */}
+        {/* 4. COD Pending Confirmation */}
         <div
           onClick={() => onNavigateTab("orders")}
-          className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between cursor-pointer hover:border-amber-500/40 transition-all"
+          className="glass p-5 rounded-3xl border border-amber-500/20 bg-amber-500/5 flex flex-col justify-between cursor-pointer hover:border-amber-500/50 transition-all"
         >
-          <div className="flex items-center justify-between text-zinc-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider">Pending Payments</span>
-            <Package size={16} className="text-amber-400" />
+          <div className="flex items-center justify-between text-amber-300 mb-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider">COD Pending</span>
+            <Banknote size={16} className="text-amber-400" />
           </div>
           <div>
-            <b className="text-xl md:text-2xl font-bold text-amber-400 font-mono block">
-              {stats?.pendingPaymentsCount ?? (stats?.pendingOrders || 0)}
+            <b className="text-xl md:text-2xl font-bold text-amber-300 font-mono block">
+              {stats?.codPendingCount || 0}
             </b>
-            <span className="text-[10px] text-amber-300/80 mt-1 block">
-              Needs verification
+            <span className="text-[10px] text-amber-200/70 mt-1 block">
+              Awaiting delivery / confirm
             </span>
           </div>
         </div>
 
-        {/* 5. Low-Stock Alerts */}
+        {/* 5. EasyPaisa Pending Verification */}
+        <div
+          onClick={() => onNavigateTab("orders")}
+          className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between cursor-pointer hover:border-green-500/40 transition-all"
+        >
+          <div className="flex items-center justify-between text-zinc-400 mb-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider">EP Verification</span>
+            <Smartphone size={16} className="text-green-400" />
+          </div>
+          <div>
+            <b className="text-xl md:text-2xl font-bold text-green-400 font-mono block">
+              {stats?.pendingPaymentsCount || 0}
+            </b>
+            <span className="text-[10px] text-zinc-400 mt-1 block">
+              TID needs verify
+            </span>
+          </div>
+        </div>
+
+        {/* 6. Low-Stock Alerts */}
         <div
           onClick={() => onNavigateTab("products")}
           className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between cursor-pointer hover:border-red-500/40 transition-all"

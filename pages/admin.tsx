@@ -16,6 +16,8 @@ import {
   useAdminOrders,
   useAdminUpdateOrderStatus,
   useAdminUpdateOrderPayment,
+  useAdminMarkCashCollected,
+  useAdminMarkFakeOrder,
   useAdminDeleteOrder,
   useProducts,
   useAdminCreateProduct,
@@ -40,6 +42,7 @@ export default function AdminPage() {
   // Filter & Search states
   const [orderFilterStatus, setOrderFilterStatus] = useState<string>("all");
   const [orderPaymentFilter, setOrderPaymentFilter] = useState<string>("all");
+  const [orderPaymentMethodFilter, setOrderPaymentMethodFilter] = useState<string>("all");
   const [orderSearch, setOrderSearch] = useState<string>("");
   const [productSearch, setProductSearch] = useState<string>("");
 
@@ -55,6 +58,7 @@ export default function AdminPage() {
   const ordersQuery = useAdminOrders(token, {
     status: orderFilterStatus,
     paymentStatus: orderPaymentFilter,
+    paymentMethod: orderPaymentMethodFilter,
     search: orderSearch,
   });
   const productsQuery = useProducts({ search: productSearch });
@@ -66,6 +70,8 @@ export default function AdminPage() {
   // ----------------------------------------------------
   const updateOrderStatusMutation = useAdminUpdateOrderStatus();
   const updateOrderPaymentMutation = useAdminUpdateOrderPayment();
+  const markCashCollectedMutation = useAdminMarkCashCollected();
+  const markFakeOrderMutation = useAdminMarkFakeOrder();
   const deleteOrderMutation = useAdminDeleteOrder();
   const createProductMutation = useAdminCreateProduct();
   const updateProductMutation = useAdminUpdateProduct();
@@ -131,13 +137,14 @@ export default function AdminPage() {
     orderId: string,
     status: string,
     courierName?: string,
-    trackingNumber?: string
+    trackingNumber?: string,
+    deliveryNote?: string
   ) => {
     if (!token) return;
     await updateOrderStatusMutation.mutateAsync({
       token,
       orderId,
-      payload: { status, courierName, trackingNumber },
+      payload: { status, courierName, trackingNumber, deliveryNote },
     });
     // Keep local modal in sync
     if (selectedOrder && selectedOrder.orderId === orderId) {
@@ -146,6 +153,7 @@ export default function AdminPage() {
         status,
         courierName: courierName ?? prev.courierName,
         trackingNumber: trackingNumber ?? prev.trackingNumber,
+        deliveryNote: deliveryNote ?? prev.deliveryNote,
       }));
     }
   };
@@ -167,6 +175,24 @@ export default function AdminPage() {
         paymentStatus,
       }));
     }
+  };
+
+  const handleMarkCashCollected = async (orderId: string, note?: string) => {
+    if (!token) return;
+    await markCashCollectedMutation.mutateAsync({ token, orderId, note });
+    if (selectedOrder && selectedOrder.orderId === orderId) {
+      setSelectedOrder((prev: any) => ({
+        ...prev,
+        paymentStatus: "paid",
+        status: "delivered",
+      }));
+    }
+  };
+
+  const handleMarkFakeOrder = async (orderId: string, blockPhone?: boolean, reason?: string) => {
+    if (!token) return;
+    await markFakeOrderMutation.mutateAsync({ token, orderId, blockPhone, reason });
+    setSelectedOrder(null);
   };
 
   const handleDeleteOrder = (orderId: string) => {
@@ -302,6 +328,8 @@ export default function AdminPage() {
             onFilterChange={setOrderFilterStatus}
             paymentFilterStatus={orderPaymentFilter}
             onPaymentFilterChange={setOrderPaymentFilter}
+            paymentMethodFilter={orderPaymentMethodFilter}
+            onPaymentMethodFilterChange={setOrderPaymentMethodFilter}
             searchQuery={orderSearch}
             onSearchChange={setOrderSearch}
             onSelectOrder={setSelectedOrder}
@@ -373,6 +401,8 @@ export default function AdminPage() {
           onClose={() => setSelectedOrder(null)}
           onUpdateStatus={handleUpdateOrderStatus}
           onUpdatePaymentStatus={handleUpdatePaymentStatus}
+          onMarkCashCollected={handleMarkCashCollected}
+          onMarkFakeOrder={handleMarkFakeOrder}
           onDeleteOrder={handleDeleteOrder}
         />
       )}

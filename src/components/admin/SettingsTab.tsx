@@ -12,6 +12,10 @@ import {
   KeyRound,
   Clock,
   AlertCircle,
+  Banknote,
+  ShieldAlert,
+  Trash2,
+  Plus,
 } from "lucide-react";
 
 interface SettingsTabProps {
@@ -38,6 +42,9 @@ export default function SettingsTab({
     freeShippingThreshold: 5000,
     announcementText: "Free Delivery Across Pakistan on Orders Over Rs. 5,000 | 100% Genuine Sole Footwear",
     isStoreOpen: true,
+    enableCod: true,
+    codFee: 0,
+    blockedPhoneNumbers: [],
     easypaisaNumber: "",
     easypaisaTitle: "",
   });
@@ -45,6 +52,7 @@ export default function SettingsTab({
   const [saving, setSaving] = useState<boolean>(false);
   const [savedToast, setSavedToast] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
+  const [newBlockedPhone, setNewBlockedPhone] = useState<string>("");
 
   // Change password states
   const [passwords, setPasswords] = useState({ current: "", next: "", confirm: "" });
@@ -56,12 +64,32 @@ export default function SettingsTab({
       setForm((prev) => ({
         ...prev,
         ...initialSettings,
+        enableCod: initialSettings.enableCod !== false,
+        codFee: initialSettings.codFee ?? 0,
+        blockedPhoneNumbers: Array.isArray(initialSettings.blockedPhoneNumbers) ? initialSettings.blockedPhoneNumbers : [],
         easypaisaNumber: initialSettings.easypaisaNumber ?? "",
         easypaisaTitle: initialSettings.easypaisaTitle ?? "",
         shopTiming: initialSettings.shopTiming ?? prev.shopTiming,
       }));
     }
   }, [initialSettings]);
+
+  const handleAddBlockedPhone = () => {
+    const clean = newBlockedPhone.trim().replace(/[\s\-]/g, "");
+    if (!clean) return;
+    const current = form.blockedPhoneNumbers || [];
+    if (current.includes(clean)) {
+      setNewBlockedPhone("");
+      return;
+    }
+    setForm({ ...form, blockedPhoneNumbers: [...current, clean] });
+    setNewBlockedPhone("");
+  };
+
+  const handleRemoveBlockedPhone = (phoneToRemove: string) => {
+    const current = form.blockedPhoneNumbers || [];
+    setForm({ ...form, blockedPhoneNumbers: current.filter((p) => p !== phoneToRemove) });
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -281,7 +309,122 @@ export default function SettingsTab({
           </div>
         </div>
 
-        {/* Section 3: Official EasyPaisa Payment Configuration (EasyPaisa ONLY) */}
+        {/* Section 3: Cash on Delivery (COD) & Fake Order Protection */}
+        <div className="glass p-6 rounded-3xl border border-white/10">
+          <div className="mb-4">
+            <h4 className="text-sm font-bold text-white flex items-center gap-2">
+              <Banknote size={16} className="text-amber-400" />
+              <span>Cash on Delivery (COD) & Fake Order Protection</span>
+            </h4>
+            <p className="text-xs text-zinc-400 mt-1 leading-relaxed">
+              Enable or disable COD payments, set optional handling fees, and manage blocked numbers to protect against fake orders.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs mb-6">
+            <div className="p-4 rounded-2xl bg-black/40 border border-white/10 flex flex-col justify-between">
+              <div>
+                <label className="text-zinc-300 font-semibold block mb-1">
+                  Cash on Delivery Availability
+                </label>
+                <p className="text-zinc-500 text-[11px] mb-3">
+                  When enabled, customers can select COD at checkout without advance transfer.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="enableCod"
+                  checked={form.enableCod !== false}
+                  onChange={(e) => setForm({ ...form, enableCod: e.target.checked })}
+                  className="w-4 h-4 rounded accent-brand-gold cursor-pointer"
+                />
+                <label htmlFor="enableCod" className="text-white font-bold cursor-pointer">
+                  {form.enableCod !== false ? "COD is Active at Checkout" : "COD Disabled (EasyPaisa Only)"}
+                </label>
+              </div>
+            </div>
+
+            <div className="p-4 rounded-2xl bg-black/40 border border-white/10">
+              <label className="text-zinc-300 font-semibold block mb-1">
+                COD Extra Handling Fee (Rs.)
+              </label>
+              <p className="text-zinc-500 text-[11px] mb-2">
+                Optional extra fee for cash handling (e.g. 0 for free COD, or 50/100).
+              </p>
+              <input
+                type="number"
+                min={0}
+                value={form.codFee ?? 0}
+                onChange={(e) => setForm({ ...form, codFee: Number(e.target.value) })}
+                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2 text-brand-gold font-mono font-bold outline-none focus:border-brand-gold"
+              />
+            </div>
+          </div>
+
+          {/* Blocked Phone Numbers Management */}
+          <div className="p-4 rounded-2xl bg-red-500/5 border border-red-500/20">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-xs font-bold text-red-300 flex items-center gap-1.5 uppercase tracking-wider">
+                <ShieldAlert size={14} /> Blocked Customer Phone Numbers (Fake Order Protection)
+              </span>
+              <span className="text-[10px] text-zinc-400">
+                {(form.blockedPhoneNumbers || []).length} blocked
+              </span>
+            </div>
+            <p className="text-[11px] text-zinc-400 mb-3">
+              Phone numbers listed here will be blocked by the server from placing new orders.
+            </p>
+
+            <div className="flex items-center gap-2 mb-3">
+              <input
+                type="text"
+                placeholder="Enter mobile number to block (e.g. 0333 1234567)"
+                value={newBlockedPhone}
+                onChange={(e) => setNewBlockedPhone(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    handleAddBlockedPhone();
+                  }
+                }}
+                className="flex-1 bg-black/60 border border-white/10 rounded-xl px-3 py-2 text-xs text-white font-mono outline-none focus:border-red-400"
+              />
+              <button
+                type="button"
+                onClick={handleAddBlockedPhone}
+                className="px-3.5 py-2 rounded-xl bg-red-600/80 hover:bg-red-500 text-white text-xs font-bold flex items-center gap-1 transition-all"
+              >
+                <Plus size={14} /> Add Block
+              </button>
+            </div>
+
+            <div className="flex flex-wrap gap-2 max-h-36 overflow-y-auto pr-1">
+              {(form.blockedPhoneNumbers || []).length === 0 ? (
+                <span className="text-zinc-500 text-xs italic">No phone numbers currently blocked.</span>
+              ) : (
+                form.blockedPhoneNumbers!.map((p) => (
+                  <span
+                    key={p}
+                    className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-red-500/15 border border-red-500/30 text-red-200 font-mono text-xs"
+                  >
+                    <span>{p}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveBlockedPhone(p)}
+                      className="text-red-400 hover:text-white transition-colors"
+                      title="Unblock number"
+                    >
+                      <Trash2 size={12} />
+                    </button>
+                  </span>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Section 4: Official EasyPaisa Payment Configuration (EasyPaisa ONLY) */}
         <div className="glass p-6 rounded-3xl border border-white/10">
           <div className="mb-4">
             <h4 className="text-sm font-bold text-white flex items-center gap-2">

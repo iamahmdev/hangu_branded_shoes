@@ -39,11 +39,13 @@ export interface CreateOrderPayload {
   }>;
   subtotal: number;
   shippingFee: number;
+  codFee?: number;
   totalAmount: number;
-  paymentMethod: "easypaisa";
-  transactionId: string;
+  paymentMethod: "cod" | "easypaisa";
+  transactionId?: string;
   paymentScreenshot?: string;
   notes?: string;
+  hp?: string;
 }
 
 export interface CreateReviewPayload {
@@ -246,10 +248,11 @@ export const api = {
     return await res.json();
   },
 
-  async adminGetOrders(token: string, params?: { status?: string; paymentStatus?: string; search?: string }): Promise<{ success: boolean; count?: number; data?: any[] }> {
+  async adminGetOrders(token: string, params?: { status?: string; paymentStatus?: string; paymentMethod?: string; search?: string }): Promise<{ success: boolean; count?: number; data?: any[] }> {
     const qs = new URLSearchParams();
     if (params?.status && params.status !== "all") qs.append("status", params.status);
     if (params?.paymentStatus && params.paymentStatus !== "all") qs.append("paymentStatus", params.paymentStatus);
+    if (params?.paymentMethod && params.paymentMethod !== "all") qs.append("paymentMethod", params.paymentMethod);
     if (params?.search) qs.append("search", params.search);
 
     const res = await requestApi(`/orders${qs.toString() ? `?${qs.toString()}` : ""}`, {
@@ -258,7 +261,7 @@ export const api = {
     return await res.json();
   },
 
-  async adminUpdateOrderStatus(token: string, orderId: string, payload: { status?: string; courierName?: string; trackingNumber?: string; note?: string }): Promise<{ success: boolean; data?: any; message?: string }> {
+  async adminUpdateOrderStatus(token: string, orderId: string, payload: { status?: string; courierName?: string; trackingNumber?: string; deliveryNote?: string; note?: string }): Promise<{ success: boolean; data?: any; message?: string }> {
     const res = await requestApi(`/orders/${encodeURIComponent(orderId)}/status`, {
       method: "PATCH",
       headers: {
@@ -266,6 +269,30 @@ export const api = {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
+    });
+    return await res.json();
+  },
+
+  async adminMarkCashCollected(token: string, orderId: string, note?: string): Promise<{ success: boolean; data?: any; message?: string }> {
+    const res = await requestApi(`/orders/${encodeURIComponent(orderId)}/cash-collected`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ note }),
+    });
+    return await res.json();
+  },
+
+  async adminMarkFakeOrder(token: string, orderId: string, blockPhone?: boolean, reason?: string): Promise<{ success: boolean; data?: any; message?: string }> {
+    const res = await requestApi(`/orders/${encodeURIComponent(orderId)}/fake`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ blockPhone, reason }),
     });
     return await res.json();
   },

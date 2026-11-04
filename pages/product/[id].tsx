@@ -73,7 +73,7 @@ export default function Product() {
   const buildWhatsAppOrderUrl = () => {
     const sizeText = size || "Size not selected yet";
     const totalAmount = (p.price * q).toLocaleString();
-    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${q}\n*Price:* Rs. ${totalAmount}\n*Payment:* Cash on Delivery (COD)\n\nMera Delivery Address ye hai:\nNaam: \nPhone: \nCity: \nAddress: `;
+    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${q}\n*Price:* Rs. ${totalAmount}\n*Payment:* EasyPaisa Mobile Transfer\n\nMera Delivery Address ye hai:\nNaam: \nPhone: \nCity: \nAddress: `;
     return wa(msg);
   };
 
@@ -194,7 +194,7 @@ export default function Product() {
               onClick={() => go(true)}
             >
               <Zap size={16} />
-              <span>Buy Now (Cash on Delivery)</span>
+              <span>Buy Now (Instant Checkout)</span>
             </button>
             <button className="btn ghost py-3 text-sm font-bold" onClick={() => go(false)}>
               Add to Cart
@@ -225,7 +225,7 @@ export default function Product() {
             <div className="flex items-center gap-2.5">
               <PackageCheck size={18} className="text-brand-gold" />
               <span>
-                <b>Cash on Delivery:</b> Inspect shoes before paying the courier.
+                <b>EasyPaisa Verified:</b> Fast verified payment with instant courier dispatch.
               </span>
             </div>
             <div className="flex items-center gap-2.5">

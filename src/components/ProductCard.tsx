@@ -56,7 +56,7 @@ export default function ProductCard({ p }: ProductCardProps) {
       <div className="card-body p-4 flex flex-col flex-1">
         <div className="card-meta flex justify-between items-center mb-1">
           <small className="card-cat text-brand-red font-bold uppercase text-[11px] tracking-wider">{p.cat}</small>
-          <span className="card-cod-hint text-[10.5px] text-[#25d366] font-semibold">✓ Cash on Delivery</span>
+          <span className="card-cod-hint text-[10.5px] text-[#25d366] font-semibold">✓ EasyPaisa Verified</span>
         </div>
         <h3 className="card-title text-white font-bold text-base my-1 line-clamp-1">
           <Link href={"/product/" + p.id} className="hover:text-brand-gold transition-colors">{p.name}</Link>

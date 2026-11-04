@@ -68,7 +68,7 @@ export default function Shop() {
               Our Complete Collection
             </h2>
             <p className="text-zinc-400 max-w-xl mx-auto mt-2.5 text-sm">
-              Browse premium sneakers, executive formals, and comfort slip-ons with direct Cash on Delivery all across Pakistan.
+              Browse premium sneakers, executive formals, and comfort slip-ons with fast express delivery all across Pakistan.
             </p>
           </div>
 

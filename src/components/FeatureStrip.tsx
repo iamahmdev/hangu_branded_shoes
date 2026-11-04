@@ -19,10 +19,10 @@ const PERKS: Perk[] = [
     color: "#e10600",
   },
   {
-    icon: "💵",
-    title: "Cash On Delivery",
-    desc: "Inspect your shoes at doorstep before payment",
-    badge: "Zero Risk",
+    icon: "⚡",
+    title: "EasyPaisa Fast Pay",
+    desc: "Quick verified mobile payments with instant WhatsApp confirmation",
+    badge: "Direct & Safe",
     color: "#d4a857",
   },
   {

@@ -81,7 +81,7 @@ export default function Success() {
         </div>
 
         <div className="mt-10 p-4 rounded-2xl bg-white/5 border border-white/10 text-xs text-zinc-400 max-w-md mx-auto">
-          🚚 <b>Delivery Timeline:</b> 2 to 4 business days nationwide. You can inspect the shoes before paying Cash on Delivery.
+          🚚 <b>Delivery Timeline:</b> 2 to 4 business days nationwide. Fast express dispatch with verified EasyPaisa payment.
         </div>
       </div>
     </Layout>

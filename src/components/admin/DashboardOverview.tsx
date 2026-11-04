@@ -301,7 +301,7 @@ export default function DashboardOverview({
                   </div>
                   <div>
                     <b className="text-white block">Payment & Rates</b>
-                    <span className="text-zinc-400 text-[11px]">JazzCash & EasyPaisa settings</span>
+                    <span className="text-zinc-400 text-[11px]">EasyPaisa & store settings</span>
                   </div>
                 </div>
                 <ArrowRight size={14} className="text-zinc-400" />

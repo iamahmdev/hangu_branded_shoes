@@ -61,7 +61,7 @@ export default function QuickOrderModal() {
   const buildWhatsAppOrderUrl = () => {
     const sizeText = selectedSize || "42";
     const totalAmount = (p.price * qty).toLocaleString();
-    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${qty}\n*Price:* Rs. ${totalAmount}\n*Payment:* Cash on Delivery (COD)\n\nMera Delivery Address ye hai:\nNaam: \nPhone Number: \nCity: \nComplete Address: `;
+    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${qty}\n*Price:* Rs. ${totalAmount}\n*Payment:* EasyPaisa Mobile Transfer\n\nMera Delivery Address ye hai:\nNaam: \nPhone Number: \nCity: \nComplete Address: `;
     return wa(msg);
   };
 
@@ -198,7 +198,7 @@ export default function QuickOrderModal() {
                   onClick={handleBuyNow}
                   className="btn qorder-btn-buy inline-flex items-center justify-center gap-2 py-3 px-4 text-sm font-semibold rounded-xl text-white"
                 >
-                  Instant COD Checkout <ArrowRight size={16} />
+                  Proceed to Checkout <ArrowRight size={16} />
                 </button>
                 <button
                   type="button"
@@ -215,7 +215,7 @@ export default function QuickOrderModal() {
               <div className="qorder-trust-item flex items-center gap-2.5">
                 <PackageCheck size={18} className="text-brand-gold shrink-0" />
                 <div>
-                  <strong className="text-zinc-200">Parcel Khol Kar Check Karein</strong> — Open parcel check before payment
+                  <strong className="text-zinc-200">100% Genuine Sole Guarantee</strong> — Hand-inspected quality
                 </div>
               </div>
               <div className="qorder-trust-item flex items-center gap-2.5">
@@ -227,7 +227,7 @@ export default function QuickOrderModal() {
               <div className="qorder-trust-item flex items-center gap-2.5">
                 <ShieldCheck size={18} className="text-brand-gold shrink-0" />
                 <div>
-                  <strong className="text-zinc-200">100% Cash on Delivery (COD)</strong> — All Pakistan courier delivery
+                  <strong className="text-zinc-200">EasyPaisa Direct Payment</strong> — Fast nationwide courier dispatch
                 </div>
               </div>
             </div>

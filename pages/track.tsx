@@ -320,8 +320,8 @@ export default function TrackOrderPage() {
                 <div className="glass p-6 rounded-3xl border border-white/10">
                   <h3 className="text-lg font-bold text-white mb-4 flex items-center justify-between">
                     <span>Ordered Footwear ({order.items.length})</span>
-                    <span className="text-xs text-zinc-400 font-normal">
-                      Cash on Delivery
+                    <span className="text-xs text-brand-gold font-mono font-semibold uppercase">
+                      {order.paymentMethod || "EasyPaisa"}
                     </span>
                   </h3>
 

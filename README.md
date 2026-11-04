@@ -6,11 +6,11 @@ A modern, high-performance luxury footwear e-commerce web application engineered
 
 ## 🌟 Key Features
 
-- **🛍️ Direct WhatsApp Order Integration**: Customers can customize footwear size and send full order details (COD / JazzCash / EasyPaisa) directly to WhatsApp (+923333147691) in one tap.
+- **🛍️ Direct WhatsApp Order Integration**: Customers can customize footwear size and send full order details directly to WhatsApp (+923333147691) in one tap.
 - **📏 Interactive Shoe Size Guide**: Real-time converter for EU (39–46), UK, US Men, and foot length in centimeters and inches, plus home foot measurement instructions.
 - **✨ Luxury Dark Mode Aesthetics**: Custom glassmorphism, fluid SVG waves, ambient radial glows, and micro-interactions.
 - **📱 100% Mobile Responsive**: Dedicated mobile navigation drawer, touch-friendly tap targets, and safe cursor handling.
-- **💳 Payment Methods**: Built-in support for Cash on Delivery (COD), JazzCash, and EasyPaisa.
+- **💳 Payment Methods**: Built-in support for verified EasyPaisa mobile transfer with receipt upload and admin verification.
 - **⚡ SEO & Performance Optimized**: Clean semantic markup, structured headings, fast static rendering, and instant navigation.
 
 ---

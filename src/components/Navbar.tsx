@@ -144,7 +144,7 @@ export default function Navbar() {
               <span>Chat on WhatsApp (+{WA})</span>
             </a>
             <div className="nb-mobile-note">
-              🚚 Free Delivery over Rs. 5,000 • 💵 Cash on Delivery
+              🚚 Free Delivery over Rs. 5,000 • 📱 EasyPaisa Verified
             </div>
           </div>
         </div>

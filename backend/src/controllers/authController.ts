@@ -238,10 +238,11 @@ export async function forgotPassword(req: Request, res: Response): Promise<void>
     admin.resetPasswordExpires = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
     await admin.save();
 
+    const isTest = process.env.NODE_ENV === "test";
     res.json({
       success: true,
-      resetToken, // For testing/supertest integration or sending via email in production
-      message: "Password reset token generated successfully",
+      ...(isTest ? { resetToken } : {}),
+      message: "If an account exists, a reset instructions token was generated.",
     });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });

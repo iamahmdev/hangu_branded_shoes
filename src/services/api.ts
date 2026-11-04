@@ -1,22 +1,35 @@
 import { Product as LocalProduct } from "../types";
 
-let cachedApiBase: string = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+function getNormalizedApiBase(): string {
+  const envUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
+  if (envUrl) {
+    const stripped = envUrl.replace(/\/+$/, "");
+    return stripped.endsWith("/api") ? stripped : `${stripped}/api`;
+  }
+  return "http://localhost:5001/api";
+}
+
+let cachedApiBase: string = getNormalizedApiBase();
 
 async function requestApi(path: string, options?: RequestInit): Promise<Response> {
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
   try {
-    return await fetch(`${cachedApiBase}${path}`, options);
+    return await fetch(`${cachedApiBase}${normalizedPath}`, options);
   } catch (primaryErr) {
-    // If port 5000 has permission denied / occupied on Windows, auto try 5001
-    const fallbackBase = cachedApiBase.includes("5000")
-      ? "http://localhost:5001/api"
-      : "http://localhost:5000/api";
-    try {
-      const res = await fetch(`${fallbackBase}${path}`, options);
-      cachedApiBase = fallbackBase;
-      return res;
-    } catch {
-      throw primaryErr;
+    // Only attempt localhost port fallback during local development
+    if (cachedApiBase.includes("localhost") || cachedApiBase.includes("127.0.0.1")) {
+      const fallbackBase = cachedApiBase.includes("5000")
+        ? "http://localhost:5001/api"
+        : "http://localhost:5000/api";
+      try {
+        const res = await fetch(`${fallbackBase}${normalizedPath}`, options);
+        cachedApiBase = fallbackBase;
+        return res;
+      } catch {
+        throw primaryErr;
+      }
     }
+    throw primaryErr;
   }
 }
 

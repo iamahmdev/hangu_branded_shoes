@@ -7,7 +7,7 @@ export interface IAdmin extends Document {
   passwordHash?: string;
   password?: string;
   name: string;
-  role: "superadmin" | "manager" | "support";
+  role: "admin";
   permissions: string[];
   isActive: boolean;
   lastLogin?: Date;
@@ -23,7 +23,7 @@ const AdminSchema = new Schema<IAdmin>(
     passwordHash: { type: String },
     password: { type: String },
     name: { type: String, default: "Admin", trim: true },
-    role: { type: String, enum: ["superadmin", "manager", "support"], default: "superadmin" },
+    role: { type: String, enum: ["admin"], default: "admin" },
     permissions: { type: [String], default: ["*"] },
     isActive: { type: Boolean, default: true },
     lastLogin: { type: Date },

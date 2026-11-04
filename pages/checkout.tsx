@@ -90,49 +90,92 @@ export default function Checkout() {
   const submit = (e: FormEvent) => {
     e.preventDefault();
     const id = "HBS" + Date.now().toString().slice(-6);
-    const pay = m === "cod" ? "Cash on Delivery" : `${currentPay[m].name} (TID: ${f.tid})`;
+
+    const payLabel =
+      m === "cod"
+        ? "💵 Cash on Delivery (Inspect shoes before payment)"
+        : m === "jazzcash"
+        ? `📱 JazzCash (TID: ${f.tid.trim() || "Pending Proof"})`
+        : `📱 EasyPaisa (TID: ${f.tid.trim() || "Pending Proof"})`;
 
     let discountSummary = "";
     if (appliedCoupon && discountVal > 0) {
-      discountSummary = `\nPromo Code (${appliedCoupon.code}): -Rs.${discountVal}`;
+      discountSummary = `\n🏷️ *Promo Discount (${appliedCoupon.code}):* -Rs. ${discountVal.toLocaleString()}`;
     }
 
+    const itemsSummary = items
+      .map(
+        (i) =>
+          `• *${i.name}*\n   Size: ${i.size} | Qty: ${i.q} | Rs. ${(i.price * i.q).toLocaleString()}`
+      )
+      .join("\n");
+
+    const paymentProofPrompt =
+      m !== "cod"
+        ? `\n\n📸 *PAYMENT SCREENSHOT:*\nPlease reply to this chat with your *${currentPay[m].name}* transfer screenshot or transaction receipt right here to verify and confirm your order dispatch!`
+        : `\n\n💵 *CASH ON DELIVERY:*\nPlease keep Rs. ${effectiveTotal.toLocaleString()} cash ready upon delivery. You can inspect your shoes before payment!`;
+
     const msg =
-      `🛍 NEW ORDER ${id}\n\n` +
-      items.map((i) => `• ${i.name} | Size ${i.size} | x${i.q} = Rs.${i.price * i.q}`).join("\n") +
-      `\n\nSubtotal: Rs.${sub}\nDelivery: Rs.${effectiveShipping}${discountSummary}\nTOTAL: Rs.${effectiveTotal}\nPayment: ${pay}\n\n👤 ${f.name}\n📞 ${f.phone}\n📍 ${f.address}, ${f.city}`;
+      `🛍️ *NEW ORDER CONFIRMATION — HANGU BRANDED SHOES*\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `📦 *Order ID:* #${id}\n\n` +
+      `👟 *Ordered Shoes:*\n${itemsSummary}\n\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `Subtotal: Rs. ${sub.toLocaleString()}\n` +
+      `Shipping Delivery: ${effectiveShipping === 0 ? "FREE" : `Rs. ${effectiveShipping.toLocaleString()}`}` +
+      `${discountSummary}\n` +
+      `💰 *TOTAL PAYABLE:* Rs. ${effectiveTotal.toLocaleString()}\n` +
+      `💳 *Payment Method:* ${payLabel}` +
+      `${paymentProofPrompt}\n\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `👤 *Customer Name:* ${f.name}\n` +
+      `📞 *Phone / WhatsApp:* ${f.phone}\n` +
+      `📍 *Delivery Address:* ${f.address}, ${f.city}\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `_Assalam-o-Alaikum! Please confirm my order dispatch._`;
 
-    // Persist order to database via TanStack Mutation
-    createOrderMutation.mutate({
-      orderId: id,
-      customer: {
-        name: f.name,
-        phone: f.phone,
-        city: f.city,
-        address: f.address,
+    // Persist order to database first via TanStack Mutation
+    createOrderMutation.mutate(
+      {
+        orderId: id,
+        customer: {
+          name: f.name,
+          phone: f.phone,
+          city: f.city,
+          address: f.address,
+        },
+        items: items.map((i) => ({
+          productId: i.id,
+          name: i.name,
+          img: i.img,
+          price: i.price,
+          size: i.size,
+          quantity: i.q,
+          total: i.price * i.q,
+        })),
+        subtotal: sub,
+        shippingFee: effectiveShipping,
+        discountAmount: discountVal,
+        couponCode: appliedCoupon?.code || "",
+        totalAmount: effectiveTotal,
+        paymentMethod: m,
+        transactionId: f.tid.trim(),
       },
-      items: items.map((i) => ({
-        productId: i.id,
-        name: i.name,
-        img: i.img,
-        price: i.price,
-        size: i.size,
-        quantity: i.q,
-        total: i.price * i.q,
-      })),
-      subtotal: sub,
-      shippingFee: effectiveShipping,
-      discountAmount: discountVal,
-      couponCode: appliedCoupon?.code || "",
-      totalAmount: effectiveTotal,
-      paymentMethod: m,
-      transactionId: f.tid,
-    });
-
-    sessionStorage.setItem("lastOrder", JSON.stringify({ id, msg }));
-    window.open(wa(msg), "_blank");
-    clear();
-    push(`/success?orderId=${id}`);
+      {
+        onSuccess: () => {
+          sessionStorage.setItem("lastOrder", JSON.stringify({ id, msg }));
+          clear();
+          // Redirect directly to WhatsApp with pre-filled order details & payment screenshot prompt
+          window.location.href = wa(msg);
+        },
+        onError: (err: any) => {
+          alert(
+            err?.message ||
+              "Could not record your order in database. Please check your connection and try again."
+          );
+        },
+      }
+    );
   };
 
   if (!items.length) {
@@ -344,8 +387,8 @@ export default function Checkout() {
             className="btn w-full mt-3 py-3 text-sm font-bold tracking-wide disabled:opacity-50"
           >
             {createOrderMutation.isPending
-              ? "Placing Order..."
-              : "Confirm Order & Open WhatsApp ✓"}
+              ? "Saving Order & Connecting WhatsApp..."
+              : "Confirm Order & Redirect to WhatsApp 💬"}
           </button>
         </div>
       </form>

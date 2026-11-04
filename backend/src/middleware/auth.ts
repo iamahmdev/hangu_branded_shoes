@@ -39,7 +39,7 @@ export function authorizeRoles(...roles: string[]) {
       return;
     }
 
-    if (!roles.includes(req.admin.role) && req.admin.role !== "superadmin") {
+    if (roles.length > 0 && !roles.includes(req.admin.role)) {
       res.status(403).json({ success: false, message: "Access forbidden. Insufficient permissions." });
       return;
     }

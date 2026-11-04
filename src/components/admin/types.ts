@@ -3,9 +3,7 @@ export type AdminTab =
   | "orders"
   | "products"
   | "coupons"
-  | "inquiries"
   | "reviews"
-  | "subscribers"
   | "settings";
 
 export interface AdminUser {
@@ -13,7 +11,7 @@ export interface AdminUser {
   username: string;
   email: string;
   name: string;
-  role: "superadmin" | "admin" | "manager";
+  role: "admin";
 }
 
 export interface ProductFormData {

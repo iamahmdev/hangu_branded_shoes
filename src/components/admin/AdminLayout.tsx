@@ -16,9 +16,7 @@ interface AdminLayoutProps {
     orders: number;
     products: number;
     coupons: number;
-    inquiries: number;
     reviews: number;
-    subscribers: number;
   };
 }
 

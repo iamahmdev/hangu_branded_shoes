@@ -96,8 +96,8 @@ export async function register(req: Request, res: Response): Promise<void> {
       email: email.toLowerCase(),
       passwordHash,
       name,
-      role: role && ["superadmin", "manager", "support"].includes(role) ? role : "support",
-      permissions: role === "superadmin" ? ["*"] : ["orders:read", "products:read"],
+      role: "admin",
+      permissions: ["*"],
     });
 
     const token = generateToken(admin._id.toString(), admin.role);
@@ -304,8 +304,8 @@ export async function updateUserRole(req: AuthRequest, res: Response): Promise<v
       return;
     }
 
-    if (role && ["superadmin", "manager", "support"].includes(role)) {
-      user.role = role;
+    if (role === "admin") {
+      user.role = "admin";
     }
     if (typeof isActive === "boolean") {
       user.isActive = isActive;

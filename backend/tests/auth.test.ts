@@ -4,49 +4,31 @@ import app from "../src/app";
 import { Admin } from "../src/models/Admin";
 
 describe("🔐 Authentication & Admin Management API Tests", () => {
-  let superadminToken: string;
-  let superadminId: string;
-  let supportToken: string;
+  let adminToken: string;
+  let adminId: string;
 
   beforeEach(async () => {
     await Admin.deleteMany({});
 
-    // Create superadmin
+    // Create admin
     const salt = await bcrypt.genSalt(10);
     const passwordHash = await bcrypt.hash("admin123", salt);
-    const superadmin = await Admin.create({
+    const admin = await Admin.create({
       username: "admin",
       email: "admin@hangubrandedshoes.com",
       passwordHash,
-      name: "Super Admin",
-      role: "superadmin",
+      name: "Store Admin",
+      role: "admin",
       permissions: ["*"],
       isActive: true,
     });
-    superadminId = superadmin._id.toString();
+    adminId = admin._id.toString();
 
-    // Login superadmin to get token
+    // Login admin to get token
     const res = await request(app)
       .post("/api/admin/login")
       .send({ usernameOrEmail: "admin", password: "admin123" });
-    superadminToken = res.body.token;
-
-    // Create support user
-    const supportHash = await bcrypt.hash("support123", salt);
-    const support = await Admin.create({
-      username: "support1",
-      email: "support@hangubrandedshoes.com",
-      passwordHash: supportHash,
-      name: "Support Staff",
-      role: "support",
-      permissions: ["orders:read"],
-      isActive: true,
-    });
-
-    const supportRes = await request(app)
-      .post("/api/admin/login")
-      .send({ usernameOrEmail: "support1", password: "support123" });
-    supportToken = supportRes.body.token;
+    adminToken = res.body.token;
   });
 
   it("POST /api/admin/login - returns 400 when missing credentials", async () => {
@@ -70,7 +52,7 @@ describe("🔐 Authentication & Admin Management API Tests", () => {
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.token).toBeDefined();
-    expect(res.body.admin.role).toBe("superadmin");
+    expect(res.body.admin.role).toBe("admin");
   });
 
   it("GET /api/admin/me - returns 401 without Bearer token", async () => {
@@ -82,16 +64,17 @@ describe("🔐 Authentication & Admin Management API Tests", () => {
   it("GET /api/admin/me - returns 200 with profile when authenticated", async () => {
     const res = await request(app)
       .get("/api/admin/me")
-      .set("Authorization", `Bearer ${superadminToken}`);
+      .set("Authorization", `Bearer ${adminToken}`);
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.admin.username).toBe("admin");
+    expect(res.body.admin.role).toBe("admin");
   });
 
   it("PUT /api/admin/profile - updates profile details", async () => {
     const res = await request(app)
       .put("/api/admin/profile")
-      .set("Authorization", `Bearer ${superadminToken}`)
+      .set("Authorization", `Bearer ${adminToken}`)
       .send({ name: "Chief Executive Officer" });
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
@@ -101,7 +84,7 @@ describe("🔐 Authentication & Admin Management API Tests", () => {
   it("PUT /api/admin/change-password - changes password successfully", async () => {
     const res = await request(app)
       .put("/api/admin/change-password")
-      .set("Authorization", `Bearer ${superadminToken}`)
+      .set("Authorization", `Bearer ${adminToken}`)
       .send({ currentPassword: "admin123", newPassword: "newsecurepass123" });
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
@@ -135,43 +118,42 @@ describe("🔐 Authentication & Admin Management API Tests", () => {
     expect(loginRes.status).toBe(200);
   });
 
-  it("POST /api/admin/register - RBAC enforces superadmin only", async () => {
-    // Non-superadmin forbidden (403)
+  it("POST /api/admin/register - requires admin authentication and creates new admin", async () => {
+    // Unauthenticated forbidden (401)
     const failRes = await request(app)
       .post("/api/admin/register")
-      .set("Authorization", `Bearer ${supportToken}`)
       .send({
-        username: "newmanager",
-        email: "manager@hangubrandedshoes.com",
+        username: "newadmin",
+        email: "newadmin@hangubrandedshoes.com",
         password: "password123",
-        name: "Store Manager",
-        role: "manager",
+        name: "Second Admin",
+        role: "admin",
       });
-    expect(failRes.status).toBe(403);
+    expect(failRes.status).toBe(401);
 
-    // Superadmin allowed (201)
+    // Authenticated admin allowed (201)
     const successRes = await request(app)
       .post("/api/admin/register")
-      .set("Authorization", `Bearer ${superadminToken}`)
+      .set("Authorization", `Bearer ${adminToken}`)
       .send({
-        username: "newmanager",
-        email: "manager@hangubrandedshoes.com",
+        username: "newadmin",
+        email: "newadmin@hangubrandedshoes.com",
         password: "password123",
-        name: "Store Manager",
-        role: "manager",
+        name: "Second Admin",
+        role: "admin",
       });
     expect(successRes.status).toBe(201);
-    expect(successRes.body.admin.username).toBe("newmanager");
+    expect(successRes.body.admin.username).toBe("newadmin");
+    expect(successRes.body.admin.role).toBe("admin");
   });
 
   it("GET /api/admin/dashboard - returns statistical data", async () => {
     const res = await request(app)
       .get("/api/admin/dashboard")
-      .set("Authorization", `Bearer ${superadminToken}`);
+      .set("Authorization", `Bearer ${adminToken}`);
     expect(res.status).toBe(200);
     expect(res.body.success).toBe(true);
     expect(res.body.stats).toBeDefined();
     expect(typeof res.body.stats.totalRevenue).toBe("number");
   });
 });
-

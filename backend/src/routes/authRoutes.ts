@@ -17,16 +17,16 @@ import { authLimiter } from "../middleware/rateLimiter.js";
 const router = Router();
 
 router.post("/login", authLimiter, login);
-router.post("/register", authenticate, authorizeRoles("superadmin"), register);
+router.post("/register", authenticate, authorizeRoles("admin"), register);
 router.get("/me", authenticate, getMe);
 router.put("/profile", authenticate, updateProfile);
 router.put("/change-password", authenticate, changePassword);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 
-// RBAC User Management
-router.get("/users", authenticate, authorizeRoles("superadmin"), getUsers);
-router.put("/users/:id", authenticate, authorizeRoles("superadmin"), updateUserRole);
+// User Management
+router.get("/users", authenticate, authorizeRoles("admin"), getUsers);
+router.put("/users/:id", authenticate, authorizeRoles("admin"), updateUserRole);
 
 // Admin Dashboard stats
 router.get("/dashboard", authenticate, getDashboard);

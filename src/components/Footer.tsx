@@ -1,38 +1,8 @@
-import { useState, FormEvent } from "react";
 import Link from "next/link";
 import { SHOP, WA, wa, SOCIALS } from "../data/config";
 import { WhatsAppIcon, InstagramIcon, TikTokIcon } from "./WhatsAppButton";
-import { useSubscribeNewsletter } from "../hooks/useApi";
 
 export default function Footer() {
-  const [email, setEmail] = useState<string>("");
-  const [subbed, setSubbed] = useState<boolean>(false);
-  const [subMsg, setSubMsg] = useState<string>("");
-
-  const subscribeMutation = useSubscribeNewsletter();
-
-  const handleSubscribe = (e: FormEvent) => {
-    e.preventDefault();
-    if (email.trim()) {
-      subscribeMutation.mutate(
-        { email: email.trim(), source: "footer_newsletter" },
-        {
-          onSuccess: (res) => {
-            setSubMsg(res.message || "✓ Welcome to HBS VIP Club! Check your inbox.");
-            setSubbed(true);
-            setEmail("");
-            setTimeout(() => setSubbed(false), 6000);
-          },
-          onError: (err: any) => {
-            setSubMsg(err?.message || "✓ Thank you for subscribing!");
-            setSubbed(true);
-            setEmail("");
-            setTimeout(() => setSubbed(false), 6000);
-          },
-        }
-      );
-    }
-  };
 
   return (
     <footer className="ft-wrap">
@@ -234,40 +204,24 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* Col 4: VIP Newsletter & Payment Options */}
+        {/* Col 4: Customer Care & Payment Options */}
         <div className="ft-col">
-          <h4 className="ft-heading text-white font-bold text-base mb-3">HBS VIP Club</h4>
-          <p className="ft-sub-text text-zinc-400 text-sm mb-3">
-            Subscribe for early access to private footwear drops, exclusive discount vouchers, and
-            seasonal releases.
+          <h4 className="ft-heading text-white font-bold text-base mb-3">Direct Support</h4>
+          <p className="ft-sub-text text-zinc-400 text-sm mb-4 leading-relaxed">
+            Need sizing advice or want to place a custom order? Our WhatsApp concierge is available 7 days a week.
           </p>
 
-          <form className="ft-form" onSubmit={handleSubscribe}>
-            <div className="ft-input-group flex gap-2">
-              <input
-                type="email"
-                placeholder="Enter email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="flex-1 bg-white/5 border border-white/10 rounded-full px-4 py-2 text-white text-xs outline-none focus:border-brand-red"
-              />
-              <button
-                type="submit"
-                disabled={subscribeMutation.isPending}
-                className="btn text-xs py-2 px-5 font-bold disabled:opacity-50"
-              >
-                {subscribeMutation.isPending ? "Joining..." : "Join"}
-              </button>
-            </div>
-            {subbed && (
-              <div className="ft-success text-[#25d366] text-xs mt-2 font-semibold animate-fadeIn">
-                {subMsg}
-              </div>
-            )}
-          </form>
+          <a
+            href={wa("Assalam-o-Alaikum! I need help with shoe sizing and ordering.")}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#25d366]/15 border border-[#25d366]/30 text-white text-xs font-semibold hover:bg-[#25d366]/25 transition-all mb-4"
+          >
+            <WhatsAppIcon size={16} color="#25d366" />
+            <span>Chat on WhatsApp</span>
+          </a>
 
-          <div className="ft-pay-section mt-5">
+          <div className="ft-pay-section mt-2">
             <small className="block text-zinc-500 text-xs mb-2">Accepted Payment Methods</small>
             <div className="ft-pay-chips flex flex-wrap gap-1.5">
               <span className="pay-chip text-xs bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-zinc-300">

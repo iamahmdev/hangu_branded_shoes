@@ -18,7 +18,7 @@ describe("⭐ Review System API Tests", () => {
       email: "admin@hangubrandedshoes.com",
       passwordHash,
       name: "Super Admin",
-      role: "superadmin",
+      role: "admin",
       isActive: true,
     });
 

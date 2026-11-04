@@ -10,9 +10,7 @@ import OrderDetailModal from "../src/components/admin/OrderDetailModal";
 import ProductsTab from "../src/components/admin/ProductsTab";
 import ProductModal from "../src/components/admin/ProductModal";
 import CouponsTab from "../src/components/admin/CouponsTab";
-import InquiriesTab from "../src/components/admin/InquiriesTab";
 import ReviewsTab from "../src/components/admin/ReviewsTab";
-import SubscribersTab from "../src/components/admin/SubscribersTab";
 import SettingsTab from "../src/components/admin/SettingsTab";
 import {
   useAdminDashboard,
@@ -27,14 +25,9 @@ import {
   useAdminCoupons,
   useAdminCreateCoupon,
   useAdminDeleteCoupon,
-  useAdminInquiries,
-  useAdminUpdateInquiryStatus,
-  useAdminDeleteInquiry,
   useAdminReviews,
   useAdminUpdateReviewStatus,
   useAdminDeleteReview,
-  useAdminSubscribers,
-  useAdminDeleteSubscriber,
   useStoreSettings,
   useAdminUpdateSettings,
   useUploadImage,
@@ -50,7 +43,6 @@ export default function AdminPage() {
   const [orderFilterStatus, setOrderFilterStatus] = useState<string>("all");
   const [orderSearch, setOrderSearch] = useState<string>("");
   const [productSearch, setProductSearch] = useState<string>("");
-  const [inquiryFilterStatus, setInquiryFilterStatus] = useState<string>("all");
 
   // Modals state
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
@@ -67,9 +59,7 @@ export default function AdminPage() {
   });
   const productsQuery = useProducts({ search: productSearch });
   const couponsQuery = useAdminCoupons(token);
-  const inquiriesQuery = useAdminInquiries(token, { status: inquiryFilterStatus });
   const reviewsQuery = useAdminReviews(token);
-  const subscribersQuery = useAdminSubscribers(token);
   const settingsQuery = useStoreSettings();
 
   // ----------------------------------------------------
@@ -83,11 +73,8 @@ export default function AdminPage() {
   const deleteProductMutation = useAdminDeleteProduct();
   const createCouponMutation = useAdminCreateCoupon();
   const deleteCouponMutation = useAdminDeleteCoupon();
-  const updateInquiryStatusMutation = useAdminUpdateInquiryStatus();
-  const deleteInquiryMutation = useAdminDeleteInquiry();
   const updateReviewStatusMutation = useAdminUpdateReviewStatus();
   const deleteReviewMutation = useAdminDeleteReview();
-  const deleteSubscriberMutation = useAdminDeleteSubscriber();
   const updateSettingsMutation = useAdminUpdateSettings();
   const uploadImageMutation = useUploadImage();
 
@@ -137,33 +124,18 @@ export default function AdminPage() {
     ordersQuery.refetch();
     productsQuery.refetch();
     couponsQuery.refetch();
-    inquiriesQuery.refetch();
     reviewsQuery.refetch();
-    subscribersQuery.refetch();
     settingsQuery.refetch();
   };
 
   // Order Handlers
-  const handleUpdateOrderStatus = async (
-    orderId: string,
-    status: string,
-    courierName?: string,
-    trackingNumber?: string
-  ) => {
+  const handleUpdateOrderStatus = (orderId: string, status: string, courierName?: string, trackingNumber?: string) => {
     if (!token) return;
-    await updateOrderStatusMutation.mutateAsync({
+    updateOrderStatusMutation.mutate({
       token,
       orderId,
       payload: { status, courierName, trackingNumber },
     });
-    if (selectedOrder && selectedOrder.orderId === orderId) {
-      setSelectedOrder((prev: any) => ({
-        ...prev,
-        status,
-        courierName: courierName || prev?.courierName,
-        trackingNumber: trackingNumber || prev?.trackingNumber,
-      }));
-    }
   };
 
   const handleDeleteOrder = (orderId: string) => {
@@ -172,25 +144,20 @@ export default function AdminPage() {
   };
 
   // Product Handlers
-  const handleSaveProduct = async (productData: ProductFormData) => {
+  const handleSaveProduct = async (formData: ProductFormData) => {
     if (!token) return;
-    if (productData.id) {
+    if (editingProduct?.id) {
       await updateProductMutation.mutateAsync({
         token,
-        id: productData.id,
-        payload: productData,
+        id: editingProduct.id,
+        payload: formData,
       });
     } else {
       await createProductMutation.mutateAsync({
         token,
-        payload: productData,
+        payload: formData,
       });
     }
-  };
-
-  const handleDeleteProduct = (productId: number) => {
-    if (!token) return;
-    deleteProductMutation.mutate({ token, id: productId });
   };
 
   const handleAdjustStock = (productId: number, delta: number) => {
@@ -198,8 +165,13 @@ export default function AdminPage() {
     adjustStockMutation.mutate({ token, id: productId, delta });
   };
 
+  const handleDeleteProduct = (productId: number) => {
+    if (!token) return;
+    deleteProductMutation.mutate({ token, id: productId });
+  };
+
   const handleUploadProductImage = async (file: File) => {
-    if (!token) throw new Error("Unauthorized");
+    if (!token) throw new Error("Authentication required");
     return await uploadImageMutation.mutateAsync({ token, file });
   };
 
@@ -212,21 +184,6 @@ export default function AdminPage() {
   const handleDeleteCoupon = (couponId: string) => {
     if (!token) return;
     deleteCouponMutation.mutate({ token, id: couponId });
-  };
-
-  // Inquiry Handlers
-  const handleUpdateInquiryStatus = (id: string, status: string, adminNotes?: string) => {
-    if (!token) return;
-    updateInquiryStatusMutation.mutate({
-      token,
-      id,
-      payload: { status, adminNotes },
-    });
-  };
-
-  const handleDeleteInquiry = (id: string) => {
-    if (!token) return;
-    deleteInquiryMutation.mutate({ token, id });
   };
 
   // Review Handlers
@@ -242,12 +199,6 @@ export default function AdminPage() {
   const handleDeleteReview = (id: string) => {
     if (!token) return;
     deleteReviewMutation.mutate({ token, id });
-  };
-
-  // Subscriber Handlers
-  const handleDeleteSubscriber = (id: string) => {
-    if (!token) return;
-    deleteSubscriberMutation.mutate({ token, id });
   };
 
   // Settings Handlers
@@ -275,9 +226,7 @@ export default function AdminPage() {
   const orders = ordersQuery.data?.data || [];
   const products = productsQuery.data || [];
   const coupons = couponsQuery.data?.data || [];
-  const inquiries = inquiriesQuery.data?.data || [];
   const reviews = reviewsQuery.data?.data || [];
-  const subscribers = subscribersQuery.data?.data || [];
   const initialSettings = settingsQuery.data?.data;
 
   return (
@@ -293,9 +242,7 @@ export default function AdminPage() {
           orders: orders.length,
           products: products.length,
           coupons: coupons.length,
-          inquiries: inquiries.length,
           reviews: reviews.length,
-          subscribers: subscribers.length,
         }}
       >
         {/* Tab 1: Overview */}
@@ -368,19 +315,7 @@ export default function AdminPage() {
           />
         )}
 
-        {/* Tab 5: Inquiries */}
-        {activeTab === "inquiries" && (
-          <InquiriesTab
-            inquiries={inquiries}
-            filterStatus={inquiryFilterStatus}
-            onFilterChange={setInquiryFilterStatus}
-            onUpdateStatus={handleUpdateInquiryStatus}
-            onDeleteInquiry={handleDeleteInquiry}
-            isLoading={inquiriesQuery.isLoading}
-          />
-        )}
-
-        {/* Tab 6: Reviews */}
+        {/* Tab 5: Reviews */}
         {activeTab === "reviews" && (
           <ReviewsTab
             reviews={reviews}
@@ -390,16 +325,7 @@ export default function AdminPage() {
           />
         )}
 
-        {/* Tab 7: Subscribers */}
-        {activeTab === "subscribers" && (
-          <SubscribersTab
-            subscribers={subscribers}
-            onDeleteSubscriber={handleDeleteSubscriber}
-            isLoading={subscribersQuery.isLoading}
-          />
-        )}
-
-        {/* Tab 8: Store Settings */}
+        {/* Tab 6: Store Settings */}
         {activeTab === "settings" && (
           <SettingsTab
             initialSettings={initialSettings}

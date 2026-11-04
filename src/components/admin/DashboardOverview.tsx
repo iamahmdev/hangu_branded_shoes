@@ -1,6 +1,17 @@
 import { AdminDashboardData } from "../../hooks/useApi";
 import { ORDER_STATUS_COLORS } from "./types";
-import { AlertTriangle, ArrowRight, DollarSign, ShoppingBag, CheckCircle, Calendar, Users, MessageSquare } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  DollarSign,
+  ShoppingBag,
+  CheckCircle,
+  Calendar,
+  MessageCircle,
+  Settings,
+  Package,
+} from "lucide-react";
+import { wa } from "../../data/config";
 
 interface DashboardOverviewProps {
   data: AdminDashboardData | undefined;
@@ -18,12 +29,11 @@ export default function DashboardOverview({
   const stats = data?.stats;
   const lowStockItems = data?.lowStockItems || [];
   const recentOrders = data?.recentOrders || [];
-  const recentInquiries = data?.recentInquiries || [];
 
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
-      {/* 6 Key Analytics Metric Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+      {/* 5 Key Analytics Metric Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
         <div className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-[11px] font-bold uppercase tracking-wider">Gross Revenue</span>
@@ -90,19 +100,6 @@ export default function DashboardOverview({
             <span className="text-[10px] text-zinc-500 mt-1 block">Placed today</span>
           </div>
         </div>
-
-        <div className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider">VIP Members</span>
-            <Users size={16} className="text-purple-400" />
-          </div>
-          <div>
-            <b className="text-xl md:text-2xl font-bold text-purple-400 font-mono block">
-              {stats?.subscriberCount || 0}
-            </b>
-            <span className="text-[10px] text-zinc-500 mt-1 block">Email subscribers</span>
-          </div>
-        </div>
       </div>
 
       {/* Low Stock Warning Section */}
@@ -148,7 +145,7 @@ export default function DashboardOverview({
         </div>
       )}
 
-      {/* Grid: Recent Orders (Left 7 cols) & Recent Inquiries (Right 5 cols) */}
+      {/* Grid: Recent Orders (Left 8 cols) & Quick Operations Actions (Right 4 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Recent Orders Overview */}
         <div className="lg:col-span-8 glass p-6 rounded-3xl border border-white/10">
@@ -224,60 +221,85 @@ export default function DashboardOverview({
           )}
         </div>
 
-        {/* Recent Inquiries & Leads */}
+        {/* Quick Operations Hub */}
         <div className="lg:col-span-4 glass p-6 rounded-3xl border border-white/10 flex flex-col justify-between">
           <div>
-            <div className="flex items-center justify-between mb-4">
-              <div>
-                <h3 className="text-base font-bold text-white">Latest Leads & Inquiries</h3>
-                <p className="text-xs text-zinc-400 mt-0.5">Contact form customer queries</p>
-              </div>
-              <button
-                onClick={() => onNavigateTab("inquiries")}
-                className="text-xs text-brand-gold hover:underline font-bold inline-flex items-center gap-1"
+            <h3 className="text-base font-bold text-white mb-1">Store Operations Hub</h3>
+            <p className="text-xs text-zinc-400 mb-5">Admin shortcuts & instant actions</p>
+
+            <div className="flex flex-col gap-3">
+              <a
+                href={wa("Assalam-o-Alaikum! Hangu Branded Shoes Operations Support.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-3.5 rounded-2xl bg-[#25d366]/10 border border-[#25d366]/20 flex items-center justify-between hover:bg-[#25d366]/20 transition-all text-xs"
               >
-                <span>View All</span>
-                <ArrowRight size={13} />
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-[#25d366]/20 flex items-center justify-center text-[#25d366]">
+                    <MessageCircle size={16} />
+                  </div>
+                  <div>
+                    <b className="text-white block">WhatsApp Orders</b>
+                    <span className="text-zinc-400 text-[11px]">Open customer concierge</span>
+                  </div>
+                </div>
+                <ArrowRight size={14} className="text-[#25d366]" />
+              </a>
+
+              <button
+                onClick={() => onNavigateTab("orders")}
+                className="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between hover:bg-white/10 transition-all text-left text-xs"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-amber-500/20 flex items-center justify-center text-amber-400">
+                    <ShoppingBag size={16} />
+                  </div>
+                  <div>
+                    <b className="text-white block">Dispatch Orders</b>
+                    <span className="text-zinc-400 text-[11px]">{stats?.pendingOrders || 0} orders waiting</span>
+                  </div>
+                </div>
+                <ArrowRight size={14} className="text-zinc-400" />
+              </button>
+
+              <button
+                onClick={() => onNavigateTab("products")}
+                className="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between hover:bg-white/10 transition-all text-left text-xs"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-brand-red/20 flex items-center justify-center text-brand-red">
+                    <Package size={16} />
+                  </div>
+                  <div>
+                    <b className="text-white block">Manage Inventory</b>
+                    <span className="text-zinc-400 text-[11px]">Update prices, stock & sizes</span>
+                  </div>
+                </div>
+                <ArrowRight size={14} className="text-zinc-400" />
+              </button>
+
+              <button
+                onClick={() => onNavigateTab("settings")}
+                className="p-3.5 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-between hover:bg-white/10 transition-all text-left text-xs"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-xl bg-blue-500/20 flex items-center justify-center text-blue-400">
+                    <Settings size={16} />
+                  </div>
+                  <div>
+                    <b className="text-white block">Payment & Rates</b>
+                    <span className="text-zinc-400 text-[11px]">JazzCash & EasyPaisa settings</span>
+                  </div>
+                </div>
+                <ArrowRight size={14} className="text-zinc-400" />
               </button>
             </div>
-
-            {recentInquiries.length === 0 ? (
-              <div className="py-12 text-center text-zinc-500 text-xs">
-                No inquiries submitted yet.
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {recentInquiries.slice(0, 4).map((inq: any) => (
-                  <div
-                    key={inq._id}
-                    className="p-3.5 rounded-2xl bg-white/5 border border-white/5 flex flex-col gap-1 hover:border-white/10 transition-colors"
-                  >
-                    <div className="flex items-center justify-between">
-                      <b className="text-xs text-white">{inq.name}</b>
-                      <span className="text-[10px] text-zinc-400 font-mono">{inq.city || "Pakistan"}</span>
-                    </div>
-                    <p className="text-[11px] text-zinc-300 line-clamp-2 mt-0.5 leading-relaxed">
-                      "{inq.message}"
-                    </p>
-                    <div className="flex items-center justify-between mt-1 text-[10px]">
-                      <span className="text-brand-gold font-mono">{inq.phone}</span>
-                      <span className="text-zinc-500">
-                        {inq.status === "new" ? "🟡 New Lead" : "🟢 Responded"}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
           </div>
 
-          <div className="mt-4 pt-4 border-t border-white/10 text-center">
-            <button
-              onClick={() => onNavigateTab("inquiries")}
-              className="text-xs font-semibold text-zinc-400 hover:text-white transition-colors inline-flex items-center gap-1"
-            >
-              <MessageSquare size={13} /> Manage Customer Communications →
-            </button>
+          <div className="mt-5 pt-4 border-t border-white/10 text-center">
+            <span className="text-[11px] text-zinc-500">
+              Hangu Branded Shoes • Single Admin Unified Console
+            </span>
           </div>
         </div>
       </div>

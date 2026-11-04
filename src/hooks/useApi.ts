@@ -2,7 +2,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   api,
   CreateOrderPayload,
-  CreateInquiryPayload,
   CreateReviewPayload,
   RecentSale,
 } from "../services/api";
@@ -108,29 +107,6 @@ export function useCancelOrder() {
   });
 }
 
-export function useSubscribeNewsletter() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ email, source }: { email: string; source?: string }) =>
-      api.subscribeNewsletter(email, source),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-subscribers"] });
-      queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
-    },
-  });
-}
-
-export function useCreateInquiry() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: (payload: CreateInquiryPayload) => api.createInquiry(payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-inquiries"] });
-      queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
-    },
-  });
-}
-
 export function useCreateReview() {
   const queryClient = useQueryClient();
   return useMutation({
@@ -155,12 +131,9 @@ export interface AdminDashboardData {
     deliveredOrders: number;
     lowStockCount: number;
     todayOrders: number;
-    subscriberCount: number;
-    unreadInquiries: number;
   };
   lowStockItems?: any[];
   recentOrders?: any[];
-  recentInquiries?: any[];
 }
 
 export function useAdminDashboard(token: string | null) {
@@ -295,48 +268,6 @@ export function useAdminDeleteCoupon() {
   });
 }
 
-export function useAdminInquiries(token: string | null, params?: { status?: string; search?: string }) {
-  return useQuery({
-    queryKey: ["admin-inquiries", token, params],
-    queryFn: () =>
-      token
-        ? api.adminGetInquiries(token, params)
-        : Promise.resolve({ success: false, data: [] }),
-    enabled: Boolean(token),
-  });
-}
-
-export function useAdminUpdateInquiryStatus() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({
-      token,
-      id,
-      payload,
-    }: {
-      token: string;
-      id: string;
-      payload: { status?: string; adminNotes?: string };
-    }) => api.adminUpdateInquiryStatus(token, id, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-inquiries"] });
-      queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
-    },
-  });
-}
-
-export function useAdminDeleteInquiry() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ token, id }: { token: string; id: string }) =>
-      api.adminDeleteInquiry(token, id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-inquiries"] });
-      queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
-    },
-  });
-}
-
 export function useAdminReviews(token: string | null, params?: { status?: string; search?: string }) {
   return useQuery({
     queryKey: ["admin-reviews", token, params],
@@ -375,29 +306,6 @@ export function useAdminDeleteReview() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["reviews"] });
       queryClient.invalidateQueries({ queryKey: ["admin-reviews"] });
-    },
-  });
-}
-
-export function useAdminSubscribers(token: string | null) {
-  return useQuery({
-    queryKey: ["admin-subscribers", token],
-    queryFn: () =>
-      token
-        ? api.adminGetSubscribers(token)
-        : Promise.resolve({ success: false, data: [] }),
-    enabled: Boolean(token),
-  });
-}
-
-export function useAdminDeleteSubscriber() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ token, id }: { token: string; id: string }) =>
-      api.adminDeleteSubscriber(token, id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-subscribers"] });
-      queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
     },
   });
 }

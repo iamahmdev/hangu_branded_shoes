@@ -1,330 +1,194 @@
-import { useState, ChangeEvent, FormEvent } from "react";
 import Layout from "../src/components/Layout";
 import Reveal from "../src/components/Reveal";
 import { WhatsAppIcon } from "../src/components/WhatsAppButton";
 import { SHOP, WA, wa } from "../src/data/config";
-import { useCreateInquiry } from "../src/hooks/useApi";
-import { MessageSquare, Phone, Mail, MapPin, Clock, Send, CheckCircle2 } from "lucide-react";
-
-interface ContactForm {
-  firstName: string;
-  lastName: string;
-  phone: string;
-  email: string;
-  city: string;
-  subject: string;
-  orderNumber: string;
-  message: string;
-  preferredMethod: string;
-}
+import { Phone, MapPin, Clock, MessageCircle, ShieldCheck, Truck, RotateCcw } from "lucide-react";
 
 export default function Contact() {
-  const [form, setForm] = useState<ContactForm>({
-    firstName: "",
-    lastName: "",
-    phone: "",
-    email: "",
-    city: "",
-    subject: "Size Fitting Consultation",
-    orderNumber: "",
-    message: "",
-    preferredMethod: "WhatsApp",
-  });
-
-  const [submitted, setSubmitted] = useState<boolean>(false);
-  const createInquiryMutation = useCreateInquiry();
-
-  const handleChange = (field: keyof ContactForm) => (
-    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
-  ) => {
-    setForm({ ...form, [field]: e.target.value });
-  };
-
-  const constructMessage = (): string => {
-    const fullName = `${form.firstName} ${form.lastName}`.trim();
-    let text = `👋 *NEW INQUIRY — ${SHOP}*\n`;
-    text += `━━━━━━━━━━━━━━━━━━━━━\n`;
-    text += `👤 *Name:* ${fullName || "Customer"}\n`;
-    text += `📞 *Phone / WhatsApp:* ${form.phone || "Not provided"}\n`;
-    if (form.email) text += `📧 *Email:* ${form.email}\n`;
-    if (form.city) text += `📍 *City:* ${form.city}\n`;
-    text += `🏷️ *Topic:* ${form.subject}\n`;
-    if (form.orderNumber) text += `📦 *Order Number:* ${form.orderNumber}\n`;
-    text += `📲 *Preferred Contact:* ${form.preferredMethod}\n`;
-    text += `━━━━━━━━━━━━━━━━━━━━━\n`;
-    text += `💬 *Message:*\n${form.message || "Hi, I would like to inquire about your shoes."}\n`;
-    return text;
-  };
-
-  const handleWhatsAppSend = (e: FormEvent) => {
-    e.preventDefault();
-    if (!form.firstName || !form.phone || !form.message) {
-      alert("Please fill in your First Name, Phone Number, and Message.");
-      return;
-    }
-
-    createInquiryMutation.mutate({
-      firstName: form.firstName,
-      lastName: form.lastName,
-      phone: form.phone,
-      email: form.email,
-      city: form.city,
-      subject: form.subject,
-      orderNumber: form.orderNumber,
-      message: form.message,
-      preferredMethod: form.preferredMethod,
-    });
-
-    const msg = constructMessage();
-    window.open(wa(msg), "_blank");
-    setSubmitted(true);
-  };
-
-  const handleDirectSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    if (!form.firstName || !form.phone || !form.message) {
-      alert("Please fill in your First Name, Phone Number, and Message.");
-      return;
-    }
-
-    createInquiryMutation.mutate(
-      {
-        firstName: form.firstName,
-        lastName: form.lastName,
-        phone: form.phone,
-        email: form.email,
-        city: form.city,
-        subject: form.subject,
-        orderNumber: form.orderNumber,
-        message: form.message,
-        preferredMethod: form.preferredMethod,
-      },
-      {
-        onSuccess: () => {
-          setSubmitted(true);
-        },
-      }
-    );
-  };
+  const whatsappMsg = `Assalam-o-Alaikum ${SHOP}! I would like to inquire about shoe availability and sizes.`;
 
   return (
-    <Layout title="Contact & Showroom Location — Hangu Branded Shoes">
-      <div className="pt-32 pb-20">
-        <div className="wrap max-w-5xl mx-auto">
+    <Layout title={`Contact Us & Showroom — ${SHOP}`}>
+      <div className="pt-32 pb-24">
+        <div className="wrap max-w-5xl mx-auto px-4">
           {/* Header */}
           <div className="text-center mb-12">
-            <small className="text-brand-red uppercase tracking-wider text-xs font-bold">
-              CUSTOMER CONCIERGE & SHOWROOM
-            </small>
-            <h1 className="text-3xl md:text-5xl font-extrabold text-white mt-1">
-              Contact & Footwear Inquiries
-            </h1>
-            <p className="text-zinc-400 max-w-xl mx-auto mt-2.5 text-sm">
-              Need assistance selecting your ideal size, custom recommendations, or tracking updates? We are here to help.
-            </p>
+            <Reveal>
+              <small className="text-brand-red uppercase tracking-wider text-xs font-bold">
+                CUSTOMER CONCIERGE & SHOWROOM
+              </small>
+              <h1 className="text-3xl md:text-5xl font-extrabold text-white mt-1">
+                Contact & Store Location
+              </h1>
+              <p className="text-zinc-400 max-w-xl mx-auto mt-3 text-sm leading-relaxed">
+                Have questions about shoe sizing, order dispatch, or custom recommendations? Connect with our team directly via WhatsApp or phone helpline.
+              </p>
+            </Reveal>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[1.2fr_1fr] gap-8">
-            {/* Left: Contact / Consultation Form */}
-            <div className="glass p-6 md:p-8 rounded-3xl border border-white/10">
-              <h2 className="text-xl font-bold text-white mb-1 flex items-center gap-2">
-                <MessageSquare size={20} className="text-brand-gold" />
-                <span>Send Us an Inquiry</span>
-              </h2>
-              <p className="text-zinc-400 text-xs mb-6">
-                Fill out the details below. Our team logs inquiries directly to our database and responds within minutes.
-              </p>
-
-              {submitted ? (
-                <div className="p-6 rounded-2xl bg-green-500/15 border border-green-500/30 text-center animate-fadeIn">
-                  <CheckCircle2 size={36} className="text-green-400 mx-auto mb-2" />
-                  <b className="text-white text-base block">Inquiry Submitted Successfully!</b>
-                  <p className="text-zinc-300 text-xs mt-1">
-                    Thank you, {form.firstName}! Our footwear specialists will get in touch with you shortly.
+          {/* Core Contact Cards Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            {/* 1. Official WhatsApp Support (Primary) */}
+            <Reveal delay={100}>
+              <div className="glass p-7 rounded-3xl border border-white/10 flex flex-col justify-between h-full relative overflow-hidden group hover:border-[#25d366]/40 transition-all duration-300">
+                <div className="absolute top-0 right-0 w-36 h-36 bg-[#25d366]/10 rounded-full blur-3xl pointer-events-none" />
+                <div>
+                  <div className="w-13 h-13 w-12 h-12 rounded-2xl bg-[#25d366]/15 border border-[#25d366]/30 flex items-center justify-center mb-5 text-[#25d366]">
+                    <WhatsAppIcon size={26} color="#25d366" />
+                  </div>
+                  <small className="text-[#25d366] text-xs font-bold uppercase tracking-wider block mb-1">
+                    Instant Messaging
+                  </small>
+                  <h3 className="text-2xl font-bold text-white mb-2">WhatsApp Concierge</h3>
+                  <p className="text-zinc-400 text-xs leading-relaxed mb-4">
+                    Direct chat with our footwear specialists. Instant help with shoe fitting, real product videos, live stock verification, and tracking updates.
                   </p>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setSubmitted(false);
-                      setForm({
-                        firstName: "",
-                        lastName: "",
-                        phone: "",
-                        email: "",
-                        city: "",
-                        subject: "Size Fitting Consultation",
-                        orderNumber: "",
-                        message: "",
-                        preferredMethod: "WhatsApp",
-                      });
-                    }}
-                    className="btn ghost mt-4 py-2 px-4 text-xs"
-                  >
-                    Send Another Message
-                  </button>
-                </div>
-              ) : (
-                <form className="flex flex-col gap-3.5 text-xs">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-zinc-400 block mb-1">First Name *</label>
-                      <input
-                        type="text"
-                        required
-                        placeholder="e.g. Tariq"
-                        value={form.firstName}
-                        onChange={handleChange("firstName")}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-brand-red"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-zinc-400 block mb-1">Last Name</label>
-                      <input
-                        type="text"
-                        placeholder="e.g. Khan"
-                        value={form.lastName}
-                        onChange={handleChange("lastName")}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-brand-red"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-zinc-400 block mb-1">WhatsApp / Phone *</label>
-                      <input
-                        type="tel"
-                        required
-                        placeholder="0300 1234567"
-                        value={form.phone}
-                        onChange={handleChange("phone")}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-brand-red font-mono"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-zinc-400 block mb-1">City</label>
-                      <input
-                        type="text"
-                        placeholder="Peshawar, Kohat, Islamabad..."
-                        value={form.city}
-                        onChange={handleChange("city")}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-brand-red"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="text-zinc-400 block mb-1">Topic / Subject</label>
-                      <select
-                        value={form.subject}
-                        onChange={handleChange("subject")}
-                        className="w-full bg-zinc-900 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-brand-red"
-                      >
-                        <option value="Size Fitting Consultation">Size Fitting Consultation</option>
-                        <option value="Order Tracking & Status">Order Tracking & Status</option>
-                        <option value="7-Day Size Exchange">7-Day Size Exchange</option>
-                        <option value="Bulk / Wholesale Inquiry">Bulk / Wholesale Inquiry</option>
-                        <option value="General Question">General Question</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="text-zinc-400 block mb-1">Order Number (if any)</label>
-                      <input
-                        type="text"
-                        placeholder="HBS123456"
-                        value={form.orderNumber}
-                        onChange={handleChange("orderNumber")}
-                        className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-brand-red font-mono"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="text-zinc-400 block mb-1">Message *</label>
-                    <textarea
-                      required
-                      rows={4}
-                      placeholder="Write your questions or describe your sizing needs..."
-                      value={form.message}
-                      onChange={handleChange("message")}
-                      className="w-full bg-white/5 border border-white/10 rounded-xl p-2.5 text-white outline-none focus:border-brand-red"
-                    />
-                  </div>
-
-                  <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                    <button
-                      type="button"
-                      onClick={handleWhatsAppSend}
-                      disabled={createInquiryMutation.isPending}
-                      className="btn flex-1 py-3 text-xs font-bold inline-flex items-center justify-center gap-2"
-                    >
-                      <WhatsAppIcon size={16} color="#fff" />
-                      <span>Send via WhatsApp</span>
-                    </button>
-                    <button
-                      type="button"
-                      onClick={handleDirectSubmit}
-                      disabled={createInquiryMutation.isPending}
-                      className="btn ghost flex-1 py-3 text-xs font-bold inline-flex items-center justify-center gap-2"
-                    >
-                      <Send size={15} />
-                      <span>Submit Direct Inquiry</span>
-                    </button>
-                  </div>
-                </form>
-              )}
-            </div>
-
-            {/* Right: Showroom & Direct Contact Details */}
-            <div className="flex flex-col gap-6">
-              <div className="glass p-6 md:p-8 rounded-3xl border border-white/10 flex flex-col gap-5">
-                <h3 className="text-lg font-bold text-white">Showroom & Support</h3>
-
-                <div className="flex items-start gap-3 text-xs">
-                  <div className="w-8 h-8 rounded-full bg-brand-red/15 text-brand-red border border-brand-red/30 flex items-center justify-center shrink-0">
-                    <MapPin size={15} />
-                  </div>
-                  <div>
-                    <b className="text-white block text-sm">Physical Showroom</b>
-                    <p className="text-zinc-400 mt-0.5">Main Commercial Bazaar, Hangu, KPK, Pakistan</p>
+                  <div className="font-mono text-white text-base font-bold bg-white/5 border border-white/10 px-4 py-2 rounded-xl w-fit mb-5">
+                    +{WA}
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 text-xs">
-                  <div className="w-8 h-8 rounded-full bg-[#25d366]/15 text-[#25d366] border border-[#25d366]/30 flex items-center justify-center shrink-0">
-                    <Phone size={15} />
+                <a
+                  href={wa(whatsappMsg)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn inline-flex items-center justify-center gap-2.5 w-full py-3.5 text-sm font-bold bg-[#25d366] hover:bg-[#20ba59] text-black shadow-lg shadow-[#25d366]/20 transition-all"
+                >
+                  <WhatsAppIcon size={18} color="#000" />
+                  <span>Chat on WhatsApp Now</span>
+                </a>
+              </div>
+            </Reveal>
+
+            {/* 2. Direct Phone Helpline */}
+            <Reveal delay={200}>
+              <div className="glass p-7 rounded-3xl border border-white/10 flex flex-col justify-between h-full relative overflow-hidden group hover:border-brand-gold/40 transition-all duration-300">
+                <div className="absolute top-0 right-0 w-36 h-36 bg-brand-gold/10 rounded-full blur-3xl pointer-events-none" />
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-brand-gold/15 border border-brand-gold/30 flex items-center justify-center mb-5 text-brand-gold">
+                    <Phone size={24} />
                   </div>
-                  <div>
-                    <b className="text-white block text-sm">WhatsApp Concierge</b>
-                    <p className="text-zinc-400 mt-0.5 font-mono">+{WA}</p>
-                    <small className="text-[#25d366] block mt-0.5">Average reply time: under 5 minutes</small>
+                  <small className="text-brand-gold text-xs font-bold uppercase tracking-wider block mb-1">
+                    Customer Hotline
+                  </small>
+                  <h3 className="text-2xl font-bold text-white mb-2">Call Center Helpline</h3>
+                  <p className="text-zinc-400 text-xs leading-relaxed mb-4">
+                    Speak directly with our store support team for urgent order assistance, wholesale inquiries, and delivery questions across Pakistan.
+                  </p>
+                  <div className="font-mono text-white text-base font-bold bg-white/5 border border-white/10 px-4 py-2 rounded-xl w-fit mb-5">
+                    0333-3147691 / 0345-9680373
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 text-xs">
-                  <div className="w-8 h-8 rounded-full bg-blue-500/15 text-blue-400 border border-blue-500/30 flex items-center justify-center shrink-0">
-                    <Mail size={15} />
+                <a
+                  href={`tel:+${WA}`}
+                  className="btn ghost inline-flex items-center justify-center gap-2.5 w-full py-3.5 text-sm font-bold border-white/20 hover:border-brand-gold hover:text-brand-gold transition-all"
+                >
+                  <Phone size={18} />
+                  <span>Call Us Directly</span>
+                </a>
+              </div>
+            </Reveal>
+
+            {/* 3. Physical Showroom Address */}
+            <Reveal delay={300}>
+              <div className="glass p-7 rounded-3xl border border-white/10 flex flex-col justify-between h-full">
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-brand-red/15 border border-brand-red/30 flex items-center justify-center mb-5 text-brand-red">
+                    <MapPin size={24} />
                   </div>
-                  <div>
-                    <b className="text-white block text-sm">Email Support</b>
-                    <p className="text-zinc-400 mt-0.5 font-mono">support@hangubrandedshoes.com</p>
+                  <small className="text-brand-red text-xs font-bold uppercase tracking-wider block mb-1">
+                    Storefront
+                  </small>
+                  <h3 className="text-2xl font-bold text-white mb-2">Showroom Address</h3>
+                  <p className="text-zinc-400 text-xs leading-relaxed mb-4">
+                    Visit our physical store to explore our full collection in person, try different sizes, and experience master craftsmanship firsthand.
+                  </p>
+                  <div className="bg-white/5 border border-white/10 p-4 rounded-xl text-xs text-zinc-300 leading-relaxed mb-4">
+                    <b className="text-white block text-sm mb-1">{SHOP}</b>
+                    Main Commercial Bazaar, Hangu District, Khyber Pakhtunkhwa (KP), Pakistan
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3 text-xs">
-                  <div className="w-8 h-8 rounded-full bg-brand-gold/15 text-brand-gold border border-brand-gold/30 flex items-center justify-center shrink-0">
-                    <Clock size={15} />
+                <div className="flex items-center gap-2 text-xs text-zinc-400">
+                  <ShieldCheck size={16} className="text-brand-gold shrink-0" />
+                  <span>Physical verification & in-person sizing available</span>
+                </div>
+              </div>
+            </Reveal>
+
+            {/* 4. Operating Hours & Schedule */}
+            <Reveal delay={400}>
+              <div className="glass p-7 rounded-3xl border border-white/10 flex flex-col justify-between h-full">
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-blue-500/15 border border-blue-500/30 flex items-center justify-center mb-5 text-blue-400">
+                    <Clock size={24} />
                   </div>
-                  <div>
-                    <b className="text-white block text-sm">Opening Hours</b>
-                    <p className="text-zinc-400 mt-0.5">Monday – Sunday: 10:00 AM – 10:00 PM</p>
+                  <small className="text-blue-400 text-xs font-bold uppercase tracking-wider block mb-1">
+                    Store Timing
+                  </small>
+                  <h3 className="text-2xl font-bold text-white mb-2">Operating Hours</h3>
+                  <p className="text-zinc-400 text-xs leading-relaxed mb-4">
+                    Our physical outlet and digital customer support operate 7 days a week for seamless shopping across all provinces.
+                  </p>
+                  <div className="divide-y divide-white/5 bg-white/5 border border-white/10 rounded-xl p-3.5 text-xs">
+                    <div className="flex justify-between py-1.5 text-zinc-300">
+                      <span>Monday – Saturday:</span>
+                      <b className="text-white font-mono">10:00 AM – 10:00 PM</b>
+                    </div>
+                    <div className="flex justify-between py-1.5 text-zinc-300">
+                      <span>Sunday:</span>
+                      <b className="text-white font-mono">11:00 AM – 09:00 PM</b>
+                    </div>
+                    <div className="flex justify-between py-1.5 text-zinc-300">
+                      <span>WhatsApp Orders:</span>
+                      <b className="text-green-400 font-mono">24/7 Available</b>
+                    </div>
                   </div>
+                </div>
+
+                <div className="flex items-center gap-2 text-xs text-zinc-400 mt-4">
+                  <MessageCircle size={16} className="text-[#25d366] shrink-0" />
+                  <span>Messages sent after hours are answered early next morning</span>
+                </div>
+              </div>
+            </Reveal>
+          </div>
+
+          {/* Reassurance Features Bar */}
+          <Reveal delay={500}>
+            <div className="glass p-6 rounded-3xl border border-white/10 grid grid-cols-1 md:grid-cols-3 gap-6 text-center md:text-left">
+              <div className="flex items-center gap-3.5 justify-center md:justify-start">
+                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-brand-gold shrink-0">
+                  <Truck size={20} />
+                </div>
+                <div>
+                  <b className="text-white text-xs block">Nationwide Delivery</b>
+                  <span className="text-zinc-400 text-[11px]">Free delivery on orders over Rs. 5,000</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3.5 justify-center md:justify-start">
+                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-green-400 shrink-0">
+                  <RotateCcw size={20} />
+                </div>
+                <div>
+                  <b className="text-white text-xs block">7-Day Free Size Exchange</b>
+                  <span className="text-zinc-400 text-[11px]">Hassle-free size replacement guarantee</span>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-3.5 justify-center md:justify-start">
+                <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-brand-red shrink-0">
+                  <ShieldCheck size={20} />
+                </div>
+                <div>
+                  <b className="text-white text-xs block">Inspect Before Payment</b>
+                  <span className="text-zinc-400 text-[11px]">Check shoes before paying COD rider</span>
                 </div>
               </div>
             </div>
-          </div>
+          </Reveal>
         </div>
       </div>
     </Layout>

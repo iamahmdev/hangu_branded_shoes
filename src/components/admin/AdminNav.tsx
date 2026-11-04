@@ -4,9 +4,7 @@ import {
   ShoppingBag,
   Package,
   Tag,
-  MessageSquare,
   Star,
-  Users,
   Settings,
 } from "lucide-react";
 
@@ -17,9 +15,7 @@ interface AdminNavProps {
     orders: number;
     products: number;
     coupons: number;
-    inquiries: number;
     reviews: number;
-    subscribers: number;
   };
 }
 
@@ -29,9 +25,7 @@ export default function AdminNav({ activeTab, onTabChange, counts }: AdminNavPro
     { id: "orders" as AdminTab, label: `Orders (${counts.orders})`, icon: ShoppingBag },
     { id: "products" as AdminTab, label: `Shoes Catalog (${counts.products})`, icon: Package },
     { id: "coupons" as AdminTab, label: `Promo Codes (${counts.coupons})`, icon: Tag },
-    { id: "inquiries" as AdminTab, label: `Inquiries (${counts.inquiries})`, icon: MessageSquare },
     { id: "reviews" as AdminTab, label: `Reviews (${counts.reviews})`, icon: Star },
-    { id: "subscribers" as AdminTab, label: `VIP Subscribers (${counts.subscribers})`, icon: Users },
     { id: "settings" as AdminTab, label: "Store Settings", icon: Settings },
   ];
 

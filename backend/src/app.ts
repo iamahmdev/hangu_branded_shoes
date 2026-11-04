@@ -9,8 +9,6 @@ import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import couponRoutes from "./routes/couponRoutes.js";
-import inquiryRoutes from "./routes/inquiryRoutes.js";
-import subscriberRoutes from "./routes/subscriberRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
@@ -57,9 +55,6 @@ app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
 app.use("/api/coupons", couponRoutes);
-app.use("/api/inquiries", inquiryRoutes);
-app.use("/api/subscribers", subscriberRoutes);
-app.use("/api/newsletter", subscriberRoutes);
 app.use("/api/settings", settingRoutes);
 app.use("/api/upload", uploadRoutes);
 

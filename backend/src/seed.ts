@@ -188,7 +188,7 @@ export const SEED_PRODUCTS = [
 ];
 
 export async function seedDatabase(): Promise<void> {
-  // 1. Seed Superadmin
+  // 1. Seed Admin
   const existingAdmin = await Admin.findOne({ username: "admin" });
   if (!existingAdmin) {
     const salt = await bcrypt.genSalt(10);
@@ -197,8 +197,8 @@ export async function seedDatabase(): Promise<void> {
       username: "admin",
       email: "admin@hangubrandedshoes.com",
       passwordHash,
-      name: "Super Admin",
-      role: "superadmin",
+      name: "Admin",
+      role: "admin",
       permissions: ["*"],
       isActive: true,
     });

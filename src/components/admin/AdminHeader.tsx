@@ -35,7 +35,7 @@ export default function AdminHeader({
             <span className="text-brand-gold font-mono font-semibold">
               {adminUser?.username || "Admin"}
             </span>{" "}
-            ({adminUser?.role ? adminUser.role.toUpperCase() : "SUPERADMIN"}) •{" "}
+            ({adminUser?.role ? adminUser.role.toUpperCase() : "ADMIN"}) •{" "}
             <span className="text-zinc-500">{adminUser?.email || "admin@hangubrandedshoes.com"}</span>
           </span>
         </div>

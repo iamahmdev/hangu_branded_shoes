@@ -47,18 +47,6 @@ export interface CreateOrderPayload {
   notes?: string;
 }
 
-export interface CreateInquiryPayload {
-  firstName: string;
-  lastName?: string;
-  phone: string;
-  email?: string;
-  city?: string;
-  subject: string;
-  orderNumber?: string;
-  message: string;
-  preferredMethod?: string;
-}
-
 export interface CreateReviewPayload {
   name?: string;
   userName?: string;
@@ -201,30 +189,6 @@ export const api = {
   },
 
   /**
-   * Subscribe to newsletter
-   */
-  async subscribeNewsletter(email: string, source: string = "website_footer"): Promise<{ success: boolean; message?: string }> {
-    const res = await requestApi(`/newsletter`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, source }),
-    });
-    return await res.json();
-  },
-
-  /**
-   * Post customer inquiry / support request
-   */
-  async createInquiry(payload: CreateInquiryPayload): Promise<{ success: boolean; data?: any; message?: string }> {
-    const res = await requestApi(`/inquiries`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    return await res.json();
-  },
-
-  /**
    * Fetch approved reviews directly from backend
    */
   async getReviews(params?: { shoeName?: string; rating?: number }): Promise<{ success: boolean; stats?: any; data?: any[] }> {
@@ -277,7 +241,7 @@ export const api = {
     return await res.json();
   },
 
-  async adminGetDashboard(token: string): Promise<{ success: boolean; stats?: any; lowStockItems?: any[]; recentOrders?: any[]; recentInquiries?: any[] }> {
+  async adminGetDashboard(token: string): Promise<{ success: boolean; stats?: any; lowStockItems?: any[]; recentOrders?: any[] }> {
     const res = await requestApi(`/admin/dashboard`, {
       headers: { Authorization: `Bearer ${token}` },
     });
@@ -386,37 +350,6 @@ export const api = {
     return await res.json();
   },
 
-  async adminGetInquiries(token: string, params?: { status?: string; search?: string }): Promise<{ success: boolean; count?: number; data?: any[] }> {
-    const qs = new URLSearchParams();
-    if (params?.status && params.status !== "all") qs.append("status", params.status);
-    if (params?.search) qs.append("search", params.search);
-
-    const res = await requestApi(`/inquiries${qs.toString() ? `?${qs.toString()}` : ""}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return await res.json();
-  },
-
-  async adminUpdateInquiryStatus(token: string, id: string, payload: { status?: string; adminNotes?: string }): Promise<{ success: boolean; data?: any }> {
-    const res = await requestApi(`/inquiries/${id}/status`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-    });
-    return await res.json();
-  },
-
-  async adminDeleteInquiry(token: string, id: string): Promise<{ success: boolean; message?: string }> {
-    const res = await requestApi(`/inquiries/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return await res.json();
-  },
-
   async adminGetReviews(token: string, params?: { status?: string; search?: string }): Promise<{ success: boolean; count?: number; data?: any[] }> {
     const qs = new URLSearchParams();
     if (params?.status && params.status !== "all") qs.append("status", params.status);
@@ -442,21 +375,6 @@ export const api = {
 
   async adminDeleteReview(token: string, id: string): Promise<{ success: boolean; message?: string }> {
     const res = await requestApi(`/reviews/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return await res.json();
-  },
-
-  async adminGetSubscribers(token: string): Promise<{ success: boolean; count?: number; data?: any[] }> {
-    const res = await requestApi(`/newsletter`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return await res.json();
-  },
-
-  async adminDeleteSubscriber(token: string, id: string): Promise<{ success: boolean; message?: string }> {
-    const res = await requestApi(`/newsletter/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });

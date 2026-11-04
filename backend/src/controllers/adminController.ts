@@ -10,11 +10,12 @@ export async function getDashboard(_req: AuthRequest, res: Response): Promise<vo
 
     const deliveredOrders = orders.filter((o) => o.status === "delivered").length;
     const pendingOrders = orders.filter((o) => o.status === "pending").length;
+    const pendingPaymentsCount = orders.filter((o) => o.paymentStatus === "pending_verification").length;
     const totalOrders = orders.length;
 
     // Total revenue excluding cancelled
     const totalRevenue = orders
-      .filter((o) => o.status !== "cancelled")
+      .filter((o) => o.status !== "cancelled" && o.paymentStatus === "paid")
       .reduce((acc, o) => acc + (o.totalAmount || 0), 0);
 
     const startOfToday = new Date();
@@ -34,7 +35,7 @@ export async function getDashboard(_req: AuthRequest, res: Response): Promise<vo
       }));
     const lowStockCount = lowStockItems.length;
 
-    const recentOrders = await Order.find().sort({ createdAt: -1 }).limit(5);
+    const recentOrders = await Order.find().sort({ createdAt: -1 }).limit(6);
 
     res.json({
       success: true,
@@ -43,6 +44,7 @@ export async function getDashboard(_req: AuthRequest, res: Response): Promise<vo
         totalOrders,
         pendingOrders,
         deliveredOrders,
+        pendingPaymentsCount,
         lowStockCount,
         todayOrders,
       },
@@ -53,4 +55,3 @@ export async function getDashboard(_req: AuthRequest, res: Response): Promise<vo
     res.status(500).json({ success: false, message: error.message });
   }
 }
-

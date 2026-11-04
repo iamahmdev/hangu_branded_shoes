@@ -3,7 +3,6 @@ import {
   LayoutDashboard,
   ShoppingBag,
   Package,
-  Tag,
   Star,
   Settings,
 } from "lucide-react";
@@ -14,7 +13,6 @@ interface AdminNavProps {
   counts: {
     orders: number;
     products: number;
-    coupons: number;
     reviews: number;
   };
 }
@@ -24,7 +22,6 @@ export default function AdminNav({ activeTab, onTabChange, counts }: AdminNavPro
     { id: "dashboard" as AdminTab, label: "Overview", icon: LayoutDashboard },
     { id: "orders" as AdminTab, label: `Orders (${counts.orders})`, icon: ShoppingBag },
     { id: "products" as AdminTab, label: `Shoes Catalog (${counts.products})`, icon: Package },
-    { id: "coupons" as AdminTab, label: `Promo Codes (${counts.coupons})`, icon: Tag },
     { id: "reviews" as AdminTab, label: `Reviews (${counts.reviews})`, icon: Star },
     { id: "settings" as AdminTab, label: "Store Settings", icon: Settings },
   ];
@@ -52,4 +49,3 @@ export default function AdminNav({ activeTab, onTabChange, counts }: AdminNavPro
     </div>
   );
 }
-

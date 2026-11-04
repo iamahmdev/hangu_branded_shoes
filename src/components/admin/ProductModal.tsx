@@ -37,6 +37,7 @@ export default function ProductModal({
     desc: "",
     brand: "Hangu Branded Shoes",
     sizes: ["40", "41", "42", "43", "44"],
+    isActive: true,
   });
 
   const [uploading, setUploading] = useState<boolean>(false);
@@ -57,6 +58,7 @@ export default function ProductModal({
         desc: initialData.desc || "",
         brand: initialData.brand || "Hangu Branded Shoes",
         sizes: initialData.sizes && initialData.sizes.length > 0 ? initialData.sizes : ["40", "41", "42", "43", "44"],
+        isActive: initialData.isActive !== false,
       });
     }
   }, [initialData]);
@@ -302,6 +304,27 @@ export default function ProductModal({
               placeholder="Comfortable handcrafted leather shoe with cushioned insole..."
               className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-brand-gold"
             />
+          </div>
+
+          {/* Status Active/Disabled Toggle */}
+          <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+            <div>
+              <b className="text-white block text-xs">Catalog Status</b>
+              <span className="text-[11px] text-zinc-400">
+                {form.isActive !== false
+                  ? "Visible to customers in footwear catalog"
+                  : "Hidden from customer store catalog (Disabled)"}
+              </span>
+            </div>
+            <label className="relative inline-flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={form.isActive !== false}
+                onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
+                className="sr-only peer"
+              />
+              <div className="w-11 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+            </label>
           </div>
 
           {/* Actions */}

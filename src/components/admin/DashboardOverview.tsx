@@ -34,9 +34,10 @@ export default function DashboardOverview({
     <div className="flex flex-col gap-6 animate-fadeIn">
       {/* 5 Key Analytics Metric Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+        {/* 1. Revenue */}
         <div className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider">Gross Revenue</span>
+            <span className="text-[11px] font-bold uppercase tracking-wider">Revenue</span>
             <DollarSign size={16} className="text-brand-gold" />
           </div>
           <div>
@@ -47,6 +48,7 @@ export default function DashboardOverview({
           </div>
         </div>
 
+        {/* 2. Total Orders */}
         <div className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
             <span className="text-[11px] font-bold uppercase tracking-wider">Total Orders</span>
@@ -56,41 +58,16 @@ export default function DashboardOverview({
             <b className="text-xl md:text-2xl font-bold text-white font-mono block">
               {stats?.totalOrders || 0}
             </b>
-            <span className="text-[10px] text-amber-400 mt-1 block">
-              {stats?.pendingOrders || 0} pending dispatch
+            <span className="text-[10px] text-zinc-400 mt-1 block">
+              {stats?.deliveredOrders || 0} delivered
             </span>
           </div>
         </div>
 
+        {/* 3. Today's Orders */}
         <div className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
           <div className="flex items-center justify-between text-zinc-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider">Delivered</span>
-            <CheckCircle size={16} className="text-green-400" />
-          </div>
-          <div>
-            <b className="text-xl md:text-2xl font-bold text-green-400 font-mono block">
-              {stats?.deliveredOrders || 0}
-            </b>
-            <span className="text-[10px] text-zinc-500 mt-1 block">Fulfilled successfully</span>
-          </div>
-        </div>
-
-        <div className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider">Low Stock</span>
-            <AlertTriangle size={16} className="text-red-400" />
-          </div>
-          <div>
-            <b className="text-xl md:text-2xl font-bold text-red-400 font-mono block">
-              {stats?.lowStockCount || 0} items
-            </b>
-            <span className="text-[10px] text-zinc-500 mt-1 block">Stock ≤ 10 units</span>
-          </div>
-        </div>
-
-        <div className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider">Today's Orders</span>
+            <span className="text-[11px] font-bold uppercase tracking-wider">Today&apos;s Orders</span>
             <Calendar size={16} className="text-cyan-400" />
           </div>
           <div>
@@ -98,6 +75,42 @@ export default function DashboardOverview({
               {stats?.todayOrders || 0}
             </b>
             <span className="text-[10px] text-zinc-500 mt-1 block">Placed today</span>
+          </div>
+        </div>
+
+        {/* 4. Pending Payments */}
+        <div
+          onClick={() => onNavigateTab("orders")}
+          className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between cursor-pointer hover:border-amber-500/40 transition-all"
+        >
+          <div className="flex items-center justify-between text-zinc-400 mb-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider">Pending Payments</span>
+            <Package size={16} className="text-amber-400" />
+          </div>
+          <div>
+            <b className="text-xl md:text-2xl font-bold text-amber-400 font-mono block">
+              {stats?.pendingPaymentsCount ?? (stats?.pendingOrders || 0)}
+            </b>
+            <span className="text-[10px] text-amber-300/80 mt-1 block">
+              Needs verification
+            </span>
+          </div>
+        </div>
+
+        {/* 5. Low-Stock Alerts */}
+        <div
+          onClick={() => onNavigateTab("products")}
+          className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between cursor-pointer hover:border-red-500/40 transition-all"
+        >
+          <div className="flex items-center justify-between text-zinc-400 mb-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider">Low Stock</span>
+            <AlertTriangle size={16} className="text-red-400" />
+          </div>
+          <div>
+            <b className="text-xl md:text-2xl font-bold text-red-400 font-mono block">
+              {stats?.lowStockCount || 0}
+            </b>
+            <span className="text-[10px] text-zinc-500 mt-1 block">Stock ≤ 10 pairs</span>
           </div>
         </div>
       </div>

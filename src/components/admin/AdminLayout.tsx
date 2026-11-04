@@ -15,7 +15,6 @@ interface AdminLayoutProps {
   counts: {
     orders: number;
     products: number;
-    coupons: number;
     reviews: number;
   };
 }

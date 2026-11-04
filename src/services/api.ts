@@ -39,11 +39,10 @@ export interface CreateOrderPayload {
   }>;
   subtotal: number;
   shippingFee: number;
-  discountAmount?: number;
-  couponCode?: string;
   totalAmount: number;
-  paymentMethod: "cod" | "jazzcash" | "easypaisa";
-  transactionId?: string;
+  paymentMethod: "easypaisa";
+  transactionId: string;
+  paymentScreenshot?: string;
   notes?: string;
 }
 
@@ -68,20 +67,6 @@ export interface RecentSale {
   price: number;
   size: string;
   createdAt: string;
-}
-
-export interface CouponVerifyResult {
-  success: boolean;
-  valid?: boolean;
-  coupon?: {
-    code: string;
-    discountType: "percentage" | "fixed";
-    discountValue: number;
-    discountAmount: number;
-    freeShipping: boolean;
-    description?: string;
-  };
-  message?: string;
 }
 
 export const api = {
@@ -177,13 +162,14 @@ export const api = {
   },
 
   /**
-   * Verify coupon promo code against subtotal
+   * Upload customer payment receipt (EasyPaisa transfer screenshot)
    */
-  async verifyCoupon(code: string, subtotal: number): Promise<CouponVerifyResult> {
-    const res = await requestApi(`/coupons/verify`, {
+  async uploadPaymentReceipt(file: File): Promise<{ success: boolean; data?: { url: string; publicId: string }; message?: string }> {
+    const formData = new FormData();
+    formData.append("image", file);
+    const res = await requestApi(`/upload/receipt`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ code, subtotal }),
+      body: formData,
     });
     return await res.json();
   },
@@ -234,6 +220,18 @@ export const api = {
     return await res.json();
   },
 
+  async adminChangePassword(token: string, payload: { currentPassword: string; newPassword: string }): Promise<{ success: boolean; message?: string }> {
+    const res = await requestApi(`/admin/change-password`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(payload),
+    });
+    return await res.json();
+  },
+
   async adminGetMe(token: string): Promise<{ success: boolean; admin?: any }> {
     const res = await requestApi(`/admin/me`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -248,9 +246,10 @@ export const api = {
     return await res.json();
   },
 
-  async adminGetOrders(token: string, params?: { status?: string; search?: string }): Promise<{ success: boolean; count?: number; data?: any[] }> {
+  async adminGetOrders(token: string, params?: { status?: string; paymentStatus?: string; search?: string }): Promise<{ success: boolean; count?: number; data?: any[] }> {
     const qs = new URLSearchParams();
     if (params?.status && params.status !== "all") qs.append("status", params.status);
+    if (params?.paymentStatus && params.paymentStatus !== "all") qs.append("paymentStatus", params.paymentStatus);
     if (params?.search) qs.append("search", params.search);
 
     const res = await requestApi(`/orders${qs.toString() ? `?${qs.toString()}` : ""}`, {
@@ -267,6 +266,18 @@ export const api = {
         Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(payload),
+    });
+    return await res.json();
+  },
+
+  async adminUpdateOrderPayment(token: string, orderId: string, paymentStatus: "pending_verification" | "paid" | "rejected", note?: string): Promise<{ success: boolean; data?: any; message?: string }> {
+    const res = await requestApi(`/orders/${encodeURIComponent(orderId)}/payment`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ paymentStatus, note }),
     });
     return await res.json();
   },
@@ -317,33 +328,6 @@ export const api = {
 
   async adminDeleteProduct(token: string, id: number | string): Promise<{ success: boolean; message?: string }> {
     const res = await requestApi(`/products/${id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return await res.json();
-  },
-
-  async adminGetCoupons(token: string): Promise<{ success: boolean; data?: any[] }> {
-    const res = await requestApi(`/coupons`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return await res.json();
-  },
-
-  async adminCreateCoupon(token: string, payload: any): Promise<{ success: boolean; data?: any; message?: string }> {
-    const res = await requestApi(`/coupons`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payload),
-    });
-    return await res.json();
-  },
-
-  async adminDeleteCoupon(token: string, id: string): Promise<{ success: boolean; message?: string }> {
-    const res = await requestApi(`/coupons/${id}`, {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` },
     });

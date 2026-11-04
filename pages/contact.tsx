@@ -2,13 +2,23 @@ import Layout from "../src/components/Layout";
 import Reveal from "../src/components/Reveal";
 import { WhatsAppIcon } from "../src/components/WhatsAppButton";
 import { SHOP, WA, wa } from "../src/data/config";
+import { useStoreSettings } from "../src/hooks/useApi";
 import { Phone, MapPin, Clock, MessageCircle, ShieldCheck, Truck, RotateCcw } from "lucide-react";
 
 export default function Contact() {
-  const whatsappMsg = `Assalam-o-Alaikum ${SHOP}! I would like to inquire about shoe availability and sizes.`;
+  const { data: storeSettingsData } = useStoreSettings();
+  const settings = storeSettingsData?.data;
+
+  const shopName = settings?.shopName?.trim() || SHOP;
+  const whatsappNum = settings?.whatsappNumber?.trim() || WA;
+  const phoneNum = settings?.phone?.trim() || "0333-3147691";
+  const address = settings?.address?.trim() || "Main Commercial Bazaar, Hangu District, Khyber Pakhtunkhwa (KP), Pakistan";
+  const shopTiming = settings?.shopTiming?.trim() || "8:00 AM to 5:00 PM";
+
+  const whatsappMsg = `Assalam-o-Alaikum ${shopName}! I would like to inquire about footwear availability and sizes.`;
 
   return (
-    <Layout title={`Contact Us & Showroom — ${SHOP}`}>
+    <Layout title={`Contact Us & Store Location — ${shopName}`}>
       <div className="pt-32 pb-24">
         <div className="wrap max-w-5xl mx-auto px-4">
           {/* Header */}
@@ -21,19 +31,19 @@ export default function Contact() {
                 Contact & Store Location
               </h1>
               <p className="text-zinc-400 max-w-xl mx-auto mt-3 text-sm leading-relaxed">
-                Have questions about shoe sizing, order dispatch, or custom recommendations? Connect with our team directly via WhatsApp or phone helpline.
+                Have questions about shoe sizing, order dispatch, or recommendations? Connect with our team directly via WhatsApp or phone hotline.
               </p>
             </Reveal>
           </div>
 
           {/* Core Contact Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {/* 1. Official WhatsApp Support (Primary) */}
+            {/* 1. Official WhatsApp Support */}
             <Reveal delay={100}>
               <div className="glass p-7 rounded-3xl border border-white/10 flex flex-col justify-between h-full relative overflow-hidden group hover:border-[#25d366]/40 transition-all duration-300">
                 <div className="absolute top-0 right-0 w-36 h-36 bg-[#25d366]/10 rounded-full blur-3xl pointer-events-none" />
                 <div>
-                  <div className="w-13 h-13 w-12 h-12 rounded-2xl bg-[#25d366]/15 border border-[#25d366]/30 flex items-center justify-center mb-5 text-[#25d366]">
+                  <div className="w-12 h-12 rounded-2xl bg-[#25d366]/15 border border-[#25d366]/30 flex items-center justify-center mb-5 text-[#25d366]">
                     <WhatsAppIcon size={26} color="#25d366" />
                   </div>
                   <small className="text-[#25d366] text-xs font-bold uppercase tracking-wider block mb-1">
@@ -41,15 +51,15 @@ export default function Contact() {
                   </small>
                   <h3 className="text-2xl font-bold text-white mb-2">WhatsApp Concierge</h3>
                   <p className="text-zinc-400 text-xs leading-relaxed mb-4">
-                    Direct chat with our footwear specialists. Instant help with shoe fitting, real product videos, live stock verification, and tracking updates.
+                    Direct chat with our footwear specialists for sizing assistance, real product photos, live stock confirmation, and tracking updates.
                   </p>
                   <div className="font-mono text-white text-base font-bold bg-white/5 border border-white/10 px-4 py-2 rounded-xl w-fit mb-5">
-                    +{WA}
+                    +{whatsappNum}
                   </div>
                 </div>
 
                 <a
-                  href={wa(whatsappMsg)}
+                  href={wa(whatsappMsg, whatsappNum)}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn inline-flex items-center justify-center gap-2.5 w-full py-3.5 text-sm font-bold bg-[#25d366] hover:bg-[#20ba59] text-black shadow-lg shadow-[#25d366]/20 transition-all"
@@ -73,15 +83,15 @@ export default function Contact() {
                   </small>
                   <h3 className="text-2xl font-bold text-white mb-2">Call Center Helpline</h3>
                   <p className="text-zinc-400 text-xs leading-relaxed mb-4">
-                    Speak directly with our store support team for urgent order assistance, wholesale inquiries, and delivery questions across Pakistan.
+                    Speak directly with our store support team for urgent order assistance, size inquiries, and delivery questions across Pakistan.
                   </p>
                   <div className="font-mono text-white text-base font-bold bg-white/5 border border-white/10 px-4 py-2 rounded-xl w-fit mb-5">
-                    0333-3147691 / 0345-9680373
+                    {phoneNum}
                   </div>
                 </div>
 
                 <a
-                  href={`tel:+${WA}`}
+                  href={`tel:${phoneNum.replace(/[^0-9+]/g, "")}`}
                   className="btn ghost inline-flex items-center justify-center gap-2.5 w-full py-3.5 text-sm font-bold border-white/20 hover:border-brand-gold hover:text-brand-gold transition-all"
                 >
                   <Phone size={18} />
@@ -105,8 +115,8 @@ export default function Contact() {
                     Visit our physical store to explore our full collection in person, try different sizes, and experience master craftsmanship firsthand.
                   </p>
                   <div className="bg-white/5 border border-white/10 p-4 rounded-xl text-xs text-zinc-300 leading-relaxed mb-4">
-                    <b className="text-white block text-sm mb-1">{SHOP}</b>
-                    Main Commercial Bazaar, Hangu District, Khyber Pakhtunkhwa (KP), Pakistan
+                    <b className="text-white block text-sm mb-1">{shopName}</b>
+                    {address}
                   </div>
                 </div>
 
@@ -129,16 +139,12 @@ export default function Contact() {
                   </small>
                   <h3 className="text-2xl font-bold text-white mb-2">Operating Hours</h3>
                   <p className="text-zinc-400 text-xs leading-relaxed mb-4">
-                    Our physical outlet and digital customer support operate 7 days a week for seamless shopping across all provinces.
+                    Our physical outlet and digital customer support operate reliably for seamless footwear shopping.
                   </p>
                   <div className="divide-y divide-white/5 bg-white/5 border border-white/10 rounded-xl p-3.5 text-xs">
                     <div className="flex justify-between py-1.5 text-zinc-300">
-                      <span>Monday – Saturday:</span>
-                      <b className="text-white font-mono">10:00 AM – 10:00 PM</b>
-                    </div>
-                    <div className="flex justify-between py-1.5 text-zinc-300">
-                      <span>Sunday:</span>
-                      <b className="text-white font-mono">11:00 AM – 09:00 PM</b>
+                      <span>Store Timings:</span>
+                      <b className="text-white font-mono">{shopTiming}</b>
                     </div>
                     <div className="flex justify-between py-1.5 text-zinc-300">
                       <span>WhatsApp Orders:</span>
@@ -164,7 +170,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <b className="text-white text-xs block">Nationwide Delivery</b>
-                  <span className="text-zinc-400 text-[11px]">Free delivery on orders over Rs. 5,000</span>
+                  <span className="text-zinc-400 text-[11px]">Direct courier dispatch across all cities</span>
                 </div>
               </div>
 
@@ -183,8 +189,8 @@ export default function Contact() {
                   <ShieldCheck size={20} />
                 </div>
                 <div>
-                  <b className="text-white text-xs block">Inspect Before Payment</b>
-                  <span className="text-zinc-400 text-[11px]">Check shoes before paying COD rider</span>
+                  <b className="text-white text-xs block">100% Genuine Quality</b>
+                  <span className="text-zinc-400 text-[11px]">High-grade durable soles and materials</span>
                 </div>
               </div>
             </div>

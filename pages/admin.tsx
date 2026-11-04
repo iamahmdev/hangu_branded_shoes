@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Layout from "../src/components/Layout";
 import { api } from "../src/services/api";
-import { AdminTab, AdminUser, ProductFormData, CouponFormData, StoreSettingsFormData } from "../src/components/admin/types";
+import { AdminTab, AdminUser, ProductFormData, StoreSettingsFormData } from "../src/components/admin/types";
 import AdminLogin from "../src/components/admin/AdminLogin";
 import AdminLayout from "../src/components/admin/AdminLayout";
 import DashboardOverview from "../src/components/admin/DashboardOverview";
@@ -9,27 +9,25 @@ import OrdersTab from "../src/components/admin/OrdersTab";
 import OrderDetailModal from "../src/components/admin/OrderDetailModal";
 import ProductsTab from "../src/components/admin/ProductsTab";
 import ProductModal from "../src/components/admin/ProductModal";
-import CouponsTab from "../src/components/admin/CouponsTab";
 import ReviewsTab from "../src/components/admin/ReviewsTab";
 import SettingsTab from "../src/components/admin/SettingsTab";
 import {
   useAdminDashboard,
   useAdminOrders,
   useAdminUpdateOrderStatus,
+  useAdminUpdateOrderPayment,
   useAdminDeleteOrder,
   useProducts,
   useAdminCreateProduct,
   useAdminUpdateProduct,
   useAdminAdjustStock,
   useAdminDeleteProduct,
-  useAdminCoupons,
-  useAdminCreateCoupon,
-  useAdminDeleteCoupon,
   useAdminReviews,
   useAdminUpdateReviewStatus,
   useAdminDeleteReview,
   useStoreSettings,
   useAdminUpdateSettings,
+  useAdminChangePassword,
   useUploadImage,
 } from "../src/hooks/useApi";
 
@@ -41,6 +39,7 @@ export default function AdminPage() {
 
   // Filter & Search states
   const [orderFilterStatus, setOrderFilterStatus] = useState<string>("all");
+  const [orderPaymentFilter, setOrderPaymentFilter] = useState<string>("all");
   const [orderSearch, setOrderSearch] = useState<string>("");
   const [productSearch, setProductSearch] = useState<string>("");
 
@@ -50,15 +49,15 @@ export default function AdminPage() {
   const [editingProduct, setEditingProduct] = useState<ProductFormData | null>(null);
 
   // ----------------------------------------------------
-  // TANSTACK QUERY HOOKS (Live Data from MongoDB Atlas)
+  // TANSTACK QUERY HOOKS (Auto-refreshes every 15s)
   // ----------------------------------------------------
   const dashboardQuery = useAdminDashboard(token);
   const ordersQuery = useAdminOrders(token, {
     status: orderFilterStatus,
+    paymentStatus: orderPaymentFilter,
     search: orderSearch,
   });
   const productsQuery = useProducts({ search: productSearch });
-  const couponsQuery = useAdminCoupons(token);
   const reviewsQuery = useAdminReviews(token);
   const settingsQuery = useStoreSettings();
 
@@ -66,16 +65,16 @@ export default function AdminPage() {
   // MUTATIONS (Auto-Invalidate Queries)
   // ----------------------------------------------------
   const updateOrderStatusMutation = useAdminUpdateOrderStatus();
+  const updateOrderPaymentMutation = useAdminUpdateOrderPayment();
   const deleteOrderMutation = useAdminDeleteOrder();
   const createProductMutation = useAdminCreateProduct();
   const updateProductMutation = useAdminUpdateProduct();
   const adjustStockMutation = useAdminAdjustStock();
   const deleteProductMutation = useAdminDeleteProduct();
-  const createCouponMutation = useAdminCreateCoupon();
-  const deleteCouponMutation = useAdminDeleteCoupon();
   const updateReviewStatusMutation = useAdminUpdateReviewStatus();
   const deleteReviewMutation = useAdminDeleteReview();
   const updateSettingsMutation = useAdminUpdateSettings();
+  const changePasswordMutation = useAdminChangePassword();
   const uploadImageMutation = useUploadImage();
 
   // Verify stored token on mount
@@ -123,19 +122,51 @@ export default function AdminPage() {
     dashboardQuery.refetch();
     ordersQuery.refetch();
     productsQuery.refetch();
-    couponsQuery.refetch();
     reviewsQuery.refetch();
     settingsQuery.refetch();
   };
 
   // Order Handlers
-  const handleUpdateOrderStatus = (orderId: string, status: string, courierName?: string, trackingNumber?: string) => {
+  const handleUpdateOrderStatus = async (
+    orderId: string,
+    status: string,
+    courierName?: string,
+    trackingNumber?: string
+  ) => {
     if (!token) return;
-    updateOrderStatusMutation.mutate({
+    await updateOrderStatusMutation.mutateAsync({
       token,
       orderId,
       payload: { status, courierName, trackingNumber },
     });
+    // Keep local modal in sync
+    if (selectedOrder && selectedOrder.orderId === orderId) {
+      setSelectedOrder((prev: any) => ({
+        ...prev,
+        status,
+        courierName: courierName ?? prev.courierName,
+        trackingNumber: trackingNumber ?? prev.trackingNumber,
+      }));
+    }
+  };
+
+  const handleUpdatePaymentStatus = async (
+    orderId: string,
+    paymentStatus: "paid" | "rejected"
+  ) => {
+    if (!token) return;
+    await updateOrderPaymentMutation.mutateAsync({
+      token,
+      orderId,
+      paymentStatus,
+    });
+    // Keep local modal in sync
+    if (selectedOrder && selectedOrder.orderId === orderId) {
+      setSelectedOrder((prev: any) => ({
+        ...prev,
+        paymentStatus,
+      }));
+    }
   };
 
   const handleDeleteOrder = (orderId: string) => {
@@ -160,6 +191,16 @@ export default function AdminPage() {
     }
   };
 
+  const handleToggleProductActive = async (product: any) => {
+    if (!token) return;
+    const nextActive = product.isActive === false;
+    await updateProductMutation.mutateAsync({
+      token,
+      id: product.id,
+      payload: { isActive: nextActive },
+    });
+  };
+
   const handleAdjustStock = (productId: number, delta: number) => {
     if (!token) return;
     adjustStockMutation.mutate({ token, id: productId, delta });
@@ -173,17 +214,6 @@ export default function AdminPage() {
   const handleUploadProductImage = async (file: File) => {
     if (!token) throw new Error("Authentication required");
     return await uploadImageMutation.mutateAsync({ token, file });
-  };
-
-  // Coupon Handlers
-  const handleCreateCoupon = async (couponData: CouponFormData) => {
-    if (!token) return;
-    await createCouponMutation.mutateAsync({ token, payload: couponData });
-  };
-
-  const handleDeleteCoupon = (couponId: string) => {
-    if (!token) return;
-    deleteCouponMutation.mutate({ token, id: couponId });
   };
 
   // Review Handlers
@@ -207,6 +237,14 @@ export default function AdminPage() {
     await updateSettingsMutation.mutateAsync({ token, payload: settingsData });
   };
 
+  const handleChangePassword = async (currentPassword: string, newPassword: string) => {
+    if (!token) throw new Error("Authentication required");
+    return await changePasswordMutation.mutateAsync({
+      token,
+      payload: { currentPassword, newPassword },
+    });
+  };
+
   if (loading) {
     return (
       <Layout title="Admin Portal — Hangu Branded Shoes">
@@ -225,7 +263,6 @@ export default function AdminPage() {
 
   const orders = ordersQuery.data?.data || [];
   const products = productsQuery.data || [];
-  const coupons = couponsQuery.data?.data || [];
   const reviews = reviewsQuery.data?.data || [];
   const initialSettings = settingsQuery.data?.data;
 
@@ -241,7 +278,6 @@ export default function AdminPage() {
         counts={{
           orders: orders.length,
           products: products.length,
-          coupons: coupons.length,
           reviews: reviews.length,
         }}
       >
@@ -264,6 +300,8 @@ export default function AdminPage() {
             orders={orders}
             filterStatus={orderFilterStatus}
             onFilterChange={setOrderFilterStatus}
+            paymentFilterStatus={orderPaymentFilter}
+            onPaymentFilterChange={setOrderPaymentFilter}
             searchQuery={orderSearch}
             onSearchChange={setOrderSearch}
             onSelectOrder={setSelectedOrder}
@@ -296,26 +334,18 @@ export default function AdminPage() {
                 desc: p.desc || "",
                 brand: p.brand || "Hangu Branded Shoes",
                 sizes: p.sizes || ["40", "41", "42", "43", "44"],
+                isActive: p.isActive !== false,
               });
               setProductModalOpen(true);
             }}
+            onToggleActive={handleToggleProductActive}
             onDeleteProduct={handleDeleteProduct}
             onAdjustStock={handleAdjustStock}
             isLoading={productsQuery.isLoading}
           />
         )}
 
-        {/* Tab 4: Coupons */}
-        {activeTab === "coupons" && (
-          <CouponsTab
-            coupons={coupons}
-            onCreateCoupon={handleCreateCoupon}
-            onDeleteCoupon={handleDeleteCoupon}
-            isLoading={couponsQuery.isLoading}
-          />
-        )}
-
-        {/* Tab 5: Reviews */}
+        {/* Tab 4: Reviews */}
         {activeTab === "reviews" && (
           <ReviewsTab
             reviews={reviews}
@@ -325,11 +355,12 @@ export default function AdminPage() {
           />
         )}
 
-        {/* Tab 6: Store Settings */}
+        {/* Tab 5: Store Settings */}
         {activeTab === "settings" && (
           <SettingsTab
             initialSettings={initialSettings}
             onSaveSettings={handleSaveSettings}
+            onChangePassword={handleChangePassword}
             isLoading={settingsQuery.isLoading}
           />
         )}
@@ -341,6 +372,7 @@ export default function AdminPage() {
           order={selectedOrder}
           onClose={() => setSelectedOrder(null)}
           onUpdateStatus={handleUpdateOrderStatus}
+          onUpdatePaymentStatus={handleUpdatePaymentStatus}
           onDeleteOrder={handleDeleteOrder}
         />
       )}

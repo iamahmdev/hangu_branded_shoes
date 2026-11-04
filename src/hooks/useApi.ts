@@ -86,10 +86,9 @@ export function useCreateOrder() {
   });
 }
 
-export function useVerifyCoupon() {
+export function useUploadPaymentReceipt() {
   return useMutation({
-    mutationFn: ({ code, subtotal }: { code: string; subtotal: number }) =>
-      api.verifyCoupon(code, subtotal),
+    mutationFn: (file: File) => api.uploadPaymentReceipt(file),
   });
 }
 
@@ -129,6 +128,7 @@ export interface AdminDashboardData {
     totalOrders: number;
     pendingOrders: number;
     deliveredOrders: number;
+    pendingPaymentsCount: number;
     lowStockCount: number;
     todayOrders: number;
   };
@@ -141,10 +141,14 @@ export function useAdminDashboard(token: string | null) {
     queryKey: ["admin-dashboard", token],
     queryFn: () => (token ? api.adminGetDashboard(token) : Promise.resolve({ success: false })),
     enabled: Boolean(token),
+    refetchInterval: 15000, // 15-second auto-refresh for real-time live updates
   });
 }
 
-export function useAdminOrders(token: string | null, params?: { status?: string; search?: string }) {
+export function useAdminOrders(
+  token: string | null,
+  params?: { status?: string; paymentStatus?: string; search?: string }
+) {
   return useQuery({
     queryKey: ["admin-orders", token, params],
     queryFn: () =>
@@ -152,6 +156,7 @@ export function useAdminOrders(token: string | null, params?: { status?: string;
         ? api.adminGetOrders(token, params)
         : Promise.resolve({ success: false, data: [] }),
     enabled: Boolean(token),
+    refetchInterval: 15000, // 15-second auto-refresh for real-time live updates
   });
 }
 
@@ -171,6 +176,27 @@ export function useAdminUpdateOrderStatus() {
       queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
       queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
       queryClient.invalidateQueries({ queryKey: ["order-tracking"] });
+    },
+  });
+}
+
+export function useAdminUpdateOrderPayment() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      token,
+      orderId,
+      paymentStatus,
+      note,
+    }: {
+      token: string;
+      orderId: string;
+      paymentStatus: "pending_verification" | "paid" | "rejected";
+      note?: string;
+    }) => api.adminUpdateOrderPayment(token, orderId, paymentStatus, note),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
+      queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
     },
   });
 }
@@ -238,36 +264,6 @@ export function useAdminDeleteProduct() {
   });
 }
 
-export function useAdminCoupons(token: string | null) {
-  return useQuery({
-    queryKey: ["admin-coupons", token],
-    queryFn: () => (token ? api.adminGetCoupons(token) : Promise.resolve({ success: false, data: [] })),
-    enabled: Boolean(token),
-  });
-}
-
-export function useAdminCreateCoupon() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ token, payload }: { token: string; payload: any }) =>
-      api.adminCreateCoupon(token, payload),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-coupons"] });
-    },
-  });
-}
-
-export function useAdminDeleteCoupon() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ token, id }: { token: string; id: string }) =>
-      api.adminDeleteCoupon(token, id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["admin-coupons"] });
-    },
-  });
-}
-
 export function useAdminReviews(token: string | null, params?: { status?: string; search?: string }) {
   return useQuery({
     queryKey: ["admin-reviews", token, params],
@@ -318,6 +314,18 @@ export function useAdminUpdateSettings() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["store-settings"] });
     },
+  });
+}
+
+export function useAdminChangePassword() {
+  return useMutation({
+    mutationFn: ({
+      token,
+      payload,
+    }: {
+      token: string;
+      payload: { currentPassword: string; newPassword: string };
+    }) => api.adminChangePassword(token, payload),
   });
 }
 

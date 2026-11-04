@@ -5,7 +5,10 @@ import { uploadMiddleware } from "../middleware/upload.js";
 
 const router = Router();
 
-// Protected Upload endpoints
+// Customer Payment Receipt Upload (No admin auth required)
+router.post("/receipt", uploadMiddleware.single("image"), uploadImage);
+
+// Protected Admin Upload endpoints
 router.post("/", authenticate, uploadMiddleware.single("image"), uploadImage);
 router.delete("/:publicId(*)", authenticate, deleteImage);
 router.delete("/", authenticate, deleteImage);

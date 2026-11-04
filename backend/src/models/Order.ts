@@ -27,11 +27,11 @@ export interface IOrder extends Document {
   items: IOrderItem[];
   subtotal: number;
   shippingFee: number;
-  discountAmount: number;
-  couponCode?: string;
   totalAmount: number;
-  paymentMethod: "cod" | "jazzcash" | "easypaisa";
-  transactionId?: string;
+  paymentMethod: "easypaisa";
+  paymentStatus: "pending_verification" | "paid" | "rejected";
+  transactionId: string;
+  paymentScreenshot?: string;
   notes?: string;
   status: "pending" | "confirmed" | "dispatched" | "delivered" | "cancelled";
   courierName?: string;
@@ -65,15 +65,21 @@ const OrderSchema = new Schema<IOrder>(
     ],
     subtotal: { type: Number, required: true },
     shippingFee: { type: Number, required: true, default: 0 },
-    discountAmount: { type: Number, default: 0 },
-    couponCode: { type: String },
     totalAmount: { type: Number, required: true },
     paymentMethod: {
       type: String,
-      enum: ["cod", "jazzcash", "easypaisa"],
-      default: "cod",
+      enum: ["easypaisa"],
+      default: "easypaisa",
+      required: true,
     },
-    transactionId: { type: String },
+    paymentStatus: {
+      type: String,
+      enum: ["pending_verification", "paid", "rejected"],
+      default: "pending_verification",
+      index: true,
+    },
+    transactionId: { type: String, required: true, trim: true, index: true },
+    paymentScreenshot: { type: String, trim: true },
     notes: { type: String },
     status: {
       type: String,
@@ -97,4 +103,3 @@ const OrderSchema = new Schema<IOrder>(
 );
 
 export const Order = mongoose.model<IOrder>("Order", OrderSchema);
-

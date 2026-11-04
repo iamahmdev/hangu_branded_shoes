@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { ORDER_STATUS_COLORS } from "./types";
+import { ORDER_STATUS_COLORS, PAYMENT_STATUS_COLORS } from "./types";
 import { resolveProductImage } from "../../utils/image";
-import { Search, Eye, Trash2, Truck, Check, RefreshCw } from "lucide-react";
+import { Search, Eye, Trash2, Truck, RefreshCw, Image as ImageIcon, ShieldCheck } from "lucide-react";
 
 interface OrdersTabProps {
   orders: any[];
   filterStatus: string;
   onFilterChange: (status: string) => void;
+  paymentFilterStatus?: string;
+  onPaymentFilterChange?: (status: string) => void;
   searchQuery: string;
   onSearchChange: (query: string) => void;
   onSelectOrder: (order: any) => void;
@@ -15,20 +17,28 @@ interface OrdersTabProps {
   isLoading?: boolean;
 }
 
-const STATUS_OPTIONS = [
+const ORDER_STATUS_OPTIONS = [
   "all",
   "pending",
   "confirmed",
-  "processing",
   "dispatched",
   "delivered",
   "cancelled",
+];
+
+const PAYMENT_STATUS_OPTIONS = [
+  { id: "all", label: "All Payments" },
+  { id: "pending_verification", label: "Pending Verification" },
+  { id: "paid", label: "Paid" },
+  { id: "rejected", label: "Rejected" },
 ];
 
 export default function OrdersTab({
   orders,
   filterStatus,
   onFilterChange,
+  paymentFilterStatus = "all",
+  onPaymentFilterChange,
   searchQuery,
   onSearchChange,
   onSelectOrder,
@@ -36,73 +46,110 @@ export default function OrdersTab({
   onDeleteOrder,
   isLoading = false,
 }: OrdersTabProps) {
-  const [quickStatusLoading, setQuickStatusLoading] = useState<string | null>(null);
-
   const filteredOrders = orders.filter((o) => {
+    // Payment status filter (client side safeguard)
+    if (paymentFilterStatus !== "all" && (o.paymentStatus || "pending_verification") !== paymentFilterStatus) {
+      return false;
+    }
+    // Search query
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase().trim();
     const idMatch = o.orderId?.toLowerCase().includes(q);
     const nameMatch = o.customer?.name?.toLowerCase().includes(q);
     const phoneMatch = o.customer?.phone?.includes(q);
     const cityMatch = o.customer?.city?.toLowerCase().includes(q);
-    return idMatch || nameMatch || phoneMatch || cityMatch;
+    const tidMatch = o.transactionId?.toLowerCase().includes(q);
+    return idMatch || nameMatch || phoneMatch || cityMatch || tidMatch;
   });
-
-  const handleQuickStatus = async (orderId: string, nextStatus: string) => {
-    setQuickStatusLoading(orderId);
-    try {
-      await onUpdateStatus(orderId, nextStatus);
-    } finally {
-      setQuickStatusLoading(null);
-    }
-  };
 
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
-      {/* Search & Status Filters Bar */}
-      <div className="glass p-4 rounded-3xl border border-white/10 flex flex-wrap items-center justify-between gap-4">
-        {/* Status Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-          {STATUS_OPTIONS.map((st) => {
-            const count =
-              st === "all"
-                ? orders.length
-                : orders.filter((o) => o.status === st).length;
-            const isSelected = filterStatus === st;
-            return (
-              <button
-                key={st}
-                onClick={() => onFilterChange(st)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold uppercase transition-all whitespace-nowrap flex items-center gap-1.5 ${
-                  isSelected
-                    ? "bg-brand-red text-white shadow-glow"
-                    : "bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10"
-                }`}
-              >
-                <span>{st}</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                    isSelected ? "bg-black/40 text-white" : "bg-white/10 text-zinc-300"
+      {/* Search & Filters Bar */}
+      <div className="glass p-4 rounded-3xl border border-white/10 flex flex-col gap-4">
+        {/* Top row: Order Status filters + Search */}
+        <div className="flex flex-wrap items-center justify-between gap-4">
+          {/* Order Status Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+            <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mr-1">
+              Order:
+            </span>
+            {ORDER_STATUS_OPTIONS.map((st) => {
+              const count =
+                st === "all"
+                  ? orders.length
+                  : orders.filter((o) => o.status === st).length;
+              const isSelected = filterStatus === st;
+              return (
+                <button
+                  key={st}
+                  onClick={() => onFilterChange(st)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                    isSelected
+                      ? "bg-brand-red text-white shadow-glow"
+                      : "bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10"
                   }`}
                 >
-                  {count}
-                </span>
-              </button>
-            );
-          })}
+                  <span>{st}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                      isSelected ? "bg-black/40 text-white" : "bg-white/10 text-zinc-300"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Search input */}
+          <div className="relative min-w-[260px] flex-1 max-w-sm">
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              placeholder="Search by ID, name, phone, city, TID..."
+              className="w-full bg-white/5 border border-white/10 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white outline-none focus:border-brand-gold transition-colors"
+            />
+            <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+          </div>
         </div>
 
-        {/* Search input */}
-        <div className="relative min-w-[260px] flex-1 max-w-sm">
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search order ID, customer, phone, city..."
-            className="w-full bg-white/5 border border-white/10 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white outline-none focus:border-brand-gold transition-colors"
-          />
-          <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
-        </div>
+        {/* Second row: Payment Verification Status Filter */}
+        {onPaymentFilterChange && (
+          <div className="flex items-center gap-2 pt-2 border-t border-white/5 overflow-x-auto no-scrollbar">
+            <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mr-1">
+              Payment:
+            </span>
+            {PAYMENT_STATUS_OPTIONS.map((pst) => {
+              const count =
+                pst.id === "all"
+                  ? orders.length
+                  : orders.filter((o) => (o.paymentStatus || "pending_verification") === pst.id).length;
+              const isSelected = paymentFilterStatus === pst.id;
+              return (
+                <button
+                  key={pst.id}
+                  onClick={() => onPaymentFilterChange(pst.id)}
+                  className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
+                    isSelected
+                      ? "bg-brand-gold text-black font-bold shadow-md"
+                      : "bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10"
+                  }`}
+                >
+                  <span>{pst.label}</span>
+                  <span
+                    className={`text-[10px] px-1.5 py-0.2 rounded-full ${
+                      isSelected ? "bg-black/20 text-black font-mono font-bold" : "bg-white/10 text-zinc-300"
+                    }`}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       {/* Orders Table */}
@@ -115,8 +162,8 @@ export default function OrdersTab({
                 <th className="p-4">Customer Details</th>
                 <th className="p-4">Delivery City & Address</th>
                 <th className="p-4">Footwear Items</th>
-                <th className="p-4">Total & Payment</th>
-                <th className="p-4">Status & Logistics</th>
+                <th className="p-4">Total & Payment Verification</th>
+                <th className="p-4">Order Status</th>
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
@@ -132,8 +179,8 @@ export default function OrdersTab({
                 <tr>
                   <td colSpan={7} className="p-12 text-center text-zinc-500">
                     {searchQuery
-                      ? `No orders matching "${searchQuery}" in this view.`
-                      : `No ${filterStatus === "all" ? "" : filterStatus} orders found.`}
+                      ? `No orders matching "${searchQuery}".`
+                      : "No orders found in this view."}
                   </td>
                 </tr>
               ) : (
@@ -142,6 +189,12 @@ export default function OrdersTab({
                     bg: "bg-zinc-800",
                     text: "text-zinc-300",
                     border: "border-zinc-700",
+                  };
+                  const paymentMeta = PAYMENT_STATUS_COLORS[ord.paymentStatus || "pending_verification"] || {
+                    bg: "bg-amber-500/15",
+                    text: "text-amber-400",
+                    border: "border-amber-500/30",
+                    label: ord.paymentStatus || "Pending",
                   };
                   const dateStr = ord.createdAt
                     ? new Date(ord.createdAt).toLocaleDateString("en-PK", {
@@ -197,22 +250,32 @@ export default function OrdersTab({
                         </span>
                       </td>
 
-                      {/* Total & Payment */}
+                      {/* Total & Payment Verification Status */}
                       <td className="p-4">
                         <b className="text-brand-gold font-mono text-sm block font-bold">
                           Rs. {(ord.totalAmount || 0).toLocaleString()}
                         </b>
-                        <span className="inline-block mt-1 px-2 py-0.5 rounded-full text-[10px] uppercase font-bold bg-white/5 text-zinc-300 border border-white/10">
-                          {ord.paymentMethod?.toUpperCase() || "COD"}
-                        </span>
-                        {ord.transactionId && (
-                          <span className="text-[10px] text-cyan-400 font-mono block mt-0.5">
-                            TID: {ord.transactionId}
+                        <div className="flex items-center gap-1.5 mt-1 flex-wrap">
+                          <span
+                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase border ${paymentMeta.bg} ${paymentMeta.text} ${paymentMeta.border}`}
+                          >
+                            {paymentMeta.label}
                           </span>
-                        )}
+                          {ord.paymentScreenshot && (
+                            <span
+                              title="Payment receipt attached"
+                              className="inline-flex items-center text-cyan-400"
+                            >
+                              <ImageIcon size={12} />
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-[10px] text-zinc-400 font-mono block mt-1">
+                          TID: <strong className="text-white">{ord.transactionId || "—"}</strong>
+                        </span>
                       </td>
 
-                      {/* Status & Logistics */}
+                      {/* Order Status & Logistics */}
                       <td className="p-4">
                         <span
                           className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase border ${statusMeta.bg} ${statusMeta.text} ${statusMeta.border}`}
@@ -238,7 +301,7 @@ export default function OrdersTab({
                           <button
                             onClick={() => onSelectOrder(ord)}
                             className="p-2 rounded-xl bg-white/5 hover:bg-brand-gold/15 text-zinc-300 hover:text-brand-gold border border-white/10 transition-colors"
-                            title="Inspect Order Details & Logistics"
+                            title="Inspect Order Details & Verify Payment"
                           >
                             <Eye size={14} />
                           </button>
@@ -263,4 +326,3 @@ export default function OrdersTab({
     </div>
   );
 }
-

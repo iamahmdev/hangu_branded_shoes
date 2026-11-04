@@ -2,7 +2,6 @@ export type AdminTab =
   | "dashboard"
   | "orders"
   | "products"
-  | "coupons"
   | "reviews"
   | "settings";
 
@@ -26,17 +25,7 @@ export interface ProductFormData {
   desc: string;
   brand?: string;
   sizes: string[];
-}
-
-export interface CouponFormData {
-  code: string;
-  discountType: "percentage" | "fixed";
-  discountAmount: number;
-  minOrderAmount: number;
-  maxDiscountAmount: number;
-  freeShipping: boolean;
-  usageLimit: number;
-  description: string;
+  isActive?: boolean;
 }
 
 export interface StoreSettingsFormData {
@@ -45,12 +34,11 @@ export interface StoreSettingsFormData {
   whatsappNumber: string;
   email: string;
   address: string;
+  shopTiming?: string;
   shippingFee: number;
   freeShippingThreshold: number;
   announcementText: string;
   isStoreOpen: boolean;
-  jazzcashNumber: string;
-  jazzcashTitle: string;
   easypaisaNumber: string;
   easypaisaTitle: string;
 }
@@ -58,9 +46,28 @@ export interface StoreSettingsFormData {
 export const ORDER_STATUS_COLORS: Record<string, { bg: string; text: string; border: string }> = {
   pending: { bg: "bg-amber-500/15", text: "text-amber-400", border: "border-amber-500/30" },
   confirmed: { bg: "bg-blue-500/15", text: "text-blue-400", border: "border-blue-500/30" },
-  processing: { bg: "bg-purple-500/15", text: "text-purple-400", border: "border-purple-500/30" },
-  dispatched: { bg: "bg-cyan-500/15", text: "text-cyan-400", border: "border-cyan-500/30" },
+  dispatched: { bg: "bg-purple-500/15", text: "text-purple-400", border: "border-purple-500/30" },
   delivered: { bg: "bg-green-500/15", text: "text-green-400", border: "border-green-500/30" },
   cancelled: { bg: "bg-red-500/15", text: "text-red-400", border: "border-red-500/30" },
 };
 
+export const PAYMENT_STATUS_COLORS: Record<string, { bg: string; text: string; border: string; label: string }> = {
+  pending_verification: {
+    bg: "bg-amber-500/15",
+    text: "text-amber-400",
+    border: "border-amber-500/30",
+    label: "Awaiting Verification",
+  },
+  paid: {
+    bg: "bg-green-500/15",
+    text: "text-green-400",
+    border: "border-green-500/30",
+    label: "Verified & Paid",
+  },
+  rejected: {
+    bg: "bg-red-500/15",
+    text: "text-red-400",
+    border: "border-red-500/30",
+    label: "Payment Rejected",
+  },
+};

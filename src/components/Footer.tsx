@@ -16,10 +16,10 @@ export default function Footer() {
           </div>
         </div>
         <div className="ft-perk glass">
-          <span className="ft-perk-icon">💵</span>
+          <span className="ft-perk-icon">⚡</span>
           <div>
-            <b>Cash On Delivery (COD)</b>
-            <p>Inspect your shoes before payment</p>
+            <b>Fast EasyPaisa Verification</b>
+            <p>Quick verified order processing</p>
           </div>
         </div>
         <div className="ft-perk glass">
@@ -222,16 +222,10 @@ export default function Footer() {
           </a>
 
           <div className="ft-pay-section mt-2">
-            <small className="block text-zinc-500 text-xs mb-2">Accepted Payment Methods</small>
+            <small className="block text-zinc-500 text-xs mb-2">Accepted Payment Method</small>
             <div className="ft-pay-chips flex flex-wrap gap-1.5">
               <span className="pay-chip text-xs bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-zinc-300">
-                💵 Cash on Delivery
-              </span>
-              <span className="pay-chip text-xs bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-zinc-300">
-                📱 JazzCash
-              </span>
-              <span className="pay-chip text-xs bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-zinc-300">
-                📱 EasyPaisa
+                📱 EasyPaisa Mobile Transfer
               </span>
             </div>
           </div>

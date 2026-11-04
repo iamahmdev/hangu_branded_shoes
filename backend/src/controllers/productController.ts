@@ -24,6 +24,10 @@ export async function getProducts(req: Request, res: Response): Promise<void> {
       filter.stock = { $gt: 0 };
     }
 
+    if (req.query.includeInactive !== "true") {
+      filter.isActive = { $ne: false };
+    }
+
     let query = Product.find(filter);
 
     if (sort === "price-low") {
@@ -123,6 +127,7 @@ export async function createProduct(req: Request, res: Response): Promise<void> 
       isSale: Boolean(isSale),
       isFeatured: Boolean(isFeatured),
       isBestseller: Boolean(isBestseller),
+      isActive: req.body.isActive !== undefined ? Boolean(req.body.isActive) : true,
       sizes: Array.isArray(sizes) && sizes.length ? sizes : ["39", "40", "41", "42", "43", "44"],
       colors: Array.isArray(colors) && colors.length ? colors : ["Black", "Brown"],
       features: Array.isArray(features) ? features : [],

@@ -16,6 +16,7 @@ export interface IProduct extends Document {
   isSale?: boolean;
   isFeatured?: boolean;
   isBestseller?: boolean;
+  isActive?: boolean;
   sizes: string[];
   colors: string[];
   features: string[];
@@ -38,6 +39,7 @@ const ProductSchema = new Schema<IProduct>(
     isSale: { type: Boolean, default: false },
     isFeatured: { type: Boolean, default: false },
     isBestseller: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: true, index: true },
     sizes: { type: [String], default: ["39", "40", "41", "42", "43", "44"] },
     colors: { type: [String], default: ["Black", "Brown"] },
     features: { type: [String], default: [] },

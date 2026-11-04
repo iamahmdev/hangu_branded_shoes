@@ -8,7 +8,6 @@ import authRoutes from "./routes/authRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
-import couponRoutes from "./routes/couponRoutes.js";
 import settingRoutes from "./routes/settingRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import { errorHandler } from "./middleware/errorHandler.js";
@@ -54,7 +53,6 @@ app.use("/api/admin", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/reviews", reviewRoutes);
-app.use("/api/coupons", couponRoutes);
 app.use("/api/settings", settingRoutes);
 app.use("/api/upload", uploadRoutes);
 

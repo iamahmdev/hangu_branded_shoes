@@ -12,6 +12,7 @@ export interface Product {
   stockCount?: number;
   brand?: string;
   featured?: boolean;
+  isActive?: boolean;
 }
 
 export interface CartItem {
@@ -31,7 +32,6 @@ export interface PaymentAccount {
 }
 
 export interface PaymentAccounts {
-  jazzcash: PaymentAccount;
   easypaisa: PaymentAccount;
 }
 

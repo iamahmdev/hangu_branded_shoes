@@ -4,7 +4,6 @@ import { connectDB, disconnectDB } from "./config/db.js";
 import { Admin } from "./models/Admin.js";
 import { Product } from "./models/Product.js";
 import { Review } from "./models/Review.js";
-import { Coupon } from "./models/Coupon.js";
 import { Setting } from "./models/Setting.js";
 
 export const SEED_PRODUCTS = [
@@ -191,8 +190,9 @@ export async function seedDatabase(): Promise<void> {
   // 1. Seed Admin
   const existingAdmin = await Admin.findOne({ username: "admin" });
   if (!existingAdmin) {
+    const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || "admin123";
     const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash("admin123", salt);
+    const passwordHash = await bcrypt.hash(defaultPassword, salt);
     await Admin.create({
       username: "admin",
       email: "admin@hangubrandedshoes.com",
@@ -202,7 +202,7 @@ export async function seedDatabase(): Promise<void> {
       permissions: ["*"],
       isActive: true,
     });
-    console.log("👤 Default Admin created: admin / admin123");
+    console.log("👤 Default Admin account verified/created.");
   }
 
   // 2. Seed Products
@@ -212,18 +212,7 @@ export async function seedDatabase(): Promise<void> {
     console.log(`👟 ${SEED_PRODUCTS.length} Products seeded.`);
   }
 
-  // 3. Seed Coupons
-  const couponCount = await Coupon.countDocuments();
-  if (couponCount === 0) {
-    await Coupon.create([
-      { code: "HANGU10", discountPercent: 10, minOrderAmount: 3000, isActive: true },
-      { code: "VIP20", discountPercent: 20, minOrderAmount: 8000, isActive: true },
-      { code: "EIDSPECIAL", discountPercent: 15, minOrderAmount: 5000, isActive: true },
-    ]);
-    console.log("🏷️ Default Coupons created: HANGU10, VIP20, EIDSPECIAL");
-  }
-
-  // 4. Seed Reviews
+  // 3. Seed Reviews
   const reviewCount = await Review.countDocuments();
   if (reviewCount === 0) {
     await Review.create([

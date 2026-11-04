@@ -5,6 +5,7 @@ import {
   cancelOrder,
   getOrders,
   updateOrderStatus,
+  updateOrderPaymentStatus,
   deleteOrder,
   getRecentPublicSales,
 } from "../controllers/orderController.js";
@@ -18,10 +19,10 @@ router.get("/track", trackOrder);
 router.post("/", createOrder);
 router.patch("/:id/cancel", cancelOrder);
 
-// Admin Management
+// Admin Order & Payment Management
 router.get("/", authenticate, getOrders);
 router.patch("/:id/status", authenticate, updateOrderStatus);
+router.patch("/:id/payment", authenticate, updateOrderPaymentStatus);
 router.delete("/:id", authenticate, deleteOrder);
 
 export default router;
-

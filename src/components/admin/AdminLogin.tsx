@@ -7,7 +7,7 @@ interface AdminLoginProps {
 }
 
 export default function AdminLogin({ onLogin }: AdminLoginProps) {
-  const [form, setForm] = useState({ usernameOrEmail: "admin", password: "" });
+  const [form, setForm] = useState({ usernameOrEmail: "", password: "" });
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
 
@@ -46,7 +46,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
               Admin Authentication
             </h1>
             <p className="text-zinc-400 text-xs mt-2 leading-relaxed">
-              Sign in with your administrative credentials to manage footwear catalog, live customer orders, inventory stock, and promo codes.
+              Sign in with your administrative credentials to manage footwear catalog, live customer orders, inventory stock, and store operations.
             </p>
           </div>
 
@@ -87,14 +87,6 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                   className="w-full bg-white/5 border border-white/10 rounded-2xl pl-11 pr-4 py-3 text-white text-sm outline-none focus:border-brand-gold focus:bg-white/10 transition-all"
                 />
                 <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
-              </div>
-            </div>
-
-            <div className="p-3.5 rounded-2xl bg-white/5 border border-white/5 text-[11px] text-zinc-400 leading-relaxed">
-              <span className="text-brand-gold font-bold">💡 Default Seed Credentials:</span>
-              <div className="mt-1 flex items-center justify-between text-zinc-300 font-mono text-[11px]">
-                <span>User: <strong className="text-white">admin</strong></span>
-                <span>Pass: <strong className="text-white">admin12345</strong></span>
               </div>
             </div>
 

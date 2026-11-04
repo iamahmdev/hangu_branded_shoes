@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ProductFormData } from "./types";
 import { resolveProductImage } from "../../utils/image";
-import { Plus, Search, Edit2, Trash2, PlusCircle, MinusCircle, AlertCircle } from "lucide-react";
+import { Plus, Search, Edit2, Trash2, PlusCircle, MinusCircle, CheckCircle2, EyeOff } from "lucide-react";
 
 interface ProductsTabProps {
   products: any[];
@@ -11,6 +11,7 @@ interface ProductsTabProps {
   onEditProduct: (product: any) => void;
   onDeleteProduct: (productId: number) => void;
   onAdjustStock: (productId: number, delta: number) => void;
+  onToggleActive?: (product: any) => void;
   isLoading?: boolean;
 }
 
@@ -24,6 +25,7 @@ export default function ProductsTab({
   onEditProduct,
   onDeleteProduct,
   onAdjustStock,
+  onToggleActive,
   isLoading = false,
 }: ProductsTabProps) {
   const [selectedCat, setSelectedCat] = useState<string>("All");
@@ -92,6 +94,7 @@ export default function ProductsTab({
               <tr>
                 <th className="p-4">Footwear Model</th>
                 <th className="p-4">Category</th>
+                <th className="p-4">Status</th>
                 <th className="p-4">Pricing</th>
                 <th className="p-4">Available Sizes</th>
                 <th className="p-4">Inventory Stock</th>
@@ -102,13 +105,13 @@ export default function ProductsTab({
             <tbody className="divide-y divide-white/5">
               {isLoading ? (
                 <tr>
-                  <td colSpan={7} className="p-12 text-center text-zinc-400">
+                  <td colSpan={8} className="p-12 text-center text-zinc-400">
                     Loading shoes catalog from database...
                   </td>
                 </tr>
               ) : filteredProducts.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="p-12 text-center text-zinc-500">
+                  <td colSpan={8} className="p-12 text-center text-zinc-500">
                     No shoes found in this filter view. Click "Add New Shoe" to create one.
                   </td>
                 </tr>
@@ -117,6 +120,7 @@ export default function ProductsTab({
                   const stockNum = p.stock ?? p.stockCount ?? 0;
                   const isLowStock = stockNum <= 10;
                   const isOutOfStock = stockNum <= 0;
+                  const isEnabled = p.isActive !== false;
 
                   return (
                     <tr key={p.id} className="hover:bg-white/5 transition-colors">
@@ -142,6 +146,23 @@ export default function ProductsTab({
                         <span className="px-2.5 py-1 rounded-full text-[11px] font-bold bg-white/5 text-zinc-300 border border-white/10">
                           {p.cat}
                         </span>
+                      </td>
+
+                      {/* Status / Toggle Active */}
+                      <td className="p-4">
+                        <button
+                          type="button"
+                          onClick={() => onToggleActive && onToggleActive(p)}
+                          className={`px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase transition-all flex items-center gap-1 ${
+                            isEnabled
+                              ? "bg-green-500/15 text-green-400 border border-green-500/30 hover:bg-green-500/25"
+                              : "bg-zinc-800 text-zinc-400 border border-zinc-700 hover:bg-zinc-700"
+                          }`}
+                          title={isEnabled ? "Click to disable from catalog" : "Click to enable in catalog"}
+                        >
+                          {isEnabled ? <CheckCircle2 size={11} /> : <EyeOff size={11} />}
+                          <span>{isEnabled ? "Active" : "Disabled"}</span>
+                        </button>
                       </td>
 
                       {/* Pricing */}
@@ -251,4 +272,3 @@ export default function ProductsTab({
     </div>
   );
 }
-

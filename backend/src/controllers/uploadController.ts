@@ -1,8 +1,8 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { AuthRequest } from "../middleware/auth.js";
 import cloudinary from "../config/cloudinary.js";
 
-export async function uploadImage(req: AuthRequest, res: Response): Promise<void> {
+export async function uploadImage(req: Request, res: Response): Promise<void> {
   try {
     if (!req.file) {
       res.status(400).json({ success: false, message: "No image file provided." });

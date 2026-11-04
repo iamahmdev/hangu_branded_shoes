@@ -4,7 +4,7 @@ import Link from "next/link";
 import Layout from "../src/components/Layout";
 import { useCart } from "../src/context/CartContext";
 import { PAY, wa } from "../src/data/config";
-import { useVerifyCoupon, useCreateOrder } from "../src/hooks/useApi";
+import { useVerifyCoupon, useCreateOrder, useStoreSettings } from "../src/hooks/useApi";
 import { Tag, Check, ShieldCheck } from "lucide-react";
 
 type PaymentMethod = "cod" | "jazzcash" | "easypaisa" | "bank";
@@ -25,7 +25,28 @@ export default function Checkout() {
   } | null>(null);
   const [couponMsg, setCouponMsg] = useState<{ text: string; error: boolean } | null>(null);
 
-  // TanStack Query Mutations
+  // TanStack Query Mutations & Live Store Settings
+  const { data: storeSettingsData } = useStoreSettings();
+  const liveSettings = storeSettingsData?.data;
+
+  const currentPay = {
+    jazzcash: {
+      name: "JazzCash",
+      acc: liveSettings?.jazzcashNumber || PAY.jazzcash.acc,
+      title: liveSettings?.jazzcashTitle || PAY.jazzcash.title,
+    },
+    easypaisa: {
+      name: "EasyPaisa",
+      acc: liveSettings?.easypaisaNumber || PAY.easypaisa.acc,
+      title: liveSettings?.easypaisaTitle || PAY.easypaisa.title,
+    },
+    bank: {
+      name: liveSettings?.bankName || PAY.bank.name,
+      acc: liveSettings?.bankIban || liveSettings?.bankAccountNumber || PAY.bank.acc,
+      title: liveSettings?.bankAccountTitle || PAY.bank.title,
+    },
+  };
+
   const verifyCouponMutation = useVerifyCoupon();
   const createOrderMutation = useCreateOrder();
 
@@ -74,7 +95,7 @@ export default function Checkout() {
   const submit = (e: FormEvent) => {
     e.preventDefault();
     const id = "HBS" + Date.now().toString().slice(-6);
-    const pay = m === "cod" ? "Cash on Delivery" : `${PAY[m].name} (TID: ${f.tid})`;
+    const pay = m === "cod" ? "Cash on Delivery" : `${currentPay[m].name} (TID: ${f.tid})`;
 
     let discountSummary = "";
     if (appliedCoupon && discountVal > 0) {
@@ -197,7 +218,7 @@ export default function Checkout() {
 
           {m !== "cod" && (
             <div className="glass note p-4 rounded-xl mt-3 text-xs text-zinc-300">
-              Transfer to {PAY[m].name}: <b className="text-white">{PAY[m].acc}</b> ({PAY[m].title}
+              Transfer to {currentPay[m].name}: <b className="text-white">{currentPay[m].acc}</b> ({currentPay[m].title}
               ). Send Rs. {effectiveTotal.toLocaleString()} and enter the Transaction ID below:
               <input
                 className="inp w-full bg-white/5 border border-white/10 rounded-xl px-4 py-2.5 text-white text-xs mt-2 outline-none focus:border-brand-red font-mono"

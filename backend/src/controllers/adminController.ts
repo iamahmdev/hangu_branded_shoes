@@ -25,7 +25,17 @@ export async function getDashboard(_req: AuthRequest, res: Response): Promise<vo
     startOfToday.setHours(0, 0, 0, 0);
     const todayOrders = orders.filter((o) => new Date((o as any).createdAt) >= startOfToday).length;
 
-    const lowStockItems = products.filter((p) => p.stock <= 5);
+    const lowStockItems = products
+      .filter((p) => p.stock <= 10)
+      .map((p) => ({
+        id: p.id,
+        name: p.name,
+        stock: p.stock,
+        stockCount: p.stock,
+        img: p.img,
+        cat: p.cat,
+        price: p.price,
+      }));
     const lowStockCount = lowStockItems.length;
 
     const unreadInquiries = inquiries.filter((i) => i.status === "new").length;

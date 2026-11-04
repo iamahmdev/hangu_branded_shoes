@@ -6,6 +6,10 @@ function getNormalizedApiBase(): string {
     const stripped = envUrl.replace(/\/+$/, "");
     return stripped.endsWith("/api") ? stripped : `${stripped}/api`;
   }
+  // Production browser fallback: use current origin's /api rather than broken localhost
+  if (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
+    return `${window.location.origin}/api`;
+  }
   return "http://localhost:5001/api";
 }
 

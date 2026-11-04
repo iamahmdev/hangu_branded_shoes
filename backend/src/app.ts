@@ -22,23 +22,38 @@ app.use(helmet({ crossOriginResourcePolicy: false }));
 app.use(generalLimiter);
 
 // CORS
+const configuredFrontend = process.env.FRONTEND_URL?.trim().replace(/\/+$/, "");
 const allowedOrigins = [
-  process.env.FRONTEND_URL || "http://localhost:3000",
+  configuredFrontend,
   "http://localhost:3000",
   "http://127.0.0.1:3000",
-];
+].filter(Boolean) as string[];
 
 app.use(
   cors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps, curl, server-to-server)
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin) {
         return callback(null, true);
       }
+
+      const cleanOrigin = origin.replace(/\/+$/, "");
+
+      // Match configured domain or local origins
+      if (allowedOrigins.includes(cleanOrigin)) {
+        return callback(null, true);
+      }
+
+      // Automatically allow all Vercel deployments (production domain & preview URLs)
+      if (/^https:\/\/[a-zA-Z0-9._-]+\.vercel\.app$/.test(cleanOrigin)) {
+        return callback(null, true);
+      }
+
       // Allow any origin only in local development / testing
       if (process.env.NODE_ENV !== "production") {
         return callback(null, true);
       }
+
       return callback(new Error("CORS policy violation: Access denied from this origin."));
     },
     credentials: true,

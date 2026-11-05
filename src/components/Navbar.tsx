@@ -42,23 +42,23 @@ export default function Navbar() {
       <header
         className={`sticky top-0 z-50 w-full transition-all duration-300 ${
           scrolled
-            ? "bg-white/95 backdrop-blur-md border-b border-zinc-200 shadow-xs py-3.5"
-            : "bg-white border-b border-zinc-100 py-4"
+            ? "bg-white/95 backdrop-blur-md border-b border-zinc-200 shadow-xs py-2 md:py-2.5"
+            : "bg-white border-b border-zinc-100 py-2.5 md:py-3"
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6">
-          {/* 1. Brand Logo (Circular Custom Seal + Minimalist Spaced Wordmark) */}
-          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+          {/* 1. Brand Logo (Prominent Circular Seal + Minimalist Spaced Wordmark) */}
+          <Link href="/" className="flex items-center gap-3 sm:gap-3.5 group shrink-0">
             <img
               src="/images/logo.png"
               alt="Hangu Branded Shoes"
-              className="w-9 h-9 sm:w-10 sm:h-10 object-contain rounded-full shadow-xs ring-1 ring-zinc-200/90 group-hover:scale-105 transition-transform"
+              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain rounded-full shadow-sm ring-2 ring-zinc-200/80 group-hover:scale-105 transition-transform bg-white"
             />
-            <div className="flex flex-col">
-              <span className="font-extrabold text-base sm:text-lg tracking-[0.22em] text-zinc-950 group-hover:text-emerald-700 transition-colors uppercase leading-none">
+            <div className="flex flex-col justify-center">
+              <span className="font-extrabold text-lg sm:text-xl md:text-2xl tracking-[0.2em] text-zinc-950 group-hover:text-emerald-700 transition-colors uppercase leading-none">
                 H A N G U .
               </span>
-              <span className="text-[9px] font-bold tracking-[0.2em] text-zinc-500 uppercase mt-0.5 hidden sm:block">
+              <span className="text-[10px] md:text-[11px] font-bold tracking-[0.22em] text-zinc-500 uppercase mt-1 hidden sm:block">
                 Branded Shoes
               </span>
             </div>

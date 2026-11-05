@@ -136,12 +136,12 @@ export default function AdminSidebar({
       >
         {/* Top: Brand Header */}
         <div className="flex flex-col">
-          <div className="h-16 px-5 border-b border-slate-800/80 flex items-center justify-between">
+          <div className="h-16 px-4 border-b border-slate-800/80 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5 group">
               <img
                 src="/images/logo.png"
                 alt="Hangu Branded Shoes Logo"
-                className="w-9 h-9 rounded-full object-contain ring-1 ring-emerald-500/40 p-0.5 group-hover:scale-105 transition-transform bg-white/5"
+                className="w-11 h-11 rounded-full object-contain ring-2 ring-emerald-500/50 p-0.5 group-hover:scale-105 transition-transform bg-white shrink-0 shadow-sm"
               />
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">

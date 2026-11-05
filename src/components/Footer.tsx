@@ -52,17 +52,17 @@ export default function Footer() {
       <div className="ft-body wrap">
         {/* Column 1: Brand Identity & Physical Showroom */}
         <div className="ft-col ft-brand">
-          <Link href="/" className="flex items-center gap-3 mb-3.5 group">
+          <Link href="/" className="flex items-center gap-4 mb-4 group">
             <img
               src="/images/logo.png"
               alt="Hangu Branded Shoes"
-              className="w-11 h-11 rounded-full object-contain bg-white/10 ring-1 ring-white/20 p-0.5 group-hover:scale-105 transition-transform"
+              className="w-16 h-16 md:w-20 md:h-20 rounded-full object-contain bg-white ring-2 ring-white/20 p-0.5 group-hover:scale-105 transition-transform shrink-0 shadow-lg"
             />
             <div>
-              <span className="font-extrabold text-xl tracking-[0.22em] text-white uppercase group-hover:text-emerald-400 transition-colors block">
+              <span className="font-extrabold text-xl md:text-2xl tracking-[0.22em] text-white uppercase group-hover:text-emerald-400 transition-colors block leading-tight">
                 H A N G U .
               </span>
-              <span className="block text-[9px] font-bold tracking-[0.2em] text-zinc-400 uppercase mt-0.5">
+              <span className="block text-[10px] md:text-[11px] font-bold tracking-[0.22em] text-zinc-400 uppercase mt-1">
                 BRANDED FOOTWEAR
               </span>
             </div>

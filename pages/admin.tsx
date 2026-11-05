@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import Layout from "../src/components/Layout";
 import { api } from "../src/services/api";
 import { AdminTab, AdminUser, ProductFormData, StoreSettingsFormData } from "../src/components/admin/types";
 import AdminLogin from "../src/components/admin/AdminLogin";
@@ -273,12 +272,10 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <Layout title="Admin Portal — Hangu Branded Shoes">
-        <div className="pt-36 pb-20 text-center">
-          <div className="inline-block w-8 h-8 border-3 border-brand-gold border-t-transparent rounded-full animate-spin mb-4" />
-          <p className="text-zinc-400 text-xs font-mono">Verifying secure admin authorization...</p>
-        </div>
-      </Layout>
+      <div className="min-h-screen bg-[#0b0b0e] flex flex-col items-center justify-center p-4 text-center">
+        <div className="w-10 h-10 border-3 border-brand-red border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-zinc-400 text-xs font-mono">Verifying secure admin authorization...</p>
+      </div>
     );
   }
 

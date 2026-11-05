@@ -35,66 +35,66 @@ export default function DashboardOverview({
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
       {/* 6 Key Analytics Metric Cards */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* 1. Revenue */}
-        <div className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider">Revenue</span>
-            <DollarSign size={16} className="text-brand-gold" />
+        <div className="bg-[#121218] p-5 rounded-2xl border border-white/10 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-zinc-400 mb-3">
+            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Total Revenue</span>
+            <DollarSign size={18} className="text-brand-gold" />
           </div>
           <div>
-            <b className="text-xl md:text-2xl font-bold text-brand-gold font-mono block">
+            <b className="text-2xl font-bold text-brand-gold font-mono block">
               Rs. {(stats?.totalRevenue || 0).toLocaleString()}
             </b>
-            <span className="text-[10px] text-zinc-500 mt-1 block">Live Atlas orders</span>
+            <span className="text-xs text-zinc-500 mt-1 block">Completed & verified sales</span>
           </div>
         </div>
 
         {/* 2. Total Orders */}
-        <div className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider">Total Orders</span>
-            <ShoppingBag size={16} className="text-white" />
+        <div className="bg-[#121218] p-5 rounded-2xl border border-white/10 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-zinc-400 mb-3">
+            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Total Orders</span>
+            <ShoppingBag size={18} className="text-white" />
           </div>
           <div>
-            <b className="text-xl md:text-2xl font-bold text-white font-mono block">
+            <b className="text-2xl font-bold text-white font-mono block">
               {stats?.totalOrders || 0}
             </b>
-            <span className="text-[10px] text-zinc-400 mt-1 block">
-              {stats?.deliveredOrders || 0} delivered
+            <span className="text-xs text-zinc-400 mt-1 block">
+              {stats?.deliveredOrders || 0} orders delivered
             </span>
           </div>
         </div>
 
         {/* 3. Today's Orders */}
-        <div className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-zinc-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider">Today&apos;s Orders</span>
-            <Calendar size={16} className="text-cyan-400" />
+        <div className="bg-[#121218] p-5 rounded-2xl border border-white/10 flex flex-col justify-between">
+          <div className="flex items-center justify-between text-zinc-400 mb-3">
+            <span className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">Today&apos;s Orders</span>
+            <Calendar size={18} className="text-cyan-400" />
           </div>
           <div>
-            <b className="text-xl md:text-2xl font-bold text-cyan-400 font-mono block">
+            <b className="text-2xl font-bold text-cyan-400 font-mono block">
               {stats?.todayOrders || 0}
             </b>
-            <span className="text-[10px] text-zinc-500 mt-1 block">Placed today</span>
+            <span className="text-xs text-zinc-500 mt-1 block">Placed today</span>
           </div>
         </div>
 
         {/* 4. COD Pending Confirmation */}
         <div
           onClick={() => onNavigateTab("orders")}
-          className="glass p-5 rounded-3xl border border-amber-500/20 bg-amber-500/5 flex flex-col justify-between cursor-pointer hover:border-amber-500/50 transition-all"
+          className="bg-[#121218] p-5 rounded-2xl border border-amber-500/30 hover:border-amber-500/60 flex flex-col justify-between cursor-pointer transition-colors"
         >
-          <div className="flex items-center justify-between text-amber-300 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider">COD Pending</span>
-            <Banknote size={16} className="text-amber-400" />
+          <div className="flex items-center justify-between text-amber-400 mb-3">
+            <span className="text-xs font-semibold uppercase tracking-wider">COD Pending</span>
+            <Banknote size={18} className="text-amber-400" />
           </div>
           <div>
-            <b className="text-xl md:text-2xl font-bold text-amber-300 font-mono block">
+            <b className="text-2xl font-bold text-amber-300 font-mono block">
               {stats?.codPendingCount || 0}
             </b>
-            <span className="text-[10px] text-amber-200/70 mt-1 block">
-              Awaiting delivery / confirm
+            <span className="text-xs text-amber-200/70 mt-1 block">
+              Needs phone/delivery confirmation
             </span>
           </div>
         </div>
@@ -102,18 +102,18 @@ export default function DashboardOverview({
         {/* 5. EasyPaisa Pending Verification */}
         <div
           onClick={() => onNavigateTab("orders")}
-          className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between cursor-pointer hover:border-green-500/40 transition-all"
+          className="bg-[#121218] p-5 rounded-2xl border border-white/10 hover:border-green-500/50 flex flex-col justify-between cursor-pointer transition-colors"
         >
-          <div className="flex items-center justify-between text-zinc-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider">EP Verification</span>
-            <Smartphone size={16} className="text-green-400" />
+          <div className="flex items-center justify-between text-zinc-400 mb-3">
+            <span className="text-xs font-semibold uppercase tracking-wider">EasyPaisa Verification</span>
+            <Smartphone size={18} className="text-green-400" />
           </div>
           <div>
-            <b className="text-xl md:text-2xl font-bold text-green-400 font-mono block">
+            <b className="text-2xl font-bold text-green-400 font-mono block">
               {stats?.pendingPaymentsCount || 0}
             </b>
-            <span className="text-[10px] text-zinc-400 mt-1 block">
-              TID needs verify
+            <span className="text-xs text-zinc-400 mt-1 block">
+              TID receipt awaits review
             </span>
           </div>
         </div>
@@ -121,17 +121,17 @@ export default function DashboardOverview({
         {/* 6. Low-Stock Alerts */}
         <div
           onClick={() => onNavigateTab("products")}
-          className="glass p-5 rounded-3xl border border-white/10 flex flex-col justify-between cursor-pointer hover:border-red-500/40 transition-all"
+          className="bg-[#121218] p-5 rounded-2xl border border-white/10 hover:border-red-500/50 flex flex-col justify-between cursor-pointer transition-colors"
         >
-          <div className="flex items-center justify-between text-zinc-400 mb-2">
-            <span className="text-[11px] font-bold uppercase tracking-wider">Low Stock</span>
-            <AlertTriangle size={16} className="text-red-400" />
+          <div className="flex items-center justify-between text-zinc-400 mb-3">
+            <span className="text-xs font-semibold uppercase tracking-wider">Low Stock Shoes</span>
+            <AlertTriangle size={18} className="text-red-400" />
           </div>
           <div>
-            <b className="text-xl md:text-2xl font-bold text-red-400 font-mono block">
+            <b className="text-2xl font-bold text-red-400 font-mono block">
               {stats?.lowStockCount || 0}
             </b>
-            <span className="text-[10px] text-zinc-500 mt-1 block">Stock ≤ 10 pairs</span>
+            <span className="text-xs text-zinc-500 mt-1 block">Shoes with stock ≤ 10 pairs</span>
           </div>
         </div>
       </div>

@@ -42,7 +42,7 @@ export default function ProductsTab({
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
       {/* Top Filter and Actions Bar */}
-      <div className="glass p-4 rounded-3xl border border-white/10 flex flex-wrap items-center justify-between gap-4">
+      <div className="bg-[#121218] p-4 rounded-2xl border border-white/10 flex flex-wrap items-center justify-between gap-4">
         {/* Category Filter Pills */}
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
           {CATEGORIES.map((cat) => {
@@ -51,7 +51,7 @@ export default function ProductsTab({
               <button
                 key={cat}
                 onClick={() => setSelectedCat(cat)}
-                className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all whitespace-nowrap ${
+                className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ${
                   isSelected
                     ? "bg-brand-red text-white shadow-glow"
                     : "bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10"
@@ -70,36 +70,36 @@ export default function ProductsTab({
               type="text"
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search shoes by name or category..."
-              className="w-full bg-white/5 border border-white/10 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white outline-none focus:border-brand-gold transition-colors"
+              placeholder="Search shoes by name..."
+              className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2 text-xs text-white placeholder-zinc-500 outline-none focus:border-brand-gold transition-colors"
             />
             <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
           </div>
 
           <button
             onClick={onAddProduct}
-            className="btn py-2.5 px-4 text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap shadow-glow shrink-0"
+            className="btn py-2 px-4 text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap shadow-glow shrink-0"
           >
             <Plus size={15} />
-            <span>Add New Shoe</span>
+            <span>Add Shoe</span>
           </button>
         </div>
       </div>
 
       {/* Products Table */}
-      <div className="glass rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+      <div className="bg-[#121218] rounded-2xl border border-white/10 overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs text-zinc-300">
             <thead className="bg-white/5 uppercase text-zinc-400 text-[10px] tracking-wider border-b border-white/10">
               <tr>
-                <th className="p-4">Footwear Model</th>
-                <th className="p-4">Category</th>
-                <th className="p-4">Status</th>
-                <th className="p-4">Pricing</th>
-                <th className="p-4">Available Sizes</th>
-                <th className="p-4">Inventory Stock</th>
-                <th className="p-4">Stock Adjuster</th>
-                <th className="p-4 text-right">Actions</th>
+                <th className="p-4 whitespace-nowrap">Shoe</th>
+                <th className="p-4 whitespace-nowrap">Category</th>
+                <th className="p-4 whitespace-nowrap">Status</th>
+                <th className="p-4 whitespace-nowrap">Price</th>
+                <th className="p-4 whitespace-nowrap">Sizes</th>
+                <th className="p-4 whitespace-nowrap">Stock</th>
+                <th className="p-4 whitespace-nowrap">Quick Adjust</th>
+                <th className="p-4 whitespace-nowrap text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">

@@ -38,12 +38,12 @@ export default function ReviewsTab({
           <table className="w-full text-left text-xs text-zinc-300">
             <thead className="bg-white/5 uppercase text-zinc-400 text-[10px] tracking-wider border-b border-white/10">
               <tr>
-                <th className="p-4">Customer</th>
-                <th className="p-4">Footwear Model</th>
-                <th className="p-4">Rating</th>
-                <th className="p-4">Customer Feedback</th>
-                <th className="p-4">Moderation Status</th>
-                <th className="p-4 text-right">Action</th>
+                <th className="p-4 whitespace-nowrap">Customer</th>
+                <th className="p-4 whitespace-nowrap">Footwear Model</th>
+                <th className="p-4 whitespace-nowrap">Rating</th>
+                <th className="p-4 whitespace-nowrap">Customer Feedback</th>
+                <th className="p-4 whitespace-nowrap">Moderation Status</th>
+                <th className="p-4 text-right whitespace-nowrap">Action</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">

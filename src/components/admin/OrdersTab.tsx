@@ -82,128 +82,62 @@ export default function OrdersTab({
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
       {/* Search & Filters Bar */}
-      <div className="glass p-4 rounded-3xl border border-white/10 flex flex-col gap-4">
-        {/* Top row: Order Status filters + Search */}
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          {/* Order Status Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-            <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mr-1">
-              Order:
-            </span>
-            {ORDER_STATUS_OPTIONS.map((st) => {
-              const count =
-                st === "all"
-                  ? orders.length
-                  : orders.filter((o) => o.status === st).length;
-              const isSelected = filterStatus === st;
-              return (
-                <button
-                  key={st}
-                  onClick={() => onFilterChange(st)}
-                  className={`px-3 py-1.5 rounded-full text-xs font-bold uppercase transition-all whitespace-nowrap flex items-center gap-1.5 ${
-                    isSelected
-                      ? "bg-brand-red text-white shadow-glow"
-                      : "bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10"
-                  }`}
-                >
-                  <span>{st}</span>
-                  <span
-                    className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                      isSelected ? "bg-black/40 text-white" : "bg-white/10 text-zinc-300"
-                    }`}
-                  >
-                    {count}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Search input */}
-          <div className="relative min-w-[260px] flex-1 max-w-sm">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              placeholder="Search by ID, name, phone, city, TID..."
-              className="w-full bg-white/5 border border-white/10 rounded-2xl pl-10 pr-4 py-2.5 text-xs text-white outline-none focus:border-brand-gold transition-colors"
-            />
-            <Search size={14} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
-          </div>
+      <div className="bg-[#121218] p-4 rounded-2xl border border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+        {/* Search input */}
+        <div className="relative flex-1">
+          <input
+            type="text"
+            value={searchQuery}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="Search orders by customer name, phone, Order ID, city..."
+            className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-brand-gold transition-colors"
+          />
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
         </div>
 
-        {/* Second row: Payment Method & Payment Verification Status Filters */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-white/5">
-          {/* Payment Method Pills */}
+        {/* Clean Dropdown Filters */}
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Order Status Select */}
+          <select
+            value={filterStatus}
+            onChange={(e) => onFilterChange(e.target.value)}
+            className="bg-[#181824] border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-brand-gold cursor-pointer"
+          >
+            <option value="all">All Orders ({orders.length})</option>
+            <option value="awaiting_confirmation">Awaiting Confirmation</option>
+            <option value="pending">Pending</option>
+            <option value="confirmed">Confirmed</option>
+            <option value="dispatched">Dispatched</option>
+            <option value="delivered">Delivered</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+
+          {/* Payment Method Select */}
           {onPaymentMethodFilterChange && (
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mr-1">
-                Method:
-              </span>
-              {PAYMENT_METHOD_OPTIONS.map((pm) => {
-                const count =
-                  pm.id === "all"
-                    ? orders.length
-                    : orders.filter((o) => (o.paymentMethod || "cod") === pm.id).length;
-                const isSelected = paymentMethodFilter === pm.id;
-                return (
-                  <button
-                    key={pm.id}
-                    onClick={() => onPaymentMethodFilterChange(pm.id)}
-                    className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
-                      isSelected
-                        ? "bg-brand-gold text-black font-bold shadow-md"
-                        : "bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10"
-                    }`}
-                  >
-                    <span>{pm.label}</span>
-                    <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                        isSelected ? "bg-black/20 text-black font-mono font-bold" : "bg-white/10 text-zinc-300"
-                      }`}
-                    >
-                      {count}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+            <select
+              value={paymentMethodFilter}
+              onChange={(e) => onPaymentMethodFilterChange(e.target.value)}
+              className="bg-[#181824] border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-brand-gold cursor-pointer"
+            >
+              <option value="all">All Payment Methods</option>
+              <option value="cod">Cash on Delivery (COD)</option>
+              <option value="easypaisa">EasyPaisa</option>
+            </select>
           )}
 
-          {/* Payment Status Pills */}
+          {/* Payment Status Select */}
           {onPaymentFilterChange && (
-            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
-              <span className="text-[11px] font-bold text-zinc-400 uppercase tracking-wider mr-1">
-                Payment:
-              </span>
-              {PAYMENT_STATUS_OPTIONS.map((pst) => {
-                const count =
-                  pst.id === "all"
-                    ? orders.length
-                    : orders.filter((o) => (o.paymentStatus || "cod_pending") === pst.id).length;
-                const isSelected = paymentFilterStatus === pst.id;
-                return (
-                  <button
-                    key={pst.id}
-                    onClick={() => onPaymentFilterChange(pst.id)}
-                    className={`px-3 py-1 rounded-xl text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 ${
-                      isSelected
-                        ? "bg-white/20 text-white font-bold shadow-md"
-                        : "bg-white/5 text-zinc-400 hover:text-white hover:bg-white/10"
-                    }`}
-                  >
-                    <span>{pst.label}</span>
-                    <span
-                      className={`text-[10px] px-1.5 py-0.2 rounded-full ${
-                        isSelected ? "bg-white/30 text-white font-mono" : "bg-white/10 text-zinc-300"
-                      }`}
-                    >
-                      {count}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
+            <select
+              value={paymentFilterStatus}
+              onChange={(e) => onPaymentFilterChange(e.target.value)}
+              className="bg-[#181824] border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-brand-gold cursor-pointer"
+            >
+              <option value="all">All Payment Statuses</option>
+              <option value="cod_pending">COD Pending</option>
+              <option value="pending_verification">EasyPaisa Verification</option>
+              <option value="paid">Paid</option>
+              <option value="rejected">Rejected</option>
+            </select>
           )}
         </div>
       </div>
@@ -214,13 +148,13 @@ export default function OrdersTab({
           <table className="w-full text-left text-xs text-zinc-300">
             <thead className="bg-white/5 uppercase text-zinc-400 text-[10px] tracking-wider border-b border-white/10">
               <tr>
-                <th className="p-4">Order ID & Date</th>
-                <th className="p-4">Customer Details</th>
-                <th className="p-4">Delivery City & Address</th>
-                <th className="p-4">Footwear Items</th>
-                <th className="p-4">Total & Payment Verification</th>
-                <th className="p-4">Order Status</th>
-                <th className="p-4 text-right">Actions</th>
+                <th className="p-4 whitespace-nowrap">Order ID & Date</th>
+                <th className="p-4 whitespace-nowrap">Customer</th>
+                <th className="p-4 whitespace-nowrap">City & Address</th>
+                <th className="p-4 whitespace-nowrap">Items</th>
+                <th className="p-4 whitespace-nowrap">Amount & Method</th>
+                <th className="p-4 whitespace-nowrap">Status</th>
+                <th className="p-4 whitespace-nowrap text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5">

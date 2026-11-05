@@ -138,9 +138,11 @@ export default function AdminSidebar({
         <div className="flex flex-col">
           <div className="h-16 px-5 border-b border-slate-800/80 flex items-center justify-between">
             <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-9 h-9 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-105 transition-transform">
-                <Store size={20} />
-              </div>
+              <img
+                src="/images/logo.png"
+                alt="Hangu Branded Shoes Logo"
+                className="w-9 h-9 rounded-full object-contain ring-1 ring-emerald-500/40 p-0.5 group-hover:scale-105 transition-transform bg-white/5"
+              />
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
                   <span className="font-extrabold text-sm tracking-wider text-white">HANGU</span>

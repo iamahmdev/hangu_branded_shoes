@@ -47,11 +47,21 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6">
-          {/* 1. Brand Logo (ETQ Minimalist Spaced Style) */}
-          <Link href="/" className="flex items-center gap-2 group">
-            <span className="font-extrabold text-xl tracking-[0.25em] text-zinc-950 group-hover:text-emerald-700 transition-colors uppercase">
-              H A N G U .
-            </span>
+          {/* 1. Brand Logo (Circular Custom Seal + Minimalist Spaced Wordmark) */}
+          <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+            <img
+              src="/images/logo.png"
+              alt="Hangu Branded Shoes"
+              className="w-9 h-9 sm:w-10 sm:h-10 object-contain rounded-full shadow-xs ring-1 ring-zinc-200/90 group-hover:scale-105 transition-transform"
+            />
+            <div className="flex flex-col">
+              <span className="font-extrabold text-base sm:text-lg tracking-[0.22em] text-zinc-950 group-hover:text-emerald-700 transition-colors uppercase leading-none">
+                H A N G U .
+              </span>
+              <span className="text-[9px] font-bold tracking-[0.2em] text-zinc-500 uppercase mt-0.5 hidden sm:block">
+                Branded Shoes
+              </span>
+            </div>
           </Link>
 
           {/* 2. Center Desktop Navigation Links */}

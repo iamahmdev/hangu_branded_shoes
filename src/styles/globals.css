@@ -15,11 +15,23 @@ a{color:inherit;text-decoration:none}img{max-width:100%;display:block}
 .btn.ghost{background:transparent;border:1px solid #d4d4d8;color:#18181b;box-shadow:none}
 .btn.ghost:hover{background:#f4f4f6;border-color:#a1a1aa}
 .loader{position:fixed;inset:0;z-index:999;background:#ffffff;display:grid;place-items:center;transition:opacity .7s,visibility .7s}
-.loader.hide{opacity:0;visibility:hidden}
-.loader b{display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.15;animation:pulse 1s infinite alternate}
-.loader b .logo-main{font-size:clamp(30px,7vw,52px);letter-spacing:8px;color:#09090b;display:block}
-.loader b .logo-sub{font-size:clamp(12px,2.5vw,18px);letter-spacing:6px;color:#71717a;display:block;margin-top:6px}
-@keyframes pulse{to{opacity:.35;letter-spacing:14px}}
+.loader.hide{opacity:0;visibility:hidden;pointer-events:none}
+@keyframes loaderScale {
+  0% { transform: scale(0.85); opacity: 0; }
+  40% { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-loaderScale {
+  animation: loaderScale 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+@keyframes loaderProgress {
+  0% { transform: scaleX(0); }
+  100% { transform: scaleX(1); }
+}
+.loader-line-progress {
+  transform-origin: left;
+  animation: loaderProgress 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
 .cursor{position:fixed;width:34px;height:34px;border:2px solid #09090b;border-radius:50%;pointer-events:none;z-index:998;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
 .cursor.big{width:64px;height:64px;background:rgba(9,9,11,.15)}
 @media(hover:none){.cursor{display:none}}

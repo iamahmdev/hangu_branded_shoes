@@ -2,6 +2,7 @@ import Link from "next/link";
 import { SHOP, WA, wa, SOCIALS } from "../data/config";
 import { WhatsAppIcon, InstagramIcon, TikTokIcon, FacebookIcon } from "./WhatsAppButton";
 import { useStoreSettings } from "../hooks/useApi";
+import { MapPin, Phone, Clock, ArrowRight, ShieldCheck, Truck, RefreshCw, CheckCircle2 } from "lucide-react";
 
 export default function Footer() {
   const { data: storeSettingsData } = useStoreSettings();
@@ -12,267 +13,253 @@ export default function Footer() {
 
   return (
     <footer className="ft-wrap">
-      {/* Top Value Highlights */}
+      {/* 1. Value Highlights Bar (Clean Light Luxury Style) */}
       <div className="ft-perks wrap">
-        <div className="ft-perk glass">
+        <div className="ft-perk">
           <span className="ft-perk-icon">🚚</span>
           <div>
             <b>Free Nationwide Delivery</b>
-            <p>On all orders above Rs. 5,000</p>
+            <p>On all footwear orders over Rs. 5,000</p>
           </div>
         </div>
-        <div className="ft-perk glass">
+
+        <div className="ft-perk">
           <span className="ft-perk-icon">⚡</span>
           <div>
-            <b>Fast EasyPaisa Verification</b>
-            <p>Quick verified order processing</p>
+            <b>Fast EasyPaisa & COD</b>
+            <p>Doorstep cash delivery or direct mobile transfer</p>
           </div>
         </div>
-        <div className="ft-perk glass">
+
+        <div className="ft-perk">
           <span className="ft-perk-icon">🔄</span>
           <div>
             <b>7-Day Free Size Exchange</b>
-            <p>Hassle-free replacement guarantee</p>
+            <p>Hassle-free size replacement guarantee</p>
           </div>
         </div>
-        <div className="ft-perk glass">
+
+        <div className="ft-perk">
           <span className="ft-perk-icon">⭐</span>
           <div>
-            <b>100% Quality Inspected</b>
-            <p>Triple-checked before dispatch</p>
+            <b>100% Genuine Sole Footwear</b>
+            <p>Triple-inspected for durability and premium comfort</p>
           </div>
         </div>
       </div>
 
-      {/* Main 4-Column Footer */}
+      {/* 2. Main 4-Column Footer Body (Logical Sequence & Clean Layout) */}
       <div className="ft-body wrap">
-        {/* Col 1: Brand & Contact Info */}
+        {/* Column 1: Brand Identity & Physical Showroom */}
         <div className="ft-col ft-brand">
-          <Link href="/" className="logo">
-            <span className="logo-main font-extrabold text-2xl text-white">HANGU</span>
-            <span className="logo-sub font-bold text-xs text-brand-red uppercase">
-              BRANDED SHOES
+          <Link href="/" className="inline-block mb-3 group">
+            <span className="font-extrabold text-2xl tracking-[0.25em] text-zinc-950 uppercase group-hover:text-emerald-700 transition-colors">
+              H A N G U .
+            </span>
+            <span className="block text-[10px] font-bold tracking-[0.2em] text-zinc-400 uppercase mt-0.5">
+              BRANDED FOOTWEAR
             </span>
           </Link>
-          <p className="ft-bio text-zinc-400 text-sm mt-3 leading-relaxed">
-            Pakistan’s trusted footwear destination for executive formal wear, cushioned performance
-            sneakers, and hand-finished comfort loafers. Engineered for performance, designed for
-            prestige.
+
+          <p className="ft-bio">
+            Pakistan’s trusted footwear brand for handcrafted formal shoes, cushioned daily
+            sneakers, and genuine comfort driving loafers. Engineered for elegance, built for endurance.
           </p>
 
-          <div className="ft-contact-list mt-4 flex flex-col gap-2.5">
-            <a
-              href={wa("Hello! I have a question regarding Hangu Branded Shoes.", whatsappNum)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="ft-contact-item flex items-center gap-2.5 text-zinc-300 hover:text-white"
-            >
-              <span className="ft-icon">📱</span>
-              <div>
-                <small className="block text-zinc-500 text-xs">WhatsApp Concierge</small>
-                <b className="text-white text-sm">+{whatsappNum}</b>
-              </div>
-            </a>
-            <div className="ft-contact-item flex items-center gap-2.5 text-zinc-300">
-              <span className="ft-icon">📍</span>
-              <div>
-                <small className="block text-zinc-500 text-xs">Physical Showroom</small>
-                <b className="text-white text-sm">{address}</b>
+          {/* Showroom & Helpline Details */}
+          <div className="ft-contact-list">
+            <div className="ft-contact-item">
+              <span className="ft-icon text-zinc-700">📍</span>
+              <div className="min-w-0">
+                <small>Physical Showroom</small>
+                <b className="truncate block" title={address}>{address}</b>
               </div>
             </div>
-            <div className="ft-contact-item flex items-center gap-2.5 text-zinc-300">
-              <span className="ft-icon">🕒</span>
+
+            <a
+              href={wa("Assalam-o-Alaikum! I have an inquiry about Hangu Branded Shoes.", whatsappNum)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="ft-contact-item"
+            >
+              <span className="ft-icon text-emerald-600">📱</span>
               <div>
-                <small className="block text-zinc-500 text-xs">Operating Hours</small>
-                <b className="text-white text-sm">{shopTiming}</b>
+                <small>Official WhatsApp Helpline</small>
+                <b>+{whatsappNum}</b>
+              </div>
+            </a>
+
+            <div className="ft-contact-item">
+              <span className="ft-icon text-zinc-700">🕒</span>
+              <div>
+                <small>Showroom Operating Hours</small>
+                <b>{shopTiming}</b>
               </div>
             </div>
           </div>
 
-          <div className="ft-socials flex items-center gap-3 mt-4">
+          {/* Social Channels */}
+          <div className="ft-socials">
             <a
               href={wa("Assalam-o-Alaikum! I want to inquire about footwear.", whatsappNum)}
               target="_blank"
               rel="noopener noreferrer"
-              title="WhatsApp"
+              title="WhatsApp Concierge"
               aria-label="WhatsApp"
-              className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#25d366] hover:border-[#25d366] transition-colors"
             >
-              <WhatsAppIcon size={18} color="#fff" />
+              <WhatsAppIcon size={16} color="#059669" />
             </a>
-            <a
-              href={SOCIALS.facebook}
-              target="_blank"
-              rel="noopener noreferrer"
-              title="Facebook"
-              aria-label="Facebook"
-              className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-[#1877f2] hover:border-[#1877f2] transition-colors"
-            >
-              <FacebookIcon size={18} color="#fff" />
-            </a>
+
             <a
               href={SOCIALS.tiktok}
               target="_blank"
               rel="noopener noreferrer"
-              title="TikTok"
+              title="TikTok Official"
               aria-label="TikTok"
-              className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-black hover:border-zinc-600 transition-colors"
             >
-              <TikTokIcon size={18} color="#fff" />
+              <TikTokIcon size={16} color="#000000" />
             </a>
+
+            <a
+              href={SOCIALS.facebook}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="Facebook Official"
+              aria-label="Facebook"
+            >
+              <FacebookIcon size={16} color="#1877f2" />
+            </a>
+
             <a
               href={SOCIALS.instagram}
               target="_blank"
               rel="noopener noreferrer"
               title="Instagram"
               aria-label="Instagram"
-              className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-pink-600 hover:border-pink-600 transition-colors"
             >
-              <InstagramIcon size={18} color="#fff" />
+              <InstagramIcon size={16} color="#e1306c" />
             </a>
           </div>
         </div>
 
-        {/* Col 2: Shoe Collections */}
+        {/* Column 2: Footwear Collections */}
         <div className="ft-col">
-          <h4 className="ft-heading text-white font-bold text-base mb-3">Shoe Collections</h4>
-          <ul className="ft-links flex flex-col gap-2 text-zinc-400 text-sm">
+          <h4 className="ft-heading">Footwear Collections</h4>
+          <ul className="ft-links">
             <li>
-              <Link href="/shop" className="hover:text-brand-gold transition-colors">
-                All Footwear Pairs
+              <Link href="/shop">
+                <span>All Footwear Pairs</span>
               </Link>
             </li>
             <li>
-              <Link href="/shop?cat=Sneakers" className="hover:text-brand-gold transition-colors">
-                Performance Sneakers
+              <Link href="/shop?cat=Sneakers">
+                <span>Performance Sneakers</span>
               </Link>
             </li>
             <li>
-              <Link href="/shop?cat=Formal" className="hover:text-brand-gold transition-colors">
-                Executive Formal Shoes
+              <Link href="/shop?cat=Formal">
+                <span>Executive Formal Shoes</span>
               </Link>
             </li>
             <li>
-              <Link href="/shop?cat=Comfort" className="hover:text-brand-gold transition-colors">
-                Everyday Comfort Slip-Ons
+              <Link href="/shop?cat=Comfort">
+                <span>Everyday Comfort Slip-Ons</span>
               </Link>
             </li>
             <li>
-              <Link href="/shop?cat=Loafers" className="hover:text-brand-gold transition-colors">
-                Classic Driving Loafers
+              <Link href="/shop?cat=Loafers">
+                <span>Classic Driving Loafers</span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/shop?sort=newest">
+                <span>New Seasonal Arrivals</span>
               </Link>
             </li>
           </ul>
         </div>
 
-        {/* Col 3: Customer Care & Services */}
+        {/* Column 3: Customer Care & Services */}
         <div className="ft-col">
-          <h4 className="ft-heading text-white font-bold text-base mb-3">Customer Care</h4>
-          <ul className="ft-links flex flex-col gap-2 text-zinc-400 text-sm">
+          <h4 className="ft-heading">Customer Care</h4>
+          <ul className="ft-links">
             <li>
-              <Link
-                href="/track"
-                className="text-brand-gold font-bold hover:underline transition-colors flex items-center gap-1.5"
-              >
-                <span>📦 Track Your Order</span>
+              <Link href="/track" className="font-semibold text-emerald-700">
+                <span>📦 Track Your Live Order</span>
               </Link>
             </li>
             <li>
-              <Link href="/about" className="hover:text-brand-gold transition-colors">
-                About Our Heritage & Brand
+              <Link href="/size-guide">
+                <span>Interactive Size Guide</span>
               </Link>
             </li>
             <li>
-              <Link href="/size-guide" className="hover:text-brand-gold transition-colors">
-                Interactive Shoe Size Guide
+              <Link href="/reviews">
+                <span>Verified Customer Reviews</span>
               </Link>
             </li>
             <li>
-              <Link href="/reviews" className="hover:text-brand-gold transition-colors">
-                Genuine Customer Reviews
+              <Link href="/about">
+                <span>About Our Heritage & Brand</span>
               </Link>
             </li>
             <li>
-              <Link href="/contact" className="hover:text-brand-gold transition-colors">
-                Contact & Showroom Location
+              <Link href="/contact">
+                <span>Contact & Store Location</span>
               </Link>
             </li>
             <li>
-              <Link href="/about#delivery" className="hover:text-brand-gold transition-colors">
-                Nationwide Delivery Guide
+              <Link href="/about#exchange">
+                <span>7-Day Free Exchange Policy</span>
               </Link>
-            </li>
-            <li>
-              <Link href="/about#exchange" className="hover:text-brand-gold transition-colors">
-                7-Day Exchange Policy
-              </Link>
-            </li>
-            <li>
-              <a
-                href={wa("Hi! I need help with shoe sizing.")}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-zinc-400 hover:text-[#25d366] transition-colors"
-              >
-                Size Fitting Assistance <WhatsAppIcon size={14} color="#25d366" />
-              </a>
             </li>
           </ul>
         </div>
 
-        {/* Col 4: Customer Care & Payment Options */}
+        {/* Column 4: Direct Support & Payment Methods */}
         <div className="ft-col">
-          <h4 className="ft-heading text-white font-bold text-base mb-3">Direct Support</h4>
-          <p className="ft-sub-text text-zinc-400 text-sm mb-4 leading-relaxed">
-            Need sizing advice or want to place a custom order? Our WhatsApp concierge is available 7 days a week.
+          <h4 className="ft-heading">Direct Concierge</h4>
+          <p className="ft-sub-text">
+            Need sizing advice or want to place a custom order? Our WhatsApp concierge is ready to assist you.
           </p>
 
           <a
-            href={wa("Assalam-o-Alaikum! I need help with shoe sizing and ordering.")}
+            href={wa("Assalam-o-Alaikum! I need help with shoe sizing and ordering.", whatsappNum)}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#25d366]/15 border border-[#25d366]/30 text-white text-xs font-semibold hover:bg-[#25d366]/25 transition-all mb-4"
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors mb-4 shadow-xs"
           >
-            <WhatsAppIcon size={16} color="#25d366" />
+            <WhatsAppIcon size={16} color="#fff" />
             <span>Chat on WhatsApp</span>
           </a>
 
-          <div className="ft-pay-section mt-2">
-            <small className="block text-zinc-500 text-xs mb-2">Accepted Payment Method</small>
-            <div className="ft-pay-chips flex flex-wrap gap-1.5">
-              <span className="pay-chip text-xs bg-white/5 border border-white/10 px-2.5 py-1 rounded-full text-zinc-300">
-                📱 EasyPaisa Mobile Transfer
+          <div className="ft-pay-section">
+            <small>Accepted Payment Methods</small>
+            <div className="ft-pay-chips">
+              <span className="pay-chip">
+                <span>💵</span> Cash on Delivery (COD)
+              </span>
+              <span className="pay-chip">
+                <span>📱</span> EasyPaisa Transfer
               </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Bar */}
-      <div className="ft-bottom border-t border-white/10 py-5 mt-10">
-        <div className="wrap ft-bottom-inner flex flex-col md:flex-row justify-between items-center gap-3 text-xs text-zinc-500">
-          <p>© 2026 {SHOP}. All rights reserved. Crafted for footwear lovers across Pakistan.</p>
-          <div className="ft-bottom-links flex gap-4">
-            <Link href="/about" className="hover:text-zinc-300">
-              About Us
-            </Link>
-            <Link href="/shop" className="hover:text-zinc-300">
-              Shop
-            </Link>
-            <Link href="/track" className="hover:text-zinc-300 text-brand-gold">
-              Track Order
-            </Link>
-            <Link href="/size-guide" className="hover:text-zinc-300">
-              Size Guide
-            </Link>
-            <Link href="/reviews" className="hover:text-zinc-300">
-              Reviews
-            </Link>
-            <Link href="/contact" className="hover:text-zinc-300">
-              Contact
-            </Link>
-            <Link href="/admin" className="hover:text-zinc-400 opacity-60">
-              Admin
+      {/* 3. Bottom Legal & Navigation Strip */}
+      <div className="ft-bottom">
+        <div className="wrap ft-bottom-inner">
+          <p>© 2026 {SHOP}. All rights reserved. Crafted for footwear enthusiasts across Pakistan.</p>
+          <div className="ft-bottom-links">
+            <Link href="/about">About Us</Link>
+            <Link href="/shop">Shop</Link>
+            <Link href="/track">Track Order</Link>
+            <Link href="/size-guide">Size Guide</Link>
+            <Link href="/reviews">Reviews</Link>
+            <Link href="/contact">Contact</Link>
+            <Link href="/admin" className="opacity-60 hover:opacity-100">
+              Admin Portal
             </Link>
           </div>
         </div>

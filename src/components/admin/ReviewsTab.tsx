@@ -15,28 +15,28 @@ export default function ReviewsTab({
 }: ReviewsTabProps) {
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
-      {/* Header Bar */}
-      <div className="glass p-4 rounded-3xl border border-white/10 flex items-center justify-between gap-4">
+      {/* Header Bar Card */}
+      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between gap-4">
         <div>
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <Star size={18} className="text-brand-gold fill-brand-gold" />
+          <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
+            <Star size={18} className="text-amber-500 fill-amber-500" />
             <span>Customer Reviews Moderation</span>
           </h3>
-          <p className="text-xs text-zinc-400 mt-0.5">
+          <p className="text-xs text-slate-500 mt-0.5">
             Approve or reject customer ratings displayed publicly on the storefront and shoe pages
           </p>
         </div>
 
-        <div className="text-xs text-zinc-400">
-          Total Reviews: <b className="text-white font-mono">{reviews.length}</b>
+        <div className="text-xs text-slate-600 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">
+          Total Reviews: <b className="text-slate-900 font-mono">{reviews.length}</b>
         </div>
       </div>
 
-      {/* Reviews Table */}
-      <div className="glass rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+      {/* Reviews Table Card */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-zinc-300">
-            <thead className="bg-white/5 uppercase text-zinc-400 text-[10px] tracking-wider border-b border-white/10">
+          <table className="w-full text-left text-xs text-slate-700">
+            <thead className="bg-slate-50 uppercase text-slate-500 text-[10px] tracking-wider border-b border-slate-200">
               <tr>
                 <th className="p-4 whitespace-nowrap">Customer</th>
                 <th className="p-4 whitespace-nowrap">Footwear Model</th>
@@ -46,16 +46,16 @@ export default function ReviewsTab({
                 <th className="p-4 text-right whitespace-nowrap">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {isLoading ? (
                 <tr>
-                  <td colSpan={6} className="p-12 text-center text-zinc-400">
+                  <td colSpan={6} className="p-12 text-center text-slate-400">
                     Loading reviews...
                   </td>
                 </tr>
               ) : reviews.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="p-12 text-center text-zinc-500">
+                  <td colSpan={6} className="p-12 text-center text-slate-400">
                     No customer reviews submitted yet.
                   </td>
                 </tr>
@@ -63,14 +63,14 @@ export default function ReviewsTab({
                 reviews.map((r: any) => {
                   const reviewerName = r.userName || r.name || "Customer";
                   return (
-                    <tr key={r._id} className="hover:bg-white/5 transition-colors">
+                    <tr key={r._id} className="hover:bg-slate-50/80 transition-colors">
                       {/* Customer */}
-                      <td className="p-4">
+                      <td className="p-4 whitespace-nowrap">
                         <div className="flex items-center gap-2">
-                          <b className="text-white text-xs block">{reviewerName}</b>
+                          <b className="text-slate-900 text-xs block">{reviewerName}</b>
                           {r.verified && (
                             <span
-                              className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-green-500/20 text-green-400 border border-green-500/30"
+                              className="text-[9px] px-1.5 py-0.2 rounded-full font-bold bg-emerald-50 text-emerald-700 border border-emerald-200"
                               title="Verified Buyer"
                             >
                               ✓ Verified
@@ -78,32 +78,32 @@ export default function ReviewsTab({
                           )}
                         </div>
                         {r.city && (
-                          <span className="text-zinc-500 text-[10px] block mt-0.5">
+                          <span className="text-slate-400 text-[10px] block mt-0.5">
                             📍 {r.city}
                           </span>
                         )}
                       </td>
 
                       {/* Shoe Reviewed */}
-                      <td className="p-4">
-                        <span className="text-brand-gold font-semibold text-xs block">
+                      <td className="p-4 whitespace-nowrap">
+                        <span className="text-slate-900 font-semibold text-xs block">
                           {r.shoeName || "Footwear"}
                         </span>
                       </td>
 
                       {/* Rating */}
-                      <td className="p-4">
-                        <div className="flex items-center gap-1 text-brand-gold">
+                      <td className="p-4 whitespace-nowrap">
+                        <div className="flex items-center gap-1 text-amber-500">
                           {[1, 2, 3, 4, 5].map((s) => (
                             <Star
                               key={s}
                               size={12}
                               className={
-                                s <= r.rating ? "fill-brand-gold text-brand-gold" : "text-zinc-700"
+                                s <= r.rating ? "fill-amber-500 text-amber-500" : "text-slate-200"
                               }
                             />
                           ))}
-                          <span className="font-mono text-xs font-bold text-white ml-1.5">
+                          <span className="font-mono text-xs font-bold text-slate-900 ml-1.5">
                             {r.rating}.0
                           </span>
                         </div>
@@ -111,39 +111,39 @@ export default function ReviewsTab({
 
                       {/* Comment */}
                       <td className="p-4 max-w-sm">
-                        <p className="text-zinc-300 text-xs line-clamp-2 leading-relaxed" title={r.comment}>
+                        <p className="text-slate-600 text-xs line-clamp-2 leading-relaxed" title={r.comment}>
                           "{r.comment}"
                         </p>
                       </td>
 
                       {/* Moderation Status Dropdown */}
-                      <td className="p-4">
+                      <td className="p-4 whitespace-nowrap">
                         <select
                           value={r.status || "approved"}
                           onChange={(e) => onUpdateStatus(r._id, e.target.value)}
                           className={`rounded-full px-2.5 py-1 text-[10px] font-bold uppercase outline-none cursor-pointer border ${
                             r.status === "approved"
-                              ? "bg-green-500/20 text-green-400 border-green-500/30"
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
                               : r.status === "rejected"
-                              ? "bg-red-500/20 text-red-400 border-red-500/30"
-                              : "bg-amber-500/20 text-amber-400 border-amber-500/30"
+                              ? "bg-rose-50 text-rose-700 border-rose-200"
+                              : "bg-amber-50 text-amber-700 border-amber-200"
                           }`}
                         >
-                          <option value="approved" className="bg-zinc-950 text-white">APPROVED</option>
-                          <option value="pending" className="bg-zinc-950 text-white">PENDING</option>
-                          <option value="rejected" className="bg-zinc-950 text-white">REJECTED</option>
+                          <option value="approved">APPROVED</option>
+                          <option value="pending">PENDING</option>
+                          <option value="rejected">REJECTED</option>
                         </select>
                       </td>
 
                       {/* Actions */}
-                      <td className="p-4 text-right">
+                      <td className="p-4 text-right whitespace-nowrap">
                         <button
                           onClick={() => {
                             if (confirm(`Delete review by "${reviewerName}"?`)) {
                               onDeleteReview(r._id);
                             }
                           }}
-                          className="p-2 rounded-xl bg-white/5 hover:bg-red-500/15 text-zinc-400 hover:text-red-400 border border-white/10 transition-colors"
+                          className="p-2 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 transition-colors"
                           title="Delete Review"
                         >
                           <Trash2 size={14} />
@@ -160,4 +160,3 @@ export default function ReviewsTab({
     </div>
   );
 }
-

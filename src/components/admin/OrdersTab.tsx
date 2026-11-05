@@ -81,8 +81,8 @@ export default function OrdersTab({
 
   return (
     <div className="flex flex-col gap-6 animate-fadeIn">
-      {/* Search & Filters Bar */}
-      <div className="bg-[#121218] p-4 rounded-2xl border border-white/10 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+      {/* Search & Filters Bar Card */}
+      <div className="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         {/* Search input */}
         <div className="relative flex-1">
           <input
@@ -90,9 +90,9 @@ export default function OrdersTab({
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search orders by customer name, phone, Order ID, city..."
-            className="w-full bg-white/5 border border-white/10 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-zinc-500 outline-none focus:border-brand-gold transition-colors"
+            className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-xs text-slate-800 placeholder-slate-400 outline-none focus:border-emerald-500 focus:bg-white transition-colors"
           />
-          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
+          <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
         </div>
 
         {/* Clean Dropdown Filters */}
@@ -101,7 +101,7 @@ export default function OrdersTab({
           <select
             value={filterStatus}
             onChange={(e) => onFilterChange(e.target.value)}
-            className="bg-[#181824] border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-brand-gold cursor-pointer"
+            className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 outline-none focus:border-emerald-500 cursor-pointer"
           >
             <option value="all">All Orders ({orders.length})</option>
             <option value="awaiting_confirmation">Awaiting Confirmation</option>
@@ -117,7 +117,7 @@ export default function OrdersTab({
             <select
               value={paymentMethodFilter}
               onChange={(e) => onPaymentMethodFilterChange(e.target.value)}
-              className="bg-[#181824] border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-brand-gold cursor-pointer"
+              className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 outline-none focus:border-emerald-500 cursor-pointer"
             >
               <option value="all">All Payment Methods</option>
               <option value="cod">Cash on Delivery (COD)</option>
@@ -130,7 +130,7 @@ export default function OrdersTab({
             <select
               value={paymentFilterStatus}
               onChange={(e) => onPaymentFilterChange(e.target.value)}
-              className="bg-[#181824] border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-brand-gold cursor-pointer"
+              className="bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs font-semibold text-slate-700 outline-none focus:border-emerald-500 cursor-pointer"
             >
               <option value="all">All Payment Statuses</option>
               <option value="cod_pending">COD Pending</option>
@@ -142,11 +142,11 @@ export default function OrdersTab({
         </div>
       </div>
 
-      {/* Orders Table */}
-      <div className="glass rounded-3xl border border-white/10 overflow-hidden shadow-2xl">
+      {/* Orders Table Card */}
+      <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs text-zinc-300">
-            <thead className="bg-white/5 uppercase text-zinc-400 text-[10px] tracking-wider border-b border-white/10">
+          <table className="w-full text-left text-xs text-slate-700">
+            <thead className="bg-slate-50 uppercase text-slate-500 text-[10px] tracking-wider border-b border-slate-200">
               <tr>
                 <th className="p-4 whitespace-nowrap">Order ID & Date</th>
                 <th className="p-4 whitespace-nowrap">Customer</th>
@@ -157,17 +157,17 @@ export default function OrdersTab({
                 <th className="p-4 whitespace-nowrap text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-white/5">
+            <tbody className="divide-y divide-slate-100">
               {isLoading ? (
                 <tr>
-                  <td colSpan={7} className="p-12 text-center text-zinc-400">
-                    <RefreshCw className="animate-spin inline mr-2 text-brand-gold" size={16} />
+                  <td colSpan={7} className="p-12 text-center text-slate-400">
+                    <RefreshCw className="animate-spin inline mr-2 text-emerald-600" size={16} />
                     Loading orders from live MongoDB Atlas...
                   </td>
                 </tr>
               ) : filteredOrders.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="p-12 text-center text-zinc-500">
+                  <td colSpan={7} className="p-12 text-center text-slate-400">
                     {searchQuery
                       ? `No orders matching "${searchQuery}".`
                       : "No orders found in this view."}
@@ -175,17 +175,6 @@ export default function OrdersTab({
                 </tr>
               ) : (
                 filteredOrders.map((ord: any) => {
-                  const statusMeta = ORDER_STATUS_COLORS[ord.status] || {
-                    bg: "bg-zinc-800",
-                    text: "text-zinc-300",
-                    border: "border-zinc-700",
-                  };
-                  const paymentMeta = PAYMENT_STATUS_COLORS[ord.paymentStatus || "pending_verification"] || {
-                    bg: "bg-amber-500/15",
-                    text: "text-amber-400",
-                    border: "border-amber-500/30",
-                    label: ord.paymentStatus || "Pending",
-                  };
                   const dateStr = ord.createdAt
                     ? new Date(ord.createdAt).toLocaleDateString("en-PK", {
                         day: "numeric",
@@ -197,27 +186,27 @@ export default function OrdersTab({
                     : "Recently";
 
                   return (
-                    <tr key={ord.orderId} className="hover:bg-white/5 transition-colors">
+                    <tr key={ord.orderId} className="hover:bg-slate-50/80 transition-colors">
                       {/* Order ID & Date */}
                       <td className="p-4">
-                        <b className="text-white font-mono text-sm block">{ord.orderId}</b>
-                        <span className="text-[11px] text-zinc-400 block mt-0.5">{dateStr}</span>
+                        <b className="text-slate-900 font-mono text-sm block">{ord.orderId}</b>
+                        <span className="text-[11px] text-slate-400 block mt-0.5">{dateStr}</span>
                       </td>
 
                       {/* Customer Details */}
                       <td className="p-4">
-                        <b className="text-white text-xs block">{ord.customer?.name}</b>
-                        <span className="text-brand-gold font-mono text-[11px] block mt-0.5">
+                        <b className="text-slate-900 text-xs block">{ord.customer?.name}</b>
+                        <span className="text-slate-500 font-mono text-[11px] block mt-0.5">
                           {ord.customer?.phone}
                         </span>
                       </td>
 
                       {/* City & Address */}
                       <td className="p-4 max-w-[200px]">
-                        <span className="text-white font-semibold text-xs block">
+                        <span className="text-slate-900 font-semibold text-xs block">
                           📍 {ord.customer?.city}
                         </span>
-                        <p className="text-[11px] text-zinc-400 truncate mt-0.5" title={ord.customer?.address}>
+                        <p className="text-[11px] text-slate-500 truncate mt-0.5" title={ord.customer?.address}>
                           {ord.customer?.address}
                         </p>
                       </td>
@@ -231,11 +220,11 @@ export default function OrdersTab({
                               src={resolveProductImage(it.img)}
                               alt={it.name}
                               title={`${it.name} (Size ${it.size}) x${it.quantity}`}
-                              className="w-8 h-8 rounded-full object-cover border-2 border-zinc-950 bg-zinc-900"
+                              className="w-8 h-8 rounded-full object-cover border-2 border-white bg-slate-100 shadow-xs"
                             />
                           ))}
                         </div>
-                        <span className="text-[10px] text-zinc-400 mt-1 block">
+                        <span className="text-[10px] text-slate-400 mt-1 block">
                           {ord.items?.length || 1} shoe{ord.items?.length > 1 ? "s" : ""}
                         </span>
                       </td>
@@ -243,40 +232,46 @@ export default function OrdersTab({
                       {/* Total & Payment Verification Status */}
                       <td className="p-4">
                         <div className="flex items-center gap-2 mb-1">
-                          <b className="text-brand-gold font-mono text-sm font-bold">
+                          <b className="text-slate-900 font-mono text-sm font-bold">
                             Rs. {(ord.totalAmount || 0).toLocaleString()}
                           </b>
                           {ord.paymentMethod === "cod" ? (
-                            <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-amber-50 text-amber-700 border border-amber-200">
                               COD
                             </span>
                           ) : (
-                            <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-green-500/20 text-green-300 border border-green-500/30">
+                            <span className="px-1.5 py-0.5 rounded text-[10px] font-extrabold uppercase bg-emerald-50 text-emerald-700 border border-emerald-200">
                               EP
                             </span>
                           )}
                         </div>
                         <div className="flex items-center gap-1.5 mt-1 flex-wrap">
                           <span
-                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase border ${paymentMeta.bg} ${paymentMeta.text} ${paymentMeta.border}`}
+                            className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase border ${
+                              ord.paymentStatus === "paid"
+                                ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                : ord.paymentStatus === "rejected"
+                                ? "bg-rose-50 text-rose-700 border-rose-200"
+                                : "bg-amber-50 text-amber-700 border-amber-200"
+                            }`}
                           >
-                            {paymentMeta.label}
+                            {ord.paymentStatus || "Pending"}
                           </span>
                           {ord.paymentScreenshot && (
                             <span
                               title="Payment receipt attached"
-                              className="inline-flex items-center text-cyan-400"
+                              className="inline-flex items-center text-blue-600"
                             >
                               <ImageIcon size={12} />
                             </span>
                           )}
                         </div>
-                        <span className="text-[10px] text-zinc-400 font-mono block mt-1">
+                        <span className="text-[10px] text-slate-400 font-mono block mt-1">
                           {ord.paymentMethod === "cod" ? (
-                            <span className="text-amber-200/80">Cash on Delivery</span>
+                            <span className="text-slate-500">Cash on Delivery</span>
                           ) : (
                             <>
-                              TID: <strong className="text-white">{ord.transactionId || "—"}</strong>
+                              TID: <strong className="text-slate-700">{ord.transactionId || "—"}</strong>
                             </>
                           )}
                         </span>
@@ -285,23 +280,33 @@ export default function OrdersTab({
                       {/* Order Status & Logistics */}
                       <td className="p-4">
                         <span
-                          className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase border ${statusMeta.bg} ${statusMeta.text} ${statusMeta.border}`}
+                          className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase border ${
+                            ord.status === "delivered"
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              : ord.status === "confirmed"
+                              ? "bg-blue-50 text-blue-700 border-blue-200"
+                              : ord.status === "dispatched"
+                              ? "bg-amber-50 text-amber-700 border-amber-200"
+                              : ord.status === "cancelled"
+                              ? "bg-rose-50 text-rose-700 border-rose-200"
+                              : "bg-sky-50 text-sky-700 border-sky-200"
+                          }`}
                         >
                           {ord.status.replace("_", " ")}
                         </span>
                         {ord.courierName && (
-                          <div className="flex items-center gap-1 text-[11px] text-zinc-400 mt-1">
-                            <Truck size={12} className="text-brand-gold" />
+                          <div className="flex items-center gap-1 text-[11px] text-slate-500 mt-1">
+                            <Truck size={12} className="text-slate-400" />
                             <span>{ord.courierName}</span>
                           </div>
                         )}
                         {ord.trackingNumber && (
-                          <span className="text-[10px] text-brand-gold font-mono block">
+                          <span className="text-[10px] text-emerald-700 font-mono block">
                             TRK: {ord.trackingNumber}
                           </span>
                         )}
                         {ord.deliveryNote && (
-                          <span className="text-[10px] text-zinc-400 italic block mt-0.5" title={ord.deliveryNote}>
+                          <span className="text-[10px] text-slate-400 italic block mt-0.5" title={ord.deliveryNote}>
                             📝 {ord.deliveryNote}
                           </span>
                         )}
@@ -312,7 +317,7 @@ export default function OrdersTab({
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => onSelectOrder(ord)}
-                            className="p-2 rounded-xl bg-white/5 hover:bg-brand-gold/15 text-zinc-300 hover:text-brand-gold border border-white/10 transition-colors"
+                            className="p-2 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 transition-colors"
                             title="Inspect Order Details & Verify Payment"
                           >
                             <Eye size={14} />
@@ -320,7 +325,7 @@ export default function OrdersTab({
 
                           <button
                             onClick={() => onDeleteOrder(ord.orderId)}
-                            className="p-2 rounded-xl bg-white/5 hover:bg-red-500/15 text-zinc-400 hover:text-red-400 border border-white/10 transition-colors"
+                            className="p-2 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 transition-colors"
                             title="Delete Order"
                           >
                             <Trash2 size={14} />

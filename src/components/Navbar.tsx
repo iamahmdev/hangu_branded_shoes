@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { WA, wa } from "../data/config";
 import { WhatsAppIcon } from "./WhatsAppButton";
-import { Search } from "lucide-react";
+import { Search, ShoppingBag, Menu, X, ArrowUpRight } from "lucide-react";
 
 interface NavLink {
   href: string;
@@ -12,12 +12,11 @@ interface NavLink {
 }
 
 const NAV_LINKS: NavLink[] = [
-  { href: "/", label: "Home" },
-  { href: "/shop", label: "Shop" },
+  { href: "/", label: "New Collection" },
+  { href: "/shop", label: "All Footwear" },
   { href: "/track", label: "Track Order" },
   { href: "/size-guide", label: "Size Guide" },
   { href: "/about", label: "About" },
-  { href: "/reviews", label: "Reviews" },
   { href: "/contact", label: "Contact" },
 ];
 
@@ -28,127 +27,130 @@ export default function Navbar() {
   const router = useRouter();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 30);
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Close mobile menu on route change
   useEffect(() => {
     setMobileMenu(false);
   }, [router.asPath]);
 
   return (
-    <header className={`nb-header ${scrolled ? "scrolled" : ""}`}>
-      <div className="wrap nb-inner flex justify-between items-center gap-4">
-        {/* Logo */}
-        <Link href="/" className="logo inline-flex flex-col leading-tight cursor-pointer">
-          <span className="logo-main font-extrabold text-[23px] tracking-[3.5px] text-white">HANGU</span>
-          <span className="logo-sub font-bold text-[10.5px] tracking-[3px] text-brand-red uppercase mt-0.5">BRANDED SHOES</span>
-        </Link>
-
-        {/* Desktop Navigation Links (Pill Style) */}
-        <nav className="nb-nav-desktop hidden md:flex items-center gap-1.5 bg-[rgba(22,22,32,0.65)] backdrop-blur-md border border-white/10 px-2 py-1.5 rounded-full shadow-glass">
-          {NAV_LINKS.map((link) => {
-            const isActive = router.pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={`nb-link relative px-3.5 py-1.5 text-[13px] font-medium rounded-full transition-all duration-200 ${isActive ? "active text-white font-semibold" : "text-zinc-400 hover:text-white"
-                  }`}
-              >
-                {link.label}
-                {isActive && <span className="nb-active-indicator" />}
-              </Link>
-            );
-          })}
-        </nav>
-
-        {/* Right Action Cluster */}
-        <div className="nb-actions flex items-center gap-2.5">
-          {/* Quick Search Button */}
-          <button
-            type="button"
-            className="nb-search-btn inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10 text-white hover:bg-brand-red/20 hover:border-brand-red transition-all"
-            onClick={openSearch}
-            title="Search Shoes"
-            aria-label="Search Shoes"
-          >
-            <Search size={18} />
-          </button>
-
-          {/* Quick WhatsApp Concierge Button */}
-          <a
-            href={wa("Assalam-o-Alaikum! I have a question regarding Hangu Branded Shoes.")}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="nb-wa-btn"
-            title="Quick WhatsApp Chat"
-            aria-label="WhatsApp Concierge"
-          >
-            <WhatsAppIcon size={16} color="#25d366" />
-            <span className="nb-wa-text font-medium text-xs">WhatsApp</span>
-          </a>
-
-          {/* Cart Button */}
-          <Link href="/cart" className="nb-cart-btn" aria-label="Shopping Cart">
-            <span className="nb-cart-icon">🛒</span>
-            <span className="nb-cart-label">Cart</span>
-            <span className="nb-cart-badge">{count}</span>
+    <>
+      {/* Top Clean Minimalist White Header (ETQ Reference Style) */}
+      <header
+        className={`sticky top-0 z-50 w-full transition-all duration-300 ${
+          scrolled
+            ? "bg-white/95 backdrop-blur-md border-b border-zinc-200 shadow-xs py-3.5"
+            : "bg-white border-b border-zinc-100 py-4"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6">
+          {/* 1. Brand Logo (ETQ Minimalist Spaced Style) */}
+          <Link href="/" className="flex items-center gap-2 group">
+            <span className="font-extrabold text-xl tracking-[0.25em] text-zinc-950 group-hover:text-emerald-700 transition-colors uppercase">
+              H A N G U .
+            </span>
           </Link>
 
-          {/* Mobile Hamburger Toggle */}
-          <button
-            type="button"
-            className={`nb-hamburger md:hidden ${mobileMenu ? "open" : ""}`}
-            onClick={() => setMobileMenu(!mobileMenu)}
-            aria-label="Toggle Navigation Menu"
-          >
-            <span className="nb-bar" />
-            <span className="nb-bar" />
-            <span className="nb-bar" />
-          </button>
-        </div>
-      </div>
-
-      {/* Mobile Navigation Drawer */}
-      <div className={`nb-mobile-drawer ${mobileMenu ? "open" : ""}`}>
-        <div className="nb-mobile-inner">
-          <div className="nb-mobile-links">
+          {/* 2. Center Desktop Navigation Links */}
+          <nav className="hidden md:flex items-center gap-7">
             {NAV_LINKS.map((link) => {
               const isActive = router.pathname === link.href;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`nb-mobile-link ${isActive ? "active" : ""}`}
-                  onClick={() => setMobileMenu(false)}
+                  className={`text-xs font-semibold tracking-wider uppercase transition-colors relative py-1 ${
+                    isActive
+                      ? "text-zinc-950 after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-zinc-950"
+                      : "text-zinc-500 hover:text-zinc-950"
+                  }`}
                 >
-                  <span>{link.label}</span>
-                  <span className="nb-arrow">›</span>
+                  {link.label}
                 </Link>
               );
             })}
-          </div>
+          </nav>
 
-          {/* Mobile Drawer Footer with Direct WhatsApp Order */}
-          <div className="nb-mobile-footer">
+          {/* 3. Right Utility Cluster (Search, WhatsApp, Cart with Badge) */}
+          <div className="flex items-center gap-3">
+            {/* Quick Search Button */}
+            <button
+              type="button"
+              onClick={openSearch}
+              className="p-2 text-zinc-600 hover:text-zinc-950 transition-colors"
+              title="Search Footwear"
+              aria-label="Search Footwear"
+            >
+              <Search size={18} />
+            </button>
+
+            {/* Quick WhatsApp Concierge */}
             <a
-              href={wa("Assalam-o-Alaikum! I want to order shoes on WhatsApp.")}
+              href={wa("Assalam-o-Alaikum! I have an inquiry about Hangu Branded Shoes.")}
               target="_blank"
               rel="noopener noreferrer"
-              className="nb-mobile-wa-btn"
+              className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-semibold border border-emerald-200 transition-colors"
+              title="Quick WhatsApp Concierge"
             >
-              <WhatsAppIcon size={20} color="#fff" />
-              <span>Chat on WhatsApp (+{WA})</span>
+              <WhatsAppIcon size={14} color="#059669" />
+              <span>WhatsApp</span>
             </a>
-            <div className="nb-mobile-note">
-              🚚 Free Delivery over Rs. 5,000 • 📱 EasyPaisa Verified
-            </div>
+
+            {/* Shopping Cart Button with Circular Badge (matching ETQ top-right circle) */}
+            <Link
+              href="/cart"
+              className="relative p-2 text-zinc-900 hover:text-emerald-700 transition-colors flex items-center gap-1.5"
+              aria-label="Shopping Cart"
+            >
+              <ShoppingBag size={20} />
+              <span className="w-5 h-5 rounded-full bg-zinc-950 text-white text-[11px] font-bold flex items-center justify-center font-mono">
+                {count}
+              </span>
+            </Link>
+
+            {/* Mobile Hamburger Toggle */}
+            <button
+              type="button"
+              onClick={() => setMobileMenu(!mobileMenu)}
+              className="md:hidden p-2 text-zinc-900 hover:text-emerald-700 transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenu ? <X size={22} /> : <Menu size={22} />}
+            </button>
           </div>
         </div>
-      </div>
-    </header>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenu && (
+          <div className="md:hidden border-t border-zinc-200 bg-white px-5 py-6 flex flex-col gap-4 animate-fadeIn">
+            {NAV_LINKS.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-semibold tracking-wider uppercase text-zinc-700 hover:text-zinc-950 py-1.5 border-b border-zinc-100 flex items-center justify-between"
+              >
+                <span>{link.label}</span>
+                <ArrowUpRight size={14} className="text-zinc-400" />
+              </Link>
+            ))}
+
+            <div className="pt-2">
+              <a
+                href={wa("Assalam-o-Alaikum! I have an inquiry about Hangu Branded Shoes.")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center justify-center gap-2"
+              >
+                <WhatsAppIcon size={16} color="#fff" />
+                <span>Chat on WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        )}
+      </header>
+    </>
   );
 }

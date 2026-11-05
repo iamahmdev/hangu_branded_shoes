@@ -53,7 +53,7 @@ export default function Footer() {
         {/* Column 1: Brand Identity & Physical Showroom */}
         <div className="ft-col ft-brand">
           <Link href="/" className="inline-block mb-3 group">
-            <span className="font-extrabold text-2xl tracking-[0.25em] text-zinc-950 uppercase group-hover:text-emerald-700 transition-colors">
+            <span className="font-extrabold text-2xl tracking-[0.25em] text-white uppercase group-hover:text-emerald-400 transition-colors">
               H A N G U .
             </span>
             <span className="block text-[10px] font-bold tracking-[0.2em] text-zinc-400 uppercase mt-0.5">
@@ -69,7 +69,7 @@ export default function Footer() {
           {/* Showroom & Helpline Details */}
           <div className="ft-contact-list">
             <div className="ft-contact-item">
-              <span className="ft-icon text-zinc-700">📍</span>
+              <span className="ft-icon text-emerald-400">📍</span>
               <div className="min-w-0">
                 <small>Physical Showroom</small>
                 <b className="truncate block" title={address}>{address}</b>
@@ -82,7 +82,7 @@ export default function Footer() {
               rel="noopener noreferrer"
               className="ft-contact-item"
             >
-              <span className="ft-icon text-emerald-600">📱</span>
+              <span className="ft-icon text-emerald-400">📱</span>
               <div>
                 <small>Official WhatsApp Helpline</small>
                 <b>+{whatsappNum}</b>
@@ -90,7 +90,7 @@ export default function Footer() {
             </a>
 
             <div className="ft-contact-item">
-              <span className="ft-icon text-zinc-700">🕒</span>
+              <span className="ft-icon text-emerald-400">🕒</span>
               <div>
                 <small>Showroom Operating Hours</small>
                 <b>{shopTiming}</b>
@@ -107,7 +107,7 @@ export default function Footer() {
               title="WhatsApp Concierge"
               aria-label="WhatsApp"
             >
-              <WhatsAppIcon size={16} color="#059669" />
+              <WhatsAppIcon size={16} color="#10b981" />
             </a>
 
             <a
@@ -117,7 +117,7 @@ export default function Footer() {
               title="TikTok Official"
               aria-label="TikTok"
             >
-              <TikTokIcon size={16} color="#000000" />
+              <TikTokIcon size={16} color="#ffffff" />
             </a>
 
             <a
@@ -127,7 +127,7 @@ export default function Footer() {
               title="Facebook Official"
               aria-label="Facebook"
             >
-              <FacebookIcon size={16} color="#1877f2" />
+              <FacebookIcon size={16} color="#38bdf8" />
             </a>
 
             <a
@@ -137,7 +137,7 @@ export default function Footer() {
               title="Instagram"
               aria-label="Instagram"
             >
-              <InstagramIcon size={16} color="#e1306c" />
+              <InstagramIcon size={16} color="#f472b6" />
             </a>
           </div>
         </div>
@@ -184,7 +184,7 @@ export default function Footer() {
           <h4 className="ft-heading">Customer Care</h4>
           <ul className="ft-links">
             <li>
-              <Link href="/track" className="font-semibold text-emerald-700">
+              <Link href="/track" className="font-semibold text-emerald-400 hover:text-emerald-300">
                 <span>📦 Track Your Live Order</span>
               </Link>
             </li>

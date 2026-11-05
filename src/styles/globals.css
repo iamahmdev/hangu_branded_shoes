@@ -484,12 +484,12 @@ footer{position:relative;width:100%}
 .rcard p{color:#d4d4d8;line-height:1.7;margin:12px 0 8px}.rcard small{color:var(--mut)}
 .thx{padding:16px;margin-bottom:16px;color:#25d366;text-align:center;font-weight:600}
 
-/* ================= Modern Minimalist Luxury Footer (ETQ Aesthetic) ================= */
+/* ================= Modern Deep Slate Luxury Footer (ETQ & Scandinavian Footwear Aesthetic) ================= */
 .ft-wrap {
-  background: #ffffff;
-  border-top: 1px solid #e4e4e7;
-  color: #18181b;
-  margin-top: 60px;
+  background: #0f172a;
+  border-top: 1px solid #1e293b;
+  color: #f8fafc;
+  margin-top: 70px;
   position: relative;
   overflow: hidden;
 }
@@ -509,17 +509,17 @@ footer{position:relative;width:100%}
   gap: 14px;
   padding: 18px 20px;
   border-radius: 16px;
-  background: #f4f4f6 !important;
-  border: 1px solid #e4e4e7 !important;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+  background: #1e293b !important;
+  border: 1px solid #334155 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
   transition: all 0.25s ease;
 }
 
 .ft-perk:hover {
   transform: translateY(-2px);
-  background: #ebebee !important;
-  border-color: #d4d4d8 !important;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  background: #273549 !important;
+  border-color: #475569 !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
 }
 
 .ft-perk-icon {
@@ -529,17 +529,17 @@ footer{position:relative;width:100%}
   justify-content: center;
   width: 46px;
   height: 46px;
-  background: #ffffff;
-  border: 1px solid #e4e4e7;
+  background: #0f172a;
+  border: 1px solid #334155;
   border-radius: 12px;
   flex-shrink: 0;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
 }
 
 .ft-perk b {
   display: block;
   font-size: 14px;
-  color: #09090b;
+  color: #ffffff;
   font-weight: 700;
   letter-spacing: -0.1px;
   margin-bottom: 2px;
@@ -547,7 +547,7 @@ footer{position:relative;width:100%}
 
 .ft-perk p {
   font-size: 12px;
-  color: #71717a;
+  color: #94a3b8;
   line-height: 1.4;
   margin: 0;
 }
@@ -581,7 +581,7 @@ footer{position:relative;width:100%}
 }
 
 .ft-bio {
-  color: #52525b;
+  color: #94a3b8;
   font-size: 13px;
   line-height: 1.65;
   margin-bottom: 20px;
@@ -600,15 +600,15 @@ footer{position:relative;width:100%}
   align-items: center;
   gap: 12px;
   padding: 10px 14px;
-  background: #f4f4f6;
-  border: 1px solid #e4e4e7;
+  background: #1e293b;
+  border: 1px solid #334155;
   border-radius: 14px;
   transition: all 0.2s ease;
 }
 
 .ft-contact-item:hover {
-  background: #ebebee;
-  border-color: #d4d4d8;
+  background: #273549;
+  border-color: #475569;
   transform: translateX(3px);
 }
 
@@ -619,22 +619,22 @@ footer{position:relative;width:100%}
   width: 34px;
   height: 34px;
   border-radius: 10px;
-  background: #ffffff;
-  border: 1px solid #e4e4e7;
+  background: #0f172a;
+  border: 1px solid #334155;
   flex-shrink: 0;
 }
 
 .ft-contact-item small {
   display: block;
   font-size: 11px;
-  color: #71717a;
+  color: #94a3b8;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   font-weight: 600;
 }
 
 .ft-contact-item b {
-  color: #09090b;
+  color: #ffffff;
   font-size: 13px;
   font-weight: 600;
 }
@@ -648,29 +648,29 @@ footer{position:relative;width:100%}
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: #f4f4f6;
-  border: 1px solid #e4e4e7;
+  background: #1e293b;
+  border: 1px solid #334155;
   display: grid;
   place-items: center;
   font-size: 15px;
-  color: #27272a;
+  color: #cbd5e1;
   transition: all 0.25s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
 .ft-socials a:hover {
-  background: #09090b;
-  border-color: #09090b;
+  background: #ffffff;
+  border-color: #ffffff;
   transform: translateY(-2px);
-  color: #ffffff;
+  color: #0f172a;
 }
 
 .ft-heading {
   font-size: 13px;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #09090b;
+  color: #ffffff;
   margin-bottom: 18px;
   position: relative;
   display: inline-block;
@@ -683,7 +683,7 @@ footer{position:relative;width:100%}
   bottom: -6px;
   width: 24px;
   height: 2px;
-  background: #09090b;
+  background: #10b981;
   border-radius: 2px;
 }
 
@@ -695,7 +695,7 @@ footer{position:relative;width:100%}
 }
 
 .ft-links li a {
-  color: #52525b;
+  color: #94a3b8;
   font-size: 13px;
   font-weight: 500;
   transition: all 0.2s ease;
@@ -705,12 +705,12 @@ footer{position:relative;width:100%}
 }
 
 .ft-links li a:hover {
-  color: #09090b;
+  color: #ffffff;
   transform: translateX(3px);
 }
 
 .ft-sub-text {
-  color: #52525b;
+  color: #94a3b8;
   font-size: 13px;
   line-height: 1.6;
   margin-bottom: 16px;
@@ -721,7 +721,7 @@ footer{position:relative;width:100%}
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: #71717a;
+  color: #94a3b8;
   margin-bottom: 8px;
   font-weight: 600;
 }
@@ -735,11 +735,11 @@ footer{position:relative;width:100%}
 .pay-chip {
   font-size: 11.5px;
   font-weight: 600;
-  background: #f4f4f6;
-  border: 1px solid #e4e4e7;
+  background: #1e293b;
+  border: 1px solid #334155;
   padding: 6px 12px;
   border-radius: 10px;
-  color: #18181b;
+  color: #e2e8f0;
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -747,16 +747,17 @@ footer{position:relative;width:100%}
 }
 
 .pay-chip:hover {
-  border-color: #a1a1aa;
-  background: #ebebee;
+  border-color: #64748b;
+  background: #273549;
+  color: #ffffff;
 }
 
 .ft-bottom {
-  border-top: 1px solid #e4e4e7;
-  background: #fafafa;
+  border-top: 1px solid #1e293b;
+  background: #0b1120;
   padding: 22px 0;
   font-size: 12px;
-  color: #71717a;
+  color: #64748b;
 }
 
 .ft-bottom-inner {
@@ -773,13 +774,13 @@ footer{position:relative;width:100%}
 }
 
 .ft-bottom-links a {
-  color: #71717a;
+  color: #94a3b8;
   font-weight: 500;
   transition: color 0.2s ease;
 }
 
 .ft-bottom-links a:hover {
-  color: #09090b;
+  color: #ffffff;
 }
 
 @media (max-width: 700px) {

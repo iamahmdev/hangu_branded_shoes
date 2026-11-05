@@ -14,7 +14,7 @@ export default function Home() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [filterOpen, setFilterOpen] = useState<boolean>(false);
 
-  const categories = ["All", "Sneakers", "Formal", "Loafers", "Comfort"];
+  const categories = ["All", "Sneakers", "Formal", "Loafers", "Comfort", "Boots"];
 
   const filteredShoes = products?.filter((p) => {
     if (selectedCategory === "All") return true;

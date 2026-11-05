@@ -8,182 +8,2019 @@ import { Setting } from "./models/Setting.js";
 
 export const SEED_PRODUCTS = [
   {
-    id: 1,
-    name: "Skylite Slip-On Sneaker",
-    cat: "Sneakers",
-    price: 6499,
-    old: 7999,
-    img: "https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000&auto=format&fit=crop",
-    images: [
-      "https://images.unsplash.com/photo-1549298916-b41d501d3772?q=80&w=1000&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1560769629-975ec94e6a86?q=80&w=1000&auto=format&fit=crop",
+    "id": 1,
+    "name": "Hangu Heritage Oxford",
+    "cat": "Sneakers",
+    "price": 3499,
+    "old": 4374,
+    "img": "/images/shoes/IMG_3091.jpg",
+    "images": [
+      "/images/shoes/IMG_3091.jpg"
     ],
-    stock: 14,
-    rating: 5,
-    reviews: 124,
-    desc: "Featherlight breathable mesh upper slip-on with shock-absorbing memory foam. Designed for daily active comfort in Pakistan's weather.",
-    badge: "Bestseller",
-    isSale: true,
-    isFeatured: true,
-    isBestseller: true,
-    sizes: ["39", "40", "41", "42", "43", "44"],
-    colors: ["Jet Black", "Steel Grey"],
-    features: ["Breathable Flyknit Mesh", "Ultra-lightweight EVA outsole", "Cushioned memory insole"],
+    "stock": 10,
+    "rating": 5,
+    "reviews": 15,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "New Arrival",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
   },
   {
-    id: 2,
-    name: "Classic Derby Formal Leather",
-    cat: "Formal",
-    price: 9499,
-    old: 11999,
-    img: "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?q=80&w=1000&auto=format&fit=crop",
-    images: [
-      "https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?q=80&w=1000&auto=format&fit=crop",
+    "id": 2,
+    "name": "Airflex Ultra Runner",
+    "cat": "Formal",
+    "price": 3999,
+    "old": 5199,
+    "img": "/images/shoes/IMG_3092.jpg",
+    "images": [
+      "/images/shoes/IMG_3092.jpg"
     ],
-    stock: 8,
-    rating: 5,
-    reviews: 89,
-    desc: "100% Genuine full-grain cowhide leather derby shoe hand-burnished by master craftsmen in KP. Perfect for weddings, corporate meetings, and formal gatherings.",
-    badge: "100% Pure Leather",
-    isSale: false,
-    isFeatured: true,
-    isBestseller: true,
-    sizes: ["40", "41", "42", "43", "44"],
-    colors: ["Deep Cognac Brown", "Midnight Black"],
-    features: ["Full Grain Cowhide", "Hand-stitched welt", "Anti-skid rubberized heel"],
+    "stock": 13,
+    "rating": 5,
+    "reviews": 22,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Bestseller",
+    "isSale": false,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
   },
   {
-    id: 3,
-    name: "Urban Air-Glide Runner",
-    cat: "Sneakers",
-    price: 7299,
-    old: 8999,
-    img: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop",
-    images: [
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000&auto=format&fit=crop",
+    "id": 3,
+    "name": "Classic Royal Derby",
+    "cat": "Loafers",
+    "price": 4499,
+    "old": 6074,
+    "img": "/images/shoes/IMG_3093.jpg",
+    "images": [
+      "/images/shoes/IMG_3093.jpg"
     ],
-    stock: 19,
-    rating: 5,
-    reviews: 215,
-    desc: "Signature high-rebound cushioning sneaker featuring striking ruby red and carbon accents. Outstanding grip for jogging and lifestyle streetwear.",
-    badge: "Hot Deal",
-    isSale: true,
-    isFeatured: true,
-    isBestseller: false,
-    sizes: ["39", "40", "41", "42", "43", "44"],
-    colors: ["Crimson Red", "Obsidian Black"],
-    features: ["Air rebound capsule", "Reinforced heel counter", "High abrasion rubber outsole"],
+    "stock": 16,
+    "rating": 5,
+    "reviews": 29,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "100% Pure Leather",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
   },
   {
-    id: 4,
-    name: "Handcrafted Heritage Penny Loafer",
-    cat: "Loafers",
-    price: 8499,
-    old: 9999,
-    img: "https://images.unsplash.com/photo-1533867617858-e7b97e060509?q=80&w=1000&auto=format&fit=crop",
-    images: [
-      "https://images.unsplash.com/photo-1533867617858-e7b97e060509?q=80&w=1000&auto=format&fit=crop",
+    "id": 4,
+    "name": "KP Handcrafted Penny Loafer",
+    "cat": "Comfort",
+    "price": 4999,
+    "old": 6249,
+    "img": "/images/shoes/IMG_3094.jpg",
+    "images": [
+      "/images/shoes/IMG_3094.jpg"
     ],
-    stock: 11,
-    rating: 5,
-    reviews: 67,
-    desc: "Timeless slip-on penny loafer crafted from supple calfskin. Features soft padded arch support and hand-stitched apron toe for versatile elegance.",
-    badge: "Signature",
-    isSale: false,
-    isFeatured: true,
-    isBestseller: false,
-    sizes: ["40", "41", "42", "43"],
-    colors: ["Mahogany Brown", "Classic Black"],
-    features: ["Calfskin leather upper", "Padded arch support", "Slip-on convenience"],
+    "stock": 19,
+    "rating": 5,
+    "reviews": 36,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Featured",
+    "isSale": false,
+    "isFeatured": true,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
   },
   {
-    id: 5,
-    name: "ErgoWalk Ortho Comfort Loafer",
-    cat: "Comfort",
-    price: 5999,
-    old: 7499,
-    img: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1000&auto=format&fit=crop",
-    images: [
-      "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?q=80&w=1000&auto=format&fit=crop",
+    "id": 5,
+    "name": "CloudWalk Ortho Slip-On",
+    "cat": "Boots",
+    "price": 5299,
+    "old": 6889,
+    "img": "/images/shoes/IMG_3095.jpg",
+    "images": [
+      "/images/shoes/IMG_3095.jpg"
     ],
-    stock: 4,
-    rating: 5,
-    reviews: 142,
-    desc: "Specially engineered orthopedic insole shoe designed for prolonged standing, diabetic foot care, and senior comfort. Zero break-in period required.",
-    badge: "Orthopedic",
-    isSale: true,
-    isFeatured: false,
-    isBestseller: true,
-    sizes: ["39", "40", "41", "42", "43", "44", "45"],
-    colors: ["Charcoal Grey", "Navy Blue"],
-    features: ["Dual-density memory foam", "Extra wide toe-box", "Zero heel friction lining"],
+    "stock": 22,
+    "rating": 5,
+    "reviews": 43,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Top Rated",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
   },
   {
-    id: 6,
-    name: "Oxford Cap-Toe Royal Black",
-    cat: "Formal",
-    price: 9999,
-    old: 12500,
-    img: "https://images.unsplash.com/photo-1582588678413-dbf45f4823e9?q=80&w=1000&auto=format&fit=crop",
-    images: [
-      "https://images.unsplash.com/photo-1582588678413-dbf45f4823e9?q=80&w=1000&auto=format&fit=crop",
+    "id": 6,
+    "name": "Executive Cap-Toe Formal",
+    "cat": "Sneakers",
+    "price": 5499,
+    "old": 7424,
+    "img": "/images/shoes/IMG_3096.jpg",
+    "images": [
+      "/images/shoes/IMG_3096.jpg"
     ],
-    stock: 7,
-    rating: 5,
-    reviews: 95,
-    desc: "The quintessential gentleman's closed-lacing Oxford with a polished mirror cap-toe. High-durability Goodyear construction for lifetime elegance.",
-    badge: "Luxury",
-    isSale: false,
-    isFeatured: true,
-    isBestseller: false,
-    sizes: ["40", "41", "42", "43", "44"],
-    colors: ["Pitch Black"],
-    features: ["Closed lacing Oxford", "Leather lined interior", "Reinforced cap toe"],
+    "stock": 25,
+    "rating": 5,
+    "reviews": 50,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Exclusive",
+    "isSale": false,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
   },
   {
-    id: 7,
-    name: "Veloce Carbon Trail Sneaker",
-    cat: "Sneakers",
-    price: 6999,
-    old: 8499,
-    img: "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?q=80&w=1000&auto=format&fit=crop",
-    images: [
-      "https://images.unsplash.com/photo-1551107696-a4b0c5a0d9a2?q=80&w=1000&auto=format&fit=crop",
+    "id": 7,
+    "name": "Apex Performance Sneaker",
+    "cat": "Formal",
+    "price": 5999,
+    "old": 7499,
+    "img": "/images/shoes/IMG_3097.jpg",
+    "images": [
+      "/images/shoes/IMG_3097.jpg"
     ],
-    stock: 16,
-    rating: 4,
-    reviews: 58,
-    desc: "Rugged multi-terrain lightweight athletic shoe with reinforced toe bumper and water-repellent coating. Engineered for all-weather outdoor performance.",
-    badge: "New Arrival",
-    isSale: false,
-    isFeatured: false,
-    isBestseller: false,
-    sizes: ["39", "40", "41", "42", "43", "44"],
-    colors: ["Stone Grey & Gold", "Midnight Olive"],
-    features: ["Water-resistant textile", "Deep lug trail grip", "Shock absorbing midsole"],
+    "stock": 28,
+    "rating": 5,
+    "reviews": 57,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Comfort Edition",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
   },
   {
-    id: 8,
-    name: "Tassel Monkstrap Executive",
-    cat: "Loafers",
-    price: 8999,
-    old: 10999,
-    img: "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?q=80&w=1000&auto=format&fit=crop",
-    images: [
-      "https://images.unsplash.com/photo-1608256246200-53e635b5b65f?q=80&w=1000&auto=format&fit=crop",
+    "id": 8,
+    "name": "Venetian Soft Leather Moccasin",
+    "cat": "Loafers",
+    "price": 6499,
+    "old": 8449,
+    "img": "/images/shoes/IMG_3098.jpg",
+    "images": [
+      "/images/shoes/IMG_3098.jpg"
     ],
-    stock: 5,
-    rating: 5,
-    reviews: 43,
-    desc: "Distinguished handcrafted double monkstrap featuring decorative hand-woven tassels and antique gold buckle hardware.",
-    badge: "Exclusive",
-    isSale: true,
-    isFeatured: false,
-    isBestseller: false,
-    sizes: ["41", "42", "43", "44"],
-    colors: ["Walnut Tan", "Antique Burgundy"],
-    features: ["Double monk brass buckles", "Hand burnished patina", "Comfort inner sock"],
+    "stock": 31,
+    "rating": 5,
+    "reviews": 64,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Handcrafted",
+    "isSale": false,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
   },
+  {
+    "id": 9,
+    "name": "Khyber Rugged Leather Boot",
+    "cat": "Comfort",
+    "price": 6999,
+    "old": 9449,
+    "img": "/images/shoes/IMG_3099.jpg",
+    "images": [
+      "/images/shoes/IMG_3099.jpg"
+    ],
+    "stock": 34,
+    "rating": 5,
+    "reviews": 71,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "New Arrival",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 10,
+    "name": "Monkstrap Antique Burnished",
+    "cat": "Boots",
+    "price": 7499,
+    "old": 9374,
+    "img": "/images/shoes/IMG_3100.jpg",
+    "images": [
+      "/images/shoes/IMG_3100.jpg"
+    ],
+    "stock": 12,
+    "rating": 5,
+    "reviews": 78,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Bestseller",
+    "isSale": false,
+    "isFeatured": true,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 11,
+    "name": "Veloce Carbon Street Runner",
+    "cat": "Sneakers",
+    "price": 7999,
+    "old": 10399,
+    "img": "/images/shoes/IMG_3101.jpg",
+    "images": [
+      "/images/shoes/IMG_3101.jpg"
+    ],
+    "stock": 15,
+    "rating": 5,
+    "reviews": 85,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "100% Pure Leather",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 12,
+    "name": "Signature Brogue Gentleman",
+    "cat": "Formal",
+    "price": 8499,
+    "old": 11474,
+    "img": "/images/shoes/IMG_3102.jpg",
+    "images": [
+      "/images/shoes/IMG_3102.jpg"
+    ],
+    "stock": 18,
+    "rating": 5,
+    "reviews": 92,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Featured",
+    "isSale": false,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 13,
+    "name": "ErgoStep Memory Foam Walker",
+    "cat": "Loafers",
+    "price": 8999,
+    "old": 11249,
+    "img": "/images/shoes/IMG_3103.jpg",
+    "images": [
+      "/images/shoes/IMG_3103.jpg"
+    ],
+    "stock": 21,
+    "rating": 5,
+    "reviews": 99,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Top Rated",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 14,
+    "name": "Chelsea Suede Ankle Boot",
+    "cat": "Comfort",
+    "price": 3499,
+    "old": 4549,
+    "img": "/images/shoes/IMG_3105.jpg",
+    "images": [
+      "/images/shoes/IMG_3105.jpg"
+    ],
+    "stock": 24,
+    "rating": 5,
+    "reviews": 21,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Exclusive",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 15,
+    "name": "Urban Pulse Lifestyle Trainer",
+    "cat": "Boots",
+    "price": 3999,
+    "old": 5399,
+    "img": "/images/shoes/IMG_3106.jpg",
+    "images": [
+      "/images/shoes/IMG_3106.jpg"
+    ],
+    "stock": 27,
+    "rating": 5,
+    "reviews": 28,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Comfort Edition",
+    "isSale": true,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 16,
+    "name": "Classic Wholecut Formal",
+    "cat": "Sneakers",
+    "price": 4499,
+    "old": 5624,
+    "img": "/images/shoes/IMG_3107.jpg",
+    "images": [
+      "/images/shoes/IMG_3107.jpg"
+    ],
+    "stock": 30,
+    "rating": 5,
+    "reviews": 35,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Handcrafted",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 17,
+    "name": "Driving Loafer Gripped Sole",
+    "cat": "Formal",
+    "price": 4999,
+    "old": 6499,
+    "img": "/images/shoes/IMG_3108.jpg",
+    "images": [
+      "/images/shoes/IMG_3108.jpg"
+    ],
+    "stock": 33,
+    "rating": 5,
+    "reviews": 42,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "New Arrival",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 18,
+    "name": "Breeze Knit Athletic Sneaker",
+    "cat": "Loafers",
+    "price": 5299,
+    "old": 7154,
+    "img": "/images/shoes/IMG_3109.jpg",
+    "images": [
+      "/images/shoes/IMG_3109.jpg"
+    ],
+    "stock": 11,
+    "rating": 5,
+    "reviews": 49,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Bestseller",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 19,
+    "name": "Imperial Wingtip Derby",
+    "cat": "Comfort",
+    "price": 5499,
+    "old": 6874,
+    "img": "/images/shoes/IMG_3110.jpg",
+    "images": [
+      "/images/shoes/IMG_3110.jpg"
+    ],
+    "stock": 14,
+    "rating": 5,
+    "reviews": 56,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "100% Pure Leather",
+    "isSale": true,
+    "isFeatured": false,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 20,
+    "name": "Zenith Lightweight Runner",
+    "cat": "Boots",
+    "price": 5999,
+    "old": 7799,
+    "img": "/images/shoes/IMG_3111.jpg",
+    "images": [
+      "/images/shoes/IMG_3111.jpg"
+    ],
+    "stock": 17,
+    "rating": 5,
+    "reviews": 63,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Featured",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 21,
+    "name": "Sovereign Double Monkstrap",
+    "cat": "Sneakers",
+    "price": 6499,
+    "old": 8774,
+    "img": "/images/shoes/IMG_3112.jpg",
+    "images": [
+      "/images/shoes/IMG_3112.jpg"
+    ],
+    "stock": 20,
+    "rating": 5,
+    "reviews": 70,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Top Rated",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 22,
+    "name": "Comfort Fit Diabetic Daily",
+    "cat": "Formal",
+    "price": 6999,
+    "old": 8749,
+    "img": "/images/shoes/IMG_3113.jpg",
+    "images": [
+      "/images/shoes/IMG_3113.jpg"
+    ],
+    "stock": 23,
+    "rating": 5,
+    "reviews": 77,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Exclusive",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 23,
+    "name": "Chukka Hand-Stitched Boot",
+    "cat": "Loafers",
+    "price": 7499,
+    "old": 9749,
+    "img": "/images/shoes/IMG_3114.jpg",
+    "images": [
+      "/images/shoes/IMG_3114.jpg"
+    ],
+    "stock": 26,
+    "rating": 5,
+    "reviews": 84,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Comfort Edition",
+    "isSale": true,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 24,
+    "name": "Retro Court Vintage Sneaker",
+    "cat": "Comfort",
+    "price": 7999,
+    "old": 10799,
+    "img": "/images/shoes/IMG_3115.jpg",
+    "images": [
+      "/images/shoes/IMG_3115.jpg"
+    ],
+    "stock": 29,
+    "rating": 5,
+    "reviews": 91,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Handcrafted",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 25,
+    "name": "Monarch Patent Tuxedo Oxford",
+    "cat": "Boots",
+    "price": 8499,
+    "old": 10624,
+    "img": "/images/shoes/IMG_3116.jpg",
+    "images": [
+      "/images/shoes/IMG_3116.jpg"
+    ],
+    "stock": 32,
+    "rating": 5,
+    "reviews": 98,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "New Arrival",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 26,
+    "name": "Riviera Tassel Leather Loafer",
+    "cat": "Sneakers",
+    "price": 8999,
+    "old": 11699,
+    "img": "/images/shoes/IMG_3117.jpg",
+    "images": [
+      "/images/shoes/IMG_3117.jpg"
+    ],
+    "stock": 10,
+    "rating": 5,
+    "reviews": 20,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Bestseller",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 27,
+    "name": "AeroGlide Daily Jogger",
+    "cat": "Formal",
+    "price": 3499,
+    "old": 4724,
+    "img": "/images/shoes/IMG_3118.jpg",
+    "images": [
+      "/images/shoes/IMG_3118.jpg"
+    ],
+    "stock": 13,
+    "rating": 5,
+    "reviews": 27,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "100% Pure Leather",
+    "isSale": true,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 28,
+    "name": "Highlander Combat Ankle Boot",
+    "cat": "Loafers",
+    "price": 3999,
+    "old": 4999,
+    "img": "/images/shoes/IMG_3119.jpg",
+    "images": [
+      "/images/shoes/IMG_3119.jpg"
+    ],
+    "stock": 16,
+    "rating": 5,
+    "reviews": 34,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Featured",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 29,
+    "name": "Prestige Cap-Toe Brown Derby",
+    "cat": "Comfort",
+    "price": 4499,
+    "old": 5849,
+    "img": "/images/shoes/IMG_3120.jpg",
+    "images": [
+      "/images/shoes/IMG_3120.jpg"
+    ],
+    "stock": 19,
+    "rating": 5,
+    "reviews": 41,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Top Rated",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 30,
+    "name": "Air Cushion Pro Athletic",
+    "cat": "Boots",
+    "price": 4999,
+    "old": 6749,
+    "img": "/images/shoes/IMG_3121.jpg",
+    "images": [
+      "/images/shoes/IMG_3121.jpg"
+    ],
+    "stock": 22,
+    "rating": 5,
+    "reviews": 48,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Exclusive",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 31,
+    "name": "Tuscan Pebble Leather Loafer",
+    "cat": "Sneakers",
+    "price": 5299,
+    "old": 6624,
+    "img": "/images/shoes/IMG_3122.jpg",
+    "images": [
+      "/images/shoes/IMG_3122.jpg"
+    ],
+    "stock": 25,
+    "rating": 5,
+    "reviews": 55,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Comfort Edition",
+    "isSale": true,
+    "isFeatured": false,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 32,
+    "name": "Metropolitan Formal Oxford",
+    "cat": "Formal",
+    "price": 5499,
+    "old": 7149,
+    "img": "/images/shoes/IMG_3123.jpg",
+    "images": [
+      "/images/shoes/IMG_3123.jpg"
+    ],
+    "stock": 28,
+    "rating": 5,
+    "reviews": 62,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Handcrafted",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 33,
+    "name": "FlexMotion Walking Shoe",
+    "cat": "Loafers",
+    "price": 5999,
+    "old": 8099,
+    "img": "/images/shoes/IMG_3124.jpg",
+    "images": [
+      "/images/shoes/IMG_3124.jpg"
+    ],
+    "stock": 31,
+    "rating": 5,
+    "reviews": 69,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "New Arrival",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 34,
+    "name": "Sahara Suede Desert Boot",
+    "cat": "Comfort",
+    "price": 6499,
+    "old": 8124,
+    "img": "/images/shoes/IMG_3125.jpg",
+    "images": [
+      "/images/shoes/IMG_3125.jpg"
+    ],
+    "stock": 34,
+    "rating": 5,
+    "reviews": 76,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Bestseller",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 35,
+    "name": "Phantom All-Black Street Sneaker",
+    "cat": "Boots",
+    "price": 6999,
+    "old": 9099,
+    "img": "/images/shoes/IMG_3126.jpg",
+    "images": [
+      "/images/shoes/IMG_3126.jpg"
+    ],
+    "stock": 12,
+    "rating": 5,
+    "reviews": 83,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "100% Pure Leather",
+    "isSale": true,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 36,
+    "name": "Khyber Artisan Slip-On",
+    "cat": "Sneakers",
+    "price": 7499,
+    "old": 10124,
+    "img": "/images/shoes/IMG_3127.jpg",
+    "images": [
+      "/images/shoes/IMG_3127.jpg"
+    ],
+    "stock": 15,
+    "rating": 5,
+    "reviews": 90,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Featured",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 37,
+    "name": "Marathon Featherlight Trainer",
+    "cat": "Formal",
+    "price": 7999,
+    "old": 9999,
+    "img": "/images/shoes/IMG_3128.jpg",
+    "images": [
+      "/images/shoes/IMG_3128.jpg"
+    ],
+    "stock": 18,
+    "rating": 5,
+    "reviews": 97,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Top Rated",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 38,
+    "name": "Milano Horsebit Gold Loafer",
+    "cat": "Loafers",
+    "price": 8499,
+    "old": 11049,
+    "img": "/images/shoes/IMG_3129.jpg",
+    "images": [
+      "/images/shoes/IMG_3129.jpg"
+    ],
+    "stock": 21,
+    "rating": 5,
+    "reviews": 19,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Exclusive",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 39,
+    "name": "Elite Goodyear Welted Derby",
+    "cat": "Comfort",
+    "price": 8999,
+    "old": 12149,
+    "img": "/images/shoes/IMG_3130.jpg",
+    "images": [
+      "/images/shoes/IMG_3130.jpg"
+    ],
+    "stock": 24,
+    "rating": 5,
+    "reviews": 26,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Comfort Edition",
+    "isSale": true,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 40,
+    "name": "Nordic Winter Leather Boot",
+    "cat": "Boots",
+    "price": 3499,
+    "old": 4374,
+    "img": "/images/shoes/IMG_3131.jpg",
+    "images": [
+      "/images/shoes/IMG_3131.jpg"
+    ],
+    "stock": 27,
+    "rating": 5,
+    "reviews": 33,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Handcrafted",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 41,
+    "name": "Strata Mesh Breathable Runner",
+    "cat": "Sneakers",
+    "price": 3999,
+    "old": 5199,
+    "img": "/images/shoes/IMG_3132.jpg",
+    "images": [
+      "/images/shoes/IMG_3132.jpg"
+    ],
+    "stock": 30,
+    "rating": 5,
+    "reviews": 40,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "New Arrival",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 42,
+    "name": "Diplomat Polished Black Oxford",
+    "cat": "Formal",
+    "price": 4499,
+    "old": 6074,
+    "img": "/images/shoes/IMG_3133.jpg",
+    "images": [
+      "/images/shoes/IMG_3133.jpg"
+    ],
+    "stock": 33,
+    "rating": 5,
+    "reviews": 47,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Bestseller",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 43,
+    "name": "Velvet Touch Padded Loafer",
+    "cat": "Loafers",
+    "price": 4999,
+    "old": 6249,
+    "img": "/images/shoes/IMG_3134.jpg",
+    "images": [
+      "/images/shoes/IMG_3134.jpg"
+    ],
+    "stock": 11,
+    "rating": 5,
+    "reviews": 54,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "100% Pure Leather",
+    "isSale": true,
+    "isFeatured": false,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 44,
+    "name": "Active Dynamic Cushioned Sneaker",
+    "cat": "Comfort",
+    "price": 5299,
+    "old": 6889,
+    "img": "/images/shoes/IMG_3135.jpg",
+    "images": [
+      "/images/shoes/IMG_3135.jpg"
+    ],
+    "stock": 14,
+    "rating": 5,
+    "reviews": 61,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Featured",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 45,
+    "name": "Frontier Rugged Casual Boot",
+    "cat": "Boots",
+    "price": 5499,
+    "old": 7424,
+    "img": "/images/shoes/IMG_3136.jpg",
+    "images": [
+      "/images/shoes/IMG_3136.jpg"
+    ],
+    "stock": 17,
+    "rating": 5,
+    "reviews": 68,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Top Rated",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 46,
+    "name": "Regal Hand-Finished Brogue",
+    "cat": "Sneakers",
+    "price": 5999,
+    "old": 7499,
+    "img": "/images/shoes/IMG_3138.jpg",
+    "images": [
+      "/images/shoes/IMG_3138.jpg"
+    ],
+    "stock": 20,
+    "rating": 5,
+    "reviews": 75,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Exclusive",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 47,
+    "name": "Quantum Energy Sport Runner",
+    "cat": "Formal",
+    "price": 6499,
+    "old": 8449,
+    "img": "/images/shoes/IMG_3139.jpg",
+    "images": [
+      "/images/shoes/IMG_3139.jpg"
+    ],
+    "stock": 23,
+    "rating": 5,
+    "reviews": 82,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Comfort Edition",
+    "isSale": true,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 48,
+    "name": "Heritage Horsebit Moccasin",
+    "cat": "Loafers",
+    "price": 6999,
+    "old": 9449,
+    "img": "/images/shoes/IMG_3140.jpg",
+    "images": [
+      "/images/shoes/IMG_3140.jpg"
+    ],
+    "stock": 26,
+    "rating": 5,
+    "reviews": 89,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Handcrafted",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 49,
+    "name": "Savile Row Formal Derby",
+    "cat": "Comfort",
+    "price": 7499,
+    "old": 9374,
+    "img": "/images/shoes/IMG_3141.jpg",
+    "images": [
+      "/images/shoes/IMG_3141.jpg"
+    ],
+    "stock": 29,
+    "rating": 5,
+    "reviews": 96,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "New Arrival",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 50,
+    "name": "Peak Performance Outdoor Sneaker",
+    "cat": "Boots",
+    "price": 7999,
+    "old": 10399,
+    "img": "/images/shoes/IMG_3142.jpg",
+    "images": [
+      "/images/shoes/IMG_3142.jpg"
+    ],
+    "stock": 32,
+    "rating": 5,
+    "reviews": 18,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Bestseller",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 51,
+    "name": "Grandmaster Leather Loafer",
+    "cat": "Sneakers",
+    "price": 8499,
+    "old": 11474,
+    "img": "/images/shoes/IMG_3143.jpg",
+    "images": [
+      "/images/shoes/IMG_3143.jpg"
+    ],
+    "stock": 10,
+    "rating": 5,
+    "reviews": 25,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "100% Pure Leather",
+    "isSale": true,
+    "isFeatured": false,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Midnight Blue",
+      "Pure White"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 52,
+    "name": "Vanguard Tactical Boot",
+    "cat": "Formal",
+    "price": 8999,
+    "old": 11249,
+    "img": "/images/shoes/IMG_3144.jpg",
+    "images": [
+      "/images/shoes/IMG_3144.jpg"
+    ],
+    "stock": 13,
+    "rating": 5,
+    "reviews": 32,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Featured",
+    "isSale": false,
+    "isFeatured": false,
+    "isBestseller": true,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Jet Black",
+      "Deep Brown"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  },
+  {
+    "id": 53,
+    "name": "Hangu Masterpiece Edition Shoe",
+    "cat": "Loafers",
+    "price": 3499,
+    "old": 4549,
+    "img": "/images/shoes/IMG_3145.jpg",
+    "images": [
+      "/images/shoes/IMG_3145.jpg"
+    ],
+    "stock": 16,
+    "rating": 5,
+    "reviews": 39,
+    "desc": "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan.",
+    "badge": "Top Rated",
+    "isSale": true,
+    "isFeatured": true,
+    "isBestseller": false,
+    "isActive": true,
+    "sizes": [
+      "39",
+      "40",
+      "41",
+      "42",
+      "43",
+      "44"
+    ],
+    "colors": [
+      "Walnut Tan",
+      "Charcoal"
+    ],
+    "features": [
+      "100% Authentic Hand-Finished Craftsmanship",
+      "Shock-Absorbing Memory Sole",
+      "Breathable Anti-Odor Lining",
+      "Cash on Delivery Nationwide across Pakistan"
+    ]
+  }
 ];
 
 export async function seedDatabase(): Promise<void> {

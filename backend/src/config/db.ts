@@ -22,11 +22,31 @@ export async function connectDB(uri?: string): Promise<void> {
   }
 
   try {
-    const conn = await mongoose.connect(mongoUri, {
-      serverSelectionTimeoutMS: 10000,
-    });
-    if (process.env.NODE_ENV !== "test") {
-      console.log(`✅ MongoDB Atlas Connected: ${conn.connection.host}`);
+    try {
+      const conn = await mongoose.connect(mongoUri, {
+        serverSelectionTimeoutMS: 5000,
+      });
+      if (process.env.NODE_ENV !== "test") {
+        console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+      }
+      return;
+    } catch (primaryErr: any) {
+      console.warn(`⚠️ Primary MongoDB connection failed (${primaryErr.message}).`);
+      
+      const localUri = "mongodb://127.0.0.1:27017/hangu_branded_shoes";
+      if (mongoUri !== localUri) {
+        console.log(`🔄 Attempting fallback to local DBngin MongoDB at ${localUri}...`);
+        try {
+          const localConn = await mongoose.connect(localUri, {
+            serverSelectionTimeoutMS: 3000,
+          });
+          console.log(`✅ Connected to Local MongoDB: ${localConn.connection.host}`);
+          return;
+        } catch (localErr: any) {
+          console.error("❌ Local fallback also failed:", localErr.message);
+        }
+      }
+      throw primaryErr;
     }
   } catch (error: any) {
     console.error("❌ MongoDB Connection Error:", error.message || error);

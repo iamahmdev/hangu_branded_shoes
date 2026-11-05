@@ -27,7 +27,7 @@ export default function Shop() {
         if (!list.includes(c.name)) list.push(c.name);
       });
     } else {
-      list.push("Sneakers", "Comfort", "Formal", "Loafers");
+      list.push("Sneakers", "Comfort", "Formal", "Loafers", "Boots");
     }
     return list;
   }, [categoriesData]);

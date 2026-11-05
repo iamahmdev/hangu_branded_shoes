@@ -91,7 +91,7 @@ export default function RecentSalesToast() {
 
   return (
     <aside
-      className={`recent-toast fixed z-[92] bg-zinc-900/95 backdrop-blur-md border border-white/10 border-l-[3px] border-l-[#25d366] rounded-2xl p-2.5 px-3.5 shadow-2xl transition-all duration-500 max-w-[320px] ${
+      className={`recent-toast fixed z-[92] bg-white/95 backdrop-blur-md border border-zinc-200/90 border-l-[3px] border-l-emerald-500 rounded-2xl p-2.5 px-3.5 shadow-xl transition-all duration-500 max-w-[320px] ${
         visible ? "show opacity-100 translate-y-0" : "opacity-0 translate-y-6"
       }`}
       style={{ bottom: "84px", left: "20px" }}
@@ -101,10 +101,10 @@ export default function RecentSalesToast() {
         <img
           src={imageSrc}
           alt={current.name}
-          className="w-12 h-12 rounded-xl object-cover bg-zinc-950 border border-white/10 shrink-0"
+          className="w-12 h-12 rounded-xl object-cover bg-[#f4f4f6] border border-zinc-200 shrink-0"
         />
         <div className="flex-1 min-w-0 text-left">
-          <div className="flex items-center gap-1 text-[11px] text-[#25d366] font-semibold">
+          <div className="flex items-center gap-1 text-[11px] text-emerald-600 font-semibold">
             <CheckCircle2 size={12} />
             <span>
               {current.customerName
@@ -115,14 +115,14 @@ export default function RecentSalesToast() {
           </div>
           <b
             onClick={handleOpenProduct}
-            className="text-xs text-white block truncate cursor-pointer hover:text-brand-gold transition-colors"
+            className="text-xs text-zinc-900 block truncate cursor-pointer hover:text-zinc-600 transition-colors"
           >
             {current.name}
           </b>
-          <div className="flex items-center gap-2 text-[10px] text-zinc-400">
+          <div className="flex items-center gap-2 text-[10px] text-zinc-500">
             <span>Size {current.size}</span>
             <span>•</span>
-            <span className="font-mono text-brand-gold font-bold">
+            <span className="font-mono text-zinc-900 font-bold">
               Rs. {current.price.toLocaleString()}
             </span>
             <span>•</span>
@@ -132,7 +132,7 @@ export default function RecentSalesToast() {
         <button
           type="button"
           onClick={() => setClosed(true)}
-          className="text-zinc-500 hover:text-white p-1"
+          className="text-zinc-400 hover:text-zinc-800 p-1"
           aria-label="Dismiss notification"
         >
           <X size={13} />

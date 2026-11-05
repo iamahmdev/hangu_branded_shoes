@@ -157,11 +157,11 @@ export default function About() {
               <Sparkles size={14} style={{ display: "inline-block", verticalAlign: "middle", marginRight: 6 }} />
               ESTABLISHED IN HANGU, KPK • NATIONWIDE RECOGNITION
             </span>
-            <h1 className="text-3xl md:text-5xl font-extrabold text-white my-3">
+            <h1 className="text-3xl md:text-5xl font-extrabold text-zinc-900 my-3">
               Crafted For Distinction. <br />
               <em className="text-brand-red not-italic">Engineered For All-Day Comfort.</em>
             </h1>
-            <p className="ab-hero-lead text-zinc-400 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
+            <p className="ab-hero-lead text-zinc-600 max-w-2xl mx-auto text-sm md:text-base leading-relaxed">
               Welcome to {SHOP}. We are dedicated to elevating Pakistan's footwear standard by bridging master artisan shoemaking traditions with modern ergonomic innovation. Every pair delivers genuine luxury, lasting durability, and distinguished style at accessible, direct-to-consumer prices.
             </p>
 
@@ -184,21 +184,21 @@ export default function About() {
         </Reveal>
 
         {/* Quick In-Page Jump Bar */}
-        <div className="ab-nav-bar flex justify-center gap-3 flex-wrap mb-12 p-3 bg-white/5 border border-white/10 rounded-2xl">
-          <a href="#story" className="ab-nav-link text-xs font-semibold text-zinc-300 hover:text-white px-3 py-1.5">📖 Our Story</a>
-          <a href="#pillars" className="ab-nav-link text-xs font-semibold text-zinc-300 hover:text-white px-3 py-1.5">👑 Core Pillars</a>
-          <a href="#anatomy" className="ab-nav-link text-xs font-semibold text-zinc-300 hover:text-white px-3 py-1.5">🔬 Shoe Anatomy</a>
-          <a href="#policies" className="ab-nav-link text-xs font-semibold text-zinc-300 hover:text-white px-3 py-1.5">🚚 Delivery & Policies</a>
-          <a href="#showroom" className="ab-nav-link text-xs font-semibold text-zinc-300 hover:text-white px-3 py-1.5">📍 Showroom Visit</a>
+        <div className="ab-nav-bar flex justify-center gap-3 flex-wrap mb-12 p-3 bg-white border border-zinc-200/80 shadow-xs rounded-2xl">
+          <a href="#story" className="ab-nav-link text-xs font-semibold text-zinc-600 hover:text-zinc-950 px-3 py-1.5 transition-colors">📖 Our Story</a>
+          <a href="#pillars" className="ab-nav-link text-xs font-semibold text-zinc-600 hover:text-zinc-950 px-3 py-1.5 transition-colors">👑 Core Pillars</a>
+          <a href="#anatomy" className="ab-nav-link text-xs font-semibold text-zinc-600 hover:text-zinc-950 px-3 py-1.5 transition-colors">🔬 Shoe Anatomy</a>
+          <a href="#policies" className="ab-nav-link text-xs font-semibold text-zinc-600 hover:text-zinc-950 px-3 py-1.5 transition-colors">🚚 Delivery & Policies</a>
+          <a href="#showroom" className="ab-nav-link text-xs font-semibold text-zinc-600 hover:text-zinc-950 px-3 py-1.5 transition-colors">📍 Showroom Visit</a>
         </div>
 
         {/* Brand Story Section */}
         <div className="ab-story-section grid grid-cols-1 md:grid-cols-2 gap-8 items-center mb-16" id="story">
           <Reveal>
-            <div className="ab-story-text text-zinc-300 text-sm leading-relaxed flex flex-col gap-3.5">
+            <div className="ab-story-text text-zinc-600 text-sm leading-relaxed flex flex-col gap-3.5">
               <div className="title text-left mb-2">
                 <small className="text-brand-red uppercase text-xs font-bold">OUR HERITAGE & ORIGINS</small>
-                <h2 className="text-2xl md:text-3xl font-bold text-white mt-1">The Journey From Hangu to Across Pakistan</h2>
+                <h2 className="text-2xl md:text-3xl font-bold text-zinc-900 mt-1">The Journey From Hangu to Across Pakistan</h2>
               </div>
               <p>
                 {SHOP} was founded in Hangu, Khyber Pakhtunkhwa, out of a simple observation: Pakistani shoe buyers were routinely forced to choose between overpriced foreign imports in big-city shopping malls or fragile local footwear that compromised on foot health and longevity.
@@ -213,17 +213,17 @@ export default function About() {
           </Reveal>
 
           <Reveal delay={200}>
-            <div className="ab-story-card glass relative rounded-3xl overflow-hidden p-3 bg-zinc-950">
+            <div className="ab-story-card relative rounded-3xl overflow-hidden p-3 bg-white border border-zinc-200/80 shadow-md">
               <img
                 src="/images/h3.jpg"
                 alt="Shoe Craftsmanship at Hangu Branded Shoes"
                 className="ab-story-img w-full rounded-2xl object-cover aspect-video"
               />
-              <div className="ab-story-badge glass absolute bottom-6 left-6 right-6 p-3 rounded-2xl flex items-center gap-3 bg-black/80 backdrop-blur-md border border-brand-gold/30">
+              <div className="ab-story-badge absolute bottom-6 left-6 right-6 p-4 rounded-2xl flex items-center gap-3 bg-white/95 backdrop-blur-md border border-zinc-200 shadow-lg">
                 <Crown size={28} color="#d4a857" style={{ flexShrink: 0 }} />
                 <div>
-                  <b className="text-white text-xs block font-bold">100% Hand-Inspected Quality</b>
-                  <small className="text-zinc-400 text-[11px]">Every pair is triple-checked before packaging</small>
+                  <b className="text-zinc-900 text-xs block font-bold">100% Hand-Inspected Quality</b>
+                  <small className="text-zinc-500 text-[11px]">Every pair is triple-checked before packaging</small>
                 </div>
               </div>
             </div>
@@ -235,7 +235,7 @@ export default function About() {
           <Reveal>
             <div className="title text-center mb-8">
               <small className="text-brand-red uppercase text-xs font-bold">THE HBS PROMISE</small>
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mt-1">The Four Pillars That Define Our Work</h2>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-zinc-900 mt-1">The Four Pillars That Define Our Work</h2>
             </div>
           </Reveal>
 
@@ -247,15 +247,15 @@ export default function About() {
         </div>
 
         {/* High-Tech Blueprint: Anatomy of Our Footwear */}
-        <div id="anatomy" className="ab-blueprint-wrap glass p-8 md:p-12 rounded-3xl mb-16" style={{ scrollMarginTop: 120 }}>
+        <div id="anatomy" className="ab-blueprint-wrap bg-white border border-zinc-200/80 shadow-sm p-8 md:p-12 rounded-3xl mb-16" style={{ scrollMarginTop: 120 }}>
           <Reveal>
             <div className="ab-blueprint-header text-center mb-10">
               <span className="pill glass inline-block mb-3 text-xs font-bold text-brand-gold">
                 <Compass size={14} style={{ display: "inline-block", verticalAlign: "middle", marginRight: 6 }} />
                 ENGINEERED FOR EXCELLENCE
               </span>
-              <h2 className="text-2xl md:text-4xl font-extrabold text-white">The Anatomy of Our Footwear</h2>
-              <p className="text-zinc-400 text-xs md:text-sm max-w-xl mx-auto mt-2">
+              <h2 className="text-2xl md:text-4xl font-extrabold text-zinc-900">The Anatomy of Our Footwear</h2>
+              <p className="text-zinc-600 text-xs md:text-sm max-w-xl mx-auto mt-2">
                 A breakdown of the materials, sole kinetics, and ergonomic engineering inside every pair we create.
               </p>
             </div>
@@ -263,13 +263,13 @@ export default function About() {
 
           <div className="ab-blueprint-grid grid grid-cols-1 md:grid-cols-2 gap-6">
             <Reveal delay={100}>
-              <div className="ab-blueprint-card glass p-5 rounded-2xl flex items-start gap-3.5">
+              <div className="ab-blueprint-card bg-zinc-50/80 border border-zinc-200/80 p-5 rounded-2xl flex items-start gap-3.5">
                 <div className="ab-blueprint-icon text-brand-red shrink-0 mt-1">
                   <Layers size={24} />
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-white mb-1">1. Hydro-Treated Upper Leathers & Mesh</h4>
-                  <p className="text-xs text-zinc-400 leading-relaxed">
+                  <h4 className="text-base font-bold text-zinc-900 mb-1">1. Hydro-Treated Upper Leathers & Mesh</h4>
+                  <p className="text-xs text-zinc-600 leading-relaxed">
                     Selected high-tensile engineered mesh and full-grain calfskin leathers, specially treated for natural suppleness, crack resistance, and shape retention across seasons.
                   </p>
                 </div>
@@ -277,13 +277,13 @@ export default function About() {
             </Reveal>
 
             <Reveal delay={200}>
-              <div className="ab-blueprint-card glass p-5 rounded-2xl flex items-start gap-3.5">
+              <div className="ab-blueprint-card bg-zinc-50/80 border border-zinc-200/80 p-5 rounded-2xl flex items-start gap-3.5">
                 <div className="ab-blueprint-icon text-brand-gold shrink-0 mt-1">
                   <Zap size={24} />
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-white mb-1">2. Dynamic Kinetic Cushioning Core</h4>
-                  <p className="text-xs text-zinc-400 leading-relaxed">
+                  <h4 className="text-base font-bold text-zinc-900 mb-1">2. Dynamic Kinetic Cushioning Core</h4>
+                  <p className="text-xs text-zinc-600 leading-relaxed">
                     Dual-layer high-rebound EVA polymers that absorb up to 45% of vertical heel-strike energy, drastically reducing impact on knees, ankles, and lumbar spine.
                   </p>
                 </div>
@@ -291,13 +291,13 @@ export default function About() {
             </Reveal>
 
             <Reveal delay={300}>
-              <div className="ab-blueprint-card glass p-5 rounded-2xl flex items-start gap-3.5">
-                <div className="ab-blueprint-icon text-[#38bdf8] shrink-0 mt-1">
+              <div className="ab-blueprint-card bg-zinc-50/80 border border-zinc-200/80 p-5 rounded-2xl flex items-start gap-3.5">
+                <div className="ab-blueprint-icon text-sky-600 shrink-0 mt-1">
                   <Compass size={24} />
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-white mb-1">3. Vulcanized All-Terrain Grip Outsole</h4>
-                  <p className="text-xs text-zinc-400 leading-relaxed">
+                  <h4 className="text-base font-bold text-zinc-900 mb-1">3. Vulcanized All-Terrain Grip Outsole</h4>
+                  <p className="text-xs text-zinc-600 leading-relaxed">
                     Multi-directional siped rubber tread engineered from oil-resistant vulcanized compounds, ensuring zero-slip traction across polished marble and outdoor pavement.
                   </p>
                 </div>
@@ -305,13 +305,13 @@ export default function About() {
             </Reveal>
 
             <Reveal delay={400}>
-              <div className="ab-blueprint-card glass p-5 rounded-2xl flex items-start gap-3.5">
-                <div className="ab-blueprint-icon text-[#25d366] shrink-0 mt-1">
+              <div className="ab-blueprint-card bg-zinc-50/80 border border-zinc-200/80 p-5 rounded-2xl flex items-start gap-3.5">
+                <div className="ab-blueprint-icon text-emerald-600 shrink-0 mt-1">
                   <Wind size={24} />
                 </div>
                 <div>
-                  <h4 className="text-base font-bold text-white mb-1">4. Micro-Perforated Thermal Ventilation</h4>
-                  <p className="text-xs text-zinc-400 leading-relaxed">
+                  <h4 className="text-base font-bold text-zinc-900 mb-1">4. Micro-Perforated Thermal Ventilation</h4>
+                  <p className="text-xs text-zinc-600 leading-relaxed">
                     Silky moisture-wicking microfibers with antimicrobial silver-ion infusion, guaranteeing 14+ hours of sweat-free, odor-resistant comfort in diverse Pakistani weather.
                   </p>
                 </div>
@@ -322,22 +322,22 @@ export default function About() {
 
         {/* Milestone Stats Bar */}
         <Reveal>
-          <div className="ab-stats-bar glass grid grid-cols-2 md:grid-cols-4 gap-4 p-6 rounded-2xl text-center mb-16">
+          <div className="ab-stats-bar bg-white border border-zinc-200/80 shadow-sm grid grid-cols-2 md:grid-cols-4 gap-4 p-6 rounded-2xl text-center mb-16">
             <div className="ab-stat-item">
-              <b className="text-2xl md:text-3xl font-extrabold text-white block">15,000+</b>
-              <p className="text-xs text-zinc-400 mt-1">Pairs Delivered Across Pakistan</p>
+              <b className="text-2xl md:text-3xl font-extrabold text-zinc-900 block">15,000+</b>
+              <p className="text-xs text-zinc-500 mt-1">Pairs Delivered Across Pakistan</p>
             </div>
             <div className="ab-stat-item">
-              <b className="text-2xl md:text-3xl font-extrabold text-white block">120+</b>
-              <p className="text-xs text-zinc-400 mt-1">Cities & Towns Reached</p>
+              <b className="text-2xl md:text-3xl font-extrabold text-zinc-900 block">120+</b>
+              <p className="text-xs text-zinc-500 mt-1">Cities & Towns Reached</p>
             </div>
             <div className="ab-stat-item">
-              <b className="text-2xl md:text-3xl font-extrabold text-white block">99.2%</b>
-              <p className="text-xs text-zinc-400 mt-1">Positive Fitting & Quality Rating</p>
+              <b className="text-2xl md:text-3xl font-extrabold text-zinc-900 block">99.2%</b>
+              <p className="text-xs text-zinc-500 mt-1">Positive Fitting & Quality Rating</p>
             </div>
             <div className="ab-stat-item">
-              <b className="text-2xl md:text-3xl font-extrabold text-white block">7 Days</b>
-              <p className="text-xs text-zinc-400 mt-1">Risk-Free Exchange Window</p>
+              <b className="text-2xl md:text-3xl font-extrabold text-zinc-900 block">7 Days</b>
+              <p className="text-xs text-zinc-500 mt-1">Risk-Free Exchange Window</p>
             </div>
           </div>
         </Reveal>
@@ -347,20 +347,20 @@ export default function About() {
           <Reveal>
             <div className="title text-center mb-8">
               <small className="text-brand-red uppercase text-xs font-bold">CUSTOMER COMMITMENT</small>
-              <h2 className="text-3xl md:text-4xl font-extrabold text-white mt-1">Delivery, Payment & Exchange Policies</h2>
+              <h2 className="text-3xl md:text-4xl font-extrabold text-zinc-900 mt-1">Delivery, Payment & Exchange Policies</h2>
             </div>
           </Reveal>
 
           <div className="ab-policies grid grid-cols-1 md:grid-cols-3 gap-6">
             <Reveal delay={100}>
-              <div className="ab-policy-card glass p-6 rounded-3xl flex flex-col gap-2">
-                <h4 className="text-lg font-bold text-white flex items-center gap-2.5">
+              <div className="ab-policy-card bg-white border border-zinc-200/80 shadow-sm p-6 rounded-3xl flex flex-col gap-2">
+                <h4 className="text-lg font-bold text-zinc-900 flex items-center gap-2.5">
                   <Truck size={22} color="var(--red)" /> Nationwide Tracked Delivery
                 </h4>
-                <p className="text-xs text-zinc-400 leading-relaxed">
+                <p className="text-xs text-zinc-600 leading-relaxed">
                   We deliver to every corner of Pakistan through reliable courier services, ensuring your shoes arrive safely packed in rigid protective boxes.
                 </p>
-                <ul className="text-xs text-zinc-300 list-disc pl-4 flex flex-col gap-1 mt-2">
+                <ul className="text-xs text-zinc-600 list-disc pl-4 flex flex-col gap-1 mt-2">
                   <li>Free shipping on all orders over Rs. 5,000</li>
                   <li>Flat Rs. 250 fee for orders under Rs. 5,000</li>
                   <li>Express delivery within 2 to 4 business days</li>
@@ -370,14 +370,14 @@ export default function About() {
             </Reveal>
 
             <Reveal delay={200}>
-              <div className="ab-policy-card glass p-6 rounded-3xl flex flex-col gap-2">
-                <h4 className="text-lg font-bold text-white flex items-center gap-2.5">
+              <div className="ab-policy-card bg-white border border-zinc-200/80 shadow-sm p-6 rounded-3xl flex flex-col gap-2">
+                <h4 className="text-lg font-bold text-zinc-900 flex items-center gap-2.5">
                   <Banknote size={22} color="#d4a857" /> EasyPaisa Verified Payment
                 </h4>
-                <p className="text-xs text-zinc-400 leading-relaxed">
+                <p className="text-xs text-zinc-600 leading-relaxed">
                   Shop with complete peace of mind. Pay directly via EasyPaisa with instant WhatsApp verification and tracked dispatch.
                 </p>
-                <ul className="text-xs text-zinc-300 list-disc pl-4 flex flex-col gap-1 mt-2">
+                <ul className="text-xs text-zinc-600 list-disc pl-4 flex flex-col gap-1 mt-2">
                   <li>Direct EasyPaisa mobile account payment</li>
                   <li>Instant receipt verification & Order confirmation</li>
                   <li>Direct tracked courier dispatch nationwide</li>
@@ -386,14 +386,14 @@ export default function About() {
             </Reveal>
 
             <Reveal delay={300}>
-              <div className="ab-policy-card glass p-6 rounded-3xl flex flex-col gap-2">
-                <h4 className="text-lg font-bold text-white flex items-center gap-2.5">
-                  <RotateCcw size={22} color="#25d366" /> 7-Day Hassle-Free Exchange
+              <div className="ab-policy-card bg-white border border-zinc-200/80 shadow-sm p-6 rounded-3xl flex flex-col gap-2">
+                <h4 className="text-lg font-bold text-zinc-900 flex items-center gap-2.5">
+                  <RotateCcw size={22} color="#10b981" /> 7-Day Hassle-Free Exchange
                 </h4>
-                <p className="text-xs text-zinc-400 leading-relaxed">
+                <p className="text-xs text-zinc-600 leading-relaxed">
                   We understand that shoe sizing can vary across designs. If your pair is slightly tight or loose, we make the exchange process effortless.
                 </p>
-                <ul className="text-xs text-zinc-300 list-disc pl-4 flex flex-col gap-1 mt-2">
+                <ul className="text-xs text-zinc-600 list-disc pl-4 flex flex-col gap-1 mt-2">
                   <li>Notify our WhatsApp team within 7 days of delivery</li>
                   <li>Shoes must be in unworn, original condition with box</li>
                   <li>Prompt replacement pair dispatched immediately</li>
@@ -407,17 +407,17 @@ export default function About() {
         {/* Physical Showroom & Sizing Assistance */}
         <div id="showroom" className="mb-16" style={{ scrollMarginTop: 120 }}>
           <Reveal>
-            <div className="ab-store-box glass p-8 md:p-10 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+            <div className="ab-store-box bg-white border border-zinc-200/80 shadow-sm p-8 md:p-10 rounded-3xl grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
               <div className="ab-store-info">
                 <span className="pill glass inline-block mb-3 text-xs font-bold text-brand-gold">
                   <Store size={14} style={{ display: "inline-block", verticalAlign: "middle", marginRight: 6 }} />
                   VISIT OUR SHOWROOM
                 </span>
-                <h3 className="text-2xl font-bold text-white mb-2">Experience Hangu Branded Shoes In Person</h3>
-                <p className="text-zinc-400 text-xs md:text-sm leading-relaxed mb-4">
+                <h3 className="text-2xl font-bold text-zinc-900 mb-2">Experience Hangu Branded Shoes In Person</h3>
+                <p className="text-zinc-600 text-xs md:text-sm leading-relaxed mb-4">
                   If you are in Khyber Pakhtunkhwa or passing through Hangu, we warmly invite you to visit our flagship retail outlet. Try on different pairs, test our memory cushioning on our fitting lounge, and receive tailored styling advice.
                 </p>
-                <div className="ab-store-details flex flex-col gap-2 text-xs text-zinc-300">
+                <div className="ab-store-details flex flex-col gap-2 text-xs text-zinc-700">
                   <div className="ab-store-detail-row flex items-center gap-2">
                     <Store size={18} color="var(--red)" style={{ flexShrink: 0 }} />
                     <span><strong>Address:</strong> Hangu tall road tahir markit hangu brand shoes 👟</span>
@@ -427,14 +427,14 @@ export default function About() {
                     <span><strong>Store Timings:</strong> Monday to Sunday, 10:00 AM – 10:00 PM</span>
                   </div>
                   <div className="ab-store-detail-row flex items-center gap-2">
-                    <PhoneCall size={18} color="#25d366" style={{ flexShrink: 0 }} />
+                    <PhoneCall size={18} color="#10b981" style={{ flexShrink: 0 }} />
                     <span><strong>Direct Helpline:</strong> +{WA} (WhatsApp & Voice Call)</span>
                   </div>
                 </div>
               </div>
 
               <div className="ab-store-actions flex flex-col gap-3">
-                <p className="text-zinc-400 text-xs leading-relaxed">
+                <p className="text-zinc-600 text-xs leading-relaxed">
                   Not in Hangu? No problem! You can request high-resolution photos and live 360-degree video inspection of your exact pair on WhatsApp before we ship it to you.
                 </p>
                 <a
@@ -457,9 +457,9 @@ export default function About() {
 
         {/* Bottom CTA */}
         <Reveal>
-          <div className="cta text-center py-16 px-4 rounded-3xl">
-            <h2 className="text-3xl md:text-4xl font-extrabold text-white mb-2">Ready to Elevate Your Stride?</h2>
-            <p className="text-zinc-400 max-w-lg mx-auto mb-6 text-sm">
+          <div className="cta bg-zinc-100/90 border border-zinc-200/80 text-center py-16 px-4 rounded-3xl">
+            <h2 className="text-3xl md:text-4xl font-extrabold text-zinc-900 mb-2">Ready to Elevate Your Stride?</h2>
+            <p className="text-zinc-600 max-w-lg mx-auto mb-6 text-sm">
               Explore our handpicked curation of high-traction athletic sneakers, executive leather derby shoes, and luxurious comfort slip-ons.
             </p>
             <div className="flex gap-3 justify-center flex-wrap">

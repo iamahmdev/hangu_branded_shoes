@@ -6,7 +6,7 @@ import { useCart } from "../../src/context/CartContext";
 import { SIZES, wa } from "../../src/data/config";
 import { useProduct } from "../../src/hooks/useApi";
 import { WhatsAppIcon } from "../../src/components/WhatsAppButton";
-import { PackageCheck, RotateCcw, ShieldCheck, Zap } from "lucide-react";
+import { PackageCheck, RotateCcw, ShieldCheck, Zap, ShoppingBag, ArrowRight } from "lucide-react";
 import { resolveProductImage } from "../../src/utils/image";
 
 export default function Product() {
@@ -23,13 +23,13 @@ export default function Product() {
   if (isLoading) {
     return (
       <Layout>
-        <div className="pg wrap two pt-32 pb-16 grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div className="glass rounded-3xl h-96 animate-pulse bg-white/5 border border-white/10" />
+        <div className="wrap max-w-7xl mx-auto pt-24 pb-16 grid grid-cols-1 md:grid-cols-2 gap-10">
+          <div className="aspect-square bg-zinc-200/60 rounded-3xl animate-pulse" />
           <div className="flex flex-col gap-4">
-            <div className="h-6 w-24 bg-white/10 rounded-full animate-pulse" />
-            <div className="h-10 w-3/4 bg-white/10 rounded-xl animate-pulse" />
-            <div className="h-8 w-1/3 bg-white/10 rounded-xl animate-pulse" />
-            <div className="h-28 w-full bg-white/5 rounded-2xl animate-pulse mt-4" />
+            <div className="h-6 w-24 bg-zinc-200 rounded-full animate-pulse" />
+            <div className="h-10 w-3/4 bg-zinc-200 rounded-xl animate-pulse" />
+            <div className="h-8 w-1/3 bg-zinc-200 rounded-xl animate-pulse" />
+            <div className="h-28 w-full bg-zinc-200/60 rounded-2xl animate-pulse mt-4" />
           </div>
         </div>
       </Layout>
@@ -39,10 +39,10 @@ export default function Product() {
   if (isError || !p) {
     return (
       <Layout>
-        <div className="pg wrap text-center py-28 px-5">
+        <div className="wrap text-center py-28 px-5">
           <span className="text-4xl block mb-2">👟</span>
-          <h2 className="text-2xl font-bold text-white">Shoe Not Found</h2>
-          <p className="text-zinc-400 text-sm mt-2">
+          <h2 className="text-2xl font-bold text-zinc-950">Shoe Not Found</h2>
+          <p className="text-zinc-500 text-sm mt-2">
             The shoe you are looking for does not exist or has been removed from inventory.
           </p>
           <Link href="/shop" className="btn mt-5 inline-block">
@@ -73,172 +73,212 @@ export default function Product() {
   const buildWhatsAppOrderUrl = () => {
     const sizeText = size || "Size not selected yet";
     const totalAmount = (p.price * q).toLocaleString();
-    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${q}\n*Price:* Rs. ${totalAmount}\n*Payment:* EasyPaisa Mobile Transfer\n\nMera Delivery Address ye hai:\nNaam: \nPhone: \nCity: \nAddress: `;
+    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${q}\n*Price:* Rs. ${totalAmount}\n*Payment:* Cash on Delivery / EasyPaisa\n\nMera Delivery Address ye hai:\nNaam: \nPhone: \nCity: \nAddress: `;
     return wa(msg);
   };
 
   return (
     <Layout title={`${p.name} — Hangu Branded Shoes`}>
-      <div className="pg wrap two pt-32 pb-16">
-        {/* Left: Product Image & Badges */}
-        <div>
-          <div className="pimg glass p-4 relative rounded-3xl overflow-hidden bg-zinc-950/80 border border-white/10">
-            <img src={resolveProductImage(p.img)} alt={p.name} className="w-full object-cover rounded-2xl" />
-            {p.tag && (
-              <span className="badge absolute top-6 left-6 bg-brand-red text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                {p.tag}
-              </span>
-            )}
-            {savings > 0 && (
-              <span className="pdp-discount-badge absolute top-6 right-6 bg-brand-gold text-black font-extrabold text-xs px-3 py-1 rounded-full">
-                Save {discount}%
-              </span>
-            )}
-          </div>
-          <div className="pdp-thumbnail-hints flex justify-around mt-3 text-sm text-zinc-400">
-            <span>✨ 100% Genuine Sole</span>
-            <span>🧵 Handcrafted Quality</span>
-          </div>
-        </div>
-
-        {/* Right: Product Details & Buying Actions */}
-        <div>
-          <small className="text-brand-red font-bold tracking-widest uppercase text-xs">
-            {p.cat}
-          </small>
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-white my-2">
-            {p.name}
-          </h1>
-
-          <div className="price text-2xl md:text-3xl font-extrabold text-brand-gold flex items-center gap-3 my-3">
-            <span>Rs. {p.price.toLocaleString()}</span>
-            <s className="text-zinc-500 font-normal text-base">Rs. {p.old.toLocaleString()}</s>
-            {savings > 0 && (
-              <span className="pdp-save-pill text-xs font-bold text-[#25d366] bg-[#25d366]/15 px-3 py-1 rounded-full">
-                Save Rs. {savings.toLocaleString()}
-              </span>
-            )}
+      <div className="bg-[#fafafa] text-zinc-900 min-h-screen pt-8 pb-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Breadcrumb */}
+          <div className="flex items-center gap-2 text-xs text-zinc-400 mb-6">
+            <Link href="/" className="hover:text-zinc-950">Home</Link>
+            <span>/</span>
+            <Link href="/shop" className="hover:text-zinc-950">Footwear</Link>
+            <span>/</span>
+            <span className="text-zinc-900 font-semibold truncate">{p.name}</span>
           </div>
 
-          {p.desc && <p className="text-zinc-300 text-sm mb-4 leading-relaxed">{p.desc}</p>}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+            {/* Left: Product Image & Badges (ETQ Profile Box) */}
+            <div className="lg:col-span-6 flex flex-col gap-4">
+              <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-[#f4f4f6] border border-zinc-200/80 flex items-center justify-center p-8 group">
+                <img
+                  src={resolveProductImage(p.img)}
+                  alt={p.name}
+                  className="max-h-full max-w-full object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-500 ease-out"
+                />
 
-          {/* Size Selector */}
-          <div className="flex justify-between items-center my-4">
-            <b className="text-sm text-white">
-              Select Size (EU / PK):{" "}
-              {size ? (
-                <span className="text-brand-gold font-bold">{size}</span>
-              ) : (
-                <span className={err ? "text-brand-red font-bold" : "text-zinc-400"}>
-                  {err ? "⚠️ Please pick a size" : "(Required)"}
+                {p.tag && (
+                  <span className="absolute top-5 left-5 bg-zinc-950 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-wider">
+                    {p.tag}
+                  </span>
+                )}
+
+                {savings > 0 && (
+                  <span className="absolute top-5 right-5 bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold text-xs px-3 py-1 rounded-md shadow-xs">
+                    Save {discount}%
+                  </span>
+                )}
+              </div>
+
+              <div className="flex justify-around text-xs text-zinc-500 font-medium py-1">
+                <span>✨ 100% Genuine Sole</span>
+                <span>🧵 Handcrafted Quality</span>
+                <span>🚚 Free Shipping over Rs. 5,000</span>
+              </div>
+            </div>
+
+            {/* Right: Product Details & Buying Actions */}
+            <div className="lg:col-span-6 flex flex-col bg-white p-6 sm:p-8 rounded-3xl border border-zinc-200/80 shadow-xs">
+              <span className="text-zinc-400 font-bold tracking-widest uppercase text-xs">
+                {p.cat}
+              </span>
+
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-zinc-950 my-2 tracking-tight">
+                {p.name}
+              </h1>
+
+              <div className="flex items-baseline gap-3 my-3">
+                <span className="text-2xl sm:text-3xl font-extrabold text-zinc-950 font-mono">
+                  Rs. {p.price.toLocaleString()}
                 </span>
+                {p.old && p.old > p.price && (
+                  <s className="text-zinc-400 font-normal text-lg font-mono">
+                    Rs. {p.old.toLocaleString()}
+                  </s>
+                )}
+                {savings > 0 && (
+                  <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-md">
+                    Save Rs. {savings.toLocaleString()}
+                  </span>
+                )}
+              </div>
+
+              {p.desc && (
+                <p className="text-zinc-600 text-xs sm:text-sm mb-6 leading-relaxed">
+                  {p.desc}
+                </p>
               )}
-            </b>
-            <Link
-              href="/size-guide"
-              className="text-xs text-brand-gold hover:underline flex items-center gap-1 font-semibold"
-            >
-              📏 Size Chart Guide
-            </Link>
-          </div>
 
-          <div className="sizes flex flex-wrap gap-2.5 mb-6">
-            {(p.sizes || SIZES).map((s) => (
-              <button
-                key={s}
-                className={`w-12 h-12 rounded-2xl border font-bold text-sm transition-all ${
-                  size === s
-                    ? "bg-brand-red border-brand-red text-white shadow-[0_0_15px_rgba(235,0,40,0.5)] scale-105"
-                    : "bg-white/5 border-white/10 text-zinc-300 hover:border-white/30 hover:text-white"
-                }`}
-                onClick={() => {
-                  setSize(s);
-                  setErr(false);
-                }}
-              >
-                {s}
-              </button>
-            ))}
-          </div>
+              {/* Size Selector */}
+              <div className="flex justify-between items-center my-2">
+                <b className="text-xs sm:text-sm text-zinc-900">
+                  Select Size (EU / PK):{" "}
+                  {size ? (
+                    <span className="text-emerald-700 font-bold font-mono">{size}</span>
+                  ) : (
+                    <span className={err ? "text-rose-600 font-bold" : "text-zinc-400"}>
+                      {err ? "⚠️ Please pick a size" : "(Required)"}
+                    </span>
+                  )}
+                </b>
+                <Link
+                  href="/size-guide"
+                  className="text-xs text-zinc-600 hover:text-zinc-950 underline flex items-center gap-1 font-semibold"
+                >
+                  📏 Size Guide
+                </Link>
+              </div>
 
-          {/* Quantity Counter */}
-          <div className="qty-wrap flex items-center gap-3 my-4">
-            <span className="text-xs font-bold text-zinc-400 uppercase tracking-wider">
-              Quantity:
-            </span>
-            <div className="qty flex items-center bg-white/5 border border-white/10 rounded-full px-2.5 py-1">
-              <button
-                onClick={() => setQ(Math.max(1, q - 1))}
-                className="w-7 h-7 flex items-center justify-center text-white text-base hover:text-brand-red"
-              >
-                −
-              </button>
-              <b className="px-3 text-sm text-white font-mono">{q}</b>
-              <button
-                onClick={() => setQ(q + 1)}
-                className="w-7 h-7 flex items-center justify-center text-white text-base hover:text-brand-red"
-              >
-                +
-              </button>
-            </div>
-            <span className="text-xs text-zinc-400">
-              Total:{" "}
-              <b className="text-brand-gold font-mono">Rs. {(p.price * q).toLocaleString()}</b>
-            </span>
-          </div>
+              <div className="flex flex-wrap gap-2 mb-6">
+                {(p.sizes || SIZES).map((s) => (
+                  <button
+                    key={s}
+                    type="button"
+                    className={`w-12 h-12 rounded-xl font-bold text-sm transition-all font-mono ${
+                      size === s
+                        ? "bg-zinc-950 text-white shadow-xs scale-105"
+                        : "bg-[#f4f4f6] text-zinc-700 hover:bg-zinc-200 border border-zinc-200"
+                    }`}
+                    onClick={() => {
+                      setSize(s);
+                      setErr(false);
+                    }}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
 
-          {/* Action Buttons */}
-          <div className="actions flex flex-col sm:flex-row gap-3 mt-6">
-            <button
-              className="btn flex-1 py-3 text-sm font-bold flex items-center justify-center gap-2"
-              onClick={() => go(true)}
-            >
-              <Zap size={16} />
-              <span>Buy Now (Instant Checkout)</span>
-            </button>
-            <button className="btn ghost py-3 text-sm font-bold" onClick={() => go(false)}>
-              Add to Cart
-            </button>
-          </div>
+              {/* Quantity Counter */}
+              <div className="flex items-center gap-3 my-3">
+                <span className="text-xs font-bold text-zinc-500 uppercase tracking-wider">
+                  Quantity:
+                </span>
+                <div className="flex items-center bg-[#f4f4f6] border border-zinc-200 rounded-xl px-2 py-1">
+                  <button
+                    type="button"
+                    onClick={() => setQ(Math.max(1, q - 1))}
+                    className="w-7 h-7 flex items-center justify-center text-zinc-700 text-base font-bold hover:text-zinc-950"
+                  >
+                    −
+                  </button>
+                  <b className="px-3 text-sm text-zinc-950 font-mono">{q}</b>
+                  <button
+                    type="button"
+                    onClick={() => setQ(q + 1)}
+                    className="w-7 h-7 flex items-center justify-center text-zinc-700 text-base font-bold hover:text-zinc-950"
+                  >
+                    +
+                  </button>
+                </div>
+                <span className="text-xs text-zinc-500">
+                  Total: <b className="text-zinc-950 font-mono">Rs. {(p.price * q).toLocaleString()}</b>
+                </span>
+              </div>
 
-          {/* Direct WhatsApp Instant Buy */}
-          <div className="mt-3">
-            <a
-              href={buildWhatsAppOrderUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-full py-3 rounded-full bg-[#25d366]/15 hover:bg-[#25d366]/25 border border-[#25d366]/40 text-[#25d366] font-bold text-sm flex items-center justify-center gap-2 transition-all"
-            >
-              <WhatsAppIcon size={18} color="#25d366" />
-              <span>Instant WhatsApp Order</span>
-            </a>
-          </div>
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-3 mt-4">
+                <button
+                  type="button"
+                  className="flex-1 py-3 px-6 rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white text-xs font-bold flex items-center justify-center gap-2 transition-colors shadow-xs"
+                  onClick={() => go(true)}
+                >
+                  <Zap size={16} />
+                  <span>Buy Now (Instant Checkout)</span>
+                </button>
+                <button
+                  type="button"
+                  className="py-3 px-6 rounded-xl bg-[#f4f4f6] hover:bg-zinc-200 text-zinc-900 border border-zinc-200 text-xs font-bold flex items-center justify-center gap-2 transition-colors"
+                  onClick={() => go(false)}
+                >
+                  <ShoppingBag size={16} />
+                  <span>Add to Bag</span>
+                </button>
+              </div>
 
-          {addedToast && (
-            <div className="pdp-toast mt-4 p-3 rounded-2xl bg-green-500/15 border border-green-500/30 text-green-400 text-xs font-bold flex items-center justify-center gap-2 animate-fadeIn">
-              ✓ Added to Cart! View your cart to checkout anytime.
-            </div>
-          )}
+              {/* Direct WhatsApp Instant Buy */}
+              <div className="mt-3">
+                <a
+                  href={buildWhatsAppOrderUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs flex items-center justify-center gap-2 transition-colors shadow-xs"
+                >
+                  <WhatsAppIcon size={16} color="#fff" />
+                  <span>Instant Order on WhatsApp</span>
+                </a>
+              </div>
 
-          {/* Value Assurance List */}
-          <div className="pdp-perks mt-8 pt-6 border-t border-white/10 flex flex-col gap-3 text-xs text-zinc-300">
-            <div className="flex items-center gap-2.5">
-              <PackageCheck size={18} className="text-brand-gold" />
-              <span>
-                <b>EasyPaisa Verified:</b> Fast verified payment with instant courier dispatch.
-              </span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <RotateCcw size={18} className="text-brand-gold" />
-              <span>
-                <b>7-Day Size Exchange:</b> If the size does not fit, we replace it hassle-free.
-              </span>
-            </div>
-            <div className="flex items-center gap-2.5">
-              <ShieldCheck size={18} className="text-brand-gold" />
-              <span>
-                <b>Guaranteed Comfort:</b> High density foam cushioning with anti-fatigue insole.
-              </span>
+              {addedToast && (
+                <div className="mt-4 p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-bold flex items-center justify-center gap-2 animate-fadeIn">
+                  ✓ Added to Cart! View your cart to checkout anytime.
+                </div>
+              )}
+
+              {/* Value Assurance List */}
+              <div className="mt-6 pt-6 border-t border-zinc-100 flex flex-col gap-3 text-xs text-zinc-600">
+                <div className="flex items-center gap-2.5">
+                  <PackageCheck size={16} className="text-emerald-600" />
+                  <span>
+                    <b>EasyPaisa & COD:</b> Cash on Delivery or instant EasyPaisa verified transfer.
+                  </span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <RotateCcw size={16} className="text-emerald-600" />
+                  <span>
+                    <b>7-Day Free Size Exchange:</b> Hassle-free replacement if sizing does not fit.
+                  </span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <ShieldCheck size={16} className="text-emerald-600" />
+                  <span>
+                    <b>Genuine Quality Sole:</b> High density cushioned comfort and genuine fit.
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>

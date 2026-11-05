@@ -9,7 +9,7 @@ export default function Categories() {
     return (
       <div className="cats grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="glass rounded-3xl h-64 animate-pulse bg-white/5 border border-white/10" />
+          <div key={i} className="rounded-3xl h-64 animate-pulse bg-zinc-100 border border-zinc-200" />
         ))}
       </div>
     );
@@ -25,7 +25,7 @@ export default function Categories() {
         <Link
           key={c.name}
           href={`/shop?cat=${encodeURIComponent(c.name)}`}
-          className="cat glass group relative overflow-hidden rounded-3xl block h-64 border border-white/10"
+          className="cat group relative overflow-hidden rounded-3xl block h-64 border border-zinc-200/80 shadow-sm"
         >
           <img
             src={resolveProductImage(c.img)}

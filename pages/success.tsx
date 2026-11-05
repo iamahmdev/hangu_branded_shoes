@@ -30,25 +30,25 @@ export default function Success() {
   return (
     <Layout title="Order Received — Hangu Branded Shoes">
       <div className="pg wrap ok text-center py-32 px-5 max-w-xl mx-auto">
-        <div className="w-16 h-16 rounded-full bg-green-500/20 border border-green-500/40 flex items-center justify-center mx-auto mb-6 text-green-400">
+        <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center mx-auto mb-6 text-emerald-600">
           <PackageCheck size={36} />
         </div>
 
-        <span className="text-xs uppercase tracking-widest text-brand-gold font-bold">
+        <span className="text-xs uppercase tracking-widest text-brand-red font-bold">
           ORDER CONFIRMATION
         </span>
-        <h1 className="text-3xl md:text-4xl font-extrabold text-white mt-1">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-zinc-900 mt-1">
           Thank You! Order Received
         </h1>
 
-        <div className="glass p-5 rounded-3xl border border-white/10 my-6 bg-white/5">
-          <span className="text-xs text-zinc-400 uppercase tracking-wider block">
+        <div className="bg-white border border-zinc-200/80 shadow-sm p-6 rounded-3xl my-6">
+          <span className="text-xs text-zinc-500 uppercase tracking-wider block font-semibold">
             Your Tracking Order Number
           </span>
-          <b className="text-3xl font-mono text-brand-gold font-bold block my-1">
+          <b className="text-3xl font-mono text-zinc-900 font-extrabold block my-2">
             {orderId || "HBS-CONFIRMED"}
           </b>
-          <p className="text-zinc-400 text-xs mt-2">
+          <p className="text-zinc-600 text-xs mt-2 leading-relaxed">
             Your pair will be inspected for quality, packed securely, and handed over to courier dispatch. You can track its live progress anytime online.
           </p>
         </div>
@@ -80,7 +80,7 @@ export default function Success() {
           </Link>
         </div>
 
-        <div className="mt-10 p-4 rounded-2xl bg-white/5 border border-white/10 text-xs text-zinc-400 max-w-md mx-auto">
+        <div className="mt-10 p-4 rounded-2xl bg-zinc-50 border border-zinc-200 text-xs text-zinc-600 max-w-md mx-auto">
           🚚 <b>Delivery Timeline:</b> 2 to 4 business days nationwide. Fast express dispatch with verified EasyPaisa payment.
         </div>
       </div>

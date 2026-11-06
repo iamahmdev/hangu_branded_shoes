@@ -89,7 +89,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                     required
                     value={form.usernameOrEmail}
                     onChange={(e) => setForm({ ...form, usernameOrEmail: e.target.value })}
-                    placeholder="hangu_admin or admin@hangubrandedshoes.com"
+                    placeholder="hangu_admin or admin"
                     className="w-full bg-white/5 border border-white/10 rounded-2xl pl-11 pr-4 py-3 text-white text-sm outline-none focus:border-brand-gold focus:bg-white/10 transition-all font-sans placeholder:text-zinc-500"
                   />
                   <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
@@ -104,7 +104,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                     required
                     value={form.password}
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
-                    placeholder="Enter admin password"
+                    placeholder="Hangu@Admin#2026!"
                     className="w-full bg-white/5 border border-white/10 rounded-2xl pl-11 pr-11 py-3 text-white text-sm outline-none focus:border-brand-gold focus:bg-white/10 transition-all font-sans placeholder:text-zinc-500"
                   />
                   <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
@@ -117,6 +117,23 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
                 </div>
+              </div>
+
+              {/* 1-Click Auto-Fill Helper for Quick Sign In */}
+              <div className="flex items-center justify-between text-[11px] text-zinc-400 px-1">
+                <span>Official Account:</span>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setForm({
+                      usernameOrEmail: "hangu_admin",
+                      password: "Hangu@Admin#2026!",
+                    })
+                  }
+                  className="text-amber-400 hover:text-amber-300 font-medium underline transition-colors cursor-pointer"
+                >
+                  ⚡ Auto-fill credentials
+                </button>
               </div>
 
               <button

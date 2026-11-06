@@ -21,6 +21,15 @@ async function startServer(): Promise<void> {
       console.log(`⚙️ Mode: ${process.env.NODE_ENV || "development"}`);
     });
 
+    const shutdown = () => {
+      try {
+        server.close();
+      } catch {}
+      process.exit(0);
+    };
+    process.once("SIGINT", shutdown);
+    process.once("SIGTERM", shutdown);
+
     server.on("error", (err: any) => {
       if (err.code === "EADDRINUSE" || err.code === "EACCES") {
         if (port === 5000) {
@@ -28,7 +37,10 @@ async function startServer(): Promise<void> {
           console.log(`🔄 Automatically switching to alternate port 5001...`);
           listenOnPort(5001);
         } else {
-          console.error(`❌ Server error:`, err);
+          console.warn(`⚠️ Port ${port} is temporarily busy. Retrying in 1.5s...`);
+          setTimeout(() => {
+            listenOnPort(port);
+          }, 1500);
         }
       } else {
         console.error(`❌ Server error:`, err);

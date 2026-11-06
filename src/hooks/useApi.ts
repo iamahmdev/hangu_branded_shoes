@@ -21,6 +21,8 @@ export function useProducts(params?: {
   return useQuery<Product[]>({
     queryKey: ["products", params],
     queryFn: () => api.getProducts(params),
+    initialData: () => api.getFallbackProducts(params),
+    staleTime: 1000 * 60 * 2,
   });
 }
 
@@ -28,7 +30,9 @@ export function useProduct(id: number | string | undefined) {
   return useQuery<Product | undefined>({
     queryKey: ["product", id],
     queryFn: () => (id ? api.getProductById(id) : Promise.resolve(undefined)),
+    initialData: () => (id ? api.getFallbackProductById(id) : undefined),
     enabled: Boolean(id),
+    staleTime: 1000 * 60 * 2,
   });
 }
 
@@ -36,6 +40,7 @@ export function useCategories() {
   return useQuery<Array<{ name: string; count: number; img: string }>>({
     queryKey: ["categories"],
     queryFn: () => api.getCategoriesSummary(),
+    staleTime: 1000 * 60 * 5,
   });
 }
 
@@ -43,6 +48,7 @@ export function useReviews(params?: { shoeName?: string; rating?: number }) {
   return useQuery<{ success: boolean; stats?: any; data?: any[] }>({
     queryKey: ["reviews", params],
     queryFn: () => api.getReviews(params),
+    staleTime: 1000 * 60 * 2,
   });
 }
 
@@ -58,6 +64,18 @@ export function useStoreSettings() {
   return useQuery<{ success: boolean; data?: any }>({
     queryKey: ["store-settings"],
     queryFn: () => api.getStoreSettings(),
+    initialData: {
+      success: true,
+      data: {
+        storeName: "Hangu Branded Shoes",
+        whatsappNumber: "923333147691",
+        address: "Hangu tall road tahir markit hangu brand shoes 👟",
+        shopTiming: "8:00 AM to 5:00 PM",
+        freeShippingThreshold: 5000,
+        standardShippingFee: 250,
+      },
+    },
+    staleTime: 1000 * 60 * 5,
   });
 }
 

@@ -1,4 +1,5 @@
 import { Product as LocalProduct } from "../types";
+import { FALLBACK_PRODUCTS } from "../data/fallbackProducts";
 
 function getNormalizedApiBase(): string {
   const envUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
@@ -15,11 +16,22 @@ function getNormalizedApiBase(): string {
 
 let cachedApiBase: string = getNormalizedApiBase();
 
-async function requestApi(path: string, options?: RequestInit): Promise<Response> {
+async function requestApi(path: string, options?: RequestInit, timeoutMs: number = 3500): Promise<Response> {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
+  const fetchOptions: RequestInit = {
+    ...options,
+    signal: options?.signal || controller.signal,
+  };
+
   try {
-    return await fetch(`${cachedApiBase}${normalizedPath}`, options);
+    const res = await fetch(`${cachedApiBase}${normalizedPath}`, fetchOptions);
+    clearTimeout(timeoutId);
+    return res;
   } catch (primaryErr) {
+    clearTimeout(timeoutId);
     // Only attempt localhost port fallback during local development
     if (cachedApiBase.includes("localhost") || cachedApiBase.includes("127.0.0.1")) {
       const fallbackBase = cachedApiBase.includes("5000")
@@ -90,7 +102,48 @@ export interface RecentSale {
 
 export const api = {
   /**
-   * Get all products directly from MongoDB backend API
+   * Filter and retrieve cached static fallback products instantly with zero latency
+   */
+  getFallbackProducts(params?: {
+    cat?: string;
+    search?: string;
+    size?: string;
+    sort?: string;
+    inStock?: boolean;
+  }): LocalProduct[] {
+    let list = [...FALLBACK_PRODUCTS];
+    if (params?.cat && params.cat !== "All") {
+      list = list.filter((p) => p.cat.toLowerCase() === params.cat!.toLowerCase());
+    }
+    if (params?.search) {
+      const q = params.search.toLowerCase();
+      list = list.filter(
+        (p) =>
+          p.name.toLowerCase().includes(q) ||
+          p.cat.toLowerCase().includes(q) ||
+          (p.tag && p.tag.toLowerCase().includes(q))
+      );
+    }
+    if (params?.sort === "price-low") {
+      list.sort((a, b) => a.price - b.price);
+    } else if (params?.sort === "price-high") {
+      list.sort((a, b) => b.price - a.price);
+    } else if (params?.sort === "newest") {
+      list.sort((a, b) => b.id - a.id);
+    }
+    return list;
+  },
+
+  /**
+   * Retrieve single fallback product by numeric or string ID instantly
+   */
+  getFallbackProductById(id: number | string): LocalProduct | undefined {
+    const numId = Number(id);
+    return FALLBACK_PRODUCTS.find((p) => p.id === numId);
+  },
+
+  /**
+   * Get all products directly from MongoDB backend API with instant zero-latency fallback
    */
   async getProducts(params?: {
     cat?: string;
@@ -99,38 +152,66 @@ export const api = {
     sort?: string;
     inStock?: boolean;
   }): Promise<LocalProduct[]> {
-    const qs = new URLSearchParams();
-    if (params?.cat && params.cat !== "All") qs.append("cat", params.cat);
-    if (params?.search) qs.append("search", params.search);
-    if (params?.size && params.size !== "All") qs.append("size", params.size);
-    if (params?.sort) qs.append("sort", params.sort);
-    if (params?.inStock) qs.append("inStock", "true");
+    try {
+      const qs = new URLSearchParams();
+      if (params?.cat && params.cat !== "All") qs.append("cat", params.cat);
+      if (params?.search) qs.append("search", params.search);
+      if (params?.size && params.size !== "All") qs.append("size", params.size);
+      if (params?.sort) qs.append("sort", params.sort);
+      if (params?.inStock) qs.append("inStock", "true");
 
-    const path = `/products${qs.toString() ? `?${qs.toString()}` : ""}`;
-    const res = await requestApi(path, { headers: { "Content-Type": "application/json" } });
-    if (!res.ok) throw new Error("Failed to load products from backend");
-    const json = await res.json();
-    return json.data || [];
+      const path = `/products${qs.toString() ? `?${qs.toString()}` : ""}`;
+      const res = await requestApi(path, { headers: { "Content-Type": "application/json" } }, 3500);
+      if (res.ok) {
+        const json = await res.json();
+        if (Array.isArray(json.data) && json.data.length > 0) {
+          return json.data;
+        }
+      }
+    } catch {
+      // In production (Vercel) if backend cold-starts or is unreachable, return instant fallback
+    }
+    return this.getFallbackProducts(params);
   },
 
   /**
-   * Get product by numeric ID or slug directly from backend API
+   * Get product by numeric ID or slug directly from backend API with fallback
    */
   async getProductById(id: number | string): Promise<LocalProduct | undefined> {
-    const res = await requestApi(`/products/${id}`);
-    if (!res.ok) throw new Error("Product not found");
-    const json = await res.json();
-    return json.data;
+    try {
+      const res = await requestApi(`/products/${id}`, undefined, 3500);
+      if (res.ok) {
+        const json = await res.json();
+        if (json.data) return json.data;
+      }
+    } catch {
+      // Fallback
+    }
+    return this.getFallbackProductById(id);
   },
 
   /**
-   * Get category summary counts directly from backend
+   * Get category summary counts directly from backend with fallback
    */
   async getCategoriesSummary(): Promise<Array<{ name: string; count: number; img: string }>> {
-    const res = await requestApi(`/products/categories`);
-    if (!res.ok) throw new Error("Failed to load categories");
-    const json = await res.json();
-    return json.data || [];
+    try {
+      const res = await requestApi(`/products/categories`, undefined, 3500);
+      if (res.ok) {
+        const json = await res.json();
+        if (Array.isArray(json.data) && json.data.length > 0) return json.data;
+      }
+    } catch {
+      // Fallback
+    }
+    const cats = ["Sneakers", "Formal", "Loafers", "Comfort", "Boots"];
+    return cats.map((name) => {
+      const prods = FALLBACK_PRODUCTS.filter((p) => p.cat === name);
+      return {
+        name,
+        count: prods.length,
+        img: prods[0]?.img || "/images/shoes/shoe_1.jpg",
+      };
+    });
   },
 
   /**
@@ -219,12 +300,28 @@ export const api = {
   },
 
   /**
-   * Fetch store public settings
+   * Fetch store public settings with instant resilient fallback
    */
   async getStoreSettings(): Promise<{ success: boolean; data?: any }> {
-    const res = await requestApi(`/settings`);
-    if (!res.ok) throw new Error("Failed to load settings");
-    return await res.json();
+    try {
+      const res = await requestApi(`/settings`, undefined, 3500);
+      if (res.ok) {
+        return await res.json();
+      }
+    } catch {
+      // Fallback
+    }
+    return {
+      success: true,
+      data: {
+        storeName: "Hangu Branded Shoes",
+        whatsappNumber: "923333147691",
+        address: "Hangu tall road tahir markit hangu brand shoes 👟",
+        shopTiming: "8:00 AM to 5:00 PM",
+        freeShippingThreshold: 5000,
+        standardShippingFee: 250,
+      },
+    };
   },
 
   // ----------------------------------------------------

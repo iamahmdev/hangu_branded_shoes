@@ -5,13 +5,20 @@ export interface Product {
   price: number;
   old: number;
   img: string;
+  images?: string[];
   tag?: string;
   desc?: string;
   sizes?: string[];
   inStock?: boolean;
+  stock?: number;
   stockCount?: number;
   brand?: string;
+  rating?: number;
+  reviews?: number;
   featured?: boolean;
+  isFeatured?: boolean;
+  isSale?: boolean;
+  isBestseller?: boolean;
   isActive?: boolean;
 }
 

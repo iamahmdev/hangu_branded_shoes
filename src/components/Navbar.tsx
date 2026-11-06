@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { useCart } from "../context/CartContext";
 import { WA, wa } from "../data/config";
 import { WhatsAppIcon } from "./WhatsAppButton";
-import { Search, ShoppingBag, Menu, X, ArrowUpRight } from "lucide-react";
+import { Search, ShoppingBag, Menu, X, ArrowUpRight, User } from "lucide-react";
 
 interface NavLink {
   href: string;
@@ -97,6 +97,16 @@ export default function Navbar() {
               <Search size={18} />
             </button>
 
+            {/* Admin Portal Quick Access */}
+            <Link
+              href="/admin"
+              className="p-2 text-zinc-600 hover:text-emerald-700 transition-colors hidden sm:flex items-center"
+              title="Admin Portal"
+              aria-label="Admin Portal"
+            >
+              <User size={19} />
+            </Link>
+
             {/* Quick WhatsApp Concierge */}
             <a
               href={wa("Assalam-o-Alaikum! I have an inquiry about Hangu Branded Shoes.")}
@@ -146,6 +156,20 @@ export default function Navbar() {
                 <ArrowUpRight size={14} className="text-zinc-400" />
               </Link>
             ))}
+
+            {/* Mobile Admin Portal Shortcut */}
+            <Link
+              href="/admin"
+              className="text-sm font-semibold tracking-wider uppercase text-emerald-700 hover:text-emerald-900 py-1.5 border-b border-zinc-100 flex items-center justify-between"
+            >
+              <span className="flex items-center gap-2">
+                <User size={16} />
+                <span>Admin Portal</span>
+              </span>
+              <span className="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-bold">
+                LOGIN
+              </span>
+            </Link>
 
             <div className="pt-2">
               <a

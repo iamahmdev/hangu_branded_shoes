@@ -45,11 +45,12 @@ export default function AdminHeader({
         <Link
           href="/"
           target="_blank"
-          className="p-2.5 px-3.5 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-300 hover:text-white text-xs flex items-center gap-1.5 border border-white/10 transition-colors"
+          rel="noopener noreferrer"
+          className="p-2.5 px-4 rounded-xl bg-emerald-500/15 hover:bg-emerald-500/25 text-emerald-300 hover:text-emerald-200 text-xs font-semibold flex items-center gap-2 border border-emerald-500/30 shadow-xs transition-colors"
           title="Open Customer Storefront in New Tab"
         >
           <ExternalLink size={14} />
-          <span className="hidden sm:inline">Storefront</span>
+          <span>View Storefront</span>
         </Link>
 
         <button

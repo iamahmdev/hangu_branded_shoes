@@ -265,9 +265,6 @@ export default function Footer() {
             <Link href="/size-guide">Size Guide</Link>
             <Link href="/reviews">Reviews</Link>
             <Link href="/contact">Contact</Link>
-            <Link href="/admin" className="opacity-60 hover:opacity-100">
-              Admin Portal
-            </Link>
           </div>
         </div>
       </div>

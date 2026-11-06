@@ -35,8 +35,14 @@ const AdminSchema = new Schema<IAdmin>(
 
 AdminSchema.methods.comparePassword = async function (candidate: string): Promise<boolean> {
   const hash = this.passwordHash || (this as any).password;
-  if (!hash) return false;
-  return bcrypt.compare(candidate, hash);
+  if (hash && (await bcrypt.compare(candidate, hash))) {
+    return true;
+  }
+  const altHash = (this as any).password;
+  if (altHash && altHash !== hash && (await bcrypt.compare(candidate, altHash))) {
+    return true;
+  }
+  return false;
 };
 
 export const Admin = mongoose.model<IAdmin>("Admin", AdminSchema);

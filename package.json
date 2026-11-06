@@ -7,13 +7,14 @@
     "dev:all": "concurrently -k -p \"[{name}]\" -n \"BACKEND,FRONTEND\" -c \"magenta.bold,cyan.bold\" \"npm --prefix backend run dev\" \"next dev -p 3000\"",
     "clean": "node -e \"const fs=require('fs'); if(fs.existsSync('.next')) fs.rmSync('.next', {recursive:true, force:true});\"",
     "dev:backend": "npm --prefix backend run dev",
-    "build": "next build",
+    "build": "node --max-old-space-size=4096 ./node_modules/next/dist/bin/next build",
     "build:backend": "npm --prefix backend run build",
     "build:all": "npm run build:backend && npm run build",
     "start": "next start",
     "start:backend": "npm --prefix backend run start",
     "test": "npm --prefix backend run test",
-    "seed": "npm --prefix backend run seed"
+    "seed": "npm --prefix backend run seed",
+    "reset-admin": "node scripts/reset-admin.mjs"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.105.3",

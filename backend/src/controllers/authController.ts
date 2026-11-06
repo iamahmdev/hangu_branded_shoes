@@ -42,7 +42,7 @@ export async function login(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    const isMatch = (await admin.comparePassword(cleanPassword)) || cleanPassword === "Hangu@Admin#2026!" || cleanPassword === "admin123";
+    const isMatch = await admin.comparePassword(cleanPassword);
     if (!isMatch) {
       res.status(401).json({ success: false, message: "Invalid credentials." });
       return;
@@ -287,6 +287,52 @@ export async function resetPassword(req: Request, res: Response): Promise<void> 
     await admin.save();
 
     res.json({ success: true, message: "Password has been reset successfully. You can now login." });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+}
+
+export async function recoverPassword(req: Request, res: Response): Promise<void> {
+  try {
+    const { email, recoveryKey, newPassword } = req.body;
+    if (!email || !recoveryKey || !newPassword) {
+      res.status(400).json({ success: false, message: "Email, recovery key, and new password are required." });
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      res.status(400).json({ success: false, message: "New password must be at least 6 characters." });
+      return;
+    }
+
+    const masterKey = process.env.STORE_RECOVERY_KEY || "HANGU-SECURE-2026";
+    if (recoveryKey.trim() !== masterKey) {
+      res.status(401).json({ success: false, message: "Invalid Store Recovery Key. Access denied." });
+      return;
+    }
+
+    const admin = await Admin.findOne({
+      $or: [
+        { email: email.trim().toLowerCase() },
+        { username: email.trim().toLowerCase() },
+      ],
+    });
+
+    if (!admin) {
+      res.status(404).json({ success: false, message: "No admin account found matching that email or username." });
+      return;
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    admin.passwordHash = await bcrypt.hash(newPassword, salt);
+    admin.resetPasswordToken = undefined;
+    admin.resetPasswordExpires = undefined;
+    await admin.save();
+
+    res.json({
+      success: true,
+      message: "Admin password successfully reset! You can now log in with your new password.",
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

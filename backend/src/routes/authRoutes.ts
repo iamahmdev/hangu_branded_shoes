@@ -7,6 +7,7 @@ import {
   changePassword,
   forgotPassword,
   resetPassword,
+  recoverPassword,
   getUsers,
   updateUserRole,
 } from "../controllers/authController.js";
@@ -23,6 +24,7 @@ router.put("/profile", authenticate, updateProfile);
 router.put("/change-password", authenticate, changePassword);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
+router.post("/recover-password", authLimiter, recoverPassword);
 
 // User Management
 router.get("/users", authenticate, authorizeRoles("admin"), getUsers);

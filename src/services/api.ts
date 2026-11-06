@@ -239,6 +239,15 @@ export const api = {
     return await res.json();
   },
 
+  async adminRecoverPassword(payload: { email: string; recoveryKey: string; newPassword: string }): Promise<{ success: boolean; message?: string }> {
+    const res = await requestApi(`/admin/recover-password`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    return await res.json();
+  },
+
   async adminChangePassword(token: string, payload: { currentPassword: string; newPassword: string }): Promise<{ success: boolean; message?: string }> {
     const res = await requestApi(`/admin/change-password`, {
       method: "PUT",

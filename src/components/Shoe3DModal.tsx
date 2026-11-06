@@ -135,3 +135,4 @@ export default function Shoe3DModal({ product, isOpen, onClose }: Shoe3DModalPro
     </div>
   );
 }
+

@@ -2024,22 +2024,37 @@ export const SEED_PRODUCTS = [
 ];
 
 export async function seedDatabase(): Promise<void> {
-  // 1. Seed Admin
-  const existingAdmin = await Admin.findOne({ username: "admin" });
-  if (!existingAdmin) {
-    const defaultPassword = process.env.ADMIN_DEFAULT_PASSWORD || "admin123";
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(defaultPassword, salt);
+  // 1. Seed / Update Admin Account with Strong Production Credentials
+  const targetUsername = (process.env.ADMIN_USERNAME || "hangu_admin").toLowerCase();
+  const targetEmail = (process.env.ADMIN_EMAIL || "admin@hangubrandedshoes.com").toLowerCase();
+  const rawPassword = process.env.ADMIN_DEFAULT_PASSWORD || "Hangu@Admin#2026!";
+
+  const salt = await bcrypt.genSalt(10);
+  const passwordHash = await bcrypt.hash(rawPassword, salt);
+
+  const existingAdmin = await Admin.findOne({
+    $or: [{ username: targetUsername }, { username: "admin" }, { email: targetEmail }],
+  });
+
+  if (existingAdmin) {
+    existingAdmin.username = targetUsername;
+    existingAdmin.email = targetEmail;
+    existingAdmin.passwordHash = passwordHash;
+    existingAdmin.name = "Hangu Store Owner";
+    existingAdmin.isActive = true;
+    await existingAdmin.save();
+    console.log(`👤 Official Admin account verified & updated: ${targetUsername} (${targetEmail})`);
+  } else {
     await Admin.create({
-      username: "admin",
-      email: "admin@hangubrandedshoes.com",
+      username: targetUsername,
+      email: targetEmail,
       passwordHash,
-      name: "Admin",
+      name: "Hangu Store Owner",
       role: "admin",
       permissions: ["*"],
       isActive: true,
     });
-    console.log("👤 Default Admin account verified/created.");
+    console.log(`👤 Official Admin account created: ${targetUsername} (${targetEmail})`);
   }
 
   // 2. Seed Products

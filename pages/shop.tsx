@@ -146,16 +146,16 @@ export default function Shop() {
 
           {/* Product Results Grid */}
           {isLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <div
                   key={i}
-                  className="aspect-square bg-zinc-200/60 rounded-2xl animate-pulse"
+                  className="aspect-[3/4] bg-zinc-200/60 rounded-2xl sm:rounded-3xl animate-pulse"
                 />
               ))}
             </div>
           ) : products && products.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {products.map((p) => (
                 <ProductCard key={p.id} p={p} />
               ))}

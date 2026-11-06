@@ -8,6 +8,7 @@ import { useProduct } from "../../src/hooks/useApi";
 import { WhatsAppIcon } from "../../src/components/WhatsAppButton";
 import { PackageCheck, RotateCcw, ShieldCheck, Zap, ShoppingBag, ArrowRight } from "lucide-react";
 import { resolveProductImage } from "../../src/utils/image";
+import Shoe3DViewer from "../../src/components/Shoe3DViewer";
 
 export default function Product() {
   const { query, push } = useRouter();
@@ -16,6 +17,7 @@ export default function Product() {
   const [q, setQ] = useState<number>(1);
   const [err, setErr] = useState<boolean>(false);
   const [addedToast, setAddedToast] = useState<boolean>(false);
+  const [viewMode, setViewMode] = useState<"3d" | "photo">("3d");
 
   // TanStack Query hook
   const { data: p, isLoading, isError } = useProduct(query.id as string);
@@ -91,23 +93,71 @@ export default function Product() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            {/* Left: Product Image & Badges (ETQ Profile Box) */}
+            {/* Left: Product Image & 3D Interactive Showcase */}
             <div className="lg:col-span-6 flex flex-col gap-4">
-              <div className="relative aspect-square w-full rounded-3xl overflow-hidden bg-[#f4f4f6] border border-zinc-200/80 flex items-center justify-center p-8 group">
-                <img
-                  src={resolveProductImage(p.img)}
-                  alt={p.name}
-                  className="max-h-full max-w-full object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-500 ease-out"
-                />
+              {/* Mode Switcher Tabs */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 p-1 bg-[#ebebee] rounded-full border border-zinc-200">
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("3d")}
+                    className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                      viewMode === "3d"
+                        ? "bg-zinc-950 text-white shadow-xs"
+                        : "text-zinc-600 hover:text-zinc-950"
+                    }`}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    <span>3D Rotate 360°</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setViewMode("photo")}
+                    className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                      viewMode === "photo"
+                        ? "bg-zinc-950 text-white shadow-xs"
+                        : "text-zinc-600 hover:text-zinc-950"
+                    }`}
+                  >
+                    <span>📷 HD Photo</span>
+                  </button>
+                </div>
 
+                <span className="text-[11px] font-semibold text-zinc-400">
+                  {viewMode === "3d" ? "🖱️ Drag to Rotate" : "🔍 Full Resolution"}
+                </span>
+              </div>
+
+              {/* Showcase Container (Portrait 3:4 for Max Visibility, No Cropping) */}
+              <div className="relative aspect-[3/4] w-full rounded-3xl overflow-hidden bg-[#f4f4f6] border border-zinc-200/80 shadow-xs flex items-center justify-center">
+                {viewMode === "3d" ? (
+                  <Shoe3DViewer
+                    img={p.img}
+                    name={p.name}
+                    className="w-full h-full"
+                    initialAutoRotate={false}
+                    allowZoom={true}
+                    showControls={true}
+                  />
+                ) : (
+                  <div className="relative w-full h-full flex items-center justify-center p-4">
+                    <img
+                      src={resolveProductImage(p.img)}
+                      alt={p.name}
+                      className="w-full h-full object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.15)]"
+                    />
+                  </div>
+                )}
+
+                {/* Badges */}
                 {p.tag && (
-                  <span className="absolute top-5 left-5 bg-zinc-950 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-wider">
+                  <span className="absolute top-4 left-4 z-10 bg-zinc-950 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-wider shadow-md">
                     {p.tag}
                   </span>
                 )}
 
                 {savings > 0 && (
-                  <span className="absolute top-5 right-5 bg-emerald-50 text-emerald-800 border border-emerald-200 font-bold text-xs px-3 py-1 rounded-md shadow-xs">
+                  <span className="absolute top-4 right-4 z-10 bg-emerald-600 text-white font-bold text-xs px-3 py-1 rounded-md shadow-md">
                     Save {discount}%
                   </span>
                 )}

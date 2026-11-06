@@ -105,13 +105,13 @@ export default function Home() {
                 </div>
               )}
 
-              {/* Footwear Grid (matching Image 1's 2-column or 3-column light-grey boxes) */}
-              <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 gap-5">
+              {/* Footwear Grid */}
+              <div className="grid grid-cols-2 gap-4 sm:gap-5">
                 {isLoading ? (
                   [1, 2, 3, 4].map((i) => (
                     <div
                       key={i}
-                      className="aspect-square bg-zinc-200/60 rounded-2xl animate-pulse"
+                      className="aspect-[3/4] bg-zinc-200/60 rounded-2xl animate-pulse"
                     />
                   ))
                 ) : (

@@ -31,6 +31,9 @@ backend/.env
 # vercel
 .vercel
 
+# local backups (database & recovery snapshots - never push to public git)
+backups/
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

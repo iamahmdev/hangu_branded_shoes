@@ -2,7 +2,7 @@ import { useState, useRef, MouseEvent } from "react";
 import Link from "next/link";
 import { useCart } from "../context/CartContext";
 import { Product } from "../types";
-import { Zap, Eye } from "lucide-react";
+import { Zap, Eye, ArrowRight } from "lucide-react";
 import { resolveProductImage } from "../utils/image";
 import Shoe3DModal from "./Shoe3DModal";
 
@@ -44,31 +44,32 @@ export default function ProductCard({ p }: ProductCardProps) {
         className="flex flex-col group transition-all duration-300"
         style={{ perspective: 1000 }}
       >
-        {/* 1. Footwear Profile Showcase Container (Portrait 3:4 for Max Shoe Size & No Cropping) */}
+        {/* 1. Footwear Profile Showcase Container (Square for Max Shoe Size & Zero Cropping) */}
         <div
           ref={cardRef}
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={handleMouseLeave}
-          className="relative aspect-[3/4] w-full bg-[#f4f4f6] group-hover:bg-[#ebebee] rounded-2xl sm:rounded-3xl overflow-hidden flex items-center justify-center p-2 sm:p-3 transition-all duration-300 border border-zinc-200/80 shadow-xs group-hover:shadow-lg"
+          className="relative aspect-square w-full bg-[#f4f4f6] group-hover:bg-[#ebebee] rounded-2xl sm:rounded-3xl overflow-hidden flex items-center justify-center p-2.5 sm:p-4 transition-all duration-300 border border-zinc-200/80 shadow-xs group-hover:shadow-md"
           style={{
             transform: isHovered
-              ? `rotateX(${cardTilt.x}deg) rotateY(${cardTilt.y}deg) translateY(-4px)`
+              ? `rotateX(${cardTilt.x}deg) rotateY(${cardTilt.y}deg) translateY(-3px)`
               : "none",
             transformStyle: "preserve-3d",
             transition: isHovered ? "transform 0.1s ease-out" : "transform 0.4s ease-out",
           }}
         >
-          {/* Main Shoe Image Container */}
-          <div
-            onClick={() => setIs3DModalOpen(true)}
-            className="w-full h-full flex items-center justify-center cursor-pointer relative"
+          {/* Main Shoe Image Link to PDP */}
+          <Link
+            href={"/product/" + p.id}
+            className="w-full h-full flex items-center justify-center relative p-1 sm:p-2 cursor-pointer"
+            title={`View ${p.name}`}
           >
             <img
               src={resolveProductImage(p.img)}
               alt={p.name}
               loading="lazy"
-              className="w-full h-full object-contain transition-transform duration-500 ease-out group-hover:scale-108 drop-shadow-[0_12px_20px_rgba(0,0,0,0.12)]"
+              className="w-full h-full object-contain transition-transform duration-300 ease-out group-hover:scale-105 drop-shadow-[0_10px_16px_rgba(0,0,0,0.1)]"
             />
 
             {/* Specular Glare light on card hover */}
@@ -80,52 +81,65 @@ export default function ProductCard({ p }: ProductCardProps) {
                 }}
               />
             )}
-          </div>
+          </Link>
 
           {/* 3D Rotate Pill Button (Top Right) */}
           <button
             type="button"
             onClick={(e) => {
+              e.preventDefault();
               e.stopPropagation();
               setIs3DModalOpen(true);
             }}
-            className="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-950/85 hover:bg-zinc-950 text-white text-[10px] font-bold tracking-wider uppercase border border-white/20 shadow-md backdrop-blur-md transition-all hover:scale-105 active:scale-95 group/btn"
+            className="absolute top-2 right-2 z-10 inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-zinc-950/85 hover:bg-zinc-950 text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase border border-white/20 shadow-md backdrop-blur-md transition-all hover:scale-105 active:scale-95 shrink-0"
             title="Open 3D Interactive Rotate View"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 group-hover/btn:animate-ping" />
-            <span>3D View</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span className="hidden sm:inline">3D View</span>
+            <span className="sm:hidden font-mono">3D</span>
           </button>
 
           {/* Tag Badges (Top Left) */}
           {p.tag && (
-            <span className="absolute top-2.5 left-2.5 z-10 bg-white/95 backdrop-blur-sm text-zinc-900 text-[10px] font-bold px-2.5 py-0.5 rounded-md uppercase tracking-wider border border-zinc-200 shadow-xs">
+            <span className="absolute top-2 left-2 z-10 bg-white/95 backdrop-blur-sm text-zinc-900 text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider border border-zinc-200 shadow-xs max-w-[55%] truncate pointer-events-none">
               {p.tag}
             </span>
           )}
 
           {/* Discount Tag (Bottom Left) */}
           {savings > 0 && (
-            <span className="absolute bottom-2.5 left-2.5 z-10 bg-emerald-600/90 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs">
+            <span className="absolute bottom-2 left-2 z-10 bg-emerald-600/95 backdrop-blur-sm text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs pointer-events-none">
               Save Rs. {savings.toLocaleString()}
             </span>
           )}
+        </div>
 
-          {/* Minimal Hover Overlay Actions (Center-Bottom) */}
-          <div className="absolute inset-0 bg-black/15 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-center justify-center gap-2 pointer-events-none group-hover:pointer-events-auto">
-            {/* 3D Spin Button */}
-            <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIs3DModalOpen(true);
-              }}
-              className="p-3 rounded-full bg-white text-zinc-950 hover:bg-zinc-950 hover:text-white transition-all shadow-xl hover:scale-110 flex items-center gap-1.5 text-xs font-bold"
-              title="Rotate in 3D"
-            >
-              <span>🔄 3D Rotate</span>
-            </button>
+        {/* 2. Footwear Typography & Price */}
+        <div className="pt-2.5 pb-1 flex flex-col">
+          <div className="flex items-center justify-between">
+            <span className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-zinc-500 truncate max-w-[65%]">
+              {p.cat}
+            </span>
+            <span className="text-[10px] font-semibold text-emerald-600 shrink-0">✓ In Stock</span>
+          </div>
 
-            {/* Quick WhatsApp Order */}
+          <h3 className="font-semibold text-zinc-950 text-xs sm:text-sm mt-0.5 hover:text-emerald-700 transition-colors line-clamp-2 min-h-[2.25rem] leading-snug">
+            <Link href={"/product/" + p.id}>{p.name}</Link>
+          </h3>
+
+          <div className="flex items-baseline gap-2 mt-1">
+            <span className="font-bold text-zinc-950 text-xs sm:text-sm font-mono">
+              Rs. {p.price.toLocaleString()}
+            </span>
+            {p.old && p.old > p.price && (
+              <s className="text-zinc-500 text-[11px] sm:text-xs font-normal font-mono">
+                Rs. {p.old.toLocaleString()}
+              </s>
+            )}
+          </div>
+
+          {/* Direct Mobile & Desktop Action Bar */}
+          <div className="mt-2.5 flex items-center gap-1.5">
             <button
               type="button"
               onClick={(e) => {
@@ -133,45 +147,19 @@ export default function ProductCard({ p }: ProductCardProps) {
                 e.stopPropagation();
                 openQuickOrder(p);
               }}
-              className="p-3 rounded-full bg-zinc-900 text-white hover:bg-emerald-600 transition-all shadow-xl hover:scale-110"
-              title="Quick Order / WhatsApp Checkout"
+              className="flex-1 py-1.5 sm:py-2 px-2.5 sm:px-3 rounded-xl bg-zinc-950 hover:bg-zinc-800 active:bg-zinc-900 text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1 active:scale-98"
             >
-              <Zap size={16} />
+              <Zap size={13} className="text-amber-400 fill-amber-400 shrink-0" />
+              <span>Quick Order</span>
             </button>
-
-            {/* View Product Details */}
             <Link
               href={"/product/" + p.id}
-              className="p-3 rounded-full bg-white text-zinc-900 hover:bg-zinc-950 hover:text-white transition-all shadow-xl hover:scale-110"
-              title="Product Details"
+              className="p-1.5 sm:p-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-700 transition-colors shrink-0 flex items-center justify-center"
+              title="View Product Details"
+              aria-label={`View details for ${p.name}`}
             >
-              <Eye size={16} />
+              <ArrowRight size={15} />
             </Link>
-          </div>
-        </div>
-
-        {/* 2. Footwear Typography & Price */}
-        <div className="pt-3 pb-1 flex flex-col">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
-              {p.cat}
-            </span>
-            <span className="text-[10px] font-semibold text-emerald-600">✓ In Stock</span>
-          </div>
-
-          <h3 className="font-semibold text-zinc-950 text-sm mt-0.5 hover:text-emerald-700 transition-colors line-clamp-1">
-            <Link href={"/product/" + p.id}>{p.name}</Link>
-          </h3>
-
-          <div className="flex items-baseline gap-2 mt-1">
-            <span className="font-bold text-zinc-950 text-sm font-mono">
-              Rs. {p.price.toLocaleString()}
-            </span>
-            {p.old && p.old > p.price && (
-              <s className="text-zinc-500 text-xs font-normal font-mono">
-                Rs. {p.old.toLocaleString()}
-              </s>
-            )}
           </div>
         </div>
       </div>

@@ -29,23 +29,23 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             {/* Left Editorial Visual (matching Image 1's left model shot) */}
             <div className="lg:col-span-5 flex flex-col gap-4">
-              <div className="relative aspect-[3/4] w-full rounded-3xl overflow-hidden bg-[#ebebeb] border border-zinc-200/80 shadow-xs group">
+              <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-[3/4] w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-[#ebebeb] border border-zinc-200/80 shadow-xs group">
                 <img
                   src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&q=80&w=1200"
                   alt="Hangu Luxury Footwear Showcase"
                   className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-700"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-6 md:p-8 text-white">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-6 md:p-8 text-white">
                   <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-zinc-300 mb-1">
                     SEASON ARCHIVE 2026
                   </span>
-                  <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight">
                     Pure Form. Unmatched Comfort.
                   </h2>
-                  <p className="text-xs text-zinc-300 mt-1 max-w-sm">
+                  <p className="text-xs text-zinc-300 mt-1 max-w-sm hidden sm:block">
                     Hand-finished soles, premium genuine leathers, and tailored silhouettes for everyday luxury.
                   </p>
-                  <div className="mt-4 flex items-center gap-3">
+                  <div className="mt-3 sm:mt-4 flex items-center gap-3">
                     <Link
                       href="/shop"
                       className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-zinc-950 text-xs font-bold hover:bg-zinc-100 transition-colors"
@@ -106,12 +106,12 @@ export default function Home() {
               )}
 
               {/* Footwear Grid */}
-              <div className="grid grid-cols-2 gap-4 sm:gap-5">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-5">
                 {isLoading ? (
                   [1, 2, 3, 4].map((i) => (
                     <div
                       key={i}
-                      className="aspect-[3/4] bg-zinc-200/60 rounded-2xl animate-pulse"
+                      className="aspect-square bg-zinc-200/60 rounded-2xl animate-pulse"
                     />
                   ))
                 ) : (
@@ -148,7 +148,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5 lg:gap-6">
             {(products || []).slice(0, 8).map((p) => (
               <ProductCard key={p.id} p={p} />
             ))}

@@ -70,11 +70,11 @@ export default function Shoe3DModal({ product, isOpen, onClose }: Shoe3DModalPro
         </div>
 
         {/* Modal Body: 3D Stage */}
-        <div className="relative flex-1 min-h-[380px] sm:min-h-[460px] bg-[#f2f2f4] flex flex-col justify-center">
+        <div className="relative flex-1 min-h-[280px] sm:min-h-[460px] bg-[#f2f2f4] flex flex-col justify-center">
           <Shoe3DViewer
             img={product.img}
             name={product.name}
-            className="w-full h-full min-h-[380px] sm:min-h-[460px]"
+            className="w-full h-full min-h-[280px] sm:min-h-[460px]"
             initialAutoRotate={true}
             allowZoom={true}
             showControls={true}
@@ -82,7 +82,7 @@ export default function Shoe3DModal({ product, isOpen, onClose }: Shoe3DModalPro
         </div>
 
         {/* Modal Footer: Product Info & Direct Buy Actions */}
-        <div className="px-5 py-4 bg-white border-t border-zinc-200 flex flex-wrap items-center justify-between gap-4">
+        <div className="px-4 sm:px-5 py-3 sm:py-4 bg-white border-t border-zinc-200 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-baseline gap-2.5">
             <span className="text-xl sm:text-2xl font-extrabold text-zinc-950 font-mono">
               Rs. {product.price.toLocaleString()}

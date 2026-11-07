@@ -73,9 +73,9 @@ export default function Shop() {
           </div>
 
           {/* Search & Filter Toolbar (ETQ Minimalist Style) */}
-          <div className="bg-white p-4 rounded-2xl border border-zinc-200/80 shadow-xs flex flex-wrap items-center justify-between gap-4 mb-6">
+          <div className="bg-white p-3 sm:p-4 rounded-2xl border border-zinc-200/80 shadow-xs flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4 mb-6">
             {/* Search Input */}
-            <div className="flex items-center gap-2.5 flex-1 min-w-[260px] bg-zinc-50 hover:bg-white focus-within:bg-white rounded-xl px-4 py-2.5 border border-zinc-300 focus-within:border-zinc-950 focus-within:ring-2 focus-within:ring-zinc-950/10 transition-all shadow-xs">
+            <div className="flex items-center gap-2.5 w-full sm:flex-1 bg-zinc-50 hover:bg-white focus-within:bg-white rounded-xl px-3.5 py-2 sm:px-4 sm:py-2.5 border border-zinc-300 focus-within:border-zinc-950 focus-within:ring-2 focus-within:ring-zinc-950/10 transition-all shadow-xs">
               <Search size={16} className="text-zinc-500 shrink-0" />
               <input
                 type="text"
@@ -96,14 +96,14 @@ export default function Shop() {
             </div>
 
             {/* Sort & Quick Filter Controls */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between sm:justify-end gap-3 shrink-0">
               <div className="flex items-center gap-2 text-zinc-700 text-xs font-semibold">
-                <SlidersHorizontal size={14} className="text-zinc-600" />
+                <SlidersHorizontal size={14} className="text-zinc-600 shrink-0" />
                 <select
                   id="shop-sort"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-zinc-50 hover:bg-white border border-zinc-300 text-zinc-900 rounded-xl px-3.5 py-2 text-xs font-semibold outline-none cursor-pointer focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 transition-all shadow-xs"
+                  className="bg-zinc-50 hover:bg-white border border-zinc-300 text-zinc-900 rounded-xl px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs font-semibold outline-none cursor-pointer focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 transition-all shadow-xs"
                 >
                   <option value="featured">Featured / Default</option>
                   <option value="price-low">Price: Low to High</option>
@@ -117,7 +117,7 @@ export default function Shop() {
                 <button
                   type="button"
                   onClick={handleResetFilters}
-                  className="text-xs text-zinc-600 hover:text-zinc-950 font-semibold underline flex items-center gap-1"
+                  className="text-xs text-zinc-600 hover:text-zinc-950 font-semibold underline flex items-center gap-1 shrink-0"
                 >
                   <RotateCcw size={12} />
                   <span>Reset</span>
@@ -146,16 +146,16 @@ export default function Shop() {
 
           {/* Product Results Grid */}
           {isLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5 lg:gap-6">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <div
                   key={i}
-                  className="aspect-[3/4] bg-zinc-200/60 rounded-2xl sm:rounded-3xl animate-pulse"
+                  className="aspect-square bg-zinc-200/60 rounded-2xl sm:rounded-3xl animate-pulse"
                 />
               ))}
             </div>
           ) : products && products.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5 lg:gap-6">
               {products.map((p) => (
                 <ProductCard key={p.id} p={p} />
               ))}

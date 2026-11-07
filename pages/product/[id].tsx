@@ -128,8 +128,8 @@ export default function Product() {
                 </span>
               </div>
 
-              {/* Showcase Container (Portrait 3:4 for Max Visibility, No Cropping) */}
-              <div className="relative aspect-[3/4] w-full rounded-3xl overflow-hidden bg-[#f4f4f6] border border-zinc-200/80 shadow-xs flex items-center justify-center">
+              {/* Showcase Container (Responsive Aspect for Max Visibility, No Cropping) */}
+              <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-[4/3] w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-[#f4f4f6] border border-zinc-200/80 shadow-xs flex items-center justify-center p-2 sm:p-4">
                 {viewMode === "3d" ? (
                   <Shoe3DViewer
                     img={p.img}
@@ -140,7 +140,7 @@ export default function Product() {
                     showControls={true}
                   />
                 ) : (
-                  <div className="relative w-full h-full flex items-center justify-center p-4">
+                  <div className="relative w-full h-full flex items-center justify-center p-2 sm:p-4">
                     <img
                       src={resolveProductImage(p.img)}
                       alt={p.name}
@@ -151,13 +151,13 @@ export default function Product() {
 
                 {/* Badges */}
                 {p.tag && (
-                  <span className="absolute top-4 left-4 z-10 bg-zinc-950 text-white text-[11px] font-bold px-3 py-1 rounded-md uppercase tracking-wider shadow-md">
+                  <span className="absolute top-3 left-3 sm:top-4 sm:left-4 z-10 bg-zinc-950 text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-md uppercase tracking-wider shadow-md">
                     {p.tag}
                   </span>
                 )}
 
                 {savings > 0 && (
-                  <span className="absolute top-4 right-4 z-10 bg-emerald-600 text-white font-bold text-xs px-3 py-1 rounded-md shadow-md">
+                  <span className="absolute top-3 right-3 sm:top-4 sm:right-4 z-10 bg-emerald-600 text-white font-bold text-[10px] sm:text-xs px-2.5 py-0.5 sm:px-3 sm:py-1 rounded-md shadow-md">
                     Save {discount}%
                   </span>
                 )}

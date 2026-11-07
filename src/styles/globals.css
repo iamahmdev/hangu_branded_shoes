@@ -4,8 +4,8 @@
 
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#fafafa;--red:#09090b;--gold:#09090b;--tx:#18181b;--mut:#71717a;color-scheme:light}
-html{scroll-behavior:smooth;font-family:'Poppins',sans-serif}
-body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--tx);overflow-x:hidden;line-height:1.5}
+html{scroll-behavior:smooth;font-family:'Poppins',sans-serif;max-width:100vw;overflow-x:hidden;-webkit-text-size-adjust:100%}
+body{font-family:'Poppins',sans-serif;background:var(--bg);color:var(--tx);max-width:100vw;overflow-x:hidden;line-height:1.5}
 button,input,select,textarea{font-family:'Poppins',sans-serif}
 a{color:inherit;text-decoration:none}img{max-width:100%;display:block}
 .wrap{max-width:1200px;margin:auto;padding:0 20px}

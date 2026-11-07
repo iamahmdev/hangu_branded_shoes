@@ -66,27 +66,27 @@ export default function QuickOrderModal() {
   };
 
   return (
-    <div className="qorder-overlay fixed inset-0 z-[1000] bg-black/60 backdrop-blur-md flex items-center justify-center p-4 animate-fadeIn" onClick={closeQuickOrder}>
-      <div className="qorder-modal relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white border border-zinc-200/90 rounded-3xl shadow-2xl p-6 md:p-8 text-zinc-900" onClick={(e) => e.stopPropagation()}>
+    <div className="qorder-overlay fixed inset-0 z-[1000] bg-black/60 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-fadeIn" onClick={closeQuickOrder}>
+      <div className="qorder-modal relative w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-white border border-zinc-200/90 rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 text-zinc-900" onClick={(e) => e.stopPropagation()}>
         {/* Close Button */}
         <button
           type="button"
           onClick={closeQuickOrder}
-          className="qorder-close-btn absolute top-4 right-4 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 text-zinc-600 hover:text-zinc-950 rounded-full w-9 h-9 flex items-center justify-center transition-colors z-10"
+          className="qorder-close-btn absolute top-3.5 right-3.5 sm:top-4 sm:right-4 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 text-zinc-600 hover:text-zinc-950 rounded-full w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center transition-colors z-10"
           aria-label="Close modal"
         >
-          <X size={20} />
+          <X size={18} />
         </button>
 
-        <div className="qorder-grid grid grid-cols-1 md:grid-cols-[320px_1fr] gap-6 md:gap-8">
+        <div className="qorder-grid grid grid-cols-1 md:grid-cols-[320px_1fr] gap-5 md:gap-8">
           {/* Left: Product Image */}
           <div className="qorder-img-col flex flex-col">
-            <div className="qorder-img-box relative bg-[#f4f4f6] rounded-2xl overflow-hidden border border-zinc-200 aspect-square">
-              <img src={resolveProductImage(p.img)} alt={p.name} className="w-full h-full object-cover" />
-              {p.tag && <span className="qorder-tag absolute top-3 left-3 bg-brand-red text-white text-[11px] font-bold px-2.5 py-1 rounded-full uppercase">{p.tag}</span>}
-              <span className="qorder-discount absolute bottom-3 left-3 bg-white/90 backdrop-blur-md text-zinc-900 border border-zinc-200 text-[11px] font-bold px-2.5 py-1 rounded-full shadow-xs">Save {discount}%</span>
+            <div className="qorder-img-box relative bg-[#f4f4f6] rounded-2xl overflow-hidden border border-zinc-200 aspect-[4/3] sm:aspect-square flex items-center justify-center p-3 sm:p-4">
+              <img src={resolveProductImage(p.img)} alt={p.name} className="w-full h-full object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.1)]" />
+              {p.tag && <span className="qorder-tag absolute top-2.5 left-2.5 bg-brand-red text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 sm:py-1 rounded-full uppercase">{p.tag}</span>}
+              <span className="qorder-discount absolute bottom-2.5 left-2.5 bg-white/95 backdrop-blur-md text-zinc-900 border border-zinc-200 text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 sm:py-1 rounded-full shadow-xs">Save {discount}%</span>
             </div>
-            <div className="qorder-quick-specs flex justify-around mt-3 text-xs text-zinc-500">
+            <div className="qorder-quick-specs flex justify-around mt-2.5 text-xs text-zinc-500">
               <span>🌟 High Comfort Sole</span>
               <span>🧵 Premium Stitching</span>
             </div>

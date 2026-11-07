@@ -54,11 +54,11 @@ export default function QuickSearchModal() {
 
   return (
     <div
-      className="qsearch-overlay fixed inset-0 z-[1001] bg-black/60 backdrop-blur-md flex items-start justify-center p-4 pt-16 md:pt-24 animate-fadeIn"
+      className="qsearch-overlay fixed inset-0 z-[1001] bg-black/60 backdrop-blur-md flex items-start justify-center p-3 sm:p-4 pt-8 sm:pt-16 md:pt-24 animate-fadeIn"
       onClick={closeSearch}
     >
       <div
-        className="qsearch-modal relative w-full max-w-2xl bg-[#12121a]/95 backdrop-blur-xl border border-white/15 rounded-3xl shadow-2xl p-6 text-white"
+        className="qsearch-modal relative w-full max-w-2xl bg-[#12121a]/95 backdrop-blur-xl border border-white/15 rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 text-white"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Search Box */}
@@ -99,7 +99,7 @@ export default function QuickSearchModal() {
                   <img
                     src={resolveProductImage(p.img)}
                     alt={p.name}
-                    className="w-14 h-14 rounded-xl object-cover bg-white/5 border border-white/10 shrink-0"
+                    className="w-14 h-14 rounded-xl object-contain p-1 bg-white/5 border border-white/10 shrink-0"
                   />
                   <div className="min-w-0">
                     <span className="text-[10px] font-bold uppercase text-brand-red tracking-wider">

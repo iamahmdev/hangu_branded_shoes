@@ -21,7 +21,7 @@ import { resolveProductImage } from "../src/utils/image";
 
 export default function Checkout() {
   const { items, sub, ship, clear } = useCart();
-  const [paymentMethod, setPaymentMethod] = useState<"cod" | "easypaisa">("cod");
+  const [paymentMethod, setPaymentMethod] = useState<"cod" | "jazzcash">("cod");
   const [f, setF] = useState({ name: "", phone: "", city: "", address: "", tid: "" });
   const [hp, setHp] = useState<string>(""); // Honeypot field for bot protection
   const [copied, setCopied] = useState<boolean>(false);
@@ -34,19 +34,19 @@ export default function Checkout() {
   const liveSettings = storeSettingsData?.data;
 
   const isCodEnabled = liveSettings?.enableCod !== false;
-  const easypaisaNumber = liveSettings?.easypaisaNumber?.trim() || "";
-  const easypaisaTitle = liveSettings?.easypaisaTitle?.trim() || "";
+  const jazzcashNumber = liveSettings?.easypaisaNumber?.trim() || "";
+  const jazzcashTitle = liveSettings?.easypaisaTitle?.trim() || "";
   const whatsappNumber = liveSettings?.whatsappNumber?.trim() || WA;
-  const isEasyPaisaConfigured = Boolean(easypaisaNumber && easypaisaTitle);
+  const isJazzCashConfigured = Boolean(jazzcashNumber && jazzcashTitle);
 
-  // If COD is disabled in settings, automatically switch to EasyPaisa
+  // If COD is disabled in settings, automatically switch to JazzCash
   useEffect(() => {
     if (!isCodEnabled && paymentMethod === "cod") {
-      setPaymentMethod("easypaisa");
+      setPaymentMethod("jazzcash");
     }
   }, [isCodEnabled, paymentMethod]);
 
-  const effectiveMethod = isCodEnabled ? paymentMethod : "easypaisa";
+  const effectiveMethod = isCodEnabled ? paymentMethod : "jazzcash";
 
   // Dynamic Shipping & COD Fee
   const freeThreshold = liveSettings?.freeShippingThreshold ?? 5000;
@@ -62,8 +62,8 @@ export default function Checkout() {
     setF({ ...f, [k]: e.target.value });
 
   const handleCopyAccount = () => {
-    if (!easypaisaNumber) return;
-    navigator.clipboard.writeText(easypaisaNumber);
+    if (!jazzcashNumber) return;
+    navigator.clipboard.writeText(jazzcashNumber);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
@@ -113,17 +113,17 @@ export default function Checkout() {
       return;
     }
 
-    // EasyPaisa checks
-    if (effectiveMethod === "easypaisa") {
-      if (!isEasyPaisaConfigured) {
+    // JazzCash checks
+    if (effectiveMethod === "jazzcash") {
+      if (!isJazzCashConfigured) {
         alert(
-          "EasyPaisa is not configured yet by store administration. Please choose Cash on Delivery or contact WhatsApp."
+          "JazzCash is not configured yet by store administration. Please choose Cash on Delivery or contact WhatsApp."
         );
         return;
       }
 
       if (!f.tid.trim() || f.tid.trim().length < 5) {
-        alert("Please provide a valid EasyPaisa Transaction ID (TID) from your transfer.");
+        alert("Please provide a valid JazzCash Transaction ID (TID) from your transfer.");
         return;
       }
     }
@@ -155,7 +155,7 @@ export default function Checkout() {
           `📍 *Delivery Address:* ${f.address.trim()}, ${f.city.trim()}\n` +
           `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
           `_Assalam-o-Alaikum! I have placed an order with Cash on Delivery. Please confirm my order and dispatch it._`
-        : `🛍️ *NEW ORDER (EASYPAISA) — HANGU BRANDED SHOES*\n` +
+        : `🛍️ *NEW ORDER (JAZZCASH) — HANGU BRANDED SHOES*\n` +
           `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
           `📦 *Order ID:* #${orderId}\n\n` +
           `👟 *Ordered Shoes:*\n${itemsSummary}\n\n` +
@@ -163,7 +163,7 @@ export default function Checkout() {
           `Subtotal: Rs. ${sub.toLocaleString()}\n` +
           `Shipping Delivery: ${effectiveShipping === 0 ? "FREE" : `Rs. ${effectiveShipping.toLocaleString()}`}\n` +
           `💰 *TOTAL PAID:* Rs. ${effectiveTotal.toLocaleString()}\n` +
-          `📱 *Payment Method:* EasyPaisa\n` +
+          `📱 *Payment Method:* JazzCash\n` +
           `🔖 *Transaction ID (TID):* ${f.tid.trim()}\n` +
           (screenshotUrl ? `📸 *Payment Screenshot:* Uploaded to order record\n` : `📸 *Payment Screenshot:* Attached in this WhatsApp chat\n`) +
           `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
@@ -171,7 +171,7 @@ export default function Checkout() {
           `📞 *Phone / WhatsApp:* ${f.phone.trim()}\n` +
           `📍 *Delivery Address:* ${f.address.trim()}, ${f.city.trim()}\n` +
           `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-          `_Assalam-o-Alaikum! I have transferred the amount via EasyPaisa. Please verify payment and dispatch my order._`;
+          `_Assalam-o-Alaikum! I have transferred the amount via JazzCash. Please verify payment and dispatch my order._`;
 
     // Persist to MongoDB database first
     createOrderMutation.mutate(
@@ -197,8 +197,8 @@ export default function Checkout() {
         codFee,
         totalAmount: effectiveTotal,
         paymentMethod: effectiveMethod,
-        transactionId: effectiveMethod === "easypaisa" ? f.tid.trim() : undefined,
-        paymentScreenshot: effectiveMethod === "easypaisa" ? screenshotUrl || undefined : undefined,
+        transactionId: effectiveMethod === "jazzcash" ? f.tid.trim() : undefined,
+        paymentScreenshot: effectiveMethod === "jazzcash" ? screenshotUrl || undefined : undefined,
         hp,
       },
       {
@@ -338,26 +338,26 @@ export default function Checkout() {
                   </div>
                 )}
 
-                {/* Option 2: EasyPaisa */}
+                {/* Option 2: JazzCash */}
                 <div
-                  onClick={() => setPaymentMethod("easypaisa")}
+                  onClick={() => setPaymentMethod("jazzcash")}
                   className={`cursor-pointer p-4 rounded-2xl border transition-all ${
-                    effectiveMethod === "easypaisa"
-                      ? "border-emerald-600 bg-emerald-50/50 ring-1 ring-emerald-600"
+                    effectiveMethod === "jazzcash"
+                      ? "border-red-600 bg-red-50/50 ring-1 ring-red-600"
                       : "border-zinc-200 bg-[#f4f4f6] hover:border-zinc-300"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold">
+                    <div className="w-9 h-9 rounded-xl bg-red-100 text-red-700 flex items-center justify-center font-bold">
                       <Smartphone size={20} />
                     </div>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 tracking-wide uppercase">
-                      EasyPaisa
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-700 tracking-wide uppercase">
+                      JazzCash
                     </span>
                   </div>
-                  <div className="font-bold text-zinc-900 text-sm">EasyPaisa Account</div>
+                  <div className="font-bold text-zinc-900 text-sm">JazzCash Account</div>
                   <div className="text-zinc-500 text-xs mt-1 leading-snug">
-                    Direct transfer via EasyPaisa mobile app or *786#.
+                    Direct transfer via JazzCash mobile app or *786#.
                   </div>
                 </div>
               </div>
@@ -383,22 +383,22 @@ export default function Checkout() {
                 </div>
               )}
 
-              {/* EasyPaisa Box */}
-              {effectiveMethod === "easypaisa" && (
+              {/* JazzCash Box */}
+              {effectiveMethod === "jazzcash" && (
                 <div>
-                  {!isEasyPaisaConfigured ? (
+                  {!isJazzCashConfigured ? (
                     <div className="p-5 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900">
                       <div className="flex items-start gap-3">
                         <AlertTriangle className="text-amber-600 shrink-0 mt-0.5" size={20} />
                         <div className="text-xs leading-relaxed">
-                          <b className="text-zinc-900 text-sm block mb-1">EasyPaisa Account Not Configured</b>
+                          <b className="text-zinc-900 text-sm block mb-1">JazzCash Account Not Configured</b>
                           Payment details are currently being updated. Please choose Cash on Delivery above or contact our official WhatsApp:
                           <div className="mt-3">
                             <a
                               href={wa("Assalam-o-Alaikum! I want to place an order directly on WhatsApp.", whatsappNumber)}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition-all"
+                              className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition-all"
                             >
                               <MessageCircle size={15} /> Order Directly on WhatsApp
                             </a>
@@ -407,15 +407,15 @@ export default function Checkout() {
                       </div>
                     </div>
                   ) : (
-                    <div className="p-5 rounded-2xl border border-emerald-200 bg-emerald-50/40">
-                      <div className="flex items-center justify-between pb-3 border-b border-emerald-200/60">
+                    <div className="p-5 rounded-2xl border border-red-200 bg-red-50/40">
+                      <div className="flex items-center justify-between pb-3 border-b border-red-200/60">
                         <div className="flex items-center gap-2">
-                          <span className="w-8 h-8 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
-                            EP
+                          <span className="w-8 h-8 rounded-lg bg-red-600 text-white flex items-center justify-center font-bold text-xs">
+                            JC
                           </span>
                           <div>
-                            <b className="text-zinc-900 text-sm block">EasyPaisa Mobile Account</b>
-                            <span className="text-zinc-500 text-xs">Title: <strong className="text-zinc-900">{easypaisaTitle}</strong></span>
+                            <b className="text-zinc-900 text-sm block">JazzCash Mobile Account</b>
+                            <span className="text-zinc-500 text-xs">Title: <strong className="text-zinc-900">{jazzcashTitle}</strong></span>
                           </div>
                         </div>
                         <div className="text-right">
@@ -424,11 +424,11 @@ export default function Checkout() {
                         </div>
                       </div>
 
-                      <div className="mt-4 p-3.5 rounded-xl bg-white border border-emerald-200 flex items-center justify-between">
+                      <div className="mt-4 p-3.5 rounded-xl bg-white border border-red-200 flex items-center justify-between">
                         <div>
-                          <span className="text-[11px] text-zinc-500 block">EasyPaisa Number</span>
+                          <span className="text-[11px] text-zinc-500 block">JazzCash Number</span>
                           <span className="font-mono text-lg font-extrabold text-zinc-950 tracking-wider">
-                            {easypaisaNumber}
+                            {jazzcashNumber}
                           </span>
                         </div>
                         <button
@@ -438,8 +438,8 @@ export default function Checkout() {
                         >
                           {copied ? (
                             <>
-                              <Check size={14} className="text-emerald-600" />
-                              <span className="text-emerald-700 font-bold">Copied!</span>
+                              <Check size={14} className="text-red-600" />
+                              <span className="text-red-700 font-bold">Copied!</span>
                             </>
                           ) : (
                             <>
@@ -453,15 +453,15 @@ export default function Checkout() {
                       {/* Instructions */}
                       <div className="mt-4 text-xs text-zinc-600 space-y-1.5">
                         <p className="flex items-start gap-2">
-                          <span className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">1</span>
-                          <span>Open your EasyPaisa app or dial <b>*786#</b>.</span>
+                          <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">1</span>
+                          <span>Open your JazzCash app or dial <b>*786#</b>.</span>
                         </p>
                         <p className="flex items-start gap-2">
-                          <span className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">2</span>
-                          <span>Send <b>Rs. {effectiveTotal.toLocaleString()}</b> to <b>{easypaisaNumber}</b> ({easypaisaTitle}).</span>
+                          <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">2</span>
+                          <span>Send <b>Rs. {effectiveTotal.toLocaleString()}</b> to <b>{jazzcashNumber}</b> ({jazzcashTitle}).</span>
                         </p>
                         <p className="flex items-start gap-2">
-                          <span className="w-4 h-4 rounded-full bg-emerald-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">3</span>
+                          <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">3</span>
                           <span>Copy your <b>Transaction ID (TID)</b> and enter below:</span>
                         </p>
                       </div>
@@ -472,7 +472,7 @@ export default function Checkout() {
                           Transaction ID (TID) <span className="text-rose-600">*</span>
                         </label>
                         <input
-                          className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-2.5 text-zinc-950 font-medium text-sm placeholder:text-zinc-500 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 shadow-xs transition-all font-mono"
+                          className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-2.5 text-zinc-950 font-medium text-sm placeholder:text-zinc-500 outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 shadow-xs transition-all font-mono"
                           required
                           placeholder="e.g. 24891048291"
                           value={f.tid}
@@ -481,7 +481,7 @@ export default function Checkout() {
                       </div>
 
                       {/* Payment Screenshot Upload */}
-                      <div className="mt-4 pt-4 border-t border-emerald-200/60">
+                      <div className="mt-4 pt-4 border-t border-red-200/60">
                         <label className="text-xs font-semibold text-zinc-700 block mb-1">
                           Payment Screenshot (Optional)
                         </label>
@@ -498,7 +498,7 @@ export default function Checkout() {
                             />
                           </label>
                           {screenshotUrl && (
-                            <span className="inline-flex items-center gap-1.5 text-xs text-emerald-700 font-medium">
+                            <span className="inline-flex items-center gap-1.5 text-xs text-red-700 font-medium">
                               <FileCheck2 size={15} /> Screenshot Attached
                             </span>
                           )}
@@ -601,7 +601,7 @@ export default function Checkout() {
               type="submit"
               disabled={
                 createOrderMutation.isPending ||
-                (effectiveMethod === "easypaisa" && (!isEasyPaisaConfigured || screenshotUploading))
+                (effectiveMethod === "jazzcash" && (!isJazzCashConfigured || screenshotUploading))
               }
               className="w-full mt-3 py-3 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold tracking-wide disabled:opacity-50 flex items-center justify-center gap-2 transition-colors shadow-xs"
             >

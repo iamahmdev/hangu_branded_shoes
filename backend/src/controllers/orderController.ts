@@ -112,12 +112,12 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
       }
     }
 
-    // 7. Validate payment method ("cod" or "easypaisa")
+    // 7. Validate payment method ("cod" or "jazzcash")
     const method = String(paymentMethod).toLowerCase().trim();
-    if (method !== "cod" && method !== "easypaisa") {
+    if (method !== "cod" && method !== "easypaisa" && method !== "jazzcash") {
       res.status(400).json({
         success: false,
-        message: "Invalid payment method. Only Cash on Delivery ('cod') and EasyPaisa ('easypaisa') are supported.",
+        message: "Invalid payment method. Only Cash on Delivery ('cod') and JazzCash ('jazzcash') are supported.",
       });
       return;
     }
@@ -125,7 +125,7 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     if (method === "cod" && storeSettings && storeSettings.enableCod === false) {
       res.status(400).json({
         success: false,
-        message: "Cash on Delivery is currently disabled by store management. Please select EasyPaisa or contact WhatsApp.",
+        message: "Cash on Delivery is currently disabled by store management. Please select JazzCash or contact WhatsApp.",
       });
       return;
     }
@@ -141,24 +141,24 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     let orderStatus: "awaiting_confirmation" | "pending" = "awaiting_confirmation";
     let codFee = 0;
 
-    if (method === "easypaisa") {
+    if (method === "easypaisa" || method === "jazzcash") {
       cleanTid = String(transactionId || "").trim();
       if (!cleanTid || cleanTid.length < 5) {
         res.status(400).json({
           success: false,
-          message: "Valid EasyPaisa Transaction ID (TID) is required to place your order.",
+          message: "Valid JazzCash Transaction ID (TID) is required to place your order.",
         });
         return;
       }
 
-      // Block duplicate TIDs for EasyPaisa
+      // Block duplicate TIDs for JazzCash
       const existingOrderWithTid = await Order.findOne({
         transactionId: { $regex: new RegExp(`^${cleanTid}$`, "i") },
       });
       if (existingOrderWithTid) {
         res.status(400).json({
           success: false,
-          message: "This EasyPaisa Transaction ID (TID) has already been submitted for another order. Duplicate TIDs are rejected.",
+          message: "This JazzCash Transaction ID (TID) has already been submitted for another order. Duplicate TIDs are rejected.",
         });
         return;
       }
@@ -250,7 +250,7 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
           note:
             method === "cod"
               ? "Order placed via Cash on Delivery. Stock reserved, awaiting shop confirmation call/WhatsApp."
-              : `Order placed via EasyPaisa (TID: ${cleanTid}). Pending payment verification.`,
+              : `Order placed via JazzCash (TID: ${cleanTid}). Pending payment verification.`,
         },
       ],
     });
@@ -401,11 +401,11 @@ export async function updateOrderStatus(req: Request, res: Response): Promise<vo
       return;
     }
 
-    // Business Rule: EasyPaisa orders can only be confirmed after payment is marked "paid"
-    if (status === "confirmed" && order.paymentMethod === "easypaisa" && order.paymentStatus !== "paid") {
+    // Business Rule: JazzCash orders can only be confirmed after payment is marked "paid"
+    if (status === "confirmed" && (order.paymentMethod === "easypaisa" || order.paymentMethod === "jazzcash") && order.paymentStatus !== "paid") {
       res.status(400).json({
         success: false,
-        message: "Order cannot be confirmed until payment status is marked as 'paid'. Please verify customer EasyPaisa transfer first.",
+        message: "Order cannot be confirmed until payment status is marked as 'paid'. Please verify customer JazzCash transfer first.",
       });
       return;
     }

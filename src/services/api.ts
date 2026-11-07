@@ -70,7 +70,7 @@ export interface CreateOrderPayload {
   shippingFee: number;
   codFee?: number;
   totalAmount: number;
-  paymentMethod: "cod" | "easypaisa";
+  paymentMethod: "cod" | "jazzcash";
   transactionId?: string;
   paymentScreenshot?: string;
   notes?: string;

@@ -29,7 +29,7 @@ export interface IOrder extends Document {
   shippingFee: number;
   codFee: number;
   totalAmount: number;
-  paymentMethod: "cod" | "easypaisa";
+  paymentMethod: "cod" | "easypaisa" | "jazzcash";
   paymentStatus: "cod_pending" | "pending_verification" | "paid" | "rejected";
   transactionId?: string;
   paymentScreenshot?: string;
@@ -72,7 +72,7 @@ const OrderSchema = new Schema<IOrder>(
     totalAmount: { type: Number, required: true },
     paymentMethod: {
       type: String,
-      enum: ["cod", "easypaisa"],
+      enum: ["cod", "easypaisa", "jazzcash"],
       default: "cod",
       required: true,
       index: true,

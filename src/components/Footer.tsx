@@ -26,7 +26,7 @@ export default function Footer() {
         <div className="ft-perk">
           <span className="ft-perk-icon">⚡</span>
           <div>
-            <b>Fast EasyPaisa & COD</b>
+            <b>Fast JazzCash & COD</b>
             <p>Doorstep cash delivery or direct mobile transfer</p>
           </div>
         </div>
@@ -247,7 +247,7 @@ export default function Footer() {
                 <span>💵</span> Cash on Delivery (COD)
               </span>
               <span className="pay-chip">
-                <span>📱</span> EasyPaisa Transfer
+                <span>📱</span> JazzCash Transfer
               </span>
             </div>
           </div>

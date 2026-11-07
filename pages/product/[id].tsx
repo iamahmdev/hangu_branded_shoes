@@ -75,7 +75,7 @@ export default function Product() {
   const buildWhatsAppOrderUrl = () => {
     const sizeText = size || "Size not selected yet";
     const totalAmount = (p.price * q).toLocaleString();
-    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${q}\n*Price:* Rs. ${totalAmount}\n*Payment:* Cash on Delivery / EasyPaisa\n\nMera Delivery Address ye hai:\nNaam: \nPhone: \nCity: \nAddress: `;
+    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${q}\n*Price:* Rs. ${totalAmount}\n*Payment:* Cash on Delivery / JazzCash\n\nMera Delivery Address ye hai:\nNaam: \nPhone: \nCity: \nAddress: `;
     return wa(msg);
   };
 
@@ -313,7 +313,7 @@ export default function Product() {
                 <div className="flex items-center gap-2.5">
                   <PackageCheck size={16} className="text-emerald-600" />
                   <span>
-                    <b>EasyPaisa & COD:</b> Cash on Delivery or instant EasyPaisa verified transfer.
+                    <b>JazzCash & COD:</b> Cash on Delivery or instant JazzCash verified transfer.
                   </span>
                 </div>
                 <div className="flex items-center gap-2.5">

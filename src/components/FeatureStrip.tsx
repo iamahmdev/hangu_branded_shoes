@@ -20,7 +20,7 @@ const PERKS: Perk[] = [
   },
   {
     icon: "⚡",
-    title: "EasyPaisa Fast Pay",
+    title: "JazzCash Fast Pay",
     desc: "Quick verified mobile payments with instant WhatsApp confirmation",
     badge: "Direct & Safe",
     color: "#d4a857",

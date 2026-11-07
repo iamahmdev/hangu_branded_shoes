@@ -138,7 +138,7 @@ export default function Cart() {
                 </Link>
 
                 <p className="text-[11px] text-zinc-400 text-center mt-1">
-                  Cash on Delivery & EasyPaisa accepted
+                  Cash on Delivery & JazzCash accepted
                 </p>
               </div>
             </div>

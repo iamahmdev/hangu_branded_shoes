@@ -61,7 +61,7 @@ export default function QuickOrderModal() {
   const buildWhatsAppOrderUrl = () => {
     const sizeText = selectedSize || "42";
     const totalAmount = (p.price * qty).toLocaleString();
-    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${qty}\n*Price:* Rs. ${totalAmount}\n*Payment:* EasyPaisa Mobile Transfer\n\nMera Delivery Address ye hai:\nNaam: \nPhone Number: \nCity: \nComplete Address: `;
+    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${qty}\n*Price:* Rs. ${totalAmount}\n*Payment:* JazzCash Mobile Transfer\n\nMera Delivery Address ye hai:\nNaam: \nPhone Number: \nCity: \nComplete Address: `;
     return wa(msg);
   };
 
@@ -227,7 +227,7 @@ export default function QuickOrderModal() {
               <div className="qorder-trust-item flex items-center gap-2.5">
                 <ShieldCheck size={18} className="text-brand-red shrink-0" />
                 <div>
-                  <strong className="text-zinc-800">EasyPaisa Direct Payment</strong> — Fast nationwide courier dispatch
+                  <strong className="text-zinc-800">JazzCash Direct Payment</strong> — Fast nationwide courier dispatch
                 </div>
               </div>
             </div>

@@ -39,7 +39,7 @@ export interface PaymentAccount {
 }
 
 export interface PaymentAccounts {
-  easypaisa: PaymentAccount;
+  jazzcash: PaymentAccount;
 }
 
 export interface SocialLinks {

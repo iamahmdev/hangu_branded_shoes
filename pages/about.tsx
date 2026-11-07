@@ -79,13 +79,13 @@ const PILLARS: Pillar[] = [
     num: "04",
     tag: "100% Client Protection",
     title: "Risk-Free Shopping Trust",
-    desc: "Ordering footwear online should be effortless and risk-free. Enjoy verified EasyPaisa payment processing, 24/7 dedicated WhatsApp concierge support, and an ironclad 7-day hassle-free size replacement policy.",
+    desc: "Ordering footwear online should be effortless and risk-free. Enjoy verified JazzCash payment processing, 24/7 dedicated WhatsApp concierge support, and an ironclad 7-day hassle-free size replacement policy.",
     icon: ShieldCheck,
     accent: "#e10600",
     bg: "rgba(225, 6, 0, 0.12)",
     border: "rgba(225, 6, 0, 0.35)",
     glow: "rgba(225, 6, 0, 0.2)",
-    specs: ["EasyPaisa Verification", "7-Day Size Exchange", "Pre-Dispatch Live Video"],
+    specs: ["JazzCash Verification", "7-Day Size Exchange", "Pre-Dispatch Live Video"],
   },
 ];
 
@@ -372,13 +372,13 @@ export default function About() {
             <Reveal delay={200}>
               <div className="ab-policy-card bg-white border border-zinc-200/80 shadow-sm p-6 rounded-3xl flex flex-col gap-2">
                 <h4 className="text-lg font-bold text-zinc-900 flex items-center gap-2.5">
-                  <Banknote size={22} color="#d4a857" /> EasyPaisa Verified Payment
+                  <Banknote size={22} color="#d4a857" /> JazzCash Verified Payment
                 </h4>
                 <p className="text-xs text-zinc-600 leading-relaxed">
-                  Shop with complete peace of mind. Pay directly via EasyPaisa with instant WhatsApp verification and tracked dispatch.
+                  Shop with complete peace of mind. Pay directly via JazzCash with instant WhatsApp verification and tracked dispatch.
                 </p>
                 <ul className="text-xs text-zinc-600 list-disc pl-4 flex flex-col gap-1 mt-2">
-                  <li>Direct EasyPaisa mobile account payment</li>
+                  <li>Direct JazzCash mobile account payment</li>
                   <li>Instant receipt verification & Order confirmation</li>
                   <li>Direct tracked courier dispatch nationwide</li>
                 </ul>

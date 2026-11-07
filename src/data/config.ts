@@ -26,5 +26,5 @@ export const FEE: number = 250;
 
 // 👉 Payment Accounts (Default fallback; live values loaded from MongoDB Settings)
 export const PAY: PaymentAccounts = {
-  easypaisa: { name: "EasyPaisa", acc: "", title: "" },
+  jazzcash: { name: "JazzCash", acc: "03275430305", title: "Hangu Branded Shoes" },
 };

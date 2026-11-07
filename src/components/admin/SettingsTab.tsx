@@ -422,47 +422,47 @@ export default function SettingsTab({
           </div>
         </div>
 
-        {/* Section 4: Official EasyPaisa Payment Configuration */}
+        {/* Section 4: Official JazzCash Payment Configuration */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
           <div className="mb-4">
             <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-              <CreditCard size={16} className="text-emerald-600" />
-              <span>Official EasyPaisa Account (Checkout Payment Account)</span>
+              <CreditCard size={16} className="text-red-600" />
+              <span>Official JazzCash Account (Checkout Payment Account)</span>
             </h4>
             <p className="text-xs text-slate-500 mt-1 leading-relaxed">
               Customers will see these credentials at checkout to make payments.
             </p>
           </div>
 
-          <div className="p-4 rounded-xl bg-emerald-50/50 border border-emerald-200 max-w-xl flex flex-col gap-3 text-xs">
-            <div className="flex items-center gap-2 text-emerald-800 font-bold">
+          <div className="p-4 rounded-xl bg-red-50/50 border border-red-200 max-w-xl flex flex-col gap-3 text-xs">
+            <div className="flex items-center gap-2 text-red-800 font-bold">
               <Smartphone size={16} />
-              <span>📱 EasyPaisa Account Details</span>
+              <span>📱 JazzCash Account Details</span>
             </div>
 
             <div>
               <label className="text-slate-700 font-semibold block mb-1">
-                EasyPaisa Mobile Number
+                JazzCash Mobile Number
               </label>
               <input
                 type="text"
                 value={form.easypaisaNumber}
                 onChange={(e) => setForm({ ...form, easypaisaNumber: e.target.value })}
-                placeholder="e.g. 03333147691"
-                className="w-full bg-white border border-emerald-200 rounded-xl px-3 py-2 text-slate-900 font-mono outline-none focus:border-emerald-500"
+                placeholder="e.g. 03275430305"
+                className="w-full bg-white border border-red-200 rounded-xl px-3 py-2 text-slate-900 font-mono outline-none focus:border-red-500"
               />
             </div>
 
             <div>
               <label className="text-slate-700 font-semibold block mb-1">
-                EasyPaisa Account Title (Beneficiary Name)
+                JazzCash Account Title (Beneficiary Name)
               </label>
               <input
                 type="text"
                 value={form.easypaisaTitle}
                 onChange={(e) => setForm({ ...form, easypaisaTitle: e.target.value })}
                 placeholder="e.g. Hangu Branded Shoes"
-                className="w-full bg-white border border-emerald-200 rounded-xl px-3 py-2 text-slate-900 outline-none focus:border-emerald-500"
+                className="w-full bg-white border border-red-200 rounded-xl px-3 py-2 text-slate-900 outline-none focus:border-red-500"
               />
             </div>
           </div>

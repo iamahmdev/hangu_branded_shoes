@@ -144,7 +144,7 @@ export default function Reviews() {
           {errorMsg && <div className="rerr text-brand-red text-xs">{errorMsg}</div>}
 
           <input
-            className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-zinc-900 placeholder:text-zinc-400 text-xs outline-none focus:border-zinc-900"
+            className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-2.5 text-zinc-950 font-medium placeholder:text-zinc-500 text-xs sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
             required
             placeholder="Your full name"
             value={form.n}
@@ -152,14 +152,14 @@ export default function Reviews() {
           />
 
           <input
-            className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-zinc-900 placeholder:text-zinc-400 text-xs outline-none focus:border-zinc-900"
+            className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-2.5 text-zinc-950 font-medium placeholder:text-zinc-500 text-xs sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
             placeholder="City (e.g. Peshawar, Lahore, Kohat)"
             value={form.c}
             onChange={handleChange("c")}
           />
 
           <select
-            className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-zinc-900 text-xs outline-none focus:border-zinc-900"
+            className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-2.5 text-zinc-950 font-medium text-xs sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all cursor-pointer"
             value={form.p || products?.[0]?.name || ""}
             onChange={handleChange("p")}
           >
@@ -171,7 +171,7 @@ export default function Reviews() {
           </select>
 
           <textarea
-            className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-zinc-900 placeholder:text-zinc-400 text-xs outline-none focus:border-zinc-900"
+            className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-2.5 text-zinc-950 font-medium placeholder:text-zinc-500 text-xs sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
             required
             rows={3}
             placeholder="Tell us about the fit, sole cushioning and finish…"

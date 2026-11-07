@@ -126,16 +126,16 @@ export default function TrackOrderPage() {
           {/* Search Box */}
           <form
             onSubmit={handleSearchSubmit}
-            className="bg-white p-2.5 sm:p-3 rounded-2xl flex items-center gap-2 max-w-xl mx-auto border border-zinc-200/80 mb-10 shadow-xs"
+            className="bg-white p-2.5 sm:p-3 rounded-2xl flex items-center gap-2 max-w-xl mx-auto border border-zinc-300 focus-within:border-zinc-950 focus-within:ring-2 focus-within:ring-zinc-950/10 transition-all mb-10 shadow-xs"
           >
             <div className="flex items-center gap-2.5 flex-1 px-3">
-              <Search className="text-zinc-400" size={18} />
+              <Search className="text-zinc-500 shrink-0" size={18} />
               <input
                 type="text"
                 placeholder="Enter Order ID (e.g. HBS849201) or Phone..."
                 value={queryInput}
                 onChange={(e) => setQueryInput(e.target.value)}
-                className="w-full bg-transparent border-none outline-none text-zinc-900 text-xs sm:text-sm placeholder:text-zinc-400 font-mono"
+                className="w-full bg-transparent border-none outline-none text-zinc-950 font-mono font-medium text-xs sm:text-sm placeholder:text-zinc-500"
               />
             </div>
             <button
@@ -460,7 +460,7 @@ export default function TrackOrderPage() {
                   placeholder="Reason for cancellation (optional)..."
                   value={cancelReason}
                   onChange={(e) => setCancelReason(e.target.value)}
-                  className="w-full bg-[#f4f4f6] border border-zinc-200 rounded-xl p-3 text-xs text-zinc-900 outline-none mb-4"
+                  className="w-full bg-white border border-zinc-300 rounded-xl p-3 text-xs sm:text-sm text-zinc-950 font-medium placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 mb-4 transition-all shadow-xs"
                   rows={3}
                 />
 

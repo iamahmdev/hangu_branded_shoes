@@ -75,20 +75,20 @@ export default function Shop() {
           {/* Search & Filter Toolbar (ETQ Minimalist Style) */}
           <div className="bg-white p-4 rounded-2xl border border-zinc-200/80 shadow-xs flex flex-wrap items-center justify-between gap-4 mb-6">
             {/* Search Input */}
-            <div className="flex items-center gap-2.5 flex-1 min-w-[260px] bg-[#f4f4f6] rounded-xl px-4 py-2 border border-zinc-200/60">
-              <Search size={16} className="text-zinc-400" />
+            <div className="flex items-center gap-2.5 flex-1 min-w-[260px] bg-zinc-50 hover:bg-white focus-within:bg-white rounded-xl px-4 py-2.5 border border-zinc-300 focus-within:border-zinc-950 focus-within:ring-2 focus-within:ring-zinc-950/10 transition-all shadow-xs">
+              <Search size={16} className="text-zinc-500 shrink-0" />
               <input
                 type="text"
                 placeholder="Search by shoe name, category, or tag..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 bg-transparent border-none outline-none text-zinc-900 text-xs placeholder:text-zinc-400"
+                className="flex-1 bg-transparent border-none outline-none text-zinc-950 font-medium text-xs sm:text-sm placeholder:text-zinc-500"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
-                  className="text-zinc-400 hover:text-zinc-900 text-xs"
+                  className="text-zinc-400 hover:text-zinc-950 text-xs px-1"
                 >
                   ✕
                 </button>
@@ -97,13 +97,13 @@ export default function Shop() {
 
             {/* Sort & Quick Filter Controls */}
             <div className="flex items-center gap-3">
-              <div className="flex items-center gap-2 text-zinc-600 text-xs font-semibold">
-                <SlidersHorizontal size={14} />
+              <div className="flex items-center gap-2 text-zinc-700 text-xs font-semibold">
+                <SlidersHorizontal size={14} className="text-zinc-600" />
                 <select
                   id="shop-sort"
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
-                  className="bg-[#f4f4f6] border border-zinc-200/60 text-zinc-800 rounded-xl px-3 py-1.5 text-xs font-medium outline-none cursor-pointer"
+                  className="bg-zinc-50 hover:bg-white border border-zinc-300 text-zinc-900 rounded-xl px-3.5 py-2 text-xs font-semibold outline-none cursor-pointer focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 transition-all shadow-xs"
                 >
                   <option value="featured">Featured / Default</option>
                   <option value="price-low">Price: Low to High</option>

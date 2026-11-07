@@ -2300,17 +2300,21 @@ footer{position:relative;width:100%}
   flex-shrink: 0;
 }
 
-.qsearch-input {
+.qsearch-input,
+.qsearch-modal input {
   flex: 1;
   background: transparent;
   border: none;
   outline: none;
-  color: #fff;
+  color: #ffffff !important;
+  caret-color: #ffffff !important;
   font: 500 15px 'Poppins', sans-serif;
 }
 
-.qsearch-input::placeholder {
-  color: #6c6c78;
+.qsearch-input::placeholder,
+.qsearch-modal input::placeholder {
+  color: #a1a1aa !important;
+  opacity: 1 !important;
 }
 
 .qsearch-clear {
@@ -3449,4 +3453,17 @@ footer{position:relative;width:100%}
   color: var(--mut);
   line-height: 1.4;
   margin: 0;
+}
+
+/* ================= Form Field & Input Visibility Polish ================= */
+input::placeholder,
+textarea::placeholder {
+  color: #71717a;
+  opacity: 1;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
 }

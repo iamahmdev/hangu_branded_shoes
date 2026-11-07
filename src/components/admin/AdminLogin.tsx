@@ -152,7 +152,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                     value={form.usernameOrEmail}
                     onChange={(e) => setForm({ ...form, usernameOrEmail: e.target.value })}
                     placeholder="Enter your username or email"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl pl-11 pr-4 py-3 text-white text-sm outline-none focus:border-amber-400 focus:bg-white/10 transition-all font-sans placeholder:text-zinc-600"
+                    className="w-full bg-white/10 border border-white/20 rounded-2xl pl-11 pr-4 py-3 text-white text-sm outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 focus:bg-white/15 transition-all font-sans placeholder:text-zinc-400"
                   />
                   <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
                 </div>
@@ -176,7 +176,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                     value={form.password}
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
                     placeholder="Enter your password"
-                    className="w-full bg-white/5 border border-white/10 rounded-2xl pl-11 pr-11 py-3 text-white text-sm outline-none focus:border-amber-400 focus:bg-white/10 transition-all font-sans placeholder:text-zinc-600"
+                    className="w-full bg-white/10 border border-white/20 rounded-2xl pl-11 pr-11 py-3 text-white text-sm outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 focus:bg-white/15 transition-all font-sans placeholder:text-zinc-400"
                   />
                   <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400" />
                   <button
@@ -249,7 +249,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                   value={recoveryForm.emailOrUser}
                   onChange={(e) => setRecoveryForm({ ...recoveryForm, emailOrUser: e.target.value })}
                   placeholder="admin@hangubrandedshoes.com"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-amber-400 font-sans"
+                  className="w-full bg-white/10 border border-white/20 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-400 outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 font-sans transition-all"
                 />
               </div>
 
@@ -263,7 +263,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                   value={recoveryForm.recoveryKey}
                   onChange={(e) => setRecoveryForm({ ...recoveryForm, recoveryKey: e.target.value })}
                   placeholder="Enter Store Recovery Key (from .env)"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-sm text-white outline-none focus:border-amber-400 font-mono"
+                  className="w-full bg-white/10 border border-white/20 rounded-xl px-3.5 py-2.5 text-sm text-white placeholder:text-zinc-400 outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 font-mono transition-all"
                 />
               </div>
 
@@ -279,7 +279,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                     value={recoveryForm.newPassword}
                     onChange={(e) => setRecoveryForm({ ...recoveryForm, newPassword: e.target.value })}
                     placeholder="Enter new strong password"
-                    className="w-full bg-white/5 border border-white/10 rounded-xl pl-3.5 pr-10 py-2.5 text-sm text-white outline-none focus:border-amber-400 font-sans"
+                    className="w-full bg-white/10 border border-white/20 rounded-xl pl-3.5 pr-10 py-2.5 text-sm text-white placeholder:text-zinc-400 outline-none focus:border-amber-400 focus:ring-2 focus:ring-amber-400/20 font-sans transition-all"
                   />
                   <button
                     type="button"

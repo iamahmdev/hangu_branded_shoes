@@ -258,7 +258,7 @@ export default function Checkout() {
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Full Name</label>
                   <input
-                    className="w-full bg-[#f4f4f6] border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-xs sm:text-sm outline-none focus:border-zinc-950 focus:bg-white transition-colors"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-zinc-950 font-medium text-xs sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
                     required
                     placeholder="e.g. Muhammad Ahmad"
                     value={f.name}
@@ -269,7 +269,7 @@ export default function Checkout() {
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Mobile / WhatsApp Number</label>
                   <input
-                    className="w-full bg-[#f4f4f6] border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-xs sm:text-sm outline-none focus:border-zinc-950 focus:bg-white transition-colors font-mono"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-zinc-950 font-medium text-xs sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all font-mono"
                     required
                     type="tel"
                     placeholder="e.g. 0333 1234567"
@@ -281,7 +281,7 @@ export default function Checkout() {
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Destination City</label>
                   <input
-                    className="w-full bg-[#f4f4f6] border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-xs sm:text-sm outline-none focus:border-zinc-950 focus:bg-white transition-colors"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-zinc-950 font-medium text-xs sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
                     required
                     placeholder="e.g. Hangu, Kohat, Peshawar, Islamabad, Lahore..."
                     value={f.city}
@@ -292,7 +292,7 @@ export default function Checkout() {
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Complete Delivery Address</label>
                   <textarea
-                    className="w-full bg-[#f4f4f6] border border-zinc-200 rounded-xl px-4 py-3 text-zinc-900 text-xs sm:text-sm outline-none focus:border-zinc-950 focus:bg-white transition-colors"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-zinc-950 font-medium text-xs sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
                     required
                     rows={3}
                     placeholder="House/Shop No, Street, Mohallah / Landmark"
@@ -472,7 +472,7 @@ export default function Checkout() {
                           Transaction ID (TID) <span className="text-rose-600">*</span>
                         </label>
                         <input
-                          className="w-full bg-white border border-zinc-200 rounded-xl px-4 py-2.5 text-zinc-900 text-sm outline-none focus:border-emerald-600 font-mono"
+                          className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-2.5 text-zinc-950 font-medium text-sm placeholder:text-zinc-500 outline-none focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/20 shadow-xs transition-all font-mono"
                           required
                           placeholder="e.g. 24891048291"
                           value={f.tid}

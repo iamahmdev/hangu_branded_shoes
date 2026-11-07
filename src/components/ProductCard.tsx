@@ -153,22 +153,22 @@ export default function ProductCard({ p }: ProductCardProps) {
         {/* 2. Footwear Typography & Price */}
         <div className="pt-3 pb-1 flex flex-col">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-400">
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-zinc-500">
               {p.cat}
             </span>
-            <span className="text-[10px] font-medium text-emerald-600">✓ In Stock</span>
+            <span className="text-[10px] font-semibold text-emerald-600">✓ In Stock</span>
           </div>
 
-          <h3 className="font-semibold text-zinc-900 text-sm mt-0.5 hover:text-emerald-700 transition-colors line-clamp-1">
+          <h3 className="font-semibold text-zinc-950 text-sm mt-0.5 hover:text-emerald-700 transition-colors line-clamp-1">
             <Link href={"/product/" + p.id}>{p.name}</Link>
           </h3>
 
           <div className="flex items-baseline gap-2 mt-1">
-            <span className="font-bold text-zinc-900 text-sm font-mono">
+            <span className="font-bold text-zinc-950 text-sm font-mono">
               Rs. {p.price.toLocaleString()}
             </span>
             {p.old && p.old > p.price && (
-              <s className="text-zinc-400 text-xs font-normal font-mono">
+              <s className="text-zinc-500 text-xs font-normal font-mono">
                 Rs. {p.old.toLocaleString()}
               </s>
             )}

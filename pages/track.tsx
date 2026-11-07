@@ -376,13 +376,6 @@ export default function TrackOrderPage() {
                       </span>
                     </div>
 
-                    {order.discountAmount ? (
-                      <div className="flex justify-between text-emerald-700">
-                        <span>Discount {order.couponCode ? `(${order.couponCode})` : ""}:</span>
-                        <span className="font-mono font-bold">- Rs. {order.discountAmount.toLocaleString()}</span>
-                      </div>
-                    ) : null}
-
                     {order.codFee ? (
                       <div className="flex justify-between text-amber-800">
                         <span>COD Handling Fee:</span>

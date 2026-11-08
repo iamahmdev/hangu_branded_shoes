@@ -44,13 +44,13 @@ export default function ProductCard({ p }: ProductCardProps) {
         className="flex flex-col group transition-all duration-300"
         style={{ perspective: 1000 }}
       >
-        {/* 1. Footwear Profile Showcase Container (Square for Max Shoe Size & Zero Cropping) */}
+        {/* 1. Footwear Profile Showcase Container (3:4 Portrait for Full Shoe Display & Zero Cropping) */}
         <div
           ref={cardRef}
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={handleMouseLeave}
-          className="relative aspect-square w-full bg-[#f4f4f6] group-hover:bg-[#ebebee] rounded-2xl sm:rounded-3xl overflow-hidden flex items-center justify-center p-2.5 sm:p-4 transition-all duration-300 border border-zinc-200/80 shadow-xs group-hover:shadow-md"
+          className="relative aspect-[3/4] w-full bg-[#f4f4f6] group-hover:bg-[#ebebee] rounded-2xl sm:rounded-3xl overflow-hidden flex items-center justify-center p-2 sm:p-3 transition-all duration-300 border border-zinc-200/80 shadow-xs group-hover:shadow-md"
           style={{
             transform: isHovered
               ? `rotateX(${cardTilt.x}deg) rotateY(${cardTilt.y}deg) translateY(-3px)`
@@ -62,7 +62,7 @@ export default function ProductCard({ p }: ProductCardProps) {
           {/* Main Shoe Image Link to PDP */}
           <Link
             href={"/product/" + p.id}
-            className="w-full h-full flex items-center justify-center relative p-1 sm:p-2 cursor-pointer"
+            className="w-full h-full flex items-center justify-center relative p-1 cursor-pointer"
             title={`View ${p.name}`}
           >
             <img

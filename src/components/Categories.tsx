@@ -25,12 +25,12 @@ export default function Categories() {
         <Link
           key={c.name}
           href={`/shop?cat=${encodeURIComponent(c.name)}`}
-          className="cat group relative overflow-hidden rounded-3xl block h-64 border border-zinc-200/80 shadow-sm"
+          className="cat group relative overflow-hidden rounded-3xl block aspect-[3/4] sm:aspect-[4/5] bg-zinc-950 border border-zinc-200/80 shadow-sm"
         >
           <img
             src={resolveProductImage(c.img)}
             alt={c.name}
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-105"
           />
           <div className="cat-overlay absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent p-6 flex flex-col justify-end">
             <span className="cat-badge inline-block text-xs font-bold text-brand-gold uppercase tracking-wider mb-1">

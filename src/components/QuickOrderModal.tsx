@@ -81,7 +81,7 @@ export default function QuickOrderModal() {
         <div className="qorder-grid grid grid-cols-1 md:grid-cols-[320px_1fr] gap-5 md:gap-8">
           {/* Left: Product Image */}
           <div className="qorder-img-col flex flex-col">
-            <div className="qorder-img-box relative bg-[#f4f4f6] rounded-2xl overflow-hidden border border-zinc-200 aspect-[4/3] sm:aspect-square flex items-center justify-center p-3 sm:p-4">
+            <div className="qorder-img-box relative bg-[#f4f4f6] rounded-2xl overflow-hidden border border-zinc-200 aspect-[3/4] sm:aspect-[4/5] min-h-[260px] sm:min-h-[340px] flex items-center justify-center p-2 sm:p-3">
               <img src={resolveProductImage(p.img)} alt={p.name} className="w-full h-full object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.1)]" />
               {p.tag && <span className="qorder-tag absolute top-2.5 left-2.5 bg-brand-red text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 sm:py-1 rounded-full uppercase">{p.tag}</span>}
               <span className="qorder-discount absolute bottom-2.5 left-2.5 bg-white/95 backdrop-blur-md text-zinc-900 border border-zinc-200 text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 sm:py-1 rounded-full shadow-xs">Save {discount}%</span>

@@ -116,7 +116,7 @@ export default function Home() {
                   [1, 2, 3, 4].map((i) => (
                     <div
                       key={i}
-                      className="aspect-square bg-zinc-200/60 rounded-2xl animate-pulse"
+                      className="aspect-[3/4] bg-zinc-200/60 rounded-2xl animate-pulse"
                     />
                   ))
                 ) : (

@@ -149,13 +149,13 @@ export default function Shoe3DViewer({
             transformStyle: "preserve-3d",
           }}
         >
-          {/* Real Shoe Image with 3D Depth */}
-          <div className="relative rounded-2xl overflow-hidden shadow-2xl flex items-center justify-center">
+          {/* Real Shoe Image with 3D Depth (Unclipped) */}
+          <div className="relative rounded-2xl flex items-center justify-center">
             <img
               src={resolveProductImage(img)}
               alt={name}
               draggable={false}
-              className="max-h-[85vh] max-w-[85vw] md:max-h-[500px] object-contain drop-shadow-[0_25px_35px_rgba(0,0,0,0.25)] pointer-events-none transition-all duration-150"
+              className="max-h-[80vh] max-w-[90vw] md:max-h-[460px] object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.2)] pointer-events-none transition-all duration-150"
             />
 
             {/* Specular Glare / Realistic Studio Lighting Overlay */}

@@ -17,7 +17,7 @@ export default function Product() {
   const [q, setQ] = useState<number>(1);
   const [err, setErr] = useState<boolean>(false);
   const [addedToast, setAddedToast] = useState<boolean>(false);
-  const [viewMode, setViewMode] = useState<"3d" | "photo">("3d");
+  const [viewMode, setViewMode] = useState<"3d" | "photo">("photo");
 
   // TanStack Query hook
   const { data: p, isLoading, isError } = useProduct(query.id as string);
@@ -144,8 +144,8 @@ export default function Product() {
                 </span>
               </div>
 
-              {/* Showcase Container (Responsive Aspect for Max Visibility, No Cropping) */}
-              <div className="relative aspect-square sm:aspect-[4/3] lg:aspect-[4/3] w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-[#f4f4f6] border border-zinc-200/80 shadow-xs flex items-center justify-center p-2 sm:p-4">
+              {/* Showcase Container (3:4 Portrait Aspect for Full Shoe Visibility & Zero Cropping) */}
+              <div className="relative aspect-[3/4] sm:aspect-[4/5] lg:aspect-[4/5] w-full min-h-[420px] max-h-[620px] rounded-2xl sm:rounded-3xl overflow-hidden bg-[#f4f4f6] border border-zinc-200/80 shadow-xs flex items-center justify-center p-2 sm:p-4">
                 {viewMode === "3d" ? (
                   <Shoe3DViewer
                     img={p.img}

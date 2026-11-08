@@ -154,7 +154,7 @@ export default function Shop() {
               {[1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
                 <div
                   key={i}
-                  className="aspect-square bg-zinc-200/60 rounded-2xl sm:rounded-3xl animate-pulse"
+                  className="aspect-[3/4] bg-zinc-200/60 rounded-2xl sm:rounded-3xl animate-pulse"
                 />
               ))}
             </div>

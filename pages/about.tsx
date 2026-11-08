@@ -386,7 +386,7 @@ export default function About() {
             </Reveal>
 
             <Reveal delay={300}>
-              <div className="ab-policy-card bg-white border border-zinc-200/80 shadow-sm p-6 rounded-3xl flex flex-col gap-2">
+              <div id="exchange" style={{ scrollMarginTop: 120 }} className="ab-policy-card bg-white border border-zinc-200/80 shadow-sm p-6 rounded-3xl flex flex-col gap-2">
                 <h4 className="text-lg font-bold text-zinc-900 flex items-center gap-2.5">
                   <RotateCcw size={22} color="#10b981" /> 7-Day Hassle-Free Exchange
                 </h4>

@@ -19,7 +19,7 @@ export async function getReviews(req: Request, res: Response): Promise<void> {
     // Calculate dynamic stats
     const allApproved = await Review.find({ status: "approved" });
     const totalCount = allApproved.length;
-    const avgRating = totalCount > 0 ? (allApproved.reduce((acc, r) => acc + r.rating, 0) / totalCount).toFixed(1) : "5.0";
+    const avgRating = totalCount > 0 ? (allApproved.reduce((acc, r) => acc + r.rating, 0) / totalCount).toFixed(1) : "0";
 
     const distribution: Record<number, number> = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
     for (const r of allApproved) {

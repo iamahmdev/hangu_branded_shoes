@@ -2064,63 +2064,8 @@ export async function seedDatabase(): Promise<void> {
     console.log(`👟 ${SEED_PRODUCTS.length} Products seeded.`);
   }
 
-  // 3. Seed Reviews
-  const reviewCount = await Review.countDocuments();
-  if (reviewCount === 0) {
-    await Review.create([
-      {
-        shoeName: "Skylite Slip-On Sneaker",
-        userName: "Muhammad Bilal",
-        city: "Peshawar",
-        rating: 5,
-        comment: "Bohot hi comfortable shoe hai! Hangu Branded Shoes ki packaging aur delivery speed mashallah zabardast thi. Peshawar mein 2 din mein deliver ho gaya.",
-        status: "approved",
-        verified: true,
-        productId: 1,
-      },
-      {
-        shoeName: "Classic Derby Formal Leather",
-        userName: "Kamran Shah",
-        city: "Islamabad",
-        rating: 5,
-        comment: "Pure 100% genuine leather hai. Office meetings ke liye liya tha, har kisi ne tareef ki. Finishing bilkul branded export quality jaisi hai.",
-        status: "approved",
-        verified: true,
-        productId: 2,
-      },
-      {
-        shoeName: "Urban Air-Glide Runner",
-        userName: "Usman Tariq",
-        city: "Lahore",
-        rating: 5,
-        comment: "Daily morning walk aur jogging ke liye best hai. Sole bohot soft hai aur knee pain bilkul nahi hota. 10/10 recommended!",
-        status: "approved",
-        verified: true,
-        productId: 3,
-      },
-      {
-        shoeName: "ErgoWalk Ortho Comfort Loafer",
-        userName: "Dr. Farooq Khan",
-        city: "Hangu",
-        rating: 5,
-        comment: "Mere walid sahab ke liye mangwaya tha. Unko chalne mein bohot aasaani hui. KP ke local craft aur modern comfort ka perfect combination.",
-        status: "approved",
-        verified: true,
-        productId: 5,
-      },
-      {
-        shoeName: "Handcrafted Heritage Penny Loafer",
-        userName: "Zeeshan Ali",
-        city: "Karachi",
-        rating: 5,
-        comment: "Karachi COD delivery sirf 3 din mein mili. Size 42 ordered aur bilkul perfect fit aya. Quality exceeds expectation!",
-        status: "approved",
-        verified: true,
-        productId: 4,
-      },
-    ]);
-    console.log("⭐ 5 Initial Customer Reviews seeded.");
-  }
+  // 3. Customer Reviews (Only genuine customer submissions accepted)
+  console.log("⭐ Reviews initialized (clean, waiting for real customer submissions).");
 
   // 5. Seed Settings
   let setting = await Setting.findOne();

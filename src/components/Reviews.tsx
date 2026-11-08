@@ -50,7 +50,7 @@ export default function Reviews() {
   const avg =
     totalReviews > 0
       ? (reviewsList.reduce((acc, r) => acc + r.r, 0) / totalReviews).toFixed(1)
-      : "5.0";
+      : "0";
 
   const handleChange = (k: string) => (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
@@ -97,28 +97,38 @@ export default function Reviews() {
       </div>
 
       {/* Aggregate Stats Summary Card */}
-      <div className="bg-white border border-zinc-200/80 shadow-sm rsum p-6 rounded-3xl flex flex-wrap items-center justify-around gap-6 mb-10">
-        <div className="avg text-center">
-          <b className="text-4xl md:text-5xl font-extrabold text-zinc-900 block">{avg}</b>
-          <Stars n={Math.round(Number(avg))} />
-          <p className="text-zinc-500 text-xs mt-1">Based on {totalReviews} customer reviews</p>
-        </div>
-        <div className="flex flex-col gap-1.5 min-w-[240px]">
-          {[5, 4, 3, 2, 1].map((s) => {
-            const count = reviewsList.filter((x) => x.r === s).length;
-            const pct = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
-            return (
-              <div className="bar flex items-center gap-2 text-xs text-zinc-500" key={s}>
-                <span className="w-6 font-mono">{s}★</span>
-                <div className="flex-1 bg-zinc-100 h-2 rounded-full overflow-hidden">
-                  <i className="block bg-brand-gold h-full rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
+      {totalReviews > 0 ? (
+        <div className="bg-white border border-zinc-200/80 shadow-sm rsum p-6 rounded-3xl flex flex-wrap items-center justify-around gap-6 mb-10">
+          <div className="avg text-center">
+            <b className="text-4xl md:text-5xl font-extrabold text-zinc-900 block">{avg}</b>
+            <Stars n={Math.round(Number(avg))} />
+            <p className="text-zinc-500 text-xs mt-1">Based on {totalReviews} customer reviews</p>
+          </div>
+          <div className="flex flex-col gap-1.5 min-w-[240px]">
+            {[5, 4, 3, 2, 1].map((s) => {
+              const count = reviewsList.filter((x) => x.r === s).length;
+              const pct = totalReviews > 0 ? (count / totalReviews) * 100 : 0;
+              return (
+                <div className="bar flex items-center gap-2 text-xs text-zinc-500" key={s}>
+                  <span className="w-6 font-mono">{s}★</span>
+                  <div className="flex-1 bg-zinc-100 h-2 rounded-full overflow-hidden">
+                    <i className="block bg-brand-gold h-full rounded-full transition-all duration-500" style={{ width: `${pct}%` }} />
+                  </div>
+                  <span className="w-6 text-right font-mono">{count}</span>
                 </div>
-                <span className="w-6 text-right font-mono">{count}</span>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="bg-white border border-zinc-200/80 shadow-sm p-6 rounded-3xl text-center mb-10 max-w-xl mx-auto">
+          <span className="text-3xl block mb-2">⭐</span>
+          <h3 className="font-bold text-zinc-900 text-base">No Customer Reviews Yet</h3>
+          <p className="text-zinc-500 text-xs mt-1">
+            Purchased a pair from Hangu Branded Shoes? Be the first customer to share your honest review below!
+          </p>
+        </div>
+      )}
 
       <div className="rw grid grid-cols-1 lg:grid-cols-[380px_1fr] gap-8">
         {/* Write a Review Form */}

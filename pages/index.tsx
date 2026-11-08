@@ -22,7 +22,12 @@ export default function Home() {
   });
 
   return (
-    <Layout title="Hangu Branded Shoes — Minimalist Luxury Footwear">
+    <Layout
+      title="Hangu Branded Shoes — Premium Handcrafted Footwear Pakistan"
+      description="Shop authentic handcrafted leather shoes, loafers, formal derbies, and athletic sneakers at Hangu Branded Shoes. Cash on Delivery across Pakistan with 7-day hassle-free size exchange."
+      keywords="hangu branded shoes, shoes in pakistan, buy leather shoes online, loafers pakistan, sneakers pakistan, peshawari chappal, formal footwear men, cash on delivery shoes"
+      ogImage="/images/shoes/IMG_3091.jpg"
+    >
       <div className="bg-[#fafafa] text-zinc-900 min-h-screen">
         {/* 1. ETQ-Inspired Split Showcase Hero Section */}
         <section className="pt-6 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

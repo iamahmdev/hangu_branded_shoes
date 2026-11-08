@@ -107,7 +107,10 @@ export default function TrackOrderPage() {
   };
 
   return (
-    <Layout title="Track Your Order — Hangu Branded Shoes">
+    <Layout
+      title="Track Your Order — Hangu Branded Shoes"
+      description="Track your footwear parcel live in Pakistan. Enter your Order ID (e.g. HBS-2026-XXXX) or WhatsApp phone number for real-time dispatch and delivery status."
+    >
       <div className="bg-[#fafafa] text-zinc-900 min-h-screen pt-8 pb-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}

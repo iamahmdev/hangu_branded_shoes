@@ -9,17 +9,36 @@ import BottomNav from "./BottomNav";
 import QuickOrderModal from "./QuickOrderModal";
 import QuickSearchModal from "./QuickSearchModal";
 import RecentSalesToast from "./RecentSalesToast";
+import SEO, { SEOProps } from "./SEO";
 
-interface LayoutProps {
+interface LayoutProps extends SEOProps {
   children: ReactNode;
-  title?: string;
 }
 
-export default function Layout({ children, title = "Hangu Branded Shoes" }: LayoutProps) {
+export default function Layout({
+  children,
+  title = "Hangu Branded Shoes",
+  description,
+  keywords,
+  ogImage,
+  ogType,
+  canonical,
+  product,
+  noIndex,
+}: LayoutProps) {
   return (
     <>
+      <SEO
+        title={title}
+        description={description}
+        keywords={keywords}
+        ogImage={ogImage}
+        ogType={ogType}
+        canonical={canonical}
+        product={product}
+        noIndex={noIndex}
+      />
       <Head>
-        <title>{title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />

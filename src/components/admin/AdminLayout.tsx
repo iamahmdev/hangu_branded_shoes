@@ -74,6 +74,7 @@ export default function AdminLayout({
       <Head>
         <title>{`Admin — ${current.title} | Hangu Branded Shoes`}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="robots" content="noindex, nofollow" />
       </Head>
 
       {/* Light modern SaaS Canvas (eMart Reference Style) */}

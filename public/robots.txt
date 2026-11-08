@@ -1,0 +1,22 @@
+# Robots.txt for Hangu Branded Shoes
+User-agent: *
+Allow: /
+Allow: /shop
+Allow: /product/
+Allow: /about
+Allow: /contact
+Allow: /track
+Allow: /size-guide
+Allow: /reviews
+
+# Disallow private checkout, cart, API and administrative endpoints
+Disallow: /admin
+Disallow: /admin/
+Disallow: /api/
+Disallow: /checkout
+Disallow: /cart
+Disallow: /success
+
+# Sitemap Location
+Sitemap: https://hangubrandedshoes.com/sitemap.xml
+

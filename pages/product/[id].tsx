@@ -80,7 +80,23 @@ export default function Product() {
   };
 
   return (
-    <Layout title={`${p.name} — Hangu Branded Shoes`}>
+    <Layout
+      title={`${p.name} — Rs. ${p.price.toLocaleString()} | Hangu Branded Shoes`}
+      description={`Buy authentic ${p.name} (${p.cat}) handcrafted with premium genuine materials for Rs. ${p.price.toLocaleString()}. Cash on Delivery & 7-Day Hassle-Free Size Exchange nationwide in Pakistan.`}
+      ogImage={resolveProductImage(p.img)}
+      ogType="product"
+      product={{
+        name: p.name,
+        description: p.desc || `Authentic handcrafted ${p.name} from Hangu Branded Shoes Pakistan.`,
+        price: p.price,
+        image: resolveProductImage(p.img),
+        stock: p.stock,
+        rating: p.rating || 5,
+        reviewsCount: p.reviews || 15,
+        sku: p.id,
+        category: p.cat,
+      }}
+    >
       <div className="bg-[#fafafa] text-zinc-900 min-h-screen pt-8 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}

@@ -148,7 +148,10 @@ function PillarCardItem({ pillar, index }: { pillar: Pillar; index: number }) {
 
 export default function About() {
   return (
-    <Layout title="About Us — Hangu Branded Shoes">
+    <Layout
+      title="About Us & Craftsmanship Heritage — Hangu Branded Shoes"
+      description="Learn about Hangu Branded Shoes, established in Tahir Market Hangu, KPK. Renowned for authentic handcrafted leather shoes, lifetime durability, and nationwide customer trust in Pakistan."
+    >
       <div className="pg wrap pt-32 pb-16" style={{ maxWidth: 1180 }}>
         {/* Hero Header */}
         <Reveal>

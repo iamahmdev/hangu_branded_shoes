@@ -33,7 +33,10 @@ export default function SizeGuide() {
   const current = SIZE_DATA.find((s) => s.eu === selectedSize) || SIZE_DATA[3];
 
   return (
-    <Layout title="Shoe Size Guide — Hangu Branded Shoes">
+    <Layout
+      title="Pakistan Footwear Size Guide (EU 40-45) — Hangu Branded Shoes"
+      description="Find your perfect shoe size with our comprehensive Pakistan footwear conversion chart (EU, UK, US, CM). Backed by our 7-Day Hassle-Free Size Exchange guarantee."
+    >
       <div className="bg-[#fafafa] text-zinc-900 min-h-screen pt-8 pb-20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Page Header */}

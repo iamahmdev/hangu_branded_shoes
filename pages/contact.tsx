@@ -18,7 +18,10 @@ export default function Contact() {
   const whatsappMsg = `Assalam-o-Alaikum ${shopName}! I would like to inquire about footwear availability and sizes.`;
 
   return (
-    <Layout title={`Contact Us & Store Location — ${shopName}`}>
+    <Layout
+      title={`Contact Us & Store Location — ${shopName}`}
+      description="Visit our store at Tahir Market, Tall Road, Hangu, KPK or contact our WhatsApp concierge (+923333147691) for sizing, custom inquiries, and nationwide deliveries."
+    >
       <div className="pt-32 pb-24">
         <div className="wrap max-w-5xl mx-auto px-4">
           {/* Header */}

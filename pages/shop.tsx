@@ -56,7 +56,11 @@ export default function Shop() {
   };
 
   return (
-    <Layout title="All Footwear Collection — Hangu Branded Shoes">
+    <Layout
+      title="All Footwear Collection — Hangu Branded Shoes"
+      description="Explore our full collection of 50+ handcrafted leather shoes, loafers, formal oxfords, sneakers, and boots. Nationwide Cash on Delivery with 7-day size exchange."
+      keywords="hangu footwear catalog, all shoes pakistan, leather footwear, sneakers online, men shoes hangu"
+    >
       <div className="bg-[#fafafa] text-zinc-900 min-h-screen pt-8 pb-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}

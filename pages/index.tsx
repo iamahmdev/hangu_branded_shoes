@@ -2,19 +2,24 @@ import { useState } from "react";
 import Link from "next/link";
 import Layout from "../src/components/Layout";
 import ProductCard from "../src/components/ProductCard";
-import Reveal from "../src/components/Reveal";
 import Reviews from "../src/components/Reviews";
 import { WhatsAppIcon } from "../src/components/WhatsAppButton";
 import { wa } from "../src/data/config";
 import { useProducts } from "../src/hooks/useApi";
-import { SlidersHorizontal, ArrowRight, ShieldCheck, Sparkles, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Package, Sparkles, CheckCircle2, ShieldCheck, Truck, RotateCcw } from "lucide-react";
 
 export default function Home() {
   const { data: products, isLoading } = useProducts();
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
-  const [filterOpen, setFilterOpen] = useState<boolean>(false);
 
-  const categories = ["All", "Sneakers", "Formal", "Loafers", "Comfort", "Boots"];
+  const categories = [
+    { label: "All Footwear", val: "All" },
+    { label: "Sneakers", val: "Sneakers" },
+    { label: "Formal", val: "Formal" },
+    { label: "Loafers", val: "Loafers" },
+    { label: "Comfort", val: "Comfort" },
+    { label: "Boots", val: "Boots" },
+  ];
 
   const filteredShoes = products?.filter((p) => {
     if (selectedCategory === "All") return true;
@@ -29,217 +34,245 @@ export default function Home() {
       ogImage="/images/shoes/IMG_3091.jpg"
     >
       <div className="bg-[#fafafa] text-zinc-900 min-h-screen">
-        {/* 1. ETQ-Inspired Split Showcase Hero Section */}
-        <section className="pt-6 pb-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-            {/* Left Editorial Visual (matching Image 1's left model shot) */}
-            <div className="lg:col-span-5 flex flex-col gap-4">
-              <div className="relative aspect-[4/3] sm:aspect-[16/9] lg:aspect-[3/4] w-full rounded-2xl sm:rounded-3xl overflow-hidden bg-[#ebebeb] border border-zinc-200/80 shadow-xs group">
-                <img
-                  src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&q=80&w=1200"
-                  alt="Hangu Luxury Footwear Showcase"
-                  className="w-full h-full object-cover object-center group-hover:scale-102 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent flex flex-col justify-end p-4 sm:p-6 md:p-8 text-white">
-                  <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-zinc-300 mb-1">
-                    SEASON ARCHIVE 2026
-                  </span>
-                  <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold tracking-tight">
-                    Pure Form. Unmatched Comfort.
-                  </h2>
-                  <p className="text-xs text-zinc-300 mt-1 max-w-sm hidden sm:block">
-                    Hand-finished soles, premium genuine leathers, and tailored silhouettes for everyday luxury.
-                  </p>
-                  <div className="mt-3 sm:mt-4 flex items-center gap-3">
-                    <Link
-                      href="/shop"
-                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white text-zinc-950 text-xs font-bold hover:bg-zinc-100 transition-colors"
-                    >
-                      <span>Explore Collection</span>
-                      <ArrowRight size={14} />
-                    </Link>
-                  </div>
-                </div>
-              </div>
+        {/* 1. Ultra-Modern Full-Width Hero Section */}
+        <section className="relative overflow-hidden bg-gradient-to-b from-zinc-100/80 via-white to-[#fafafa] border-b border-zinc-200/80 pt-10 sm:pt-14 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-6xl mx-auto text-center flex flex-col items-center">
+            {/* Top Brand Badge */}
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/5 border border-zinc-900/10 text-zinc-800 text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-5">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              <span>EST. 2026 • TAHIR MARKET, HANGU • NATIONWIDE DELIVERY</span>
             </div>
 
-            {/* Right Product Grid with Filter Button (matching Image 1) */}
-            <div className="lg:col-span-7 flex flex-col gap-5">
-              {/* Top Subheader Bar & Filter Pill Button */}
-              <div className="flex items-center justify-between pb-2 border-b border-zinc-200">
-                <div>
-                  <span className="text-[10px] font-bold tracking-[0.2em] uppercase text-zinc-400">
-                    FEATURED SELECTION
-                  </span>
-                  <h3 className="text-lg md:text-xl font-bold tracking-tight text-zinc-950">
-                    Latest Footwear Arrivals
-                  </h3>
-                </div>
+            {/* Modern Main Headline */}
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-zinc-950 tracking-tight leading-[1.15] max-w-4xl">
+              Minimalist Luxury. <br className="hidden sm:inline" />
+              <span className="text-zinc-600 font-bold">Handcrafted Precision.</span>
+            </h1>
 
-                {/* Filter Pill Button (matching Image 1 top right) */}
-                <button
-                  type="button"
-                  onClick={() => setFilterOpen(!filterOpen)}
-                  className={`inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-xs font-semibold border transition-all ${
-                    filterOpen
-                      ? "bg-zinc-900 text-white border-zinc-900 shadow-sm"
-                      : "bg-white text-zinc-700 border-zinc-300 hover:border-zinc-900"
-                  }`}
-                >
-                  <SlidersHorizontal size={13} />
-                  <span>Filter</span>
-                </button>
+            {/* Subtitle */}
+            <p className="text-sm sm:text-base text-zinc-600 mt-4 max-w-2xl leading-relaxed">
+              Explore 50+ authentic handcrafted leather shoes, formal derbies, penny loafers, and athletic sneakers.
+              Delivered nationwide with Cash on Delivery & 7-Day Size Exchange.
+            </p>
+
+            {/* CTAs */}
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
+              <Link
+                href="/shop"
+                className="px-7 py-3.5 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white text-xs sm:text-sm font-bold inline-flex items-center gap-2 transition-all shadow-md hover:scale-102 active:scale-98"
+              >
+                <span>Explore All Footwear ({products?.length || 53})</span>
+                <ArrowRight size={15} />
+              </Link>
+
+              <Link
+                href="/track"
+                className="px-6 py-3.5 rounded-full bg-white hover:bg-zinc-50 text-zinc-900 text-xs sm:text-sm font-bold border border-zinc-300 hover:border-zinc-950 inline-flex items-center gap-2 transition-all shadow-2xs"
+              >
+                <Package size={15} />
+                <span>Track Your Order</span>
+              </Link>
+            </div>
+
+            {/* Modern Trust Features Bar */}
+            <div className="mt-10 sm:mt-12 pt-6 border-t border-zinc-200/80 w-full max-w-4xl grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
+              <div className="flex items-center gap-2.5">
+                <Truck size={18} className="text-zinc-900 shrink-0" />
+                <div>
+                  <h4 className="text-xs font-bold text-zinc-950">Free Shipping</h4>
+                  <p className="text-[10px] text-zinc-500">Orders over Rs. 5,000</p>
+                </div>
               </div>
 
-              {/* Collapsible Category Filter Bar */}
-              {filterOpen && (
-                <div className="flex items-center gap-2 overflow-x-auto py-2 animate-fadeIn no-scrollbar">
-                  {categories.map((cat) => (
-                    <button
-                      key={cat}
-                      onClick={() => setSelectedCategory(cat)}
-                      className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-colors whitespace-nowrap ${
-                        selectedCategory === cat
-                          ? "bg-zinc-900 text-white"
-                          : "bg-zinc-200/70 text-zinc-700 hover:bg-zinc-300"
-                      }`}
-                    >
-                      {cat}
-                    </button>
-                  ))}
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 size={18} className="text-emerald-600 shrink-0" />
+                <div>
+                  <h4 className="text-xs font-bold text-zinc-950">JazzCash & COD</h4>
+                  <p className="text-[10px] text-zinc-500">Pay at doorstep</p>
                 </div>
-              )}
+              </div>
 
-              {/* Footwear Grid */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-5">
-                {isLoading ? (
-                  [1, 2, 3, 4].map((i) => (
-                    <div
-                      key={i}
-                      className="aspect-[3/4] bg-zinc-200/60 rounded-2xl animate-pulse"
-                    />
-                  ))
-                ) : (
-                  (filteredShoes || []).slice(0, 6).map((p) => (
-                    <ProductCard key={p.id} p={p} />
-                  ))
-                )}
+              <div className="flex items-center gap-2.5">
+                <RotateCcw size={18} className="text-zinc-900 shrink-0" />
+                <div>
+                  <h4 className="text-xs font-bold text-zinc-950">7-Day Exchange</h4>
+                  <p className="text-[10px] text-zinc-500">Hassle-free size fit</p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5">
+                <ShieldCheck size={18} className="text-zinc-900 shrink-0" />
+                <div>
+                  <h4 className="text-xs font-bold text-zinc-950">100% Genuine</h4>
+                  <p className="text-[10px] text-zinc-500">Handcrafted durability</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 2. Permanent Collection Overview (Minimalist Grid) */}
-        <section className="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-zinc-200/80">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+        {/* 2. Main Catalog Grid Section with Category Tabs */}
+        <section className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header & Category Filter Pills */}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-8 pb-4 border-b border-zinc-200">
             <div>
               <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-zinc-400">
-                HANGU CORE FOOTWEAR
+                CURATED COLLECTION
               </span>
-              <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-zinc-950 mt-1">
-                The Permanent Footwear Line
+              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-950 mt-1">
+                Latest Footwear Arrivals
               </h2>
               <p className="text-xs text-zinc-500 mt-1">
-                Timeless designs engineered for maximum sole durability and daily comfort.
+                Showing {filteredShoes?.length || 0} premium footwear pairs ready for immediate dispatch.
               </p>
             </div>
 
-            <Link
-              href="/shop"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-900 hover:text-emerald-700 underline underline-offset-4"
-            >
-              <span>View All Footwear ({products?.length || 0})</span>
-              <ArrowRight size={14} />
-            </Link>
+            {/* Clean Category Pill Bar */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+              {categories.map((c) => (
+                <button
+                  key={c.val}
+                  type="button"
+                  onClick={() => setSelectedCategory(c.val)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+                    selectedCategory === c.val
+                      ? "bg-zinc-950 text-white shadow-xs"
+                      : "bg-white text-zinc-700 hover:bg-zinc-100 border border-zinc-200/80"
+                  }`}
+                >
+                  {c.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5 lg:gap-6">
-            {(products || []).slice(0, 8).map((p) => (
-              <ProductCard key={p.id} p={p} />
-            ))}
+          {/* Full-Width 4-Column Product Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5 lg:gap-6">
+            {isLoading ? (
+              [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+                <div
+                  key={i}
+                  className="aspect-square bg-zinc-200/60 rounded-2xl sm:rounded-3xl animate-pulse"
+                />
+              ))
+            ) : filteredShoes && filteredShoes.length > 0 ? (
+              filteredShoes.slice(0, 12).map((p) => (
+                <ProductCard key={p.id} p={p} />
+              ))
+            ) : (
+              <div className="col-span-full py-16 text-center text-zinc-500 text-sm">
+                No products found in this category.
+              </div>
+            )}
+          </div>
+
+          {/* View All Button */}
+          <div className="mt-12 text-center">
+            <Link
+              href="/shop"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white text-xs sm:text-sm font-bold transition-all shadow-md hover:scale-102"
+            >
+              <span>View All 50+ Footwear Styles</span>
+              <ArrowRight size={15} />
+            </Link>
           </div>
         </section>
 
-        {/* 3. Value Props (Clean Minimalist Luxury Strip) */}
-        <section className="py-12 bg-white border-y border-zinc-200/80">
+        {/* 3. Luxury Leather Craftsmanship Feature Banner */}
+        <section className="py-14 bg-zinc-950 text-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 text-center sm:text-left">
-              <div className="flex items-start gap-3.5 p-3">
-                <span className="text-2xl">🚚</span>
-                <div>
-                  <h4 className="font-bold text-sm text-zinc-900">Free Nationwide Shipping</h4>
-                  <p className="text-xs text-zinc-500 mt-0.5">Complimentary express dispatch on orders over Rs. 5,000</p>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              <div className="lg:col-span-7">
+                <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-emerald-400 mb-2 block">
+                  ORIGINAL HANGU HERITAGE
+                </span>
+                <h3 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
+                  Handcrafted with Pure Genuine Materials
+                </h3>
+                <p className="text-zinc-400 text-xs sm:text-sm mt-3 max-w-xl leading-relaxed">
+                  Every shoe at Hangu Branded Shoes is crafted by master artisans in Tahir Market, Hangu.
+                  We combine supple full-grain leathers, reinforced double-stitching, and ergonomic shock-absorbing
+                  soles for a lifetime of comfortable strides.
+                </p>
+
+                <div className="mt-6 flex flex-wrap items-center gap-6 text-xs font-semibold text-zinc-300">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                    <span>Pure Cow & Calf Leather</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                    <span>Ortho Cushioning Footbed</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 size={16} className="text-emerald-400 shrink-0" />
+                    <span>Anti-Slip Durable Soles</span>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex items-start gap-3.5 p-3">
-                <span className="text-2xl">⚡</span>
-                <div>
-                  <h4 className="font-bold text-sm text-zinc-900">Cash on Delivery & JazzCash</h4>
-                  <p className="text-xs text-zinc-500 mt-0.5">Pay safely at your doorstep or via instant JazzCash transfer</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3.5 p-3">
-                <span className="text-2xl">🔄</span>
-                <div>
-                  <h4 className="font-bold text-sm text-zinc-900">7-Day Free Size Exchange</h4>
-                  <p className="text-xs text-zinc-500 mt-0.5">Hassle-free size adjustment guarantee across Pakistan</p>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3.5 p-3">
-                <span className="text-2xl">🛡️</span>
-                <div>
-                  <h4 className="font-bold text-sm text-zinc-900">100% Genuine Sole Footwear</h4>
-                  <p className="text-xs text-zinc-500 mt-0.5">Triple-inspected for stitching, durability and genuine sole fit</p>
-                </div>
+              <div className="lg:col-span-5 flex flex-col sm:flex-row gap-3 justify-end">
+                <Link
+                  href="/shop?cat=Loafers"
+                  className="px-6 py-3.5 rounded-full bg-white text-zinc-950 text-xs font-bold text-center hover:bg-zinc-100 transition-colors"
+                >
+                  Shop Leather Loafers
+                </Link>
+                <Link
+                  href="/about"
+                  className="px-6 py-3.5 rounded-full bg-zinc-800 text-white text-xs font-bold text-center hover:bg-zinc-700 border border-zinc-700 transition-colors"
+                >
+                  Our Story & Location
+                </Link>
               </div>
             </div>
           </div>
         </section>
 
-        {/* 4. Customer Testimonials */}
-        <section className="py-14 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* 4. Customer Testimonials & Reviews */}
+        <section className="py-14 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-10">
             <span className="text-[10px] font-bold tracking-[0.25em] uppercase text-zinc-400">
-              VERIFIED BUYERS
+              TRUSTED BY CUSTOMERS ACROSS PAKISTAN
             </span>
             <h2 className="text-2xl md:text-3xl font-extrabold tracking-tight text-zinc-950 mt-1">
-              Customer Feedback & Reviews
+              Customer Reviews & Feedback
             </h2>
+            <p className="text-xs text-zinc-500 mt-1 max-w-md mx-auto">
+              Real reviews from verified buyers across Peshawar, Islamabad, Lahore, Karachi and Hangu.
+            </p>
           </div>
           <Reviews />
         </section>
 
-        {/* 5. Minimalist Call To Action */}
-        <section className="py-16 bg-zinc-950 text-white text-center px-4">
+        {/* 5. Minimalist Call To Action & WhatsApp Concierge */}
+        <section className="py-16 bg-[#f4f4f6] text-zinc-900 text-center px-4 border-t border-zinc-200/80">
           <div className="max-w-2xl mx-auto flex flex-col items-center">
-            <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-emerald-400 mb-2">
-              EXECUTIVE FOOTWEAR
+            <span className="text-[10px] font-bold tracking-[0.3em] uppercase text-zinc-500 mb-2">
+              NEED HELP SELECTING YOUR SIZE?
             </span>
-            <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight">
-              Step Into Premium Distinction
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-950">
+              Speak Directly with Our Store Team
             </h2>
-            <p className="text-xs md:text-sm text-zinc-400 mt-2 max-w-md">
-              Order your pair with instant Cash on Delivery or connect directly with our Hangu store team on WhatsApp.
+            <p className="text-xs sm:text-sm text-zinc-600 mt-2 max-w-md">
+              Visit our flagship store at Tahir Market, Tall Road, Hangu or chat with us on WhatsApp for live photo requests and custom recommendations.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                href="/shop"
-                className="px-6 py-3 rounded-full bg-white text-zinc-950 text-xs font-bold hover:bg-zinc-200 transition-colors"
-              >
-                Browse All Shoes
-              </Link>
               <a
-                href={wa("Assalam-o-Alaikum! I want to order shoes from Hangu Branded Shoes.")}
+                href={wa("Assalam-o-Alaikum! Mujhe Hangu Branded Shoes se jootay ke baray mein janna hai.")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold inline-flex items-center gap-2 transition-colors"
+                className="px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold inline-flex items-center gap-2 transition-colors shadow-md"
               >
                 <WhatsAppIcon size={16} color="#fff" />
-                <span>Order on WhatsApp</span>
+                <span>Chat on WhatsApp (+92 333 3147691)</span>
               </a>
+              <Link
+                href="/shop"
+                className="px-6 py-3 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white text-xs font-bold transition-colors"
+              >
+                Browse Catalog
+              </Link>
             </div>
           </div>
         </section>

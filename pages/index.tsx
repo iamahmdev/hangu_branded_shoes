@@ -34,76 +34,74 @@ export default function Home() {
       ogImage="/images/shoes/IMG_3091.jpg"
     >
       <div className="bg-[#fafafa] text-zinc-900 min-h-screen">
-        {/* 1. Ultra-Clean Modern Luxury Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-b from-zinc-100/70 via-white to-[#fafafa] border-b border-zinc-200/80 pt-12 sm:pt-16 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-5xl mx-auto text-center flex flex-col items-center">
-            {/* Modern Main Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-zinc-950 tracking-tight leading-[1.12] max-w-3xl">
-              Pure Leather Footwear. <br className="hidden sm:inline" />
-              <span className="text-zinc-500 font-bold">Engineered for Comfort.</span>
-            </h1>
+        {/* 1. High-Impact Luxury Hero Visual Banner */}
+        <section className="relative px-4 sm:px-6 lg:px-8 pt-4 pb-6 max-w-7xl mx-auto">
+          <div className="relative rounded-3xl overflow-hidden bg-zinc-950 text-white min-h-[360px] sm:min-h-[420px] flex items-center shadow-xl">
+            {/* Background Atmosphere & Subtle Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-zinc-950/90 to-transparent z-10" />
+            <img
+              src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&q=80&w=1400"
+              alt="Hangu Luxury Footwear"
+              className="absolute right-0 top-0 w-full md:w-3/5 h-full object-cover object-center opacity-40 md:opacity-70 scale-102"
+            />
 
-            {/* Subtitle */}
-            <p className="text-sm sm:text-base text-zinc-600 mt-4 max-w-xl leading-relaxed font-medium">
-              Authentic handcrafted leather loafers, formal derby shoes, and athletic sneakers.
-              Delivered nationwide across Pakistan with Cash on Delivery & 7-Day Size Exchange.
-            </p>
+            {/* Left Content */}
+            <div className="relative z-20 max-w-xl p-6 sm:p-10 md:p-14 flex flex-col items-start">
+              <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.3em] uppercase text-emerald-400 mb-2">
+                COLLECTION ARCHIVE 2026
+              </span>
+              <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-[1.1] text-white">
+                Handcrafted <br />
+                <span className="text-zinc-400 font-extrabold">Leather Footwear.</span>
+              </h1>
+              <p className="text-xs sm:text-sm text-zinc-300 mt-3 max-w-md leading-relaxed">
+                Over 50+ handcrafted loafers, formal derbies, and daily sneakers.
+                Delivered across Pakistan with Cash on Delivery & 7-Day Size Exchange.
+              </p>
 
-            {/* CTAs */}
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3.5">
-              <Link
-                href="/shop"
-                className="px-7 py-3.5 rounded-full bg-zinc-950 hover:bg-zinc-800 text-white text-xs sm:text-sm font-bold inline-flex items-center gap-2 transition-all shadow-md hover:scale-102 active:scale-98"
-              >
-                <span>Explore All Footwear ({products?.length || 53})</span>
-                <ArrowRight size={15} />
-              </Link>
-
-              <Link
-                href="/track"
-                className="px-6 py-3.5 rounded-full bg-white hover:bg-zinc-50 text-zinc-900 text-xs sm:text-sm font-bold border border-zinc-300 hover:border-zinc-950 inline-flex items-center gap-2 transition-all shadow-2xs"
-              >
-                <Package size={15} />
-                <span>Track Your Order</span>
-              </Link>
-            </div>
-
-            {/* Modern Trust Features Bar */}
-            <div className="mt-10 sm:mt-12 pt-6 border-t border-zinc-200/80 w-full max-w-4xl grid grid-cols-2 md:grid-cols-4 gap-4 text-left">
-              <div className="flex items-center gap-2.5">
-                <Truck size={18} className="text-zinc-900 shrink-0" />
-                <div>
-                  <h4 className="text-xs font-bold text-zinc-950">Free Shipping</h4>
-                  <p className="text-[10px] text-zinc-500">Orders over Rs. 5,000</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2.5">
-                <CheckCircle2 size={18} className="text-emerald-600 shrink-0" />
-                <div>
-                  <h4 className="text-xs font-bold text-zinc-950">JazzCash & COD</h4>
-                  <p className="text-[10px] text-zinc-500">Pay at doorstep</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2.5">
-                <RotateCcw size={18} className="text-zinc-900 shrink-0" />
-                <div>
-                  <h4 className="text-xs font-bold text-zinc-950">7-Day Exchange</h4>
-                  <p className="text-[10px] text-zinc-500">Hassle-free size fit</p>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2.5">
-                <ShieldCheck size={18} className="text-zinc-900 shrink-0" />
-                <div>
-                  <h4 className="text-xs font-bold text-zinc-950">100% Genuine</h4>
-                  <p className="text-[10px] text-zinc-500">Handcrafted durability</p>
-                </div>
+              <div className="mt-6 flex items-center gap-3">
+                <Link
+                  href="/shop"
+                  className="px-6 py-3 rounded-full bg-white hover:bg-zinc-100 text-zinc-950 text-xs sm:text-sm font-bold inline-flex items-center gap-2 transition-all shadow-md active:scale-98"
+                >
+                  <span>Shop Collection ({products?.length || 53})</span>
+                  <ArrowRight size={14} />
+                </Link>
+                <Link
+                  href="/track"
+                  className="px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-bold border border-white/20 backdrop-blur-md transition-all"
+                >
+                  Track Order
+                </Link>
               </div>
             </div>
           </div>
         </section>
+
+        {/* 2. Sleek 1-Line Luxury Trust Marquee Bar */}
+        <div className="bg-zinc-950 text-white text-[11px] sm:text-xs font-semibold py-3 border-y border-zinc-800 overflow-hidden">
+          <div className="flex items-center justify-around max-w-7xl mx-auto px-4 gap-6 overflow-x-auto no-scrollbar whitespace-nowrap">
+            <span className="inline-flex items-center gap-2 text-zinc-300">
+              <Truck size={14} className="text-emerald-400" />
+              <span>Free Delivery Over Rs. 5,000</span>
+            </span>
+            <span className="text-zinc-600">✦</span>
+            <span className="inline-flex items-center gap-2 text-zinc-300">
+              <CheckCircle2 size={14} className="text-emerald-400" />
+              <span>Cash on Delivery & JazzCash</span>
+            </span>
+            <span className="text-zinc-600">✦</span>
+            <span className="inline-flex items-center gap-2 text-zinc-300">
+              <RotateCcw size={14} className="text-emerald-400" />
+              <span>7-Day Hassle-Free Size Exchange</span>
+            </span>
+            <span className="text-zinc-600">✦</span>
+            <span className="inline-flex items-center gap-2 text-zinc-300">
+              <ShieldCheck size={14} className="text-emerald-400" />
+              <span>100% Handcrafted Leather</span>
+            </span>
+          </div>
+        </div>
 
         {/* 2. Main Catalog Grid Section with Category Tabs */}
         <section className="py-12 sm:py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

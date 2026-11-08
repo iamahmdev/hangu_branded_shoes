@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Layout from "../src/components/Layout";
+import HeroSlider from "../src/components/HeroSlider";
 import ProductCard from "../src/components/ProductCard";
 import Reviews from "../src/components/Reviews";
 import { WhatsAppIcon } from "../src/components/WhatsAppButton";
@@ -34,49 +35,8 @@ export default function Home() {
       ogImage="/images/shoes/IMG_3091.jpg"
     >
       <div className="bg-[#fafafa] text-zinc-900 min-h-screen">
-        {/* 1. High-Impact Luxury Hero Visual Banner */}
-        <section className="relative px-4 sm:px-6 lg:px-8 pt-4 pb-6 max-w-7xl mx-auto">
-          <div className="relative rounded-3xl overflow-hidden bg-zinc-950 text-white min-h-[360px] sm:min-h-[420px] flex items-center shadow-xl">
-            {/* Background Atmosphere & Subtle Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-zinc-950/90 to-transparent z-10" />
-            <img
-              src="https://images.unsplash.com/photo-1549298916-b41d501d3772?auto=format&fit=crop&q=80&w=1400"
-              alt="Hangu Luxury Footwear"
-              className="absolute right-0 top-0 w-full md:w-3/5 h-full object-cover object-center opacity-40 md:opacity-70 scale-102"
-            />
-
-            {/* Left Content */}
-            <div className="relative z-20 max-w-xl p-6 sm:p-10 md:p-14 flex flex-col items-start">
-              <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.3em] uppercase text-emerald-400 mb-2">
-                COLLECTION ARCHIVE 2026
-              </span>
-              <h1 className="text-3xl sm:text-5xl font-black tracking-tight leading-[1.1] text-white">
-                Handcrafted <br />
-                <span className="text-zinc-400 font-extrabold">Leather Footwear.</span>
-              </h1>
-              <p className="text-xs sm:text-sm text-zinc-300 mt-3 max-w-md leading-relaxed">
-                Over 50+ handcrafted loafers, formal derbies, and daily sneakers.
-                Delivered across Pakistan with Cash on Delivery & 7-Day Size Exchange.
-              </p>
-
-              <div className="mt-6 flex items-center gap-3">
-                <Link
-                  href="/shop"
-                  className="px-6 py-3 rounded-full bg-white hover:bg-zinc-100 text-zinc-950 text-xs sm:text-sm font-bold inline-flex items-center gap-2 transition-all shadow-md active:scale-98"
-                >
-                  <span>Shop Collection ({products?.length || 53})</span>
-                  <ArrowRight size={14} />
-                </Link>
-                <Link
-                  href="/track"
-                  className="px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white text-xs sm:text-sm font-bold border border-white/20 backdrop-blur-md transition-all"
-                >
-                  Track Order
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
+        {/* 1. Cinematic Luxury Hero Slider */}
+        <HeroSlider />
 
         {/* 2. Sleek 1-Line Luxury Trust Marquee Bar */}
         <div className="bg-zinc-950 text-white text-[11px] sm:text-xs font-semibold py-3 border-y border-zinc-800 overflow-hidden">

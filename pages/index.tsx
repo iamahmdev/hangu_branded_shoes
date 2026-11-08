@@ -34,25 +34,19 @@ export default function Home() {
       ogImage="/images/shoes/IMG_3091.jpg"
     >
       <div className="bg-[#fafafa] text-zinc-900 min-h-screen">
-        {/* 1. Ultra-Modern Full-Width Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-b from-zinc-100/80 via-white to-[#fafafa] border-b border-zinc-200/80 pt-10 sm:pt-14 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8">
-          <div className="max-w-6xl mx-auto text-center flex flex-col items-center">
-            {/* Top Brand Badge */}
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-zinc-900/5 border border-zinc-900/10 text-zinc-800 text-[11px] sm:text-xs font-bold uppercase tracking-wider mb-5">
-              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>EST. 2026 • TAHIR MARKET, HANGU • NATIONWIDE DELIVERY</span>
-            </div>
-
+        {/* 1. Ultra-Clean Modern Luxury Hero Section */}
+        <section className="relative overflow-hidden bg-gradient-to-b from-zinc-100/70 via-white to-[#fafafa] border-b border-zinc-200/80 pt-12 sm:pt-16 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-5xl mx-auto text-center flex flex-col items-center">
             {/* Modern Main Headline */}
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-zinc-950 tracking-tight leading-[1.15] max-w-4xl">
-              Minimalist Luxury. <br className="hidden sm:inline" />
-              <span className="text-zinc-600 font-bold">Handcrafted Precision.</span>
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-zinc-950 tracking-tight leading-[1.12] max-w-3xl">
+              Pure Leather Footwear. <br className="hidden sm:inline" />
+              <span className="text-zinc-500 font-bold">Engineered for Comfort.</span>
             </h1>
 
             {/* Subtitle */}
-            <p className="text-sm sm:text-base text-zinc-600 mt-4 max-w-2xl leading-relaxed">
-              Explore 50+ authentic handcrafted leather shoes, formal derbies, penny loafers, and athletic sneakers.
-              Delivered nationwide with Cash on Delivery & 7-Day Size Exchange.
+            <p className="text-sm sm:text-base text-zinc-600 mt-4 max-w-xl leading-relaxed font-medium">
+              Authentic handcrafted leather loafers, formal derby shoes, and athletic sneakers.
+              Delivered nationwide across Pakistan with Cash on Delivery & 7-Day Size Exchange.
             </p>
 
             {/* CTAs */}

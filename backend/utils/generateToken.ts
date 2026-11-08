@@ -26,3 +26,4 @@ export function verifyToken(token: string): { id: string; role?: string } {
 }
 
 export default generateToken;
+

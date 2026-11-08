@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import { Admin, IAdmin } from "../models/Admin.js";
+import { verifyToken } from "../utils/generateToken.js";
 
 export interface AuthRequest extends Request {
   admin?: IAdmin;
@@ -15,9 +15,7 @@ export async function authenticate(req: AuthRequest, res: Response, next: NextFu
     }
 
     const token = authHeader.split(" ")[1];
-    const secret = process.env.JWT_SECRET || "hangu_branded_shoes_super_secret_jwt_key_2026";
-    
-    const decoded = jwt.verify(token, secret) as { id: string; role?: string };
+    const decoded = verifyToken(token);
     const admin = await Admin.findById(decoded.id);
 
     if (!admin || !admin.isActive) {

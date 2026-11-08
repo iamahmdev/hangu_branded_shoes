@@ -1,15 +1,9 @@
 import { Request, Response } from "express";
-import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { Admin } from "../models/Admin.js";
 import { AuthRequest } from "../middleware/auth.js";
-
-function generateToken(adminId: string, role: string): string {
-  const secret = process.env.JWT_SECRET || "hangu_branded_shoes_super_secret_jwt_key_2026";
-  const expiresIn = process.env.JWT_EXPIRES_IN || "7d";
-  return jwt.sign({ id: adminId, role }, secret, { expiresIn } as jwt.SignOptions);
-}
+import { generateToken } from "../utils/generateToken.js";
 
 export async function login(req: Request, res: Response): Promise<void> {
   try {

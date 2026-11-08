@@ -9,6 +9,6 @@
     "skipLibCheck": true,
     "types": ["jest", "node"]
   },
-  "include": ["./**/*", "../*.ts", "../controllers/**/*", "../models/**/*", "../routes/**/*", "../config/**/*", "../middleware/**/*"]
+  "include": ["./**/*", "../*.ts", "../controllers/**/*", "../models/**/*", "../routes/**/*", "../config/**/*", "../middleware/**/*", "../utils/**/*"]
 }
 

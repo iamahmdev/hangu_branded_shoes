@@ -25,6 +25,18 @@ export default function Checkout() {
   const [f, setF] = useState({ name: "", phone: "", city: "", address: "", tid: "" });
   const [hp, setHp] = useState<string>(""); // Honeypot field for bot protection
   const [copied, setCopied] = useState<boolean>(false);
+  const [copiedOrderId, setCopiedOrderId] = useState<boolean>(false);
+  const [confirmedOrder, setConfirmedOrder] = useState<{
+    orderId: string;
+    method: "cod" | "jazzcash";
+    total: number;
+    subtotal: number;
+    shipping: number;
+    codFee: number;
+    customer: { name: string; phone: string; city: string; address: string };
+    msg: string;
+    items: typeof items;
+  } | null>(null);
   const [screenshotUrl, setScreenshotUrl] = useState<string>("");
   const [screenshotUploading, setScreenshotUploading] = useState<boolean>(false);
   const [uploadError, setUploadError] = useState<string>("");
@@ -34,10 +46,10 @@ export default function Checkout() {
   const liveSettings = storeSettingsData?.data;
 
   const isCodEnabled = liveSettings?.enableCod !== false;
-  const jazzcashNumber = liveSettings?.easypaisaNumber?.trim() || "";
-  const jazzcashTitle = liveSettings?.easypaisaTitle?.trim() || "";
+  const jazzcashNumber = liveSettings?.easypaisaNumber?.trim() || "03275430305";
+  const jazzcashTitle = liveSettings?.easypaisaTitle?.trim() || "Muhammad Atif Ibrahim";
   const whatsappNumber = liveSettings?.whatsappNumber?.trim() || WA;
-  const isJazzCashConfigured = Boolean(jazzcashNumber && jazzcashTitle);
+  const isJazzCashConfigured = Boolean(jazzcashTitle);
 
   // If COD is disabled in settings, automatically switch to JazzCash
   useEffect(() => {
@@ -62,8 +74,8 @@ export default function Checkout() {
     setF({ ...f, [k]: e.target.value });
 
   const handleCopyAccount = () => {
-    if (!jazzcashNumber) return;
-    navigator.clipboard.writeText(jazzcashNumber);
+    const acc = jazzcashNumber || "03275430305";
+    navigator.clipboard.writeText(acc);
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);
   };
@@ -113,21 +125,6 @@ export default function Checkout() {
       return;
     }
 
-    // JazzCash checks
-    if (effectiveMethod === "jazzcash") {
-      if (!isJazzCashConfigured) {
-        alert(
-          "JazzCash is not configured yet by store administration. Please choose Cash on Delivery or contact WhatsApp."
-        );
-        return;
-      }
-
-      if (!f.tid.trim() || f.tid.trim().length < 5) {
-        alert("Please provide a valid JazzCash Transaction ID (TID) from your transfer.");
-        return;
-      }
-    }
-
     const orderId = "HBS" + Date.now().toString().slice(-6);
 
     const itemsSummary = items
@@ -162,16 +159,18 @@ export default function Checkout() {
           `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
           `Subtotal: Rs. ${sub.toLocaleString()}\n` +
           `Shipping Delivery: ${effectiveShipping === 0 ? "FREE" : `Rs. ${effectiveShipping.toLocaleString()}`}\n` +
-          `💰 *TOTAL PAID:* Rs. ${effectiveTotal.toLocaleString()}\n` +
+          `💰 *TOTAL PAYABLE:* Rs. ${effectiveTotal.toLocaleString()}\n` +
           `📱 *Payment Method:* JazzCash\n` +
-          `🔖 *Transaction ID (TID):* ${f.tid.trim()}\n` +
-          (screenshotUrl ? `📸 *Payment Screenshot:* Uploaded to order record\n` : `📸 *Payment Screenshot:* Attached in this WhatsApp chat\n`) +
+          `👤 *Account Title:* ${jazzcashTitle || "Muhammad Atif Ibrahim"}\n` +
+          `📞 *Account Number:* ${jazzcashNumber || "03275430305"}\n` +
+          (f.tid.trim() ? `🔖 *Transaction ID (TID):* ${f.tid.trim()}\n` : "") +
+          (screenshotUrl ? `📸 *Payment Screenshot:* Uploaded to order record\n` : "") +
           `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
           `👤 *Customer Name:* ${f.name.trim()}\n` +
           `📞 *Phone / WhatsApp:* ${f.phone.trim()}\n` +
           `📍 *Delivery Address:* ${f.address.trim()}, ${f.city.trim()}\n` +
           `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-          `_Assalam-o-Alaikum! I have transferred the amount via JazzCash. Please verify payment and dispatch my order._`;
+          `_Assalam-o-Alaikum! I have placed an order via JazzCash. Please verify my payment and dispatch my order._`;
 
     // Persist to MongoDB database first
     createOrderMutation.mutate(
@@ -197,16 +196,33 @@ export default function Checkout() {
         codFee,
         totalAmount: effectiveTotal,
         paymentMethod: effectiveMethod,
-        transactionId: effectiveMethod === "jazzcash" ? f.tid.trim() : undefined,
+        transactionId: effectiveMethod === "jazzcash" ? f.tid.trim() || undefined : undefined,
         paymentScreenshot: effectiveMethod === "jazzcash" ? screenshotUrl || undefined : undefined,
         hp,
       },
       {
         onSuccess: () => {
           sessionStorage.setItem("lastOrder", JSON.stringify({ id: orderId, msg }));
+          setConfirmedOrder({
+            orderId,
+            method: effectiveMethod,
+            total: effectiveTotal,
+            subtotal: sub,
+            shipping: effectiveShipping,
+            codFee,
+            customer: {
+              name: f.name.trim(),
+              phone: f.phone.trim(),
+              city: f.city.trim(),
+              address: f.address.trim(),
+            },
+            msg,
+            items: [...items],
+          });
           clear();
-          // Seamless redirect directly to official WhatsApp with pre-filled details
-          window.location.href = wa(msg, whatsappNumber);
+          if (typeof window !== "undefined") {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }
         },
         onError: (err: any) => {
           alert(
@@ -217,6 +233,239 @@ export default function Checkout() {
       }
     );
   };
+
+  if (confirmedOrder) {
+    const isJc = confirmedOrder.method === "jazzcash";
+    const jcNum = jazzcashNumber || "03275430305";
+    const jcName = jazzcashTitle || "Muhammad Atif Ibrahim";
+
+    return (
+      <Layout title={`Order #${confirmedOrder.orderId} Confirmed — Hangu Branded Shoes`}>
+        <div className="bg-[#fafafa] text-zinc-900 min-h-screen py-12 px-4 sm:px-6 lg:px-8">
+          <div className="max-w-2xl mx-auto flex flex-col gap-6">
+            {/* Success Header Banner */}
+            <div className="text-center">
+              <div className="w-16 h-16 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-3.5 shadow-sm ring-4 ring-emerald-50">
+                <Check size={32} strokeWidth={2.8} />
+              </div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-3 py-1 rounded-full">
+                Order Confirmed Successfully
+              </span>
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-zinc-950 mt-2.5">
+                Thank You, {confirmedOrder.customer.name}!
+              </h1>
+              <p className="text-zinc-600 text-xs sm:text-sm mt-1 max-w-md mx-auto">
+                {isJc
+                  ? "Your order has been recorded. Please complete your JazzCash transfer using the details below."
+                  : "Your order has been recorded. Our team will verify sizing with you before courier dispatch."}
+              </p>
+            </div>
+
+            {/* Order Tracking Reference Box */}
+            <div className="bg-white p-5 sm:p-6 rounded-3xl border border-zinc-200/90 shadow-xs flex items-center justify-between gap-4">
+              <div>
+                <span className="text-[11px] font-semibold text-zinc-500 uppercase tracking-wider block">
+                  Your Order Reference ID
+                </span>
+                <span className="font-mono text-xl sm:text-2xl font-extrabold text-zinc-950">
+                  #{confirmedOrder.orderId}
+                </span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  navigator.clipboard.writeText(confirmedOrder.orderId);
+                  setCopiedOrderId(true);
+                  setTimeout(() => setCopiedOrderId(false), 2000);
+                }}
+                className="px-3.5 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-xs font-semibold flex items-center gap-1.5 transition-colors border border-zinc-200"
+              >
+                {copiedOrderId ? (
+                  <>
+                    <Check size={14} className="text-emerald-600" />
+                    <span className="text-emerald-700 font-bold">Copied!</span>
+                  </>
+                ) : (
+                  <>
+                    <Copy size={14} />
+                    <span>Copy ID</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* JAZZCASH PAYMENT DETAILS REVEAL CARD */}
+            {isJc && (
+              <div className="bg-gradient-to-br from-red-50 via-white to-red-50/60 p-6 sm:p-8 rounded-3xl border-2 border-red-500/80 shadow-md flex flex-col gap-5">
+                <div className="flex items-center justify-between pb-4 border-b border-red-200/70">
+                  <div className="flex items-center gap-3">
+                    <span className="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+                      JC
+                    </span>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h2 className="text-base sm:text-lg font-extrabold text-zinc-950">JazzCash Payment Details</h2>
+                        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-red-100 text-red-800 tracking-wide uppercase">
+                          Official Account
+                        </span>
+                      </div>
+                      <p className="text-xs text-zinc-500">Send exact amount to complete your reservation</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-[10px] text-zinc-500 block uppercase font-mono font-semibold">Total Due</span>
+                    <b className="text-red-700 text-lg sm:text-xl font-mono font-extrabold">
+                      Rs. {confirmedOrder.total.toLocaleString()}
+                    </b>
+                  </div>
+                </div>
+
+                {/* Account Details Box */}
+                <div className="bg-white p-4 sm:p-5 rounded-2xl border border-red-200 shadow-xs flex flex-col gap-3.5">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 pb-3 border-b border-zinc-100">
+                    <span className="text-xs font-semibold text-zinc-500">Account Title (Beneficiary Name):</span>
+                    <span className="text-sm sm:text-base font-extrabold text-zinc-950 font-sans tracking-wide">
+                      {jcName}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-1">
+                    <div>
+                      <span className="text-[11px] font-bold text-red-600 block uppercase tracking-wider">
+                        JazzCash Mobile Number
+                      </span>
+                      <span className="font-mono text-2xl sm:text-3xl font-extrabold text-zinc-950 tracking-wider">
+                        {jcNum}
+                      </span>
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handleCopyAccount}
+                      className="px-4 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold flex items-center justify-center gap-2 transition-all shadow-sm active:scale-95"
+                    >
+                      {copied ? (
+                        <>
+                          <Check size={16} />
+                          <span>Number Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={16} />
+                          <span>Copy JazzCash Number</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Step Instructions */}
+                <div className="bg-red-50/60 p-4 rounded-2xl border border-red-100 text-xs text-zinc-700 space-y-2">
+                  <div className="font-bold text-zinc-900 text-xs flex items-center gap-1.5 mb-1">
+                    <span>⚡ Quick Transfer Steps:</span>
+                  </div>
+                  <p className="flex items-start gap-2">
+                    <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">1</span>
+                    <span>Open your <b>JazzCash App</b> or dial <b>*786#</b>.</span>
+                  </p>
+                  <p className="flex items-start gap-2">
+                    <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">2</span>
+                    <span>Transfer <b>Rs. {confirmedOrder.total.toLocaleString()}</b> to <b>{jcNum}</b> (Title: <b>{jcName}</b>).</span>
+                  </p>
+                  <p className="flex items-start gap-2">
+                    <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">3</span>
+                    <span>Click the green button below to share payment screenshot / TID on WhatsApp for instant order dispatch.</span>
+                  </p>
+                </div>
+
+                {/* Primary WhatsApp Action Button */}
+                <a
+                  href={wa(confirmedOrder.msg, whatsappNumber)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-4 px-6 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm sm:text-base font-bold flex items-center justify-center gap-2.5 shadow-md transition-all active:scale-[0.99]"
+                >
+                  <MessageCircle size={20} />
+                  <span>Send Payment Proof via WhatsApp 💬</span>
+                </a>
+              </div>
+            )}
+
+            {/* COD Confirmation Card */}
+            {!isJc && (
+              <div className="bg-white p-6 sm:p-7 rounded-3xl border border-zinc-200/90 shadow-xs flex flex-col gap-4">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+                    <Banknote size={22} />
+                  </div>
+                  <div>
+                    <h2 className="text-base font-bold text-zinc-950">Cash on Delivery (COD)</h2>
+                    <p className="text-xs text-zinc-500">Pay exact cash to courier rider upon delivery</p>
+                  </div>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-zinc-50 border border-zinc-200 text-xs flex justify-between items-center">
+                  <span className="text-zinc-600 font-medium">Cash Due at Doorstep:</span>
+                  <span className="font-mono text-base font-extrabold text-zinc-950">
+                    Rs. {confirmedOrder.total.toLocaleString()}
+                  </span>
+                </div>
+
+                <a
+                  href={wa(confirmedOrder.msg, whatsappNumber)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full py-3.5 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-colors shadow-xs"
+                >
+                  <MessageCircle size={17} />
+                  <span>Confirm on WhatsApp With Store 💬</span>
+                </a>
+              </div>
+            )}
+
+            {/* Delivery Destination Summary */}
+            <div className="bg-white p-5 sm:p-6 rounded-3xl border border-zinc-200/80 shadow-xs text-xs flex flex-col gap-2.5">
+              <h3 className="font-bold text-zinc-950 text-sm mb-1">Delivery Destination</h3>
+              <div className="grid grid-cols-2 gap-2 text-zinc-600">
+                <div>
+                  <span className="text-zinc-400 block text-[11px]">Recipient Name</span>
+                  <span className="font-semibold text-zinc-900">{confirmedOrder.customer.name}</span>
+                </div>
+                <div>
+                  <span className="text-zinc-400 block text-[11px]">Phone</span>
+                  <span className="font-semibold text-zinc-900 font-mono">{confirmedOrder.customer.phone}</span>
+                </div>
+                <div className="col-span-2">
+                  <span className="text-zinc-400 block text-[11px]">Address</span>
+                  <span className="font-semibold text-zinc-900">
+                    {confirmedOrder.customer.address}, {confirmedOrder.customer.city}
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Navigation Links */}
+            <div className="flex flex-col sm:flex-row gap-3 pt-2">
+              <Link
+                href={`/track?orderId=${confirmedOrder.orderId}`}
+                className="flex-1 py-3 px-5 rounded-xl bg-zinc-900 hover:bg-black text-white text-xs font-bold flex items-center justify-center gap-2 transition-colors text-center"
+              >
+                <Truck size={15} />
+                <span>Track Live Order Status</span>
+              </Link>
+              <Link
+                href="/shop"
+                className="flex-1 py-3 px-5 rounded-xl bg-white hover:bg-zinc-100 text-zinc-900 text-xs font-bold flex items-center justify-center gap-2 border border-zinc-300 transition-colors text-center"
+              >
+                <span>Continue Shopping</span>
+                <ArrowRight size={14} />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
 
   if (!items.length) {
     return (
@@ -355,9 +604,9 @@ export default function Checkout() {
                       JazzCash
                     </span>
                   </div>
-                  <div className="font-bold text-zinc-900 text-sm">JazzCash Account</div>
+                  <div className="font-bold text-zinc-900 text-sm">Pay via JazzCash</div>
                   <div className="text-zinc-500 text-xs mt-1 leading-snug">
-                    Direct transfer via JazzCash mobile app or *786#.
+                    Account: <strong>{jazzcashTitle || "Muhammad Atif Ibrahim"}</strong>
                   </div>
                 </div>
               </div>
@@ -383,145 +632,50 @@ export default function Checkout() {
                 </div>
               )}
 
-              {/* JazzCash Box */}
+              {/* JazzCash Section (Public - Shows ONLY Account Title 'Muhammad Atif Ibrahim', NO Phone Number) */}
               {effectiveMethod === "jazzcash" && (
-                <div>
-                  {!isJazzCashConfigured ? (
-                    <div className="p-5 rounded-2xl border border-amber-200 bg-amber-50 text-amber-900">
-                      <div className="flex items-start gap-3">
-                        <AlertTriangle className="text-amber-600 shrink-0 mt-0.5" size={20} />
-                        <div className="text-xs leading-relaxed">
-                          <b className="text-zinc-900 text-sm block mb-1">JazzCash Account Not Configured</b>
-                          Payment details are currently being updated. Please choose Cash on Delivery above or contact our official WhatsApp:
-                          <div className="mt-3">
-                            <a
-                              href={wa("Assalam-o-Alaikum! I want to place an order directly on WhatsApp.", whatsappNumber)}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white font-bold text-xs px-4 py-2 rounded-xl transition-all"
-                            >
-                              <MessageCircle size={15} /> Order Directly on WhatsApp
-                            </a>
-                          </div>
-                        </div>
+                <div className="p-5 sm:p-6 rounded-2xl border border-red-200 bg-red-50/40">
+                  <div className="flex items-center justify-between pb-3.5 border-b border-red-200/70">
+                    <div className="flex items-center gap-3">
+                      <span className="w-10 h-10 rounded-xl bg-red-600 text-white flex items-center justify-center font-bold text-xs shadow-xs">
+                        JC
+                      </span>
+                      <div>
+                        <b className="text-zinc-950 text-sm block">Pay via JazzCash</b>
+                        <span className="text-xs text-zinc-600">
+                          Account Title:{" "}
+                          <strong className="text-zinc-950 font-bold">
+                            {jazzcashTitle || "Muhammad Atif Ibrahim"}
+                          </strong>
+                        </span>
                       </div>
                     </div>
-                  ) : (
-                    <div className="p-5 rounded-2xl border border-red-200 bg-red-50/40">
-                      <div className="flex items-center justify-between pb-3 border-b border-red-200/60">
-                        <div className="flex items-center gap-2">
-                          <span className="w-8 h-8 rounded-lg bg-red-600 text-white flex items-center justify-center font-bold text-xs">
-                            JC
-                          </span>
-                          <div>
-                            <b className="text-zinc-900 text-sm block">JazzCash Mobile Account</b>
-                            <span className="text-zinc-500 text-xs">Title: <strong className="text-zinc-900">{jazzcashTitle}</strong></span>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <span className="text-[10px] text-zinc-500 block uppercase font-mono">Amount to Send</span>
-                          <b className="text-zinc-950 text-base font-mono">Rs. {effectiveTotal.toLocaleString()}</b>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 p-3.5 rounded-xl bg-white border border-red-200 flex items-center justify-between">
-                        <div>
-                          <span className="text-[11px] text-zinc-500 block">JazzCash Number</span>
-                          <span className="font-mono text-lg font-extrabold text-zinc-950 tracking-wider">
-                            {jazzcashNumber}
-                          </span>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={handleCopyAccount}
-                          className="px-3 py-1.5 rounded-lg bg-[#f4f4f6] hover:bg-zinc-200 text-zinc-900 text-xs font-semibold flex items-center gap-1.5 transition-all border border-zinc-200"
-                        >
-                          {copied ? (
-                            <>
-                              <Check size={14} className="text-red-600" />
-                              <span className="text-red-700 font-bold">Copied!</span>
-                            </>
-                          ) : (
-                            <>
-                              <Copy size={14} />
-                              <span>Copy Number</span>
-                            </>
-                          )}
-                        </button>
-                      </div>
-
-                      {/* Instructions */}
-                      <div className="mt-4 text-xs text-zinc-600 space-y-1.5">
-                        <p className="flex items-start gap-2">
-                          <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">1</span>
-                          <span>Open your JazzCash app or dial <b>*786#</b>.</span>
-                        </p>
-                        <p className="flex items-start gap-2">
-                          <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">2</span>
-                          <span>Send <b>Rs. {effectiveTotal.toLocaleString()}</b> to <b>{jazzcashNumber}</b> ({jazzcashTitle}).</span>
-                        </p>
-                        <p className="flex items-start gap-2">
-                          <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">3</span>
-                          <span>Copy your <b>Transaction ID (TID)</b> and enter below:</span>
-                        </p>
-                      </div>
-
-                      {/* TID Input */}
-                      <div className="mt-4">
-                        <label className="text-xs font-semibold text-zinc-700 block mb-1">
-                          Transaction ID (TID) <span className="text-rose-600">*</span>
-                        </label>
-                        <input
-                          className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-2.5 text-zinc-950 font-medium text-sm placeholder:text-zinc-500 outline-none focus:border-red-600 focus:ring-2 focus:ring-red-600/20 shadow-xs transition-all font-mono"
-                          required
-                          placeholder="e.g. 24891048291"
-                          value={f.tid}
-                          onChange={set("tid")}
-                        />
-                      </div>
-
-                      {/* Payment Screenshot Upload */}
-                      <div className="mt-4 pt-4 border-t border-red-200/60">
-                        <label className="text-xs font-semibold text-zinc-700 block mb-1">
-                          Payment Screenshot (Optional)
-                        </label>
-                        <div className="flex items-center gap-3">
-                          <label className="cursor-pointer inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white hover:bg-zinc-100 text-zinc-900 text-xs font-semibold border border-zinc-200 transition-all shadow-xs">
-                            <Upload size={14} />
-                            <span>{screenshotUploading ? "Uploading to Cloudinary..." : "Upload Screenshot"}</span>
-                            <input
-                              type="file"
-                              accept="image/*"
-                              className="hidden"
-                              disabled={screenshotUploading}
-                              onChange={handleScreenshotChange}
-                            />
-                          </label>
-                          {screenshotUrl && (
-                            <span className="inline-flex items-center gap-1.5 text-xs text-red-700 font-medium">
-                              <FileCheck2 size={15} /> Screenshot Attached
-                            </span>
-                          )}
-                        </div>
-                        {uploadError && (
-                          <p className="text-rose-600 text-xs mt-1.5">{uploadError}</p>
-                        )}
-                        {screenshotUrl && (
-                          <div className="mt-3 relative w-24 h-24 rounded-xl overflow-hidden border border-zinc-200 bg-white">
-                            <img src={screenshotUrl} alt="Receipt preview" className="w-full h-full object-cover" />
-                            <button
-                              type="button"
-                              onClick={() => setScreenshotUrl("")}
-                              className="absolute top-1 right-1 bg-black/70 hover:bg-black text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
-                              title="Remove screenshot"
-                            >
-                              ✕
-                            </button>
-                          </div>
-                        )}
-                      </div>
+                    <div className="text-right">
+                      <span className="text-[10px] text-zinc-500 block uppercase font-mono font-semibold">Amount to Pay</span>
+                      <b className="text-zinc-950 text-base font-mono font-bold">Rs. {effectiveTotal.toLocaleString()}</b>
                     </div>
-                  )}
+                  </div>
+
+                  <div className="mt-4 p-4 rounded-xl bg-white border border-red-100 flex items-start gap-3 shadow-xs">
+                    <ShieldCheck className="text-red-600 shrink-0 mt-0.5" size={20} />
+                    <div className="text-xs leading-relaxed">
+                      <b className="text-zinc-950 text-xs block mb-0.5">Secure Payment Verification</b>
+                      <p className="text-zinc-600">
+                        To maintain payment security, our official JazzCash account number will be revealed immediately on the confirmation step after you confirm your order details.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-4 text-xs text-zinc-600 space-y-2">
+                    <p className="flex items-start gap-2">
+                      <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">1</span>
+                      <span>Enter your name and delivery address above.</span>
+                    </p>
+                    <p className="flex items-start gap-2">
+                      <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">2</span>
+                      <span>Click <b>&quot;Confirm Order &amp; Get JazzCash Details&quot;</b> below to view official account number, one-click copy, and WhatsApp confirmation.</span>
+                    </p>
+                  </div>
                 </div>
               )}
 
@@ -599,16 +753,15 @@ export default function Checkout() {
 
             <button
               type="submit"
-              disabled={
-                createOrderMutation.isPending ||
-                (effectiveMethod === "jazzcash" && (!isJazzCashConfigured || screenshotUploading))
-              }
+              disabled={createOrderMutation.isPending}
               className="w-full mt-3 py-3 px-6 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold tracking-wide disabled:opacity-50 flex items-center justify-center gap-2 transition-colors shadow-xs"
             >
               <span>
                 {createOrderMutation.isPending
-                  ? "Recording Order & Opening WhatsApp..."
-                  : "Confirm Order via WhatsApp 💬"}
+                  ? "Recording Order..."
+                  : effectiveMethod === "jazzcash"
+                  ? "Confirm Order & Get JazzCash Details 📱"
+                  : "Confirm Order (Cash on Delivery) 🚚"}
               </span>
               <ArrowRight size={14} />
             </button>

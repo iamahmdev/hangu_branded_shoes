@@ -35,7 +35,7 @@ const SettingSchema = new Schema<ISetting>(
     isStoreOpen: { type: Boolean, default: true },
     // Empty by default for production - configured via Admin Settings tab
     easypaisaNumber: { type: String, default: "03275430305", trim: true },
-    easypaisaTitle: { type: String, default: "Hangu Branded Shoes", trim: true },
+    easypaisaTitle: { type: String, default: "Muhammad Atif Ibrahim", trim: true },
     enableCod: { type: Boolean, default: true },
     codFee: { type: Number, default: 0, min: 0 },
     blockedPhoneNumbers: { type: [String], default: [] },

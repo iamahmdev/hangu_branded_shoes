@@ -1,9 +1,9 @@
 /// <reference types="jest" />
 import request from "supertest";
 import bcrypt from "bcryptjs";
-import app from "../src/app";
-import { Review } from "../src/models/Review";
-import { Admin } from "../src/models/Admin";
+import app from "../app";
+import { Review } from "../models/Review";
+import { Admin } from "../models/Admin";
 
 describe("⭐ Review System API Tests", () => {
   let adminToken: string;

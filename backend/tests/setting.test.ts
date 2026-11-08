@@ -1,9 +1,9 @@
 /// <reference types="jest" />
 import request from "supertest";
 import bcrypt from "bcryptjs";
-import app from "../src/app";
-import { Setting } from "../src/models/Setting";
-import { Admin } from "../src/models/Admin";
+import app from "../app";
+import { Setting } from "../models/Setting";
+import { Admin } from "../models/Admin";
 
 describe("⚙️ Store Settings API Tests", () => {
   let adminToken: string;

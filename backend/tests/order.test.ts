@@ -1,11 +1,11 @@
 /// <reference types="jest" />
 import request from "supertest";
 import bcrypt from "bcryptjs";
-import app from "../src/app";
-import { Order } from "../src/models/Order";
-import { Product } from "../src/models/Product";
-import { Admin } from "../src/models/Admin";
-import { Setting } from "../src/models/Setting";
+import app from "../app";
+import { Order } from "../models/Order";
+import { Product } from "../models/Product";
+import { Admin } from "../models/Admin";
+import { Setting } from "../models/Setting";
 
 describe("📦 Order Lifecycle, COD, EasyPaisa & Fake Order Protection Tests", () => {
   let adminToken: string;

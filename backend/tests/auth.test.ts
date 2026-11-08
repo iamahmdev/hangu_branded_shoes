@@ -1,8 +1,8 @@
 /// <reference types="jest" />
 import request from "supertest";
 import bcrypt from "bcryptjs";
-import app from "../src/app";
-import { Admin } from "../src/models/Admin";
+import app from "../app";
+import { Admin } from "../models/Admin";
 
 describe("🔐 Authentication & Admin Management API Tests", () => {
   let adminToken: string;

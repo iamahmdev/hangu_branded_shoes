@@ -1,9 +1,9 @@
 /// <reference types="jest" />
 import request from "supertest";
 import bcrypt from "bcryptjs";
-import app from "../src/app";
-import { Product } from "../src/models/Product";
-import { Admin } from "../src/models/Admin";
+import app from "../app";
+import { Product } from "../models/Product";
+import { Admin } from "../models/Admin";
 
 describe("👟 Product Management API Tests", () => {
   let adminToken: string;

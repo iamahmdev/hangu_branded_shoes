@@ -4,11 +4,11 @@
   "description": "Enterprise Node.js/Express + TypeScript Backend for Hangu Branded Shoes",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "jest --runInBand --detectOpenHandles --forceExit",
-    "seed": "tsx src/seed.ts"
+    "seed": "tsx seed.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

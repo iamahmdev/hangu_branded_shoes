@@ -44,13 +44,13 @@ export default function ProductCard({ p }: ProductCardProps) {
         className="group bg-white rounded-2xl sm:rounded-3xl overflow-hidden border border-zinc-200/90 hover:border-zinc-400 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col justify-between"
         style={{ perspective: 1000 }}
       >
-        {/* Top: Large Prominent Image Showcase Canvas (Zero Wasted Space) */}
+        {/* Top: Large High-Impact Image Showcase Canvas (Full 4:5 Proportion for Max Shoe Size) */}
         <div
           ref={cardRef}
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={handleMouseLeave}
-          className="relative aspect-square w-full bg-[#f8f9fa] group-hover:bg-[#f2f4f7] overflow-hidden flex items-center justify-center p-2 sm:p-2.5 transition-colors duration-300"
+          className="relative aspect-[4/5] sm:aspect-[3/4] w-full bg-[#f7f8fa] group-hover:bg-[#f0f2f5] overflow-hidden flex items-center justify-center p-1 sm:p-1.5 transition-colors duration-300"
           style={{
             transform: isHovered
               ? `rotateX(${cardTilt.x}deg) rotateY(${cardTilt.y}deg) translateY(-2px)`
@@ -69,7 +69,7 @@ export default function ProductCard({ p }: ProductCardProps) {
               src={resolveProductImage(p.img)}
               alt={p.name}
               loading="lazy"
-              className="w-full h-full object-contain transition-transform duration-300 ease-out group-hover:scale-108 drop-shadow-[0_10px_20px_rgba(0,0,0,0.1)]"
+              className="w-full h-full object-contain object-center transition-transform duration-300 ease-out group-hover:scale-105 drop-shadow-[0_12px_24px_rgba(0,0,0,0.12)]"
             />
 
             {/* Subtle Glare Light */}

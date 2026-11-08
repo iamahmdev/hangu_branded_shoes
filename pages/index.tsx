@@ -140,13 +140,13 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Full-Width 4-Column Product Grid */}
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3.5 sm:gap-5 lg:gap-6">
+          {/* Full-Width Luxury 3-Column Product Grid (Big Prominent Shoe Cards) */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
             {isLoading ? (
-              [1, 2, 3, 4, 5, 6, 7, 8].map((i) => (
+              [1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="aspect-square bg-zinc-200/60 rounded-2xl sm:rounded-3xl animate-pulse"
+                  className="aspect-[4/5] sm:aspect-[3/4] bg-zinc-200/60 rounded-2xl sm:rounded-3xl animate-pulse"
                 />
               ))
             ) : filteredShoes && filteredShoes.length > 0 ? (

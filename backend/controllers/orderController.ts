@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import crypto from "crypto";
+import mongoose from "mongoose";
 import { Order } from "../models/Order.js";
 import { Product } from "../models/Product.js";
 import { Setting } from "../models/Setting.js";
@@ -179,7 +180,14 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
         return;
       }
 
-      const product = await Product.findOne({ id: Number(item.productId) });
+      const isNumeric = !isNaN(Number(item.productId));
+      const productQuery = isNumeric
+        ? { id: Number(item.productId) }
+        : mongoose.Types.ObjectId.isValid(String(item.productId))
+          ? { _id: new mongoose.Types.ObjectId(String(item.productId)) }
+          : { id: -1 };
+
+      const product = await Product.findOne(productQuery);
       if (!product) {
         res.status(404).json({ success: false, message: `Product #${item.productId} not found.` });
         return;

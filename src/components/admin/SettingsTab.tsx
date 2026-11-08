@@ -45,6 +45,8 @@ export default function SettingsTab({
     enableCod: true,
     codFee: 0,
     blockedPhoneNumbers: [],
+    jazzcashNumber: "03275430305",
+    jazzcashTitle: "Muhammad Atif Ibrahim",
     easypaisaNumber: "",
     easypaisaTitle: "",
   });
@@ -67,8 +69,10 @@ export default function SettingsTab({
         enableCod: initialSettings.enableCod !== false,
         codFee: initialSettings.codFee ?? 0,
         blockedPhoneNumbers: Array.isArray(initialSettings.blockedPhoneNumbers) ? initialSettings.blockedPhoneNumbers : [],
-        easypaisaNumber: initialSettings.easypaisaNumber ?? "",
-        easypaisaTitle: initialSettings.easypaisaTitle ?? "",
+        jazzcashNumber: initialSettings.jazzcashNumber ?? initialSettings.easypaisaNumber ?? "03275430305",
+        jazzcashTitle: initialSettings.jazzcashTitle ?? initialSettings.easypaisaTitle ?? "Muhammad Atif Ibrahim",
+        easypaisaNumber: "",
+        easypaisaTitle: "",
         shopTiming: initialSettings.shopTiming ?? prev.shopTiming,
       }));
     }
@@ -149,10 +153,10 @@ export default function SettingsTab({
         <div>
           <h3 className="text-base font-bold text-slate-900 flex items-center gap-2">
             <Settings size={18} className="text-emerald-600" />
-            <span>Store Configuration & EasyPaisa Account</span>
+            <span>Store Configuration & JazzCash Account</span>
           </h3>
           <p className="text-xs text-slate-500 mt-0.5">
-            Manage store brand details, timings, delivery rates, and official EasyPaisa account
+            Manage store brand details, timings, delivery rates, and official JazzCash account
           </p>
         </div>
 
@@ -338,7 +342,7 @@ export default function SettingsTab({
                   className="w-4 h-4 rounded accent-emerald-600 cursor-pointer"
                 />
                 <label htmlFor="enableCod" className="text-slate-900 font-bold cursor-pointer">
-                  {form.enableCod !== false ? "COD is Active at Checkout" : "COD Disabled (EasyPaisa Only)"}
+                  {form.enableCod !== false ? "COD is Active at Checkout" : "COD Disabled (JazzCash Only)"}
                 </label>
               </div>
             </div>
@@ -446,8 +450,8 @@ export default function SettingsTab({
               </label>
               <input
                 type="text"
-                value={form.easypaisaNumber}
-                onChange={(e) => setForm({ ...form, easypaisaNumber: e.target.value })}
+                value={form.jazzcashNumber ?? form.easypaisaNumber ?? ""}
+                onChange={(e) => setForm({ ...form, jazzcashNumber: e.target.value, easypaisaNumber: "" })}
                 placeholder="e.g. 03275430305"
                 className="w-full bg-white border border-red-200 rounded-xl px-3 py-2 text-slate-900 font-mono outline-none focus:border-red-500"
               />
@@ -459,9 +463,9 @@ export default function SettingsTab({
               </label>
               <input
                 type="text"
-                value={form.easypaisaTitle}
-                onChange={(e) => setForm({ ...form, easypaisaTitle: e.target.value })}
-                placeholder="e.g. Hangu Branded Shoes"
+                value={form.jazzcashTitle ?? form.easypaisaTitle ?? ""}
+                onChange={(e) => setForm({ ...form, jazzcashTitle: e.target.value, easypaisaTitle: "" })}
+                placeholder="e.g. Muhammad Atif Ibrahim"
                 className="w-full bg-white border border-red-200 rounded-xl px-3 py-2 text-slate-900 outline-none focus:border-red-500"
               />
             </div>

@@ -101,7 +101,7 @@ export default function DashboardOverview({
       id: "awaiting",
       title: "Waiting Confirmation",
       value: (stats?.codPendingCount || 0) + (stats?.pendingPaymentsCount || 0),
-      subtitle: "New COD & EasyPaisa",
+      subtitle: "New COD & JazzCash",
       growth: "Action",
       bgClass: "bg-sky-50/80 border-sky-200/80 text-sky-950",
       iconBg: "bg-sky-500/15 text-sky-600",

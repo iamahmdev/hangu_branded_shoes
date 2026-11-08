@@ -11,8 +11,10 @@ export interface ISetting extends Document {
   freeShippingThreshold: number;
   announcementText: string;
   isStoreOpen: boolean;
-  easypaisaNumber: string;
-  easypaisaTitle: string;
+  jazzcashNumber: string;
+  jazzcashTitle: string;
+  easypaisaNumber?: string;
+  easypaisaTitle?: string;
   enableCod: boolean;
   codFee: number;
   blockedPhoneNumbers: string[];
@@ -33,9 +35,12 @@ const SettingSchema = new Schema<ISetting>(
       default: "Free Delivery Across Pakistan on Orders Over Rs. 5,000 | JazzCash Verification",
     },
     isStoreOpen: { type: Boolean, default: true },
-    // Empty by default for production - configured via Admin Settings tab
-    easypaisaNumber: { type: String, default: "03275430305", trim: true },
-    easypaisaTitle: { type: String, default: "Muhammad Atif Ibrahim", trim: true },
+    // Official JazzCash Account Details
+    jazzcashNumber: { type: String, default: "03275430305", trim: true },
+    jazzcashTitle: { type: String, default: "Muhammad Atif Ibrahim", trim: true },
+    // EasyPaisa removed/empty
+    easypaisaNumber: { type: String, default: "", trim: true },
+    easypaisaTitle: { type: String, default: "", trim: true },
     enableCod: { type: Boolean, default: true },
     codFee: { type: Number, default: 0, min: 0 },
     blockedPhoneNumbers: { type: [String], default: [] },

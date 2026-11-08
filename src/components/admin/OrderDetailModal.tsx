@@ -88,7 +88,7 @@ export default function OrderDetailModal({
 
   const handleStatusChange = async (newStatus: string) => {
     if (newStatus === "confirmed" && !canConfirm) {
-      alert("Cannot confirm this EasyPaisa order: Payment has not been marked as 'Paid' yet. Please verify payment first.");
+      alert("Cannot confirm this JazzCash order: Payment has not been marked as 'Paid' yet. Please verify payment first.");
       return;
     }
     setUpdating(true);
@@ -150,7 +150,7 @@ export default function OrderDetailModal({
         : "💵 Cash on Delivery (Pay Rs. " + (order.totalAmount || 0).toLocaleString() + " upon delivery)";
     } else {
       paymentStateText = isPaid
-        ? "✅ Payment Verified & Received via EasyPaisa"
+        ? "✅ Payment Verified & Received via JazzCash"
         : order.paymentStatus === "rejected"
         ? "❌ Payment Verification Failed (Please resend proof)"
         : "⏳ Payment Awaiting Verification";
@@ -174,7 +174,7 @@ export default function OrderDetailModal({
         `*Order ID:* #${order.orderId}\n` +
         `*Order Status:* ${(order.status || "").replace("_", " ").toUpperCase()}\n` +
         `*Payment Status:* ${paymentStateText}\n` +
-        `*EasyPaisa TID:* ${order.transactionId || "N/A"}\n` +
+        `*JazzCash TID:* ${order.transactionId || "N/A"}\n` +
         (order.deliveryNote ? `*Delivery Note:* ${order.deliveryNote}\n` : "") +
         (order.courierName ? `*Courier:* ${order.courierName}\n` : "") +
         (order.trackingNumber ? `*Tracking Number:* ${order.trackingNumber}\n` : "") +
@@ -205,8 +205,8 @@ export default function OrderDetailModal({
                 <Banknote size={13} /> Cash on Delivery
               </span>
             ) : (
-              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-green-500/20 text-green-300 border border-green-500/30 flex items-center gap-1">
-                <Smartphone size={13} /> EasyPaisa
+              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-red-500/20 text-red-300 border border-red-500/30 flex items-center gap-1">
+                <Smartphone size={13} /> JazzCash
               </span>
             )}
             <div>
@@ -315,7 +315,7 @@ export default function OrderDetailModal({
           <div className="p-4 rounded-2xl bg-white/5 border border-white/10 mb-6">
             <div className="flex items-center justify-between mb-3">
               <span className="text-[11px] font-bold uppercase tracking-wider text-brand-gold flex items-center gap-1.5">
-                <ShieldCheck size={14} /> EasyPaisa Payment Verification
+                <ShieldCheck size={14} /> JazzCash Payment Verification
               </span>
               <span
                 className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase border ${paymentMeta.bg} ${paymentMeta.text} ${paymentMeta.border}`}
@@ -326,7 +326,7 @@ export default function OrderDetailModal({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
               <div>
-                <span className="text-zinc-400 block text-[11px]">Submitted EasyPaisa TID:</span>
+                <span className="text-zinc-400 block text-[11px]">Submitted JazzCash TID:</span>
                 <strong className="text-white font-mono text-sm block mt-0.5 bg-black/40 px-3 py-1.5 rounded-xl border border-white/10 w-fit">
                   {order.transactionId || "No TID Provided"}
                 </strong>
@@ -433,7 +433,7 @@ export default function OrderDetailModal({
               </div>
             )}
             <div className="pt-2 border-t border-white/10 flex justify-between text-sm font-bold text-white">
-              <span>{isCod ? "Cash Due on Delivery:" : "Total Payable (EasyPaisa):"}</span>
+              <span>{isCod ? "Cash Due on Delivery:" : "Total Payable (JazzCash):"}</span>
               <span className="text-brand-gold font-mono font-extrabold text-base">
                 Rs. {(order.totalAmount || 0).toLocaleString()}
               </span>
@@ -503,7 +503,7 @@ export default function OrderDetailModal({
             </span>
             {!canConfirm && (
               <span className="text-[11px] text-amber-400 flex items-center gap-1 font-medium">
-                <AlertTriangle size={13} /> EasyPaisa order requires "Paid" status before confirmation
+                <AlertTriangle size={13} /> JazzCash order requires "Paid" status before confirmation
               </span>
             )}
           </div>
@@ -522,7 +522,7 @@ export default function OrderDetailModal({
                       ? "bg-white/5 text-zinc-600 border border-white/5 cursor-not-allowed opacity-50"
                       : "bg-white/5 hover:bg-white/15 text-zinc-300 border border-white/10"
                   }`}
-                  title={cannotConfirm ? "EasyPaisa order requires payment verification first" : undefined}
+                  title={cannotConfirm ? "JazzCash order requires payment verification first" : undefined}
                 >
                   Mark {st}
                 </button>

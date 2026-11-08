@@ -170,8 +170,8 @@ export default function Home() {
               <div className="flex items-start gap-3.5 p-3">
                 <span className="text-2xl">⚡</span>
                 <div>
-                  <h4 className="font-bold text-sm text-zinc-900">Cash on Delivery & EasyPaisa</h4>
-                  <p className="text-xs text-zinc-500 mt-0.5">Pay safely at your doorstep or via instant EasyPaisa transfer</p>
+                  <h4 className="font-bold text-sm text-zinc-900">Cash on Delivery & JazzCash</h4>
+                  <p className="text-xs text-zinc-500 mt-0.5">Pay safely at your doorstep or via instant JazzCash transfer</p>
                 </div>
               </div>
 

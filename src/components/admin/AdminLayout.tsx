@@ -37,7 +37,7 @@ const TAB_TITLES: Record<AdminTab, { title: string; subtitle: string }> = {
   },
   orders: {
     title: "Order Management",
-    subtitle: "Track, confirm COD & EasyPaisa payments, dispatch, and manage customers",
+    subtitle: "Track, confirm COD & JazzCash payments, dispatch, and manage customers",
   },
   products: {
     title: "Footwear Catalog & Inventory",
@@ -48,8 +48,8 @@ const TAB_TITLES: Record<AdminTab, { title: string; subtitle: string }> = {
     subtitle: "Moderate customer testimonials and public star ratings",
   },
   settings: {
-    title: "Store Settings & EasyPaisa",
-    subtitle: "Configure delivery rates, business address, and official EasyPaisa account",
+    title: "Store Settings & JazzCash",
+    subtitle: "Configure delivery rates, business address, and official JazzCash account",
   },
 };
 

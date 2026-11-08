@@ -46,8 +46,8 @@ export default function Checkout() {
   const liveSettings = storeSettingsData?.data;
 
   const isCodEnabled = liveSettings?.enableCod !== false;
-  const jazzcashNumber = liveSettings?.easypaisaNumber?.trim() || "03275430305";
-  const jazzcashTitle = liveSettings?.easypaisaTitle?.trim() || "Muhammad Atif Ibrahim";
+  const jazzcashNumber = liveSettings?.jazzcashNumber?.trim() || liveSettings?.easypaisaNumber?.trim() || "03275430305";
+  const jazzcashTitle = liveSettings?.jazzcashTitle?.trim() || liveSettings?.easypaisaTitle?.trim() || "Muhammad Atif Ibrahim";
   const whatsappNumber = liveSettings?.whatsappNumber?.trim() || WA;
   const isJazzCashConfigured = Boolean(jazzcashTitle);
 

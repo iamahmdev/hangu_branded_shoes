@@ -19,8 +19,8 @@ export default function Success() {
 
   const { data: storeSettingsData } = useStoreSettings();
   const liveSettings = storeSettingsData?.data;
-  const jcNumber = liveSettings?.easypaisaNumber?.trim() || "03275430305";
-  const jcTitle = liveSettings?.easypaisaTitle?.trim() || "Muhammad Atif Ibrahim";
+  const jcNumber = liveSettings?.jazzcashNumber?.trim() || liveSettings?.easypaisaNumber?.trim() || "03275430305";
+  const jcTitle = liveSettings?.jazzcashTitle?.trim() || liveSettings?.easypaisaTitle?.trim() || "Muhammad Atif Ibrahim";
 
   useEffect(() => {
     try {

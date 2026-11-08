@@ -32,7 +32,7 @@ const ORDER_STATUS_OPTIONS = [
 const PAYMENT_STATUS_OPTIONS = [
   { id: "all", label: "All Payments" },
   { id: "cod_pending", label: "COD Pending" },
-  { id: "pending_verification", label: "EasyPaisa Verification" },
+  { id: "pending_verification", label: "JazzCash Verification" },
   { id: "paid", label: "Paid" },
   { id: "rejected", label: "Rejected" },
 ];
@@ -40,7 +40,7 @@ const PAYMENT_STATUS_OPTIONS = [
 const PAYMENT_METHOD_OPTIONS = [
   { id: "all", label: "All Methods" },
   { id: "cod", label: "Cash on Delivery (COD)" },
-  { id: "easypaisa", label: "EasyPaisa" },
+  { id: "jazzcash", label: "JazzCash" },
 ];
 
 export default function OrdersTab({
@@ -121,7 +121,7 @@ export default function OrdersTab({
             >
               <option value="all">All Payment Methods</option>
               <option value="cod">Cash on Delivery (COD)</option>
-              <option value="easypaisa">EasyPaisa</option>
+              <option value="jazzcash">JazzCash</option>
             </select>
           )}
 
@@ -134,7 +134,7 @@ export default function OrdersTab({
             >
               <option value="all">All Payment Statuses</option>
               <option value="cod_pending">COD Pending</option>
-              <option value="pending_verification">EasyPaisa Verification</option>
+              <option value="pending_verification">JazzCash Verification</option>
               <option value="paid">Paid</option>
               <option value="rejected">Rejected</option>
             </select>

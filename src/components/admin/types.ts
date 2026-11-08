@@ -39,8 +39,10 @@ export interface StoreSettingsFormData {
   freeShippingThreshold: number;
   announcementText: string;
   isStoreOpen: boolean;
-  easypaisaNumber: string; // repurposed for JazzCash number
-  easypaisaTitle: string;  // repurposed for JazzCash title
+  jazzcashNumber?: string;
+  jazzcashTitle?: string;
+  easypaisaNumber?: string;
+  easypaisaTitle?: string;
   enableCod?: boolean;
   codFee?: number;
   blockedPhoneNumbers?: string[];

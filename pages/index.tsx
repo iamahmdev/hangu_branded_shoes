@@ -38,26 +38,26 @@ export default function Home() {
         {/* 1. Cinematic Luxury Hero Slider */}
         <HeroSlider />
 
-        {/* 2. Sleek 1-Line Luxury Trust Marquee Bar */}
-        <div className="bg-zinc-950 text-white text-[11px] sm:text-xs font-semibold py-3 border-y border-zinc-800 overflow-hidden">
+        {/* 2. Sleek Clean Luxury Trust Bar */}
+        <div className="bg-white text-zinc-700 text-[11px] sm:text-xs font-semibold py-3 border-b border-zinc-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] overflow-hidden">
           <div className="flex items-center justify-around max-w-7xl mx-auto px-4 gap-6 overflow-x-auto no-scrollbar whitespace-nowrap">
-            <span className="inline-flex items-center gap-2 text-zinc-300">
-              <Truck size={14} className="text-emerald-400" />
+            <span className="inline-flex items-center gap-2">
+              <Truck size={14} className="text-emerald-600" />
               <span>Free Delivery Over Rs. 5,000</span>
             </span>
-            <span className="text-zinc-600">✦</span>
-            <span className="inline-flex items-center gap-2 text-zinc-300">
-              <CheckCircle2 size={14} className="text-emerald-400" />
+            <span className="text-zinc-300">✦</span>
+            <span className="inline-flex items-center gap-2">
+              <CheckCircle2 size={14} className="text-emerald-600" />
               <span>Cash on Delivery & JazzCash</span>
             </span>
-            <span className="text-zinc-600">✦</span>
-            <span className="inline-flex items-center gap-2 text-zinc-300">
-              <RotateCcw size={14} className="text-emerald-400" />
+            <span className="text-zinc-300">✦</span>
+            <span className="inline-flex items-center gap-2">
+              <RotateCcw size={14} className="text-emerald-600" />
               <span>7-Day Hassle-Free Size Exchange</span>
             </span>
-            <span className="text-zinc-600">✦</span>
-            <span className="inline-flex items-center gap-2 text-zinc-300">
-              <ShieldCheck size={14} className="text-emerald-400" />
+            <span className="text-zinc-300">✦</span>
+            <span className="inline-flex items-center gap-2">
+              <ShieldCheck size={14} className="text-emerald-600" />
               <span>100% Handcrafted Leather</span>
             </span>
           </div>

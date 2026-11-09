@@ -144,17 +144,24 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
 
     if (method === "easypaisa" || method === "jazzcash") {
       cleanTid = String(transactionId || "").trim();
-      if (!cleanTid) {
+      if (!cleanTid && !req.body.paymentScreenshot) {
+        if (method === "easypaisa") {
+          res.status(400).json({
+            success: false,
+            message: "Transaction ID (TID) is required for advance payment verification.",
+          });
+          return;
+        }
         cleanTid = `JC-PENDING-${Date.now().toString().slice(-6)}`;
       } else if (cleanTid.length >= 5) {
-        // Block duplicate TIDs for JazzCash
+        // Block duplicate TIDs for JazzCash / EasyPaisa
         const existingOrderWithTid = await Order.findOne({
           transactionId: { $regex: new RegExp(`^${cleanTid}$`, "i") },
         });
         if (existingOrderWithTid) {
           res.status(400).json({
             success: false,
-            message: "This JazzCash Transaction ID (TID) has already been submitted for another order. Duplicate TIDs are rejected.",
+            message: "This Transaction ID (TID) has already been submitted for another order. Duplicate TIDs are rejected.",
           });
           return;
         }

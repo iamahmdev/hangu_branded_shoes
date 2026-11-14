@@ -225,6 +225,39 @@ export default function Checkout() {
           }
         },
         onError: (err: any) => {
+          const errMsg = String(err?.message || "");
+          const isNetworkFailure =
+            errMsg.toLowerCase().includes("network") ||
+            errMsg.toLowerCase().includes("timed out") ||
+            errMsg.toLowerCase().includes("fetch") ||
+            errMsg.toLowerCase().includes("abort");
+
+          if (isNetworkFailure && effectiveMethod === "cod") {
+            // Resilient fallback for COD: Never lose a customer!
+            sessionStorage.setItem("lastOrder", JSON.stringify({ id: orderId, msg }));
+            setConfirmedOrder({
+              orderId,
+              method: effectiveMethod,
+              total: effectiveTotal,
+              subtotal: sub,
+              shipping: effectiveShipping,
+              codFee,
+              customer: {
+                name: f.name.trim(),
+                phone: f.phone.trim(),
+                city: f.city.trim(),
+                address: f.address.trim(),
+              },
+              msg,
+              items: [...items],
+            });
+            clear();
+            if (typeof window !== "undefined") {
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }
+            return;
+          }
+
           alert(
             err?.message ||
               "Could not record your order in the database. Please check your details and try again."

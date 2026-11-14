@@ -2,21 +2,27 @@ import { Product as LocalProduct } from "../types";
 import { FALLBACK_PRODUCTS } from "../data/fallbackProducts";
 
 function getNormalizedApiBase(): string {
+  // If in a browser on production (e.g. hangubrandedshoes.com), always use the current domain's /api
+  if (typeof window !== "undefined") {
+    const isLocal =
+      window.location.hostname === "localhost" ||
+      window.location.hostname === "127.0.0.1";
+    if (!isLocal) {
+      return `${window.location.origin}/api`;
+    }
+  }
+
   const envUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
   if (envUrl) {
     const stripped = envUrl.replace(/\/+$/, "");
     return stripped.endsWith("/api") ? stripped : `${stripped}/api`;
-  }
-  // Production browser fallback: use current origin's /api rather than broken localhost
-  if (typeof window !== "undefined" && window.location.hostname !== "localhost" && window.location.hostname !== "127.0.0.1") {
-    return `${window.location.origin}/api`;
   }
   return "http://localhost:5001/api";
 }
 
 let cachedApiBase: string = getNormalizedApiBase();
 
-async function requestApi(path: string, options?: RequestInit, timeoutMs: number = 3500): Promise<Response> {
+async function requestApi(path: string, options?: RequestInit, timeoutMs: number = 10000): Promise<Response> {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
@@ -30,7 +36,7 @@ async function requestApi(path: string, options?: RequestInit, timeoutMs: number
     const res = await fetch(`${cachedApiBase}${normalizedPath}`, fetchOptions);
     clearTimeout(timeoutId);
     return res;
-  } catch (primaryErr) {
+  } catch (primaryErr: any) {
     clearTimeout(timeoutId);
     // Only attempt localhost port fallback during local development
     if (cachedApiBase.includes("localhost") || cachedApiBase.includes("127.0.0.1")) {
@@ -42,8 +48,12 @@ async function requestApi(path: string, options?: RequestInit, timeoutMs: number
         cachedApiBase = fallbackBase;
         return res;
       } catch {
-        throw primaryErr;
+        // Fallback failed
       }
+    }
+
+    if (primaryErr?.name === "AbortError" || String(primaryErr?.message || "").toLowerCase().includes("abort")) {
+      throw new Error("Network request timed out. Please check your internet connection and try again.");
     }
     throw primaryErr;
   }
@@ -218,12 +228,20 @@ export const api = {
    * Post an order to backend MongoDB
    */
   async createOrder(payload: CreateOrderPayload): Promise<{ success: boolean; orderId?: string; data?: any; message?: string }> {
-    const res = await requestApi(`/orders`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    return await res.json();
+    const res = await requestApi(
+      `/orders`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      },
+      15000
+    );
+    const json = await res.json();
+    if (!res.ok || json.success === false) {
+      throw new Error(json?.message || "Could not record your order in the database. Please check your details.");
+    }
+    return json;
   },
 
   /**

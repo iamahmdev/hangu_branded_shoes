@@ -76,22 +76,22 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
     const past24Hours = new Date(Date.now() - 24 * 60 * 60 * 1000);
     const phoneSuffix = digitsOnly.slice(-9);
 
-    // At most 3 orders per phone number per 24 hours
+    // At most 10 orders per phone number per 24 hours
     const recentPhoneOrdersCount = await Order.countDocuments({
       "customer.phone": { $regex: phoneSuffix },
       createdAt: { $gte: past24Hours },
       status: { $ne: "cancelled" },
     });
 
-    if (recentPhoneOrdersCount >= 3) {
+    if (recentPhoneOrdersCount >= 10) {
       res.status(429).json({
         success: false,
-        message: "Daily order limit reached (maximum 3 orders per phone number in 24 hours). Please contact support on WhatsApp.",
+        message: "Daily order limit reached (maximum 10 orders per phone number in 24 hours). Please contact support on WhatsApp.",
       });
       return;
     }
 
-    // At most 5 orders per IP address per 24 hours
+    // At most 25 orders per IP address per 24 hours
     const clientIp =
       (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() ||
       req.socket.remoteAddress ||
@@ -104,10 +104,10 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
         status: { $ne: "cancelled" },
       });
 
-      if (recentIpOrdersCount >= 5) {
+      if (recentIpOrdersCount >= 25) {
         res.status(429).json({
           success: false,
-          message: "Daily order limit reached from this network (maximum 5 orders per 24 hours). Please contact support on WhatsApp.",
+          message: "Daily order limit reached from this network (maximum 25 orders per 24 hours). Please contact support on WhatsApp.",
         });
         return;
       }

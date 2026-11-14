@@ -42,25 +42,13 @@ export default function Product() {
   // TanStack Query hook
   const { data: p, isLoading, isError } = useProduct(query.id as string);
 
-  // Gallery images list: guarantees 3 distinct angle views for every shoe
+  // Gallery images list: strictly uses genuine product images from database
   const galleryImages = useMemo(() => {
     if (!p) return [];
-    if (Array.isArray(p.images) && p.images.length > 1) {
+    if (Array.isArray(p.images) && p.images.length > 0) {
       return p.images.map((img) => resolveProductImage(img));
     }
-    const primary = resolveProductImage(p.img);
-    const match = primary.match(/IMG_(\d+)/i);
-    if (match) {
-      const num = parseInt(match[1], 10);
-      const next1 = num + 1 <= 3145 ? num + 1 : 3091;
-      const next2 = num + 2 <= 3145 ? num + 2 : 3092;
-      return [
-        primary,
-        `/images/shoes/IMG_${next1}.jpg`,
-        `/images/shoes/IMG_${next2}.jpg`,
-      ];
-    }
-    return [primary];
+    return [resolveProductImage(p.img)];
   }, [p]);
 
   // Dynamic delivery date estimate (e.g. 2-3 working days)
@@ -241,8 +229,8 @@ export default function Product() {
                     </div>
                   )}
 
-                  {/* Left / Right Carousel Arrow Buttons */}
-                  {viewMode === "photo" && (
+                  {/* Left / Right Carousel Arrow Buttons (when multiple genuine images exist) */}
+                  {viewMode === "photo" && galleryImages.length > 1 && (
                     <>
                       <button
                         type="button"
@@ -264,42 +252,11 @@ export default function Product() {
                   )}
                 </div>
 
-                {/* Bottom Row: Thumbnails + Dots + 3D Toggle */}
+                {/* Bottom Row: Genuine Thumbnails / Details + 3D Toggle */}
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 z-20 border-t border-amber-200/40">
-                  {/* Thumbnail Cards Row */}
-                  <div className="flex items-center gap-3">
-                    {galleryImages.map((imgUrl, idx) => {
-                      const isLast = idx === 2 && galleryImages.length >= 3;
-                      const isActive = viewMode === "photo" && activeImgIndex === idx;
-
-                      if (isLast) {
-                        return (
-                          <button
-                            key={idx}
-                            type="button"
-                            onClick={() => {
-                              setViewMode("photo");
-                              setActiveImgIndex(idx);
-                            }}
-                            className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/95 border-2 relative overflow-hidden flex items-center justify-center transition-all cursor-pointer ${
-                              isActive
-                                ? "border-amber-500 ring-4 ring-amber-300/80 scale-105 shadow-md"
-                                : "border-amber-200/80 hover:border-amber-400 opacity-80 hover:opacity-100 shadow-2xs"
-                            }`}
-                          >
-                            <img
-                              src={imgUrl}
-                              alt={`${p.name} angle ${idx + 1}`}
-                              className="w-full h-full object-contain blur-[1px] opacity-50 scale-110"
-                            />
-                            <span className="absolute inset-0 flex items-center justify-center font-black text-sm text-zinc-900 bg-white/40">
-                              +3
-                            </span>
-                          </button>
-                        );
-                      }
-
-                      return (
+                  {galleryImages.length > 1 ? (
+                    <div className="flex items-center gap-3">
+                      {galleryImages.map((imgUrl, idx) => (
                         <button
                           key={idx}
                           type="button"
@@ -308,7 +265,7 @@ export default function Product() {
                             setActiveImgIndex(idx);
                           }}
                           className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white p-2 border-2 transition-all overflow-hidden flex items-center justify-center cursor-pointer ${
-                            isActive
+                            viewMode === "photo" && activeImgIndex === idx
                               ? "border-amber-500 ring-4 ring-amber-300/80 scale-105 shadow-md"
                               : "border-transparent hover:border-amber-300 opacity-80 hover:opacity-100 shadow-2xs"
                           }`}
@@ -319,26 +276,12 @@ export default function Product() {
                             className="w-full h-full object-contain"
                           />
                         </button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Slide Dots Indicator */}
-                  {viewMode === "photo" && (
-                    <div className="flex items-center gap-1.5 py-1">
-                      {galleryImages.map((_, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => setActiveImgIndex(idx)}
-                          aria-label={`Go to slide ${idx + 1}`}
-                          className={`h-2 rounded-full transition-all cursor-pointer ${
-                            activeImgIndex === idx
-                              ? "w-6 bg-zinc-900"
-                              : "w-2 bg-amber-300 hover:bg-amber-400"
-                          }`}
-                        />
                       ))}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2 text-xs font-semibold text-zinc-700">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                      <span>Authentic High-Resolution Shoe Photograph</span>
                     </div>
                   )}
 
@@ -374,9 +317,9 @@ export default function Product() {
             {/* RIGHT COLUMN: Product Details & Purchase Actions             */}
             {/* ============================================================ */}
             <div className="lg:col-span-6 flex flex-col pt-1">
-              {/* Brand Eyebrow in Yellow/Amber */}
+              {/* Category / Collection Eyebrow */}
               <span className="text-xs sm:text-sm font-extrabold tracking-wider uppercase text-[#eab308] mb-1">
-                {p.brand || "HANGU BRANDED SHOES"}
+                {p.cat || "Handcrafted Footwear"}
               </span>
 
               {/* Product Title in Heavy Bold Uppercase */}
@@ -385,12 +328,12 @@ export default function Product() {
               </h1>
 
               {/* Product Short Description */}
-              <p className="text-zinc-500 text-xs sm:text-sm leading-relaxed mb-4 max-w-xl">
+              <p className="text-zinc-600 text-xs sm:text-sm leading-relaxed mb-4 max-w-xl">
                 {p.desc ||
-                  `The ${p.name} blends bold design with handcrafted precision, offering superior comfort and iconic luxury style for a confident look in every step.`}
+                  "Authentic handcrafted shoe from Hangu Branded Shoes. Designed with premium genuine materials, responsive shock-absorbing cushioning, and ergonomic footbed for lifetime durability and supreme daily comfort in Pakistan."}
               </p>
 
-              {/* Ratings & Social Proof Row */}
+              {/* Ratings & Genuine Stock Row */}
               <div className="flex flex-wrap items-center gap-4 text-xs mb-6">
                 <div className="flex items-center gap-1">
                   <div className="flex text-amber-400">
@@ -399,13 +342,13 @@ export default function Product() {
                     ))}
                   </div>
                   <span className="text-zinc-500 font-semibold ml-1">
-                    ({p.reviews ? `${p.reviews}k` : "11.67k"} Reviews)
+                    ({p.reviews || 15} Reviews)
                   </span>
                 </div>
 
                 <div className="flex items-center gap-1 text-emerald-600 font-semibold">
                   <Tag size={13} />
-                  <span>{((p.stock || 10) * 42 + 4320).toLocaleString()} Item sold</span>
+                  <span>{p.stock ? `${p.stock} Pairs in Stock` : "Available in Stock"}</span>
                 </div>
               </div>
 
@@ -413,14 +356,14 @@ export default function Product() {
               {/* SHIPPING DETAILS BOX (2x2 Grid)                              */}
               {/* ============================================================ */}
               <div className="mb-6">
-                <h3 className="text-base sm:text-lg font-bold text-zinc-900 mb-3">Shipping</h3>
+                <h3 className="text-base sm:text-lg font-bold text-zinc-900 mb-3">Shipping & Delivery</h3>
                 <div className="grid grid-cols-2 gap-4 py-2 border-y border-zinc-200/80">
                   {/* Origin */}
                   <div className="flex items-start gap-2.5">
                     <Plane size={18} className="text-zinc-700 mt-0.5 shrink-0" />
                     <div>
-                      <span className="text-[11px] text-zinc-400 block font-medium">From</span>
-                      <b className="text-xs text-zinc-900">USA / Authentic Import</b>
+                      <span className="text-[11px] text-zinc-400 block font-medium">Dispatch From</span>
+                      <b className="text-xs text-zinc-900">Hangu, KP (Tahir Market)</b>
                     </div>
                   </div>
 
@@ -428,8 +371,8 @@ export default function Product() {
                   <div className="flex items-start gap-2.5">
                     <Package size={18} className="text-zinc-700 mt-0.5 shrink-0" />
                     <div>
-                      <span className="text-[11px] text-zinc-400 block font-medium">Package</span>
-                      <b className="text-xs text-zinc-900">Regular Luxury Box</b>
+                      <span className="text-[11px] text-zinc-400 block font-medium">Packaging</span>
+                      <b className="text-xs text-zinc-900">Original Shoe Box</b>
                     </div>
                   </div>
 
@@ -446,8 +389,8 @@ export default function Product() {
                   <div className="flex items-start gap-2.5">
                     <Truck size={18} className="text-zinc-700 mt-0.5 shrink-0" />
                     <div>
-                      <span className="text-[11px] text-zinc-400 block font-medium">Estimation Arrive</span>
-                      <b className="text-xs text-zinc-900">{deliveryEstimate}</b>
+                      <span className="text-[11px] text-zinc-400 block font-medium">Courier Service</span>
+                      <b className="text-xs text-zinc-900">Nationwide Express ({deliveryEstimate})</b>
                     </div>
                   </div>
                 </div>

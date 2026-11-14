@@ -1,26 +1,40 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import dbConnect from "../../../src/lib/dbConnect";
+import Product from "../../../src/models/Product";
 import { FALLBACK_PRODUCTS } from "../../../src/data/fallbackProducts";
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
     return res.status(405).json({ success: false, message: `Method ${req.method} Not Allowed` });
   }
 
+  const { id } = req.query;
+  const numId = Number(id);
+
   try {
-    const { id } = req.query;
-    const numId = Number(id);
-    const product = FALLBACK_PRODUCTS.find((p) => p.id === numId);
+    await dbConnect();
+    const dbProduct = await Product.findOne({
+      $or: [{ id: numId }, { _id: typeof id === "string" && id.match(/^[0-9a-fA-F]{24}$/) ? id : null }],
+    }).lean();
 
-    if (!product) {
-      return res.status(404).json({ success: false, message: "Product not found" });
+    if (dbProduct) {
+      return res.status(200).json({
+        success: true,
+        data: dbProduct,
+      });
     }
-
-    return res.status(200).json({
-      success: true,
-      data: product,
-    });
-  } catch (error: any) {
-    return res.status(500).json({ success: false, message: error.message });
+  } catch (dbErr) {
+    console.warn("MongoDB fetch failed in /api/products/[id], falling back:", dbErr);
   }
+
+  const fallback = FALLBACK_PRODUCTS.find((p) => p.id === numId);
+  if (!fallback) {
+    return res.status(404).json({ success: false, message: "Product not found" });
+  }
+
+  return res.status(200).json({
+    success: true,
+    data: fallback,
+  });
 }

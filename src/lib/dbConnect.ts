@@ -1,4 +1,5 @@
 import dns from "dns";
+import mongoose from "mongoose";
 
 try {
   if (typeof dns.setDefaultResultOrder === "function") {
@@ -9,12 +10,12 @@ try {
   // Ignore
 }
 
-import mongoose from "mongoose";
-
-const DEFAULT_URI =
+const PRIMARY_URI =
+  process.env.MONGODB_URI ||
   "mongodb+srv://ahmaddev42_db_user:NPnoQqC1Z62XANVX@cluster0.rxe1sim.mongodb.net/hangu_branded_shoes?retryWrites=true&w=majority";
 
-const MONGODB_URI = process.env.MONGODB_URI || DEFAULT_URI;
+const DIRECT_REPLICA_URI =
+  "mongodb://ahmaddev42_db_user:NPnoQqC1Z62XANVX@ac-o9cxlbv-shard-00-00.rxe1sim.mongodb.net:27017,ac-o9cxlbv-shard-00-01.rxe1sim.mongodb.net:27017,ac-o9cxlbv-shard-00-02.rxe1sim.mongodb.net:27017/hangu_branded_shoes?ssl=true&replicaSet=atlas-m72d13-shard-0&authSource=admin&retryWrites=true&w=majority";
 
 interface MongooseCache {
   conn: typeof mongoose | null;
@@ -46,14 +47,31 @@ export async function dbConnect(): Promise<typeof mongoose> {
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
-      serverSelectionTimeoutMS: 8000,
-      connectTimeoutMS: 8000,
+      serverSelectionTimeoutMS: 7000,
+      connectTimeoutMS: 7000,
       socketTimeoutMS: 15000,
     };
 
-    cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongooseInstance) => {
-      return mongooseInstance;
-    });
+    cached.promise = (async () => {
+      // 1. Try primary URI (SRV)
+      try {
+        const instance = await mongoose.connect(PRIMARY_URI, opts);
+        return instance;
+      } catch (srvErr: any) {
+        console.warn(
+          "Primary MongoDB SRV connection failed, attempting direct replica-set fallback:",
+          srvErr.message
+        );
+        // 2. Direct replica-set fallback for environments where SRV resolution fails
+        try {
+          const instance = await mongoose.connect(DIRECT_REPLICA_URI, opts);
+          return instance;
+        } catch (directErr: any) {
+          console.error("All MongoDB connection attempts failed:", directErr.message);
+          throw directErr;
+        }
+      }
+    })();
   }
 
   try {

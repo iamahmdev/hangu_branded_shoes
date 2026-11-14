@@ -37,6 +37,8 @@ export interface IOrder extends Document {
   deliveryNote?: string;
   customerIp?: string;
   status: "awaiting_confirmation" | "pending" | "confirmed" | "dispatched" | "delivered" | "cancelled";
+  cancelledAt?: Date;
+  cancelReason?: string;
   courierName?: string;
   trackingNumber?: string;
   timeline: IOrderTimeline[];
@@ -92,6 +94,8 @@ const OrderSchema = new Schema<IOrder>(
       default: "awaiting_confirmation",
       index: true,
     },
+    cancelledAt: { type: Date },
+    cancelReason: { type: String },
     courierName: { type: String },
     trackingNumber: { type: String },
     timeline: [

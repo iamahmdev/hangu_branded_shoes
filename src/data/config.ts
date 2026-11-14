@@ -6,8 +6,25 @@ export const SHOP: string = "Hangu Branded Shoes";
 
 export const wa = (t?: string, customNumber?: string): string => {
   const msg = t || "Hello! I want to inquire about Hangu Branded Shoes.";
-  const phone = (customNumber || WA).replace(/[^0-9]/g, "");
-  return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+  let phone = (customNumber || WA).replace(/[^0-9]/g, "");
+  if (phone.startsWith("0")) {
+    phone = "92" + phone.slice(1);
+  } else if (!phone.startsWith("92") && phone.length === 10) {
+    phone = "92" + phone;
+  }
+
+  const encoded = encodeURIComponent(msg);
+
+  // Fast direct routing: Desktop opens web.whatsapp.com directly without landing page loading stall
+  if (typeof window !== "undefined") {
+    const isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    if (!isMobile) {
+      return `https://web.whatsapp.com/send?phone=${phone}&text=${encoded}`;
+    }
+  }
+
+  // Mobile & SSR: Instant deep-link directly into WhatsApp application
+  return `https://api.whatsapp.com/send?phone=${phone}&text=${encoded}`;
 };
 
 // 👉 Official Social Media Links

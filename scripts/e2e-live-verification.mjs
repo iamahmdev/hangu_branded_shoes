@@ -177,7 +177,8 @@ async function runTest() {
   console.log("[TEST 3] Testing Stock Restoration on Order Cancellation...");
   console.log(`Cancelling test order #${testOrderId} via Live Cancel API...`);
 
-  const cancelResult = await postToLive(`/api/orders/${testOrderId}/cancel`, "PATCH", {
+  const cancelResult = await postToLive(`/api/orders`, "PATCH", {
+    orderId: testOrderId,
     reason: "Automated E2E Verification Test Cancellation",
   });
   console.log(`Cancel API Status: ${cancelResult.status}`);

@@ -16,8 +16,83 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
 
+  // Handle Order Cancellation and Inventory Restoration
+  if (req.method === "PATCH" || (req.method === "POST" && req.body?.action === "cancel")) {
+    try {
+      await dbConnect();
+      const orderIdentifier =
+        req.query.orderId ||
+        req.query.id ||
+        req.body?.orderId ||
+        req.body?.id;
+      const { reason } = req.body || {};
+
+      if (!orderIdentifier || typeof orderIdentifier !== "string") {
+        return res.status(400).json({ success: false, message: "Order ID is required." });
+      }
+
+      const cleanId = orderIdentifier.trim();
+      const order = await Order.findOne({
+        $or: [
+          { orderId: cleanId },
+          { orderId: cleanId.toUpperCase() },
+          { _id: cleanId.match(/^[0-9a-fA-F]{24}$/) ? cleanId : null },
+        ],
+      });
+
+      if (!order) {
+        return res.status(404).json({ success: false, message: "Order not found." });
+      }
+
+      if (order.status === "dispatched" || order.status === "delivered") {
+        return res.status(400).json({
+          success: false,
+          message: "Cannot cancel order after dispatch or delivery.",
+        });
+      }
+
+      if (order.status === "cancelled") {
+        return res.status(400).json({
+          success: false,
+          message: "Order is already cancelled.",
+        });
+      }
+
+      // Restore inventory stock for all items
+      for (const item of order.items) {
+        if (item.productId) {
+          await Product.updateOne({ id: Number(item.productId) }, { $inc: { stock: Number(item.quantity) } });
+        }
+      }
+
+      order.status = "cancelled";
+      order.cancelledAt = new Date();
+      order.cancelReason = reason || "Cancelled by customer/admin";
+      order.timeline = order.timeline || [];
+      order.timeline.push({
+        status: "cancelled",
+        timestamp: new Date(),
+        note: reason || "Cancelled and inventory stock restored",
+      });
+
+      await order.save();
+
+      return res.status(200).json({
+        success: true,
+        data: order,
+        message: "Order cancelled successfully and stock restored.",
+      });
+    } catch (cancelErr: any) {
+      console.error("Order cancel error:", cancelErr);
+      return res.status(500).json({
+        success: false,
+        message: cancelErr.message || "Failed to cancel order",
+      });
+    }
+  }
+
   if (req.method !== "POST") {
-    res.setHeader("Allow", ["GET", "POST"]);
+    res.setHeader("Allow", ["GET", "POST", "PATCH"]);
     return res.status(405).json({ success: false, message: `Method ${req.method} Not Allowed` });
   }
 

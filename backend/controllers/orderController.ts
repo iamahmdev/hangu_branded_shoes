@@ -201,9 +201,13 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
       }
 
       if (product.stock < item.quantity) {
+        const available = Math.max(0, product.stock);
         res.status(400).json({
           success: false,
-          message: `Insufficient stock for "${product.name}". Only ${product.stock} pair(s) remaining.`,
+          message:
+            available <= 0
+              ? `"${product.name}" is currently out of stock. Please contact support on WhatsApp.`
+              : `Only ${available} pair(s) remaining for "${product.name}".`,
         });
         return;
       }
@@ -221,8 +225,12 @@ export async function createOrder(req: Request, res: Response): Promise<void> {
         total: itemTotal,
       });
 
-      // Atomic inventory stock decrement
-      await Product.updateOne({ id: product.id }, { $inc: { stock: -item.quantity } });
+      // Atomic inventory stock decrement (ensures stock doesn't drop below 0)
+      const newStock = Math.max(0, product.stock - item.quantity);
+      await Product.updateOne(
+        { id: product.id },
+        { $set: { stock: newStock, inStock: newStock > 0 } }
+      );
     }
 
     const standardFee = storeSettings?.shippingFee ?? 250;

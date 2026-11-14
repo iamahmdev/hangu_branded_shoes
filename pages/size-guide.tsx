@@ -289,7 +289,7 @@ export default function SizeGuide() {
                 target="_blank"
                 rel="noopener noreferrer"
                 href={wa(
-                  `Assalam-o-Alaikum! I need advice selecting the right shoe size for my feet. My usual size is EU ${selectedSize}.`
+                  `Hello! I need advice selecting the right shoe size for my feet. My usual size is EU ${selectedSize}.`
                 )}
               >
                 <span>Ask Sizing Specialist on WhatsApp</span>

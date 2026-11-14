@@ -75,7 +75,7 @@ export default function Product() {
   const buildWhatsAppOrderUrl = () => {
     const sizeText = size || "Size not selected yet";
     const totalAmount = (p.price * q).toLocaleString();
-    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${q}\n*Price:* Rs. ${totalAmount}\n*Payment:* Cash on Delivery / JazzCash\n\nMera Delivery Address ye hai:\nNaam: \nPhone: \nCity: \nAddress: `;
+    const msg = `Hello Hangu Branded Shoes! 👟\n\nI want to order this footwear pair:\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${q}\n*Price:* Rs. ${totalAmount}\n*Payment:* Cash on Delivery / JazzCash\n\nMy Delivery Details:\nName: \nPhone: \nCity: \nDelivery Address: `;
     return wa(msg);
   };
 

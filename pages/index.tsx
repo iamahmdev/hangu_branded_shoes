@@ -211,7 +211,7 @@ export default function Home() {
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <a
-                href={wa("Assalam-o-Alaikum! Mujhe Hangu Branded Shoes se jootay ke baray mein janna hai.")}
+                href={wa("Hello! I would like to inquire about footwear at Hangu Branded Shoes.")}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="px-6 py-3 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold inline-flex items-center gap-2 transition-colors shadow-md"

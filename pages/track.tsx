@@ -101,8 +101,8 @@ export default function TrackOrderPage() {
   const stepIndex = order ? getStepProgressIndex(order.status) : 0;
 
   const buildWhatsAppInquiryUrl = () => {
-    if (!order) return wa("Assalam-o-Alaikum! I have a question about an order.");
-    const text = `Assalam-o-Alaikum! 📦\n\nI want to inquire about my order:\n*Order ID:* ${order.orderId}\n*Customer:* ${order.customer.name}\n*Total:* Rs. ${order.totalAmount.toLocaleString()}\n*Status:* ${order.status.toUpperCase()}\n\nPlease update me on dispatch status.`;
+    if (!order) return wa("Hello! I have a question about an order.");
+    const text = `Hello Hangu Branded Shoes! 📦\n\nI want to inquire about my order:\n*Order ID:* ${order.orderId}\n*Customer:* ${order.customer.name}\n*Total:* Rs. ${order.totalAmount.toLocaleString()}\n*Status:* ${order.status.toUpperCase()}\n\nPlease update me on dispatch status.`;
     return wa(text);
   };
 
@@ -158,7 +158,7 @@ export default function TrackOrderPage() {
               <p className="text-rose-700 text-xs mt-1">{errorMsg}</p>
               <div className="mt-3">
                 <a
-                  href={wa("Assalam-o-Alaikum! I need help tracking my order.")}
+                  href={wa("Hello! I need help tracking my order.")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-xs text-rose-800 font-semibold underline"

@@ -5,7 +5,7 @@ export const WA: string = "923333147691";
 export const SHOP: string = "Hangu Branded Shoes";
 
 export const wa = (t?: string, customNumber?: string): string => {
-  const msg = t || "Assalam-o-Alaikum! I want to inquire about Hangu Branded Shoes.";
+  const msg = t || "Hello! I want to inquire about Hangu Branded Shoes.";
   const phone = (customNumber || WA).replace(/[^0-9]/g, "");
   return `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
 };

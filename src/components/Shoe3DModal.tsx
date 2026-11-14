@@ -36,7 +36,7 @@ export default function Shoe3DModal({ product, isOpen, onClose }: Shoe3DModalPro
   const savings = product.old && product.old > product.price ? product.old - product.price : 0;
 
   const handleWhatsAppOrder = () => {
-    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n*Product:* ${product.name}\n*Category:* ${product.cat}\n*Price:* Rs. ${product.price.toLocaleString()}\n*Photo:* ${product.img}\n\nDelivery details share karein please.`;
+    const msg = `Hello Hangu Branded Shoes! 👟\n\nI want to order this shoe:\n*Product:* ${product.name}\n*Category:* ${product.cat}\n*Price:* Rs. ${product.price.toLocaleString()}\n*Photo:* ${product.img}\n\nPlease share delivery details.`;
     window.open(wa(msg), "_blank");
   };
 

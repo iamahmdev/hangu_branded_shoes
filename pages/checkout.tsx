@@ -151,7 +151,7 @@ export default function Checkout() {
           `📞 *Phone / WhatsApp:* ${f.phone.trim()}\n` +
           `📍 *Delivery Address:* ${f.address.trim()}, ${f.city.trim()}\n` +
           `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-          `_Assalam-o-Alaikum! I have placed an order with Cash on Delivery. Please confirm my order and dispatch it._`
+          `_Hello! I have placed an order with Cash on Delivery. Please confirm my order and dispatch it._`
         : `🛍️ *NEW ORDER (JAZZCASH) — HANGU BRANDED SHOES*\n` +
           `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
           `📦 *Order ID:* #${orderId}\n\n` +
@@ -170,7 +170,7 @@ export default function Checkout() {
           `📞 *Phone / WhatsApp:* ${f.phone.trim()}\n` +
           `📍 *Delivery Address:* ${f.address.trim()}, ${f.city.trim()}\n` +
           `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
-          `_Assalam-o-Alaikum! I have placed an order via JazzCash. Please verify my payment and dispatch my order._`;
+          `_Hello! I have placed an order via JazzCash. Please verify my payment and dispatch my order._`;
 
     // Persist to MongoDB database first
     createOrderMutation.mutate(

@@ -84,7 +84,7 @@ export default function Footer() {
             </div>
 
             <a
-              href={wa("Assalam-o-Alaikum! I have an inquiry about Hangu Branded Shoes.", whatsappNum)}
+              href={wa("Hello! I have an inquiry about Hangu Branded Shoes.", whatsappNum)}
               target="_blank"
               rel="noopener noreferrer"
               className="ft-contact-item"
@@ -108,7 +108,7 @@ export default function Footer() {
           {/* Social Channels */}
           <div className="ft-socials">
             <a
-              href={wa("Assalam-o-Alaikum! I want to inquire about footwear.", whatsappNum)}
+              href={wa("Hello! I want to inquire about footwear.", whatsappNum)}
               target="_blank"
               rel="noopener noreferrer"
               title="WhatsApp Concierge"
@@ -231,7 +231,7 @@ export default function Footer() {
           </p>
 
           <a
-            href={wa("Assalam-o-Alaikum! I need help with shoe sizing and ordering.", whatsappNum)}
+            href={wa("Hello! I need help with shoe sizing and ordering.", whatsappNum)}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 px-4 py-2.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors mb-4 shadow-xs"

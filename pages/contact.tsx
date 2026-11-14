@@ -15,7 +15,7 @@ export default function Contact() {
   const address = settings?.address?.trim() || "Hangu tall road tahir markit hangu brand shoes 👟";
   const shopTiming = settings?.shopTiming?.trim() || "8:00 AM to 5:00 PM";
 
-  const whatsappMsg = `Assalam-o-Alaikum ${shopName}! I would like to inquire about footwear availability and sizes.`;
+  const whatsappMsg = `Hello ${shopName}! I would like to inquire about footwear availability and sizes.`;
 
   return (
     <Layout

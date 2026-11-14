@@ -61,7 +61,7 @@ export default function QuickOrderModal() {
   const buildWhatsAppOrderUrl = () => {
     const sizeText = selectedSize || "42";
     const totalAmount = (p.price * qty).toLocaleString();
-    const msg = `Assalam-o-Alaikum! 👟\n\nMujhe ye shoe order karna hai:\n\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${qty}\n*Price:* Rs. ${totalAmount}\n*Payment:* JazzCash Mobile Transfer\n\nMera Delivery Address ye hai:\nNaam: \nPhone Number: \nCity: \nComplete Address: `;
+    const msg = `Hello Hangu Branded Shoes! 👟\n\nI want to order this footwear pair:\n\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${qty}\n*Price:* Rs. ${totalAmount}\n*Payment:* JazzCash Mobile Transfer\n\nMy Delivery Details:\nName: \nPhone Number: \nCity: \nComplete Address: `;
     return wa(msg);
   };
 

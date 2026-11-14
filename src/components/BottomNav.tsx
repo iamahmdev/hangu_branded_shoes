@@ -60,7 +60,7 @@ export default function BottomNav() {
 
         {/* WhatsApp */}
         <a
-          href={wa("Assalam-o-Alaikum! I want to order shoes on WhatsApp.")}
+          href={wa("Hello! I want to order shoes on WhatsApp.")}
           target="_blank"
           rel="noopener noreferrer"
           className="bnav-item bnav-wa text-[#25d366]"

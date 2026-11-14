@@ -157,7 +157,7 @@ export default function OrderDetailModal({
     }
 
     const msg = isCod
-      ? `Assalam-o-Alaikum *${custName}*! 👟\n\n` +
+      ? `Hello *${custName}*! 👟\n\n` +
         `Thank you for ordering at *Hangu Branded Shoes*.\n\n` +
         `*Order ID:* #${order.orderId}\n` +
         `*Order Status:* ${(order.status || "").replace("_", " ").toUpperCase()}\n` +
@@ -169,7 +169,7 @@ export default function OrderDetailModal({
         `\nPlease keep the exact cash ready when the rider arrives.\n` +
         `You can track your order anytime at: www.hangubrandedshoes.com/track\n\n` +
         `Let us know if you need to confirm or adjust anything!`
-      : `Assalam-o-Alaikum *${custName}*! 👟\n\n` +
+      : `Hello *${custName}*! 👟\n\n` +
         `Thank you for shopping at *Hangu Branded Shoes*.\n\n` +
         `*Order ID:* #${order.orderId}\n` +
         `*Order Status:* ${(order.status || "").replace("_", " ").toUpperCase()}\n` +

@@ -82,7 +82,7 @@ export default function WhatsAppButton() {
       className="wab"
       target="_blank"
       rel="noopener noreferrer"
-      href={wa("Assalam-o-Alaikum! I have a question regarding Hangu Branded Shoes.")}
+      href={wa("Hello! I have a question regarding Hangu Branded Shoes.")}
       aria-label="Chat on WhatsApp"
       title="Chat on WhatsApp"
     >

@@ -1,7 +1,7 @@
 import { useState, useEffect, FormEvent, ChangeEvent } from "react";
 import { ProductFormData } from "./types";
 import { resolveProductImage } from "../../utils/image";
-import { X, Upload, Check, Image as ImageIcon, Loader2 } from "lucide-react";
+import { X, ArrowLeft, Upload, Check, Image as ImageIcon, Loader2 } from "lucide-react";
 
 interface ProductModalProps {
   isOpen: boolean;
@@ -119,16 +119,27 @@ export default function ProductModal({
   return (
     <div className="fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fadeIn">
       <div className="bg-white p-5 sm:p-7 md:p-8 rounded-3xl max-w-xl w-full border border-slate-200/90 shadow-2xl relative my-6 text-slate-800">
-        <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
-          <h2 className="text-base sm:text-lg font-bold text-slate-900">
-            {isEditing ? `Edit Shoe Model #${form.id}` : "Add New Shoe to Store"}
-          </h2>
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5 gap-3">
           <button
+            type="button"
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition-colors"
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs transition-colors cursor-pointer group shrink-0"
           >
-            <X size={20} />
+            <ArrowLeft size={15} className="group-hover:-translate-x-0.5 transition-transform" />
+            <span>← Back to Products</span>
           </button>
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm sm:text-base font-extrabold text-slate-900 truncate">
+              {isEditing ? `Edit Shoe #${form.id}` : "Add New Shoe"}
+            </h2>
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-1.5 rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition-colors cursor-pointer"
+            >
+              <X size={18} />
+            </button>
+          </div>
         </div>
 
         {error && (

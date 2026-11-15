@@ -152,11 +152,11 @@ export default function AdminLayout({
                 </div>
               </div>
 
-              {/* Top Header Logout Button */}
+              {/* Top Header Logout Button - High Contrast Bold Red */}
               <button
                 type="button"
                 onClick={onLogout}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white text-xs font-bold transition-all cursor-pointer shadow-xs shrink-0"
                 title="Log out of Admin Portal"
               >
                 <LogOut size={14} />

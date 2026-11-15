@@ -4,6 +4,7 @@ import { resolveProductImage } from "../../utils/image";
 import { WhatsAppIcon } from "../WhatsAppButton";
 import {
   X,
+  ArrowLeft,
   Truck,
   CheckCircle2,
   XCircle,
@@ -192,40 +193,54 @@ export default function OrderDetailModal({
   return (
     <div className="fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fadeIn">
       <div className="bg-white p-5 sm:p-7 md:p-8 rounded-3xl max-w-2xl w-full border border-slate-200/90 shadow-2xl relative my-6 text-slate-800">
-        {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
-          <div className="flex items-center gap-2.5 flex-wrap">
+        {/* Top Header with Prominent Back Button */}
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-4 gap-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-900 hover:bg-black active:scale-98 text-white font-bold text-xs transition-all cursor-pointer shadow-sm group shrink-0"
+          >
+            <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+            <span>← Back to Orders</span>
+          </button>
+
+          <div className="flex items-center gap-2">
             <span
               className={`px-3 py-1 rounded-full text-xs font-extrabold uppercase border ${statusMeta.bg} ${statusMeta.text} ${statusMeta.border}`}
             >
               {order.status.replace("_", " ")}
             </span>
+            <button
+              type="button"
+              onClick={onClose}
+              className="p-2 rounded-xl hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors cursor-pointer"
+              aria-label="Close"
+              title="Close"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+
+        {/* Order Identifier Strip */}
+        <div className="flex items-center justify-between flex-wrap gap-2 mb-5 px-1 pb-3 border-b border-slate-100">
+          <div className="flex items-center gap-2 flex-wrap">
+            <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 font-mono">
+              Order #{order.orderId}
+            </h2>
             {isCod ? (
-              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
-                <Banknote size={13} /> Cash on Delivery
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wide bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                <Banknote size={12} /> Cash on Delivery
               </span>
             ) : (
-              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-red-50 text-red-700 border border-red-200 flex items-center gap-1">
-                <Smartphone size={13} /> JazzCash
+              <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wide bg-red-50 text-red-700 border border-red-200 flex items-center gap-1">
+                <Smartphone size={12} /> JazzCash
               </span>
             )}
-            <div>
-              <h2 className="text-base sm:text-lg font-bold text-slate-900 font-mono">
-                Order #{order.orderId}
-              </h2>
-              <span className="text-[11px] text-slate-500 block">
-                Placed on {new Date(order.createdAt || Date.now()).toLocaleString("en-PK")}
-              </span>
-            </div>
           </div>
-
-          <button
-            onClick={onClose}
-            className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition-colors"
-            aria-label="Close Modal"
-          >
-            <X size={20} />
-          </button>
+          <span className="text-[11px] text-slate-500">
+            Placed on {new Date(order.createdAt || Date.now()).toLocaleString("en-PK")}
+          </span>
         </div>
 
         {/* Customer Information & Delivery Details */}
@@ -569,6 +584,18 @@ export default function OrderDetailModal({
           >
             <Trash2 size={14} />
             <span>Delete Order</span>
+          </button>
+        </div>
+
+        {/* Large Prominent Bottom Back Button */}
+        <div className="pt-4 border-t border-slate-100">
+          <button
+            type="button"
+            onClick={onClose}
+            className="w-full py-3 rounded-2xl bg-slate-900 hover:bg-black text-white text-xs font-bold inline-flex items-center justify-center gap-2 shadow-sm transition-all cursor-pointer"
+          >
+            <ArrowLeft size={16} />
+            <span>Close & Return to Orders List</span>
           </button>
         </div>
       </div>

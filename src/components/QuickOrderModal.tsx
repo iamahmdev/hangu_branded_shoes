@@ -85,6 +85,8 @@ export default function QuickOrderModal() {
               <img
                 src={resolveProductImage(p.img)}
                 alt={p.name}
+                loading="eager"
+                decoding="async"
                 className="w-full h-full max-h-full max-w-full object-contain p-2 select-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.08)]"
               />
               {p.tag && (

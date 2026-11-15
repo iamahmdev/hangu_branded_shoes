@@ -36,6 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const dbProducts = await Product.find(query).sort(sortOption).lean();
 
     if (dbProducts && dbProducts.length > 0) {
+      res.setHeader("Cache-Control", "public, s-maxage=1800, stale-while-revalidate=86400");
       return res.status(200).json({
         success: true,
         count: dbProducts.length,
@@ -71,6 +72,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     list.sort((a, b) => b.id - a.id);
   }
 
+  res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400");
   return res.status(200).json({
     success: true,
     count: list.length,

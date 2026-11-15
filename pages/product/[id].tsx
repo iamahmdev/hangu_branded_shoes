@@ -1,3 +1,4 @@
+import type { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useState, useMemo } from "react";
 import Link from "next/link";
@@ -6,6 +7,8 @@ import { useCart } from "../../src/context/CartContext";
 import { SIZES, wa } from "../../src/data/config";
 import { useProduct } from "../../src/hooks/useApi";
 import { WhatsAppIcon } from "../../src/components/WhatsAppButton";
+import { FALLBACK_PRODUCTS } from "../../src/data/fallbackProducts";
+import { Product as ProductType } from "../../src/types";
 import {
   Star,
   Tag,
@@ -30,7 +33,7 @@ import {
 } from "lucide-react";
 import { resolveProductImage } from "../../src/utils/image";
 
-export default function Product() {
+export default function Product({ initialProduct }: { initialProduct?: ProductType }) {
   const { query, push } = useRouter();
   const { add } = useCart();
   const [size, setSize] = useState<string>("");
@@ -45,8 +48,9 @@ export default function Product() {
   const [zoomPos, setZoomPos] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
   const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false);
 
-  // TanStack Query hook
-  const { data: p, isLoading, isError } = useProduct(query.id as string);
+  // TanStack Query hook - uses initialProduct directly so ZERO loading delay!
+  const { data: apiProduct, isError } = useProduct(query.id as string);
+  const p = apiProduct || initialProduct || (query.id ? FALLBACK_PRODUCTS.find((item) => item.id === Number(query.id)) : undefined);
 
   // Gallery images list: strictly uses genuine product images from database
   const galleryImages = useMemo(() => {
@@ -67,7 +71,7 @@ export default function Product() {
     return `${startStr}-${endStr}`;
   }, []);
 
-  if (isLoading) {
+  if (!p) {
     return (
       <Layout>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -226,6 +230,8 @@ export default function Product() {
                     key={activeImgIndex}
                     src={galleryImages[activeImgIndex] || resolveProductImage(p.img)}
                     alt={`${p.name} - Angle ${activeImgIndex + 1}`}
+                    loading="eager"
+                    decoding="async"
                     className={`w-full h-full max-h-full max-w-full object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.1)] select-none transition-transform duration-150 ease-out ${
                       isZoomed ? "scale-175" : "scale-100"
                     }`}
@@ -675,3 +681,28 @@ export default function Product() {
     </Layout>
   );
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths = FALLBACK_PRODUCTS.map((item) => ({
+    params: { id: String(item.id) },
+  }));
+  return {
+    paths,
+    fallback: "blocking",
+  };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  const id = params?.id;
+  const numId = Number(id);
+  const initialProduct = FALLBACK_PRODUCTS.find((item) => item.id === numId) || null;
+  if (!initialProduct) {
+    return { notFound: true };
+  }
+  return {
+    props: {
+      initialProduct,
+    },
+    revalidate: 60,
+  };
+};

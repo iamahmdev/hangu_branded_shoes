@@ -119,30 +119,19 @@ export default function AdminLayout({
               </div>
             </div>
 
-            {/* Right: Live Status, Quick Actions & Profile Pill */}
-            <div className="flex items-center gap-3">
+            {/* Right: Live Status, View Website, Profile & Logout */}
+            <div className="flex items-center gap-2.5">
               {/* Live DB Status Pill */}
-              <div className="hidden md:flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Live DB Connected</span>
+                <span>Live DB</span>
               </div>
-
-              {/* Refresh Button */}
-              <button
-                type="button"
-                onClick={onRefresh}
-                disabled={isRefreshing}
-                className="p-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-colors"
-                title="Refresh Live Data"
-              >
-                <RefreshCw size={16} className={isRefreshing ? "animate-spin text-emerald-600" : ""} />
-              </button>
 
               {/* Website Link */}
               <Link
                 href="/"
                 target="_blank"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-200 transition-colors"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 shadow-2xs transition-colors"
                 title="Open Website in New Tab"
               >
                 <Store size={14} className="text-emerald-600" />
@@ -150,8 +139,8 @@ export default function AdminLayout({
                 <ExternalLink size={12} className="text-slate-400" />
               </Link>
 
-              {/* Admin Profile Pill (matching eMart Cyndy Littlebridge / Super Admin) */}
-              <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
+              {/* Admin Profile Pill */}
+              <div className="flex items-center gap-2 pl-1 sm:pl-2 sm:border-l border-slate-200">
                 <div className="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
                   {(adminUser?.username || "A").charAt(0).toUpperCase()}
                 </div>
@@ -162,6 +151,17 @@ export default function AdminLayout({
                   <span className="text-[10px] text-slate-500 font-medium">Super Admin</span>
                 </div>
               </div>
+
+              {/* Top Header Logout Button */}
+              <button
+                type="button"
+                onClick={onLogout}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-bold transition-colors cursor-pointer"
+                title="Log out of Admin Portal"
+              >
+                <LogOut size={14} />
+                <span>Logout</span>
+              </button>
             </div>
           </header>
 

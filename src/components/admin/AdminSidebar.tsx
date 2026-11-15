@@ -6,20 +6,15 @@ import {
   Package,
   Star,
   Settings,
-  RefreshCw,
   LogOut,
-  ExternalLink,
-  ShieldCheck,
   X,
-  Store,
-  ChevronRight,
 } from "lucide-react";
 
 interface AdminSidebarProps {
   activeTab: AdminTab;
   onTabChange: (tab: AdminTab) => void;
   adminUser: AdminUser | null;
-  onRefresh: () => void;
+  onRefresh?: () => void;
   onLogout: () => void;
   isRefreshing?: boolean;
   counts: {
@@ -31,84 +26,43 @@ interface AdminSidebarProps {
   onClose: () => void;
 }
 
-interface NavSection {
-  title: string;
-  items: Array<{
-    id: AdminTab;
-    label: string;
-    icon: any;
-    count?: number;
-    badgeColor?: string;
-  }>;
-}
-
 export default function AdminSidebar({
   activeTab,
   onTabChange,
   adminUser,
-  onRefresh,
   onLogout,
-  isRefreshing = false,
   counts,
   isOpen,
   onClose,
 }: AdminSidebarProps) {
-  const navSections: NavSection[] = [
+  const navItems = [
     {
-      title: "DASHBOARD",
-      items: [
-        {
-          id: "dashboard",
-          label: "Dashboard",
-          icon: LayoutDashboard,
-        },
-      ],
+      id: "dashboard" as AdminTab,
+      label: "Dashboard",
+      icon: LayoutDashboard,
     },
     {
-      title: "ORDER MANAGEMENT",
-      items: [
-        {
-          id: "orders",
-          label: "Orders",
-          icon: ShoppingBag,
-          count: counts.orders,
-          badgeColor: "bg-amber-500/20 text-amber-300 border-amber-500/30",
-        },
-      ],
+      id: "orders" as AdminTab,
+      label: "Orders",
+      icon: ShoppingBag,
+      count: counts.orders,
     },
     {
-      title: "PRODUCT MANAGEMENT",
-      items: [
-        {
-          id: "products",
-          label: "Products",
-          icon: Package,
-          count: counts.products,
-          badgeColor: "bg-blue-500/20 text-blue-300 border-blue-500/30",
-        },
-      ],
+      id: "products" as AdminTab,
+      label: "Products",
+      icon: Package,
+      count: counts.products,
     },
     {
-      title: "CUSTOMER FEEDBACK",
-      items: [
-        {
-          id: "reviews",
-          label: "Reviews",
-          icon: Star,
-          count: counts.reviews,
-          badgeColor: "bg-purple-500/20 text-purple-300 border-purple-500/30",
-        },
-      ],
+      id: "reviews" as AdminTab,
+      label: "Reviews",
+      icon: Star,
+      count: counts.reviews,
     },
     {
-      title: "STORE SETTINGS",
-      items: [
-        {
-          id: "settings",
-          label: "Settings",
-          icon: Settings,
-        },
-      ],
+      id: "settings" as AdminTab,
+      label: "Settings",
+      icon: Settings,
     },
   ];
 
@@ -141,7 +95,7 @@ export default function AdminSidebar({
               <img
                 src="/images/logo.png"
                 alt="Hangu Branded Shoes Logo"
-                className="w-11 h-11 rounded-full object-contain ring-2 ring-emerald-500/30 p-0.5 group-hover:scale-105 transition-transform bg-white shrink-0 shadow-sm"
+                className="w-10 h-10 rounded-full object-contain ring-2 ring-emerald-500/20 p-0.5 group-hover:scale-105 transition-transform bg-white shrink-0 shadow-sm"
               />
               <div className="flex flex-col">
                 <div className="flex items-center gap-1.5">
@@ -164,108 +118,67 @@ export default function AdminSidebar({
             </button>
           </div>
 
-          {/* Categorized Navigation Menu */}
-          <nav className="p-3.5 flex flex-col gap-5 overflow-y-auto max-h-[calc(100vh-210px)]">
-            {navSections.map((sec) => (
-              <div key={sec.title} className="flex flex-col gap-1">
-                <span className="px-3 text-[10px] font-bold tracking-widest text-slate-400 uppercase">
-                  {sec.title}
-                </span>
+          {/* Simple Clean Navigation Menu (No Scrollbars) */}
+          <nav className="p-3 flex flex-col gap-1.5">
+            {navItems.map((item) => {
+              const isActive = activeTab === item.id;
+              const Icon = item.icon;
 
-                <div className="flex flex-col gap-0.5 mt-0.5">
-                  {sec.items.map((item) => {
-                    const isActive = activeTab === item.id;
-                    const Icon = item.icon;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => handleSelectTab(item.id)}
+                  className={`w-full flex items-center justify-between px-3 h-11 rounded-xl text-xs font-bold transition-all duration-150 cursor-pointer ${
+                    isActive
+                      ? "bg-emerald-600 text-white shadow-sm font-extrabold"
+                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                  }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Icon
+                      size={17}
+                      className={isActive ? "text-white" : "text-slate-500"}
+                    />
+                    <span>{item.label}</span>
+                  </div>
 
-                    return (
-                      <button
-                        key={item.id}
-                        type="button"
-                        onClick={() => handleSelectTab(item.id)}
-                        className={`w-full flex items-center justify-between px-3 h-10 rounded-xl text-xs font-semibold transition-all duration-200 ${
-                          isActive
-                            ? "bg-emerald-600 text-white shadow-sm font-bold"
-                            : "text-slate-600 hover:bg-emerald-50 hover:text-emerald-700"
-                        }`}
-                      >
-                        <div className="flex items-center gap-3">
-                          <Icon
-                            size={16}
-                            className={isActive ? "text-white" : "text-slate-400 group-hover:text-emerald-600"}
-                          />
-                          <span>{item.label}</span>
-                        </div>
-
-                        {typeof item.count === "number" && (
-                          <span
-                            className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
-                              isActive
-                                ? "bg-white/20 text-white border-white/30"
-                                : "bg-slate-100 text-slate-600 border-slate-200"
-                            }`}
-                          >
-                            {item.count}
-                          </span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
+                  {typeof item.count === "number" && (
+                    <span
+                      className={`text-[11px] font-mono font-bold px-2 py-0.5 rounded-full ${
+                        isActive
+                          ? "bg-white/20 text-white"
+                          : "bg-slate-100 text-slate-700 border border-slate-200"
+                      }`}
+                    >
+                      {item.count}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
           </nav>
         </div>
 
-        {/* Bottom Profile & Actions */}
-        <div className="p-3.5 border-t border-slate-100 bg-slate-50/70 flex flex-col gap-2.5">
-          {/* Admin User Profile Card */}
-          <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-white border border-slate-200 shadow-2xs">
-            <div className="relative">
-              <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold text-xs shadow-xs">
-                {(adminUser?.username || "A").charAt(0).toUpperCase()}
-              </div>
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-white" />
+        {/* Bottom Profile with Direct 1-Click Logout */}
+        <div className="p-3 border-t border-slate-100 bg-white flex items-center justify-between gap-2 shrink-0">
+          <div className="flex items-center gap-2.5 min-w-0">
+            <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-xs">
+              {(adminUser?.username || "A").charAt(0).toUpperCase()}
             </div>
-
-            <div className="flex flex-col min-w-0 flex-1">
+            <div className="flex flex-col min-w-0">
               <span className="text-xs font-bold text-slate-900 truncate">
                 {adminUser?.username || "Super Admin"}
               </span>
-              <span className="text-[10px] text-slate-500 flex items-center gap-1">
-                <ShieldCheck size={10} className="text-emerald-600" />
-                Store Owner
-              </span>
+              <span className="text-[10px] text-emerald-600 font-semibold truncate">Store Owner</span>
             </div>
-          </div>
-
-          {/* Quick Action Buttons */}
-          <div className="grid grid-cols-2 gap-1.5 text-[11px]">
-            <Link
-              href="/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-semibold transition-colors shadow-2xs"
-              title="Open Website in New Tab"
-            >
-              <ExternalLink size={12} />
-              <span>View Website</span>
-            </Link>
-
-            <button
-              type="button"
-              onClick={onRefresh}
-              disabled={isRefreshing}
-              className="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-semibold transition-colors shadow-2xs"
-            >
-              <RefreshCw size={12} className={isRefreshing ? "animate-spin text-emerald-600" : ""} />
-              <span>Refresh</span>
-            </button>
           </div>
 
           <button
             type="button"
             onClick={onLogout}
-            className="w-full flex items-center justify-center gap-2 py-1.5 px-3 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition-colors cursor-pointer shrink-0 border border-rose-200"
+            title="Logout"
           >
             <LogOut size={13} />
             <span>Logout</span>

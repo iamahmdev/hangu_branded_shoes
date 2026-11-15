@@ -8,7 +8,6 @@ import WhatsAppButton from "./WhatsAppButton";
 import BottomNav from "./BottomNav";
 import QuickOrderModal from "./QuickOrderModal";
 import QuickSearchModal from "./QuickSearchModal";
-import RecentSalesToast from "./RecentSalesToast";
 import SEO, { SEOProps } from "./SEO";
 
 interface LayoutProps extends SEOProps {
@@ -54,7 +53,6 @@ export default function Layout({
       <BottomNav />
       <QuickOrderModal />
       <QuickSearchModal />
-      <RecentSalesToast />
     </>
   );
 }

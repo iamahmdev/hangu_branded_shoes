@@ -534,13 +534,13 @@ export default function Checkout() {
 
           <div className="lg:col-span-8 flex flex-col gap-6">
             {/* Section 1: Customer Details */}
-            <div className="bg-white p-6 sm:p-8 rounded-3xl border border-zinc-200/80 shadow-xs">
-              <h2 className="text-xl font-bold text-zinc-950 mb-4">Delivery Information</h2>
-              <div className="flex flex-col gap-3.5">
+            <div className="bg-white p-4 sm:p-8 rounded-2xl sm:rounded-3xl border border-zinc-200/80 shadow-xs">
+              <h2 className="text-lg sm:text-xl font-bold text-zinc-950 mb-3 sm:mb-4">Delivery Information</h2>
+              <div className="flex flex-col gap-3 sm:gap-3.5">
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Full Name</label>
                   <input
-                    className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-zinc-950 font-medium text-xs sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
                     required
                     placeholder="e.g. Muhammad Ahmad"
                     value={f.name}
@@ -551,7 +551,7 @@ export default function Checkout() {
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Mobile / WhatsApp Number</label>
                   <input
-                    className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-zinc-950 font-medium text-xs sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all font-mono"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all font-mono"
                     required
                     type="tel"
                     placeholder="e.g. 0333 1234567"
@@ -563,7 +563,7 @@ export default function Checkout() {
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Destination City</label>
                   <input
-                    className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-zinc-950 font-medium text-xs sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
                     required
                     placeholder="e.g. Hangu, Kohat, Peshawar, Islamabad, Lahore..."
                     value={f.city}
@@ -574,7 +574,7 @@ export default function Checkout() {
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Complete Delivery Address</label>
                   <textarea
-                    className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-3 text-zinc-950 font-medium text-xs sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
                     required
                     rows={3}
                     placeholder="House/Shop No, Street, Mohallah / Landmark"

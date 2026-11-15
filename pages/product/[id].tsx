@@ -170,145 +170,140 @@ export default function Product() {
             {/* ============================================================ */}
             {/* LEFT COLUMN: Visual Showcase & Gallery                       */}
             {/* ============================================================ */}
-            <div className="lg:col-span-6 flex flex-col gap-4">
-              {/* Warm Cream Luxury Showcase Card */}
-              <div className="relative w-full rounded-3xl bg-[#fbf4e6] border border-amber-200/60 p-5 sm:p-7 flex flex-col justify-between shadow-xs overflow-hidden min-h-[520px] sm:min-h-[580px] lg:min-h-[620px]">
-                {/* Top-Left Ribbon: Get X% Off */}
-                <div className="absolute top-0 left-6 sm:left-8 z-20">
-                  <div className="bg-[#f59e0b] text-white px-3 py-3.5 rounded-b-xl shadow-md flex flex-col items-center">
-                    <span className="text-[9px] font-extrabold uppercase tracking-widest leading-none">
-                      Get
+            <div className="lg:col-span-6 flex flex-col gap-3">
+              {/* Pure Modern Showcase Frame (100% Full Unobstructed Shoe Display) */}
+              <div className="relative w-full rounded-2xl sm:rounded-3xl bg-white border border-zinc-200/90 shadow-xs overflow-hidden flex flex-col">
+                {/* Floating Badges Header (Top Row) */}
+                <div className="absolute top-3 inset-x-3 z-20 flex items-center justify-between pointer-events-none">
+                  {/* Discount Badge */}
+                  {discount > 0 && (
+                    <span className="bg-zinc-950 text-white text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-xs pointer-events-auto">
+                      {discount}% OFF
                     </span>
-                    <span className="text-sm sm:text-base font-black mt-0.5 leading-none">{discount}%</span>
-                    <span className="text-[9px] font-bold uppercase tracking-wider leading-none mt-0.5">
-                      Off
+                  )}
+
+                  {/* Right: Category + Wishlist */}
+                  <div className="flex items-center gap-2 pointer-events-auto ml-auto">
+                    <span className="bg-white/95 backdrop-blur-md text-zinc-800 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full border border-zinc-200/80 shadow-2xs">
+                      {p.cat || "Footwear"}
                     </span>
+                    <button
+                      type="button"
+                      onClick={() => setIsWishlisted(!isWishlisted)}
+                      className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border transition-all ${
+                        isWishlisted
+                          ? "bg-rose-50 border-rose-300 text-rose-500 scale-105"
+                          : "bg-white/95 border-zinc-200 text-zinc-500 hover:text-zinc-900 shadow-2xs"
+                      }`}
+                      title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                    >
+                      <Heart size={16} fill={isWishlisted ? "currentColor" : "none"} />
+                    </button>
                   </div>
                 </div>
 
-                {/* Top-Right: Category Pill + Heart Wishlist Button */}
-                <div className="flex items-center justify-end gap-2.5 z-20">
-                  <span className="bg-white/90 backdrop-blur-xs text-zinc-800 text-[11px] sm:text-xs font-bold px-3.5 py-1.5 rounded-full border border-amber-200/80 shadow-2xs">
-                    {p.cat || "Gen Z Fashion"}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                    className={`w-10 h-10 rounded-full flex items-center justify-center border transition-all ${
-                      isWishlisted
-                        ? "bg-rose-50 border-rose-300 text-rose-500 scale-105"
-                        : "bg-white border-amber-200 text-amber-500 hover:text-amber-600 hover:border-amber-300 shadow-2xs"
-                    }`}
-                    title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
-                  >
-                    <Heart size={18} fill={isWishlisted ? "currentColor" : "none"} />
-                  </button>
-                </div>
-
-                {/* Hero Showcase Center: Large, Bold Shoe Visual */}
-                <div className="relative my-auto py-2 sm:py-4 flex items-center justify-center min-h-[340px] sm:min-h-[420px] lg:min-h-[460px] w-full">
+                {/* Big Full Photo Canvas: 100% Edge-to-Edge Fill (Exact 3:4 Native Aspect Ratio, Zero Left/Right Gutters) */}
+                <div className="relative w-full aspect-[3/4] bg-[#f4f4f6] flex items-center justify-center overflow-hidden">
                   {viewMode === "3d" ? (
-                    <div className="w-full h-96 flex items-center justify-center">
+                    <div className="w-full h-full flex items-center justify-center">
                       <Shoe3DViewer
                         img={galleryImages[activeImgIndex] || p.img}
                         name={p.name}
                         className="w-full h-full"
-                        initialAutoRotate={false}
+                        initialAutoRotate={true}
                         allowZoom={true}
                         showControls={true}
                       />
                     </div>
                   ) : (
-                    <div className="relative w-full h-full flex items-center justify-center px-4">
-                      <img
-                        key={activeImgIndex}
-                        src={galleryImages[activeImgIndex] || resolveProductImage(p.img)}
-                        alt={`${p.name} - Angle ${activeImgIndex + 1}`}
-                        className="w-full max-h-[380px] sm:max-h-[440px] lg:max-h-[480px] object-contain drop-shadow-[0_28px_35px_rgba(0,0,0,0.22)] scale-110 sm:scale-115 lg:scale-120 transition-all duration-300 ease-out hover:scale-125 select-none"
-                      />
-                    </div>
+                    <img
+                      key={activeImgIndex}
+                      src={galleryImages[activeImgIndex] || resolveProductImage(p.img)}
+                      alt={`${p.name} - Angle ${activeImgIndex + 1}`}
+                      className="w-full h-full object-cover select-none transition-transform duration-300 ease-out"
+                    />
                   )}
 
-                  {/* Left / Right Carousel Arrow Buttons (when multiple genuine images exist) */}
+                  {/* Left / Right Carousel Arrow Buttons */}
                   {viewMode === "photo" && galleryImages.length > 1 && (
                     <>
                       <button
                         type="button"
                         onClick={handlePrevImage}
                         aria-label="Previous shoe angle"
-                        className="absolute left-2 sm:left-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-zinc-900 flex items-center justify-center shadow-md border border-amber-200 transition-all z-20 cursor-pointer hover:scale-110 active:scale-95"
+                        className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-zinc-900 flex items-center justify-center shadow-md border border-zinc-200 transition-all z-20 cursor-pointer active:scale-95"
                       >
-                        <ChevronLeft size={22} strokeWidth={2.5} />
+                        <ChevronLeft size={18} strokeWidth={2.5} />
                       </button>
                       <button
                         type="button"
                         onClick={handleNextImage}
                         aria-label="Next shoe angle"
-                        className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-zinc-900 flex items-center justify-center shadow-md border border-amber-200 transition-all z-20 cursor-pointer hover:scale-110 active:scale-95"
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-zinc-900 flex items-center justify-center shadow-md border border-zinc-200 transition-all z-20 cursor-pointer active:scale-95"
                       >
-                        <ChevronRight size={22} strokeWidth={2.5} />
+                        <ChevronRight size={18} strokeWidth={2.5} />
                       </button>
                     </>
                   )}
                 </div>
+              </div>
 
-                {/* Bottom Row: Genuine Thumbnails / Details + 3D Toggle */}
-                <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-3 z-20 border-t border-amber-200/40">
-                  {galleryImages.length > 1 ? (
-                    <div className="flex items-center gap-3">
-                      {galleryImages.map((imgUrl, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => {
-                            setViewMode("photo");
-                            setActiveImgIndex(idx);
-                          }}
-                          className={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white p-2 border-2 transition-all overflow-hidden flex items-center justify-center cursor-pointer ${
-                            viewMode === "photo" && activeImgIndex === idx
-                              ? "border-amber-500 ring-4 ring-amber-300/80 scale-105 shadow-md"
-                              : "border-transparent hover:border-amber-300 opacity-80 hover:opacity-100 shadow-2xs"
-                          }`}
-                        >
-                          <img
-                            src={imgUrl}
-                            alt={`${p.name} angle ${idx + 1}`}
-                            className="w-full h-full object-contain"
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2 text-xs font-semibold text-zinc-700">
-                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                      <span>Authentic High-Resolution Shoe Photograph</span>
-                    </div>
-                  )}
+              {/* Clean Gallery Thumbnails + 3D Toggle Bar (Placed OUTSIDE/BELOW the Photo Canvas) */}
+              <div className="flex items-center justify-between gap-3 px-1 py-1">
+                {galleryImages.length > 1 ? (
+                  <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+                    {galleryImages.map((imgUrl, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => {
+                          setViewMode("photo");
+                          setActiveImgIndex(idx);
+                        }}
+                        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-white p-1 border-2 transition-all overflow-hidden flex items-center justify-center cursor-pointer shrink-0 ${
+                          viewMode === "photo" && activeImgIndex === idx
+                            ? "border-zinc-950 ring-2 ring-zinc-950/20 scale-102 shadow-xs"
+                            : "border-zinc-200 opacity-75 hover:opacity-100"
+                        }`}
+                      >
+                        <img
+                          src={imgUrl}
+                          alt={`${p.name} angle ${idx + 1}`}
+                          className="w-full h-full object-contain"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 font-medium">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>100% Genuine Physical Store Photograph</span>
+                  </div>
+                )}
 
-                  {/* 3D 360° Switcher Pill */}
-                  <button
-                    type="button"
-                    onClick={() => setViewMode(viewMode === "3d" ? "photo" : "3d")}
-                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all shadow-xs border cursor-pointer ${
-                      viewMode === "3d"
-                        ? "bg-zinc-950 text-white border-zinc-950 scale-105"
-                        : "bg-white/95 text-zinc-800 hover:text-zinc-950 border-amber-200 hover:border-amber-400"
+                {/* 3D Interactive Depth Switcher Button */}
+                <button
+                  type="button"
+                  onClick={() => setViewMode(viewMode === "3d" ? "photo" : "3d")}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold transition-all shadow-xs border cursor-pointer shrink-0 ml-auto ${
+                    viewMode === "3d"
+                      ? "bg-zinc-950 text-white border-zinc-950 scale-102"
+                      : "bg-white text-zinc-800 hover:text-zinc-950 border-zinc-300 hover:border-zinc-400"
+                  }`}
+                >
+                  <span
+                    className={`w-2 h-2 rounded-full ${
+                      viewMode === "3d" ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
                     }`}
-                  >
-                    <span
-                      className={`w-2 h-2 rounded-full ${
-                        viewMode === "3d" ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
-                      }`}
-                    />
-                    <span>{viewMode === "3d" ? "📷 View Photos" : "🔄 3D Rotate 360°"}</span>
-                  </button>
-                </div>
+                  />
+                  <span>{viewMode === "3d" ? "📷 View Photo" : "🔄 3D Depth View"}</span>
+                </button>
               </div>
 
               {/* Bottom Quick Trust Highlights */}
-              <div className="flex justify-around text-xs text-zinc-500 font-medium py-1">
-                <span>✨ 100% Genuine Sole</span>
-                <span>🧵 Handcrafted Quality</span>
+              <div className="flex justify-around text-[11px] sm:text-xs text-zinc-500 font-medium py-1">
+                <span>✨ Genuine Sole</span>
+                <span>🧵 Handcrafted</span>
                 <span>🚚 Free Shipping over Rs. 5,000</span>
               </div>
             </div>
@@ -460,7 +455,7 @@ export default function Product() {
                 </div>
 
                 {/* Size Tiles */}
-                <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+                <div className="flex items-center gap-1.5 sm:gap-2 overflow-x-auto pb-1.5 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
                   {availableSizes.map((s) => (
                     <button
                       key={s}
@@ -469,9 +464,9 @@ export default function Product() {
                         setSize(s);
                         setErr(false);
                       }}
-                      className={`min-w-[52px] h-12 px-3 rounded-md font-bold text-sm font-mono transition-all flex items-center justify-center ${
+                      className={`min-w-[48px] sm:min-w-[54px] h-11 sm:h-12 px-2.5 sm:px-3 rounded-xl font-bold text-xs sm:text-sm font-mono transition-all flex items-center justify-center cursor-pointer ${
                         size === s
-                          ? "bg-zinc-950 text-white shadow-xs scale-105"
+                          ? "bg-zinc-950 text-white shadow-xs scale-102"
                           : "bg-[#f4f4f6] text-zinc-800 hover:bg-zinc-200 border border-zinc-200/70"
                       }`}
                     >
@@ -482,7 +477,7 @@ export default function Product() {
                   <Link
                     href="/size-guide"
                     aria-label="View more sizes"
-                    className="w-10 h-12 rounded-md bg-[#f4f4f6] text-zinc-400 hover:text-zinc-950 hover:bg-zinc-200 border border-zinc-200/70 flex items-center justify-center transition-colors shrink-0"
+                    className="w-10 h-11 sm:h-12 rounded-xl bg-[#f4f4f6] text-zinc-400 hover:text-zinc-950 hover:bg-zinc-200 border border-zinc-200/70 flex items-center justify-center transition-colors shrink-0"
                   >
                     <ChevronRight size={18} />
                   </Link>
@@ -492,11 +487,11 @@ export default function Product() {
               {/* ============================================================ */}
               {/* TWO ACTION BUTTONS (Add to Cart / Buy now)                   */}
               {/* ============================================================ */}
-              <div className="grid grid-cols-2 gap-3 sm:gap-4 mt-2">
+              <div className="grid grid-cols-2 gap-2.5 sm:gap-4 mt-2">
                 <button
                   type="button"
                   onClick={() => go(false)}
-                  className="py-3.5 px-4 rounded-md bg-white hover:bg-zinc-50 text-zinc-950 border border-zinc-900 font-bold text-xs sm:text-sm uppercase tracking-wider transition-colors shadow-2xs flex items-center justify-center gap-2"
+                  className="py-3 sm:py-3.5 px-3 sm:px-4 rounded-xl sm:rounded-2xl bg-white hover:bg-zinc-50 active:bg-zinc-100 text-zinc-950 border border-zinc-900 font-bold text-xs sm:text-sm uppercase tracking-wider transition-colors shadow-2xs flex items-center justify-center gap-1.5 sm:gap-2 active:scale-98"
                 >
                   <ShoppingBag size={16} />
                   <span>Add to Cart</span>
@@ -505,9 +500,9 @@ export default function Product() {
                 <button
                   type="button"
                   onClick={() => go(true)}
-                  className="py-3.5 px-4 rounded-md bg-zinc-950 hover:bg-zinc-800 text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-colors shadow-xs flex items-center justify-center gap-2"
+                  className="py-3 sm:py-3.5 px-3 sm:px-4 rounded-xl sm:rounded-2xl bg-zinc-950 hover:bg-zinc-800 active:bg-zinc-900 text-white font-bold text-xs sm:text-sm uppercase tracking-wider transition-colors shadow-xs flex items-center justify-center gap-1.5 sm:gap-2 active:scale-98"
                 >
-                  <Zap size={16} />
+                  <Zap size={16} className="text-amber-400 fill-amber-400" />
                   <span>Buy now</span>
                 </button>
               </div>
@@ -517,7 +512,7 @@ export default function Product() {
                 href={buildWhatsAppOrderUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full mt-3 py-3.5 px-4 rounded-md bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-colors shadow-xs"
+                className="w-full mt-2.5 sm:mt-3 py-3 sm:py-3.5 px-4 rounded-xl sm:rounded-2xl bg-[#25D366] hover:bg-[#20bd5a] text-white font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-colors shadow-xs active:scale-98"
               >
                 <WhatsAppIcon size={18} color="#fff" />
                 <span>Instant Order on WhatsApp</span>

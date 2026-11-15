@@ -130,17 +130,17 @@ export default function Shop() {
             </div>
           </div>
 
-          {/* Category Tabs */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 no-scrollbar">
+          {/* Category Filter Tabs (Flex-wrap so every category is 100% complete and never cut/cropped) */}
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-6 sm:mb-8">
             {cats.map((c) => (
               <button
                 key={c}
                 type="button"
                 onClick={() => setSelectedCat(c)}
-                className={`px-4 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all ${
+                className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all ${
                   selectedCat === c
-                    ? "bg-zinc-950 text-white shadow-xs"
-                    : "bg-white text-zinc-700 hover:bg-zinc-100 border border-zinc-200"
+                    ? "bg-zinc-950 text-white shadow-xs scale-102"
+                    : "bg-white text-zinc-700 hover:bg-zinc-100 border border-zinc-200 shadow-2xs"
                 }`}
               >
                 {c}
@@ -148,9 +148,9 @@ export default function Shop() {
             ))}
           </div>
 
-          {/* Product Results Grid (Luxury 3-Column Grid for Big Prominent Shoe Showcase) */}
+          {/* Product Results Grid (2-Column on Mobile, 3-Column on Desktop) */}
           {isLoading ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
@@ -159,7 +159,7 @@ export default function Shop() {
               ))}
             </div>
           ) : products && products.length > 0 ? (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
               {products.map((p) => (
                 <ProductCard key={p.id} p={p} />
               ))}

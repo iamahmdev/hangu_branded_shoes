@@ -44,9 +44,9 @@ export default function Cart() {
                 {items.map((i) => (
                   <div
                     key={i.k}
-                    className="bg-white p-4 rounded-2xl border border-zinc-200/80 shadow-xs flex items-center gap-4 transition-colors"
+                    className="bg-white p-3 sm:p-4 rounded-2xl border border-zinc-200/80 shadow-xs flex items-center gap-2.5 sm:gap-4 transition-colors"
                   >
-                    <div className="w-20 h-20 rounded-xl bg-[#f4f4f6] border border-zinc-200/60 p-2 flex items-center justify-center shrink-0">
+                    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-xl bg-[#f4f4f6] border border-zinc-200/60 p-1.5 sm:p-2 flex items-center justify-center shrink-0">
                       <img
                         src={resolveProductImage(i.img)}
                         alt={i.name}
@@ -54,31 +54,31 @@ export default function Cart() {
                       />
                     </div>
 
-                    <div className="flex-1 min-w-0">
-                      <b className="text-zinc-900 text-sm block truncate">{i.name}</b>
-                      <span className="text-zinc-500 text-xs block mt-0.5">
+                    <div className="flex-1 min-w-0 pr-1">
+                      <b className="text-zinc-900 text-xs sm:text-sm block truncate">{i.name}</b>
+                      <span className="text-zinc-500 text-[11px] sm:text-xs block mt-0.5">
                         Size: <strong className="text-zinc-900 font-mono">{i.size}</strong>
                       </span>
-                      <div className="text-zinc-950 font-bold font-mono text-sm mt-1">
+                      <div className="text-zinc-950 font-bold font-mono text-xs sm:text-sm mt-0.5 sm:mt-1">
                         Rs. {i.price.toLocaleString()}
                       </div>
                     </div>
 
                     {/* Quantity Selector */}
-                    <div className="flex items-center border border-zinc-200 rounded-xl bg-[#f4f4f6] overflow-hidden">
+                    <div className="flex items-center border border-zinc-200 rounded-xl bg-[#f4f4f6] overflow-hidden shrink-0">
                       <button
                         type="button"
-                        className="w-8 h-8 flex items-center justify-center text-zinc-700 hover:text-zinc-950 font-bold"
+                        className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-zinc-700 hover:text-zinc-950 font-bold text-xs sm:text-sm"
                         onClick={() => setQ(i.k, i.q - 1)}
                       >
                         -
                       </button>
-                      <span className="w-8 text-center text-xs font-mono font-bold text-zinc-900">
+                      <span className="w-6 sm:w-7 text-center text-xs font-mono font-bold text-zinc-900">
                         {i.q}
                       </span>
                       <button
                         type="button"
-                        className="w-8 h-8 flex items-center justify-center text-zinc-700 hover:text-zinc-950 font-bold"
+                        className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center text-zinc-700 hover:text-zinc-950 font-bold text-xs sm:text-sm"
                         onClick={() => setQ(i.k, i.q + 1)}
                       >
                         +
@@ -89,7 +89,7 @@ export default function Cart() {
                     <button
                       type="button"
                       onClick={() => setQ(i.k, 0)}
-                      className="p-2 text-zinc-400 hover:text-rose-600 transition-colors"
+                      className="p-1.5 sm:p-2 text-zinc-400 hover:text-rose-600 transition-colors shrink-0"
                       title="Remove shoe"
                     >
                       <Trash2 size={16} />

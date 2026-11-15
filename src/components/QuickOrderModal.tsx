@@ -67,72 +67,88 @@ export default function QuickOrderModal() {
 
   return (
     <div className="qorder-overlay fixed inset-0 z-[1000] bg-black/60 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 animate-fadeIn" onClick={closeQuickOrder}>
-      <div className="qorder-modal relative w-full max-w-3xl max-h-[92vh] overflow-y-auto bg-white border border-zinc-200/90 rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 text-zinc-900" onClick={(e) => e.stopPropagation()}>
+      <div className="qorder-modal relative w-full max-w-2xl max-h-[92vh] overflow-y-auto bg-white border border-zinc-200/90 rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 text-zinc-900" onClick={(e) => e.stopPropagation()}>
         {/* Close Button */}
         <button
           type="button"
           onClick={closeQuickOrder}
-          className="qorder-close-btn absolute top-3.5 right-3.5 sm:top-4 sm:right-4 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 text-zinc-600 hover:text-zinc-950 rounded-full w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center transition-colors z-10"
+          className="qorder-close-btn absolute top-3 right-3 sm:top-4 sm:right-4 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 text-zinc-600 hover:text-zinc-950 rounded-full w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center transition-colors z-10"
           aria-label="Close modal"
         >
           <X size={18} />
         </button>
 
-        <div className="qorder-grid grid grid-cols-1 md:grid-cols-[320px_1fr] gap-4 md:gap-8">
-          {/* Left: Product Image */}
-          <div className="qorder-img-col flex flex-col">
-            <div className="qorder-img-box relative bg-[#f4f4f6] rounded-2xl overflow-hidden border border-zinc-200 aspect-[4/3] sm:aspect-[4/5] min-h-[160px] sm:min-h-[320px] max-h-[220px] sm:max-h-none flex items-center justify-center p-2.5 sm:p-4">
-              <img src={resolveProductImage(p.img)} alt={p.name} className="w-full h-full max-h-full max-w-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.1)]" />
-              {p.tag && <span className="qorder-tag absolute top-2.5 left-2.5 bg-zinc-950 text-white text-[9px] sm:text-[11px] font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full uppercase">{p.tag}</span>}
-              <span className="qorder-discount absolute bottom-2.5 left-2.5 bg-white/95 backdrop-blur-md text-zinc-900 border border-zinc-200 text-[9px] sm:text-[11px] font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full shadow-xs">Save {discount}%</span>
-            </div>
-            <div className="qorder-quick-specs flex justify-around mt-2 text-[11px] sm:text-xs text-zinc-500">
-              <span>🌟 High Comfort Sole</span>
-              <span>🧵 Premium Stitching</span>
+        <div className="qorder-grid grid grid-cols-1 md:grid-cols-[260px_1fr] gap-4 sm:gap-6 items-center">
+          {/* Left: Product Image (Full Edge-to-Edge 3:4 Native Ratio, Zero Empty Space) */}
+          <div className="qorder-img-col flex flex-col w-full">
+            <div className="relative bg-[#f4f4f6] rounded-2xl overflow-hidden border border-zinc-200 aspect-[3/4] w-full flex items-center justify-center p-0 shadow-xs">
+              <img
+                src={resolveProductImage(p.img)}
+                alt={p.name}
+                className="w-full h-full object-cover select-none"
+              />
+              {p.tag && (
+                <span className="absolute top-2.5 left-2.5 bg-zinc-950 text-white text-[9px] sm:text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-xs">
+                  {p.tag}
+                </span>
+              )}
+              {discount > 0 && (
+                <span className="absolute bottom-2.5 left-2.5 bg-white/95 backdrop-blur-md text-zinc-950 border border-zinc-200 text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-full shadow-xs">
+                  Save {discount}%
+                </span>
+              )}
             </div>
           </div>
 
           {/* Right: Details & Order Actions */}
-          <div className="qorder-info-col flex flex-col">
-            <div className="qorder-header">
-              <span className="qorder-cat text-xs text-amber-600 font-bold uppercase tracking-wider">{p.cat}</span>
-              <h2 className="qorder-title text-xl sm:text-2xl md:text-3xl font-extrabold text-zinc-900 mt-0.5 mb-1.5">{p.name}</h2>
-              <div className="qorder-price-wrap flex items-baseline gap-2.5 flex-wrap mb-3">
-                <span className="qorder-price text-xl sm:text-2xl font-extrabold text-zinc-900 font-mono">Rs. {p.price.toLocaleString()}</span>
-                <s className="qorder-old-price text-xs sm:text-sm text-zinc-400 font-mono">Rs. {p.old.toLocaleString()}</s>
-                <span className="qorder-save-badge text-[11px] sm:text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Save Rs. {(p.old - p.price).toLocaleString()}</span>
+          <div className="qorder-info-col flex flex-col justify-center">
+            {/* Header */}
+            <div>
+              <span className="text-[11px] text-amber-600 font-extrabold uppercase tracking-wider block mb-0.5">
+                {p.cat}
+              </span>
+              <h2 className="text-xl sm:text-2xl font-extrabold text-zinc-950 leading-tight mb-2">
+                {p.name}
+              </h2>
+              <div className="flex items-baseline gap-2.5 flex-wrap mb-4">
+                <span className="text-2xl font-black text-zinc-950 font-mono">
+                  Rs. {p.price.toLocaleString()}
+                </span>
+                {p.old && p.old > p.price && (
+                  <s className="text-xs sm:text-sm text-zinc-400 font-mono">
+                    Rs. {p.old.toLocaleString()}
+                  </s>
+                )}
+                {p.old && p.old > p.price && (
+                  <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">
+                    Save Rs. {(p.old - p.price).toLocaleString()}
+                  </span>
+                )}
               </div>
             </div>
 
             {/* Size Selector */}
-            <div className="qorder-section mb-4">
-              <div className="qorder-sec-top flex justify-between items-center mb-2">
-                <label className="qorder-sec-label text-sm font-semibold text-zinc-700">
-                  Select Size (EU / PK):{" "}
+            <div className="mb-4">
+              <div className="flex justify-between items-center mb-1.5">
+                <label className="text-xs sm:text-sm font-semibold text-zinc-700">
+                  Select Size:{" "}
                   {selectedSize ? (
-                    <strong className="text-zinc-900 font-bold">Size {selectedSize}</strong>
+                    <strong className="text-zinc-950 font-bold">Size {selectedSize}</strong>
                   ) : (
-                    <span className="text-brand-red">(Required)</span>
+                    <span className="text-rose-600 font-semibold">(Required)</span>
                   )}
                 </label>
-                <Link
-                  href="/size-guide"
-                  target="_blank"
-                  className="qorder-size-guide-link text-xs text-zinc-600 hover:text-zinc-950 font-semibold underline"
-                >
-                  📏 Size Guide
-                </Link>
               </div>
 
-              <div className="qorder-sizes flex gap-2 flex-wrap">
+              <div className="flex gap-1.5 sm:gap-2 flex-wrap">
                 {SIZES.map((sz) => (
                   <button
                     key={sz}
                     type="button"
-                    className={`qorder-sz-btn min-w-[42px] h-[42px] rounded-xl font-semibold text-sm transition-all border ${
+                    className={`min-w-[42px] h-[40px] sm:h-[42px] rounded-xl font-bold text-xs sm:text-sm transition-all border ${
                       selectedSize === sz
-                        ? "active bg-zinc-950 border-zinc-950 text-white shadow-sm scale-102"
-                        : "bg-zinc-100 border-zinc-200 text-zinc-800 hover:bg-zinc-200 hover:border-zinc-300 hover:text-zinc-900"
+                        ? "bg-zinc-950 border-zinc-950 text-white shadow-xs scale-102"
+                        : "bg-zinc-100 border-zinc-200 text-zinc-800 hover:bg-zinc-200 hover:border-zinc-300"
                     }`}
                     onClick={() => {
                       setSelectedSize(sz);
@@ -144,59 +160,56 @@ export default function QuickOrderModal() {
                 ))}
               </div>
               {error && (
-                <small className="qorder-err-msg text-brand-red text-xs mt-1.5 block">
+                <small className="text-rose-600 text-xs mt-1 block font-semibold">
                   ⚠️ Please select a shoe size to proceed.
                 </small>
               )}
             </div>
 
             {/* Quantity */}
-            <div className="qorder-qty-row flex items-center gap-3.5 mb-5">
-              <label className="qorder-sec-label text-sm font-semibold text-zinc-700">Quantity:</label>
-              <div className="qorder-qty-ctrl flex items-center bg-zinc-100 border border-zinc-200 rounded-full px-2 py-0.5">
+            <div className="flex items-center gap-3 mb-4">
+              <label className="text-xs sm:text-sm font-semibold text-zinc-700">Quantity:</label>
+              <div className="flex items-center bg-zinc-100 border border-zinc-200 rounded-full px-2 py-0.5">
                 <button
                   type="button"
                   onClick={() => setQty(Math.max(1, qty - 1))}
-                  className="qorder-qty-btn text-zinc-700 text-lg w-7 h-7 flex items-center justify-center hover:text-zinc-950"
+                  className="text-zinc-700 text-base w-7 h-7 flex items-center justify-center hover:text-zinc-950 hover:bg-zinc-200 rounded-full transition-colors"
                 >
                   −
                 </button>
-                <span className="qorder-qty-val px-2.5 font-bold text-sm text-zinc-900">{qty}</span>
+                <span className="px-2.5 font-bold text-sm text-zinc-950">{qty}</span>
                 <button
                   type="button"
                   onClick={() => setQty(qty + 1)}
-                  className="qorder-qty-btn text-zinc-700 text-lg w-7 h-7 flex items-center justify-center hover:text-zinc-950"
+                  className="text-zinc-700 text-base w-7 h-7 flex items-center justify-center hover:text-zinc-950 hover:bg-zinc-200 rounded-full transition-colors"
                 >
                   +
                 </button>
               </div>
-              <span className="qorder-subtotal text-xs text-zinc-500">
-                Total: <b className="text-zinc-900 text-sm font-bold">Rs. {(p.price * qty).toLocaleString()}</b>
+              <span className="text-xs text-zinc-500 ml-auto">
+                Total: <b className="text-zinc-950 text-sm font-bold">Rs. {(p.price * qty).toLocaleString()}</b>
               </span>
             </div>
 
             {/* Action Buttons */}
-            <div className="qorder-actions flex flex-col gap-2.5 mb-5">
+            <div className="flex flex-col gap-2">
               {/* Direct 1-Tap WhatsApp Order */}
               <a
                 href={buildWhatsAppOrderUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="qorder-btn-wa flex items-center gap-3.5 bg-gradient-to-r from-[#25d366] to-[#128c7e] text-white p-3.5 rounded-2xl shadow-md hover:scale-[1.01] transition-transform"
+                className="flex items-center justify-center gap-2.5 bg-gradient-to-r from-[#25d366] to-[#128c7e] text-white py-3 px-4 rounded-xl shadow-sm hover:opacity-95 transition-all text-sm font-bold"
               >
-                <WhatsAppIcon size={24} color="#fff" />
-                <div className="qorder-btn-wa-text text-left">
-                  <strong className="block text-sm font-bold">Order on WhatsApp (1-Tap)</strong>
-                  <small className="block text-[11px] text-white/90">No registration or forms required</small>
-                </div>
+                <WhatsAppIcon size={20} color="#fff" />
+                <span>Order on WhatsApp (1-Tap)</span>
               </a>
 
               {/* Standard Checkout / Add to Cart */}
-              <div className="qorder-sub-actions grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={handleBuyNow}
-                  className="qorder-btn-buy inline-flex items-center justify-center gap-1.5 py-2.5 sm:py-3 px-3 text-xs sm:text-sm font-bold rounded-xl text-white bg-zinc-950 hover:bg-zinc-800 active:scale-98 transition-all"
+                  className="inline-flex items-center justify-center gap-1.5 py-2.5 px-3 text-xs sm:text-sm font-bold rounded-xl text-white bg-zinc-950 hover:bg-zinc-800 active:scale-98 transition-all"
                 >
                   <span>Checkout</span>
                   <ArrowRight size={14} />
@@ -204,33 +217,20 @@ export default function QuickOrderModal() {
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  className="qorder-btn-cart py-2.5 sm:py-3 px-3 text-xs sm:text-sm font-bold rounded-xl border border-zinc-300 text-zinc-800 bg-white hover:bg-zinc-100 hover:text-zinc-950 active:scale-98 transition-colors"
+                  className="py-2.5 px-3 text-xs sm:text-sm font-bold rounded-xl border border-zinc-300 text-zinc-800 bg-white hover:bg-zinc-100 hover:text-zinc-950 active:scale-98 transition-colors"
                 >
                   {addedToast ? "✓ Added!" : "Add to Cart"}
                 </button>
               </div>
             </div>
 
-            {/* Trust Assurance Strip */}
-            <div className="qorder-trust-strip grid grid-cols-1 gap-2 pt-3.5 border-t border-zinc-200 text-xs text-zinc-500">
-              <div className="qorder-trust-item flex items-center gap-2.5">
-                <PackageCheck size={18} className="text-zinc-700 shrink-0" />
-                <div>
-                  <strong className="text-zinc-800">100% Genuine Sole Guarantee</strong> — Hand-inspected quality
-                </div>
-              </div>
-              <div className="qorder-trust-item flex items-center gap-2.5">
-                <RotateCcw size={18} className="text-emerald-600 shrink-0" />
-                <div>
-                  <strong className="text-zinc-800">7-Day Free Size Exchange</strong> — Size na aye to foran change
-                </div>
-              </div>
-              <div className="qorder-trust-item flex items-center gap-2.5">
-                <ShieldCheck size={18} className="text-brand-red shrink-0" />
-                <div>
-                  <strong className="text-zinc-800">JazzCash Direct Payment</strong> — Fast nationwide courier dispatch
-                </div>
-              </div>
+            {/* Sleek Minimal Trust Footer (1-line, zero clutter) */}
+            <div className="flex items-center justify-center gap-2 sm:gap-4 pt-3 text-[11px] text-zinc-500 font-medium">
+              <span>✨ 100% Genuine</span>
+              <span>•</span>
+              <span>🔄 7-Day Free Exchange</span>
+              <span>•</span>
+              <span>🚚 Fast Delivery</span>
             </div>
           </div>
         </div>

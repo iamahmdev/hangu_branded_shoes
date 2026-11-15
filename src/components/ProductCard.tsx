@@ -50,7 +50,7 @@ export default function ProductCard({ p }: ProductCardProps) {
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={handleMouseLeave}
-          className="relative aspect-[4/5] sm:aspect-[3/4] w-full bg-[#f7f8fa] group-hover:bg-[#f0f2f5] overflow-hidden flex items-center justify-center p-2 sm:p-2.5 transition-colors duration-300"
+          className="relative aspect-[3/4] w-full bg-[#f4f4f6] overflow-hidden flex items-center justify-center transition-colors duration-300"
           style={{
             transform: isHovered
               ? `rotateX(${cardTilt.x}deg) rotateY(${cardTilt.y}deg) translateY(-2px)`
@@ -69,7 +69,7 @@ export default function ProductCard({ p }: ProductCardProps) {
               src={resolveProductImage(p.img)}
               alt={p.name}
               loading="lazy"
-              className="w-full h-full max-h-full max-w-full object-contain object-center transition-transform duration-300 ease-out group-hover:scale-105 drop-shadow-[0_8px_18px_rgba(0,0,0,0.1)]"
+              className="w-full h-full object-cover object-center transition-transform duration-300 ease-out group-hover:scale-105"
             />
 
             {/* Subtle Glare Light */}

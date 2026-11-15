@@ -202,10 +202,10 @@ export default function Product() {
                   </div>
                 </div>
 
-                {/* Big Full Photo Canvas: 100% visible, clean aspect ratio, no crop, no squish */}
-                <div className="relative w-full aspect-[4/5] sm:aspect-square bg-[#fbfbfb] flex items-center justify-center overflow-hidden">
+                {/* Big Full Photo Canvas: 100% Edge-to-Edge Fill (Exact 3:4 Native Aspect Ratio, Zero Left/Right Gutters) */}
+                <div className="relative w-full aspect-[3/4] bg-[#f4f4f6] flex items-center justify-center overflow-hidden">
                   {viewMode === "3d" ? (
-                    <div className="w-full h-full flex items-center justify-center p-4">
+                    <div className="w-full h-full flex items-center justify-center p-2 sm:p-4">
                       <Shoe3DViewer
                         img={galleryImages[activeImgIndex] || p.img}
                         name={p.name}
@@ -216,14 +216,12 @@ export default function Product() {
                       />
                     </div>
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center p-2 sm:p-4">
-                      <img
-                        key={activeImgIndex}
-                        src={galleryImages[activeImgIndex] || resolveProductImage(p.img)}
-                        alt={`${p.name} - Angle ${activeImgIndex + 1}`}
-                        className="w-full h-full object-contain select-none transition-transform duration-300 ease-out"
-                      />
-                    </div>
+                    <img
+                      key={activeImgIndex}
+                      src={galleryImages[activeImgIndex] || resolveProductImage(p.img)}
+                      alt={`${p.name} - Angle ${activeImgIndex + 1}`}
+                      className="w-full h-full object-cover select-none transition-transform duration-300 ease-out"
+                    />
                   )}
 
                   {/* Left / Right Carousel Arrow Buttons */}

@@ -241,7 +241,7 @@ export default function Navbar() {
                 <span>info@hangubrandedshoes.com</span>
               </a>
               <div className="text-center text-[11px] text-zinc-400">
-                📍 Tahir Market, Hangu • Fast Nationwide Express
+                📍 Tahir Market, Hangu • Fast Delivery Across Pakistan
               </div>
             </div>
           </div>

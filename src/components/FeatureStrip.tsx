@@ -13,8 +13,8 @@ interface Perk {
 const PERKS: Perk[] = [
   {
     icon: "🚚",
-    title: "Nationwide Express Delivery",
-    desc: "Safe & tracked doorstep delivery across all Pakistan cities",
+    title: "Fast Delivery Across Pakistan",
+    desc: "Safe doorstep delivery to all cities in Pakistan",
     badge: "Tracked Dispatch",
     color: "#e10600",
   },

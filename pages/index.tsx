@@ -47,7 +47,7 @@ export default function Home() {
           <div className="flex items-center justify-around max-w-7xl mx-auto px-4 gap-6 overflow-x-auto no-scrollbar whitespace-nowrap">
             <span className="inline-flex items-center gap-2">
               <Truck size={14} className="text-emerald-600" />
-              <span>Nationwide Express Delivery</span>
+              <span>Fast Delivery Across Pakistan</span>
             </span>
             <span className="text-zinc-300">✦</span>
             <a

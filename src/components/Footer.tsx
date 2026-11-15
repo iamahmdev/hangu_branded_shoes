@@ -18,15 +18,15 @@ export default function Footer() {
         <div className="ft-perk">
           <span className="ft-perk-icon">🚚</span>
           <div>
-            <b>Nationwide Express Delivery</b>
-            <p>Safe & tracked doorstep delivery across Pakistan</p>
+            <b>Fast Delivery All Over Pakistan</b>
+            <p>Safe doorstep delivery to all cities</p>
           </div>
         </div>
 
         <div className="ft-perk">
           <span className="ft-perk-icon">✉️</span>
           <div>
-            <b>Official Support & Help</b>
+            <b>Official Email Support</b>
             <p>info@hangubrandedshoes.com</p>
           </div>
         </div>
@@ -34,16 +34,16 @@ export default function Footer() {
         <div className="ft-perk">
           <span className="ft-perk-icon">🔄</span>
           <div>
-            <b>7-Day Free Size Exchange</b>
-            <p>Hassle-free size replacement guarantee</p>
+            <b>7-Day Easy Size Exchange</b>
+            <p>Quick swap if size does not fit</p>
           </div>
         </div>
 
         <div className="ft-perk">
           <span className="ft-perk-icon">⭐</span>
           <div>
-            <b>100% Genuine Sole Footwear</b>
-            <p>Triple-inspected for durability and premium comfort</p>
+            <b>100% Original Quality</b>
+            <p>Durable soles & comfortable fit</p>
           </div>
         </div>
       </div>
@@ -69,8 +69,8 @@ export default function Footer() {
           </Link>
 
           <p className="ft-bio">
-            Pakistan’s trusted footwear brand for handcrafted formal shoes, cushioned daily
-            sneakers, and genuine comfort driving loafers. Engineered for elegance, built for endurance.
+            Pakistan’s trusted footwear brand for comfortable leather shoes, daily
+            sneakers, and casual loafers. Made for everyday style and comfort.
           </p>
 
           {/* Showroom & Helpline Details */}
@@ -236,9 +236,9 @@ export default function Footer() {
 
         {/* Column 4: Direct Support & Payment Methods */}
         <div className="ft-col">
-          <h4 className="ft-heading">Direct Concierge</h4>
+          <h4 className="ft-heading">Customer Help</h4>
           <p className="ft-sub-text">
-            Need sizing advice or want to place a custom order? Our WhatsApp concierge is ready to assist you.
+            Need help with shoe size or order details? Chat with us directly on WhatsApp.
           </p>
 
           <a

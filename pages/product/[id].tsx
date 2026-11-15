@@ -349,7 +349,7 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
               <div className="flex justify-around text-[11px] sm:text-xs text-zinc-500 font-medium py-1">
                 <span>✨ Genuine Sole</span>
                 <span>🧵 Handcrafted</span>
-                <span>🚚 Fast Nationwide Delivery</span>
+                <span>🚚 Fast Delivery Across Pakistan</span>
               </div>
             </div>
 
@@ -588,7 +588,7 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
                 <div className="flex items-center gap-2.5">
                   <Truck size={15} className="text-emerald-600 shrink-0" />
                   <span>
-                    <b>Nationwide Express Delivery:</b> Safe doorstep delivery with live tracking.
+                    <b>Fast Delivery Across Pakistan:</b> Safe doorstep delivery to all cities.
                   </span>
                 </div>
               </div>

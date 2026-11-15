@@ -103,11 +103,11 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
         <div className="w-full max-w-sm mx-auto my-auto z-10 py-6">
           <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-lg">
             <div className="text-center mb-6">
-              {/* Store Logo */}
+              {/* Store Logo - Prominent & Clear */}
               <img
                 src="/images/logo.png"
                 alt="Hangu Branded Shoes"
-                className="w-16 h-16 rounded-full object-contain mx-auto bg-white p-1 ring-1 ring-slate-200 shadow-sm mb-3"
+                className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-contain mx-auto bg-white p-1.5 ring-2 ring-slate-200 shadow-md mb-4 transition-transform hover:scale-105"
               />
 
               <h1 className="text-2xl font-bold text-slate-900">

@@ -90,21 +90,20 @@ export default function AdminSidebar({
       >
         {/* Top: Brand Header */}
         <div className="flex flex-col">
-          <div className="h-16 px-4 border-b border-slate-100 flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="h-20 px-4 border-b border-slate-100 flex items-center justify-between">
+            <Link href="/" className="flex items-center gap-3 group">
               <img
                 src="/images/logo.png"
                 alt="Hangu Branded Shoes Logo"
-                className="w-10 h-10 rounded-full object-contain ring-2 ring-emerald-500/20 p-0.5 group-hover:scale-105 transition-transform bg-white shrink-0 shadow-sm"
+                className="w-14 h-14 rounded-full object-contain ring-2 ring-emerald-500/20 p-0.5 group-hover:scale-105 transition-transform bg-white shrink-0 shadow-sm"
               />
               <div className="flex flex-col">
-                <div className="flex items-center gap-1.5">
-                  <span className="font-extrabold text-sm tracking-wider text-slate-900">HANGU</span>
-                  <span className="text-[10px] px-1.5 py-0.2 rounded font-bold bg-emerald-600 text-white uppercase tracking-wider">
-                    PRO
-                  </span>
-                </div>
-                <span className="text-[10px] text-slate-500 tracking-wider">SUPER ADMIN</span>
+                <span className="font-extrabold text-base tracking-wide text-slate-900 leading-tight">
+                  HANGU
+                </span>
+                <span className="text-[11px] text-slate-500 font-semibold tracking-wider uppercase">
+                  Super Admin
+                </span>
               </div>
             </Link>
 

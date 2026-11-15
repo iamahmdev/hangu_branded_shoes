@@ -47,9 +47,14 @@ export default function Home() {
           <div className="flex items-center justify-around max-w-7xl mx-auto px-4 gap-6 overflow-x-auto no-scrollbar whitespace-nowrap">
             <span className="inline-flex items-center gap-2">
               <Truck size={14} className="text-emerald-600" />
+              <span>Free Delivery Over Rs. 5,000</span>
               <span>Fast Delivery Across Pakistan</span>
             </span>
             <span className="text-zinc-300">✦</span>
+            <span className="inline-flex items-center gap-2">
+              <CheckCircle2 size={14} className="text-emerald-600" />
+              <span>Cash on Delivery & JazzCash</span>
+            </span>
             <a
               href="mailto:info@hangubrandedshoes.com"
               className="inline-flex items-center gap-2 hover:text-emerald-700 transition-colors"
@@ -93,11 +98,10 @@ export default function Home() {
                   key={c.val}
                   type="button"
                   onClick={() => setSelectedCategory(c.val)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
-                    selectedCategory === c.val
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${selectedCategory === c.val
                       ? "bg-zinc-950 text-white shadow-xs scale-102"
                       : "bg-white text-zinc-700 hover:bg-zinc-100 border border-zinc-200/80 shadow-2xs"
-                  }`}
+                    }`}
                 >
                   {c.label}
                 </button>

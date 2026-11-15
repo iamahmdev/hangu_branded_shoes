@@ -2,6 +2,7 @@ import type { GetStaticPaths, GetStaticProps } from "next";
 import { useRouter } from "next/router";
 import { useState, useMemo } from "react";
 import Link from "next/link";
+import Head from "next/head";
 import Layout from "../../src/components/Layout";
 import { useCart } from "../../src/context/CartContext";
 import { SIZES, wa } from "../../src/data/config";
@@ -160,6 +161,9 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
         category: p.cat,
       }}
     >
+      <Head>
+        <link rel="preload" as="image" href={resolveProductImage(p.img)} />
+      </Head>
       <div className="bg-[#fafafa] text-zinc-900 min-h-screen pt-4 pb-20">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb Navigation */}

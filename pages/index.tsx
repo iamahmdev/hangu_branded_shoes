@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Link from "next/link";
+import Head from "next/head";
 import Layout from "../src/components/Layout";
 import HeroSlider from "../src/components/HeroSlider";
 import ProductCard from "../src/components/ProductCard";
@@ -34,6 +35,9 @@ export default function Home() {
       keywords="hangu branded shoes, shoes in pakistan, buy leather shoes online, loafers pakistan, sneakers pakistan, peshawari chappal, formal footwear men, cash on delivery shoes"
       ogImage="/images/shoes/IMG_3091.jpg"
     >
+      <Head>
+        <link rel="preload" as="image" href="/images/h3.jpg" />
+      </Head>
       <div className="bg-[#fafafa] text-zinc-900 min-h-screen">
         {/* 1. Cinematic Luxury Hero Slider */}
         <HeroSlider />

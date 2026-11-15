@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { ReactNode } from "react";
-import Loader from "./Loader";
 import Cursor from "./Cursor";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
@@ -44,7 +43,6 @@ export default function Layout({
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
       </Head>
-      <Loader />
       <Cursor />
       <Navbar />
       <main className="min-h-screen">{children}</main>

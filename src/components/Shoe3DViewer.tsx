@@ -1,14 +1,12 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   RotateCcw,
   Play,
   Pause,
   ZoomIn,
   ZoomOut,
-  Maximize2,
-  Minimize2,
-  Sparkles,
   Move,
+  Sparkles,
 } from "lucide-react";
 import { resolveProductImage } from "../utils/image";
 
@@ -25,7 +23,7 @@ export default function Shoe3DViewer({
   img,
   name,
   className = "",
-  initialAutoRotate = false,
+  initialAutoRotate = true,
   allowZoom = true,
   showControls = true,
 }: Shoe3DViewerProps) {
@@ -39,7 +37,7 @@ export default function Shoe3DViewer({
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [hasInteracted, setHasInteracted] = useState<boolean>(false);
 
-  // Drag tracking refs (avoid rerendering during fast mouse drag)
+  // Drag tracking refs
   const dragStart = useRef<{ x: number; y: number; rotX: number; rotY: number }>({
     x: 0,
     y: 0,
@@ -47,12 +45,19 @@ export default function Shoe3DViewer({
     rotY: 0,
   });
 
-  // Auto-rotate requestAnimationFrame loop
+  // Smooth ambient float animation (gentle luxury pendulum tilt)
+  // Instead of a flat 360 spin that flips the 2D photo into a thin line and reversed mirror,
+  // this smoothly glides the shoe between -18° and +18° yaw, and -6° and +6° pitch
   useEffect(() => {
     let animId: number;
     if (isAutoRotating && !isDragging) {
-      const step = () => {
-        setRotY((prev) => (prev + 0.8) % 360);
+      const startTime = performance.now();
+      const step = (time: number) => {
+        const elapsed = (time - startTime) * 0.0012;
+        const targetY = Math.sin(elapsed) * 18;
+        const targetX = Math.cos(elapsed * 0.75) * 6;
+        setRotY(targetY);
+        setRotX(targetX);
         animId = requestAnimationFrame(step);
       };
       animId = requestAnimationFrame(step);
@@ -62,7 +67,7 @@ export default function Shoe3DViewer({
     };
   }, [isAutoRotating, isDragging]);
 
-  // Pointer Down (Mouse & Touch)
+  // Pointer Down (Touch & Mouse)
   const handlePointerDown = (e: React.PointerEvent) => {
     setIsDragging(true);
     setHasInteracted(true);
@@ -73,21 +78,22 @@ export default function Shoe3DViewer({
       rotY,
     };
     if (containerRef.current) {
-      containerRef.current.setPointerCapture(e.pointerId);
+      try {
+        containerRef.current.setPointerCapture(e.pointerId);
+      } catch {}
     }
   };
 
-  // Pointer Move
+  // Pointer Move (Smooth Clamped Tilt)
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging) return;
 
     const deltaX = e.clientX - dragStart.current.x;
     const deltaY = e.clientY - dragStart.current.y;
 
-    // Sensible rotation sensitivity: 0.5 deg per pixel
-    const nextRotY = (dragStart.current.rotY + deltaX * 0.6) % 360;
-    // Constrain pitch (X-axis tilt) to natural range (-35deg to +35deg)
-    const nextRotX = Math.max(-35, Math.min(35, dragStart.current.rotX - deltaY * 0.4));
+    // Mobile-tuned sensitivity: clamped to prevent 2D photo flipping/collapsing
+    const nextRotY = Math.max(-38, Math.min(38, dragStart.current.rotY + deltaX * 0.35));
+    const nextRotX = Math.max(-20, Math.min(20, dragStart.current.rotX - deltaY * 0.25));
 
     setRotY(nextRotY);
     setRotX(nextRotX);
@@ -103,7 +109,7 @@ export default function Shoe3DViewer({
     }
   };
 
-  // Reset to default angle
+  // Reset to neutral angle
   const handleReset = () => {
     setRotX(0);
     setRotY(0);
@@ -111,25 +117,22 @@ export default function Shoe3DViewer({
   };
 
   const handleZoomIn = () => {
-    setZoom((prev) => Math.min(2.2, prev + 0.25));
+    setZoom((prev) => Math.min(1.8, prev + 0.2));
   };
 
   const handleZoomOut = () => {
-    setZoom((prev) => Math.max(0.85, prev - 0.25));
+    setZoom((prev) => Math.max(0.85, prev - 0.2));
   };
 
-  // Format angle for HUD badge
-  const displayAngle = Math.round(((rotY % 360) + 360) % 360);
-
-  // Lighting reflection gradient shifts with rotation
-  const glareX = 50 + (rotY % 180) * 0.4;
-  const glareY = 50 + rotX * 0.8;
+  // Dynamic studio lighting reflection overlay
+  const glareX = 50 + rotY * 1.2;
+  const glareY = 50 + rotX * 1.5;
 
   return (
     <div
-      className={`relative select-none flex flex-col items-center justify-center overflow-hidden ${className}`}
+      className={`relative w-full h-full select-none flex items-center justify-center overflow-hidden bg-gradient-to-b from-[#fbfbfd] via-[#f1f1f4] to-[#e7e7eb] ${className}`}
     >
-      {/* 3D Stage / Viewport */}
+      {/* 3D Interactive Stage / Viewport */}
       <div
         ref={containerRef}
         onPointerDown={handlePointerDown}
@@ -139,126 +142,128 @@ export default function Shoe3DViewer({
         className={`relative w-full h-full flex items-center justify-center cursor-grab active:cursor-grabbing touch-none ${
           isDragging ? "cursor-grabbing" : ""
         }`}
-        style={{ perspective: 1100 }}
+        style={{ perspective: 1200 }}
       >
         {/* Dynamic 3D Shoe Container */}
         <div
           className="relative transition-transform duration-75 ease-out will-change-transform flex items-center justify-center"
           style={{
-            transform: `perspective(1100px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(${zoom})`,
+            transform: `perspective(1200px) rotateX(${rotX.toFixed(1)}deg) rotateY(${rotY.toFixed(1)}deg) scale(${zoom})`,
             transformStyle: "preserve-3d",
           }}
         >
-          {/* Real Shoe Image with 3D Depth (Unclipped) */}
-          <div className="relative rounded-2xl flex items-center justify-center">
+          {/* Real Shoe Image with 3D Depth & Glare */}
+          <div className="relative flex items-center justify-center p-3 sm:p-5">
             <img
               src={resolveProductImage(img)}
               alt={name}
               draggable={false}
-              className="max-h-[80vh] max-w-[90vw] md:max-h-[460px] object-contain drop-shadow-[0_20px_30px_rgba(0,0,0,0.2)] pointer-events-none transition-all duration-150"
+              className="max-h-[58vh] max-w-[84vw] sm:max-h-[400px] object-contain drop-shadow-[0_22px_28px_rgba(0,0,0,0.18)] pointer-events-none select-none transition-all duration-75"
             />
 
-            {/* Specular Glare / Realistic Studio Lighting Overlay */}
+            {/* Realistic Studio Lighting Reflection */}
             <div
-              className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-30 transition-all duration-75"
+              className="absolute inset-0 pointer-events-none mix-blend-overlay opacity-35 transition-all duration-75 rounded-2xl"
               style={{
-                background: `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 65%)`,
+                background: `radial-gradient(circle at ${glareX}% ${glareY}%, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 65%)`,
               }}
             />
           </div>
 
-          {/* Dynamic 3D Ground Shadow that responds to rotation */}
+          {/* Dynamic 3D Ground Shadow */}
           <div
-            className="absolute -bottom-8 w-3/4 h-8 rounded-full pointer-events-none blur-md transition-all duration-75"
+            className="absolute -bottom-4 sm:-bottom-6 w-3/4 h-6 sm:h-8 rounded-full pointer-events-none blur-md transition-all duration-75"
             style={{
-              background: "radial-gradient(ellipse at center, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0) 70%)",
-              transform: `scaleX(${1 + Math.abs(rotY % 180 - 90) / 200}) skewX(${rotY * 0.15}deg)`,
-              opacity: Math.max(0.2, 0.55 - Math.abs(rotX) / 100),
+              background: "radial-gradient(ellipse at center, rgba(0,0,0,0.38) 0%, rgba(0,0,0,0) 70%)",
+              transform: `scaleX(${1 + Math.abs(rotY) / 100}) skewX(${rotY * 0.22}deg)`,
+              opacity: Math.max(0.18, 0.48 - Math.abs(rotX) / 100),
             }}
           />
         </div>
 
         {/* HUD Info Badge: Top Left */}
-        <div className="absolute top-3 left-3 flex items-center gap-2 pointer-events-none">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-950/80 backdrop-blur-md text-white text-[10px] font-bold tracking-wider uppercase border border-white/10 shadow-lg">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            3D Rotate • {displayAngle}°
+        <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 pointer-events-none">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-950/80 backdrop-blur-md text-white text-[10px] font-bold tracking-wider uppercase border border-white/10 shadow-sm">
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                isAutoRotating ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
+              }`}
+            />
+            3D Depth • {rotY > 0 ? `+${Math.round(rotY)}°` : `${Math.round(rotY)}°`}
           </span>
           {zoom !== 1 && (
-            <span className="px-2.5 py-1 rounded-full bg-zinc-950/70 backdrop-blur-md text-zinc-300 text-[10px] font-mono border border-white/10">
+            <span className="px-2 py-0.5 rounded-full bg-zinc-950/70 backdrop-blur-md text-zinc-300 text-[10px] font-mono border border-white/10">
               {Math.round(zoom * 100)}%
             </span>
           )}
         </div>
 
-        {/* Interaction Hint (Fades out after user first touches) */}
-        {!hasInteracted && !isAutoRotating && (
-          <div className="absolute bottom-16 sm:bottom-14 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full bg-zinc-900/85 backdrop-blur-md text-white text-xs font-semibold flex items-center gap-2 border border-white/10 shadow-xl pointer-events-none animate-bounce">
-            <Move size={14} className="text-emerald-400" />
-            <span>Drag mouse or swipe to rotate 360°</span>
+        {/* Touch / Interaction Hint (Disappears once interacted) */}
+        {!hasInteracted && !isDragging && (
+          <div className="absolute top-3 right-3 sm:top-auto sm:bottom-14 sm:left-1/2 sm:-translate-x-1/2 z-20 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-zinc-950/80 backdrop-blur-md text-white text-[10px] sm:text-xs font-semibold flex items-center gap-1.5 border border-white/10 shadow-lg pointer-events-none animate-pulse">
+            <Move size={12} className="text-emerald-400 shrink-0" />
+            <span>Swipe to tilt 3D</span>
           </div>
         )}
-      </div>
 
-      {/* 3D Control Toolbar (Bottom) */}
-      {showControls && (
-        <div className="w-full px-4 py-3 bg-white/80 backdrop-blur-md border-t border-zinc-200/80 flex items-center justify-between gap-2 z-10">
-          <div className="flex items-center gap-2">
-            {/* Auto-Rotate Toggle */}
+        {/* Floating Glassmorphism Toolbar (Bottom Overlay) */}
+        {showControls && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-zinc-950/80 backdrop-blur-md text-white rounded-full border border-white/15 shadow-xl">
+            {/* Auto-Float Toggle */}
             <button
               type="button"
               onClick={() => {
                 setIsAutoRotating(!isAutoRotating);
                 setHasInteracted(true);
               }}
-              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
+              className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-semibold transition-all ${
                 isAutoRotating
-                  ? "bg-emerald-600 text-white shadow-sm"
-                  : "bg-zinc-100 text-zinc-800 hover:bg-zinc-200 border border-zinc-200"
+                  ? "bg-emerald-500 text-white shadow-xs"
+                  : "bg-white/10 hover:bg-white/20 text-zinc-200"
               }`}
-              title={isAutoRotating ? "Pause 3D Spin" : "Auto Spin 360°"}
+              title={isAutoRotating ? "Pause 3D Float" : "Resume 3D Float"}
             >
-              {isAutoRotating ? <Pause size={13} /> : <Play size={13} />}
-              <span>{isAutoRotating ? "Auto Spin: ON" : "Auto Spin"}</span>
+              {isAutoRotating ? <Pause size={11} /> : <Play size={11} />}
+              <span>{isAutoRotating ? "Float ON" : "Float"}</span>
             </button>
 
             {/* Reset Angle */}
             <button
               type="button"
               onClick={handleReset}
-              className="p-1.5 rounded-full bg-zinc-100 text-zinc-700 hover:bg-zinc-200 border border-zinc-200 transition-colors"
+              className="p-1 rounded-full bg-white/10 hover:bg-white/20 text-zinc-300 hover:text-white transition-colors"
               title="Reset 3D Angle"
             >
-              <RotateCcw size={14} />
+              <RotateCcw size={12} />
             </button>
-          </div>
 
-          {/* Zoom In / Out Controls */}
-          {allowZoom && (
-            <div className="flex items-center gap-1.5">
-              <button
-                type="button"
-                onClick={handleZoomOut}
-                disabled={zoom <= 0.85}
-                className="w-8 h-8 rounded-full bg-zinc-100 text-zinc-700 hover:bg-zinc-200 disabled:opacity-40 disabled:hover:bg-zinc-100 border border-zinc-200 flex items-center justify-center transition-colors"
-                title="Zoom Out"
-              >
-                <ZoomOut size={14} />
-              </button>
-              <button
-                type="button"
-                onClick={handleZoomIn}
-                disabled={zoom >= 2.2}
-                className="w-8 h-8 rounded-full bg-zinc-100 text-zinc-700 hover:bg-zinc-200 disabled:opacity-40 disabled:hover:bg-zinc-100 border border-zinc-200 flex items-center justify-center transition-colors"
-                title="Zoom In"
-              >
-                <ZoomIn size={14} />
-              </button>
-            </div>
-          )}
-        </div>
-      )}
+            {/* Zoom In / Out Controls */}
+            {allowZoom && (
+              <>
+                <div className="w-px h-3.5 bg-white/20 mx-0.5" />
+                <button
+                  type="button"
+                  onClick={handleZoomOut}
+                  disabled={zoom <= 0.85}
+                  className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 text-zinc-300 disabled:opacity-30 disabled:hover:bg-white/10 flex items-center justify-center transition-colors"
+                  title="Zoom Out"
+                >
+                  <ZoomOut size={12} />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleZoomIn}
+                  disabled={zoom >= 1.8}
+                  className="w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 text-zinc-300 disabled:opacity-30 disabled:hover:bg-white/10 flex items-center justify-center transition-colors"
+                  title="Zoom In"
+                >
+                  <ZoomIn size={12} />
+                </button>
+              </>
+            )}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
-

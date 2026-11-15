@@ -205,12 +205,12 @@ export default function Product() {
                 {/* Big Full Photo Canvas: 100% Edge-to-Edge Fill (Exact 3:4 Native Aspect Ratio, Zero Left/Right Gutters) */}
                 <div className="relative w-full aspect-[3/4] bg-[#f4f4f6] flex items-center justify-center overflow-hidden">
                   {viewMode === "3d" ? (
-                    <div className="w-full h-full flex items-center justify-center p-2 sm:p-4">
+                    <div className="w-full h-full flex items-center justify-center">
                       <Shoe3DViewer
                         img={galleryImages[activeImgIndex] || p.img}
                         name={p.name}
                         className="w-full h-full"
-                        initialAutoRotate={false}
+                        initialAutoRotate={true}
                         allowZoom={true}
                         showControls={true}
                       />
@@ -281,7 +281,7 @@ export default function Product() {
                   </div>
                 )}
 
-                {/* 3D 360° Switcher Button */}
+                {/* 3D Interactive Depth Switcher Button */}
                 <button
                   type="button"
                   onClick={() => setViewMode(viewMode === "3d" ? "photo" : "3d")}
@@ -296,7 +296,7 @@ export default function Product() {
                       viewMode === "3d" ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
                     }`}
                   />
-                  <span>{viewMode === "3d" ? "📷 View Photo" : "🔄 3D 360° View"}</span>
+                  <span>{viewMode === "3d" ? "📷 View Photo" : "🔄 3D Depth View"}</span>
                 </button>
               </div>
 

@@ -92,7 +92,7 @@ export default function ProductCard({ p }: ProductCardProps) {
               setIs3DModalOpen(true);
             }}
             className="absolute top-2 right-2 z-10 inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-zinc-950/85 hover:bg-zinc-950 text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase border border-white/20 shadow-xs backdrop-blur-md transition-all hover:scale-105 active:scale-95 shrink-0"
-            title="Open 3D 360° Interactive View"
+            title="Open 3D Depth View"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             <span className="hidden sm:inline">3D View</span>

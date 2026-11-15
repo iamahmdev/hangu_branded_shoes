@@ -70,11 +70,11 @@ export default function Shoe3DModal({ product, isOpen, onClose }: Shoe3DModalPro
         </div>
 
         {/* Modal Body: 3D Stage */}
-        <div className="relative flex-1 min-h-[280px] sm:min-h-[460px] bg-[#f2f2f4] flex flex-col justify-center">
+        <div className="relative flex-1 min-h-[320px] sm:min-h-[480px] bg-[#f2f2f4] flex flex-col justify-center overflow-hidden">
           <Shoe3DViewer
             img={product.img}
             name={product.name}
-            className="w-full h-full min-h-[280px] sm:min-h-[460px]"
+            className="w-full h-full min-h-[320px] sm:min-h-[480px]"
             initialAutoRotate={true}
             allowZoom={true}
             showControls={true}

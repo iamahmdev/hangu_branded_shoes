@@ -33,9 +33,34 @@ a{color:inherit;text-decoration:none}img{max-width:100%;display:block}
   transform-origin: left;
   animation: loaderProgress 1.7s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
-.cursor{position:fixed;width:34px;height:34px;border:2px solid #09090b;border-radius:50%;pointer-events:none;z-index:998;transform:translate(-50%,-50%);transition:width .2s,height .2s,background .2s}
-.cursor.big{width:64px;height:64px;background:rgba(9,9,11,.15)}
-@media(hover:none){.cursor{display:none}}
+.cursor {
+  display: none !important;
+}
+@media (min-width: 1025px) and (hover: hover) {
+  .cursor {
+    display: block !important;
+    position: fixed;
+    top: -100px;
+    left: -100px;
+    opacity: 0;
+    width: 34px;
+    height: 34px;
+    border: 2px solid #09090b;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 998;
+    transform: translate(-50%, -50%);
+    transition: width .2s, height .2s, background .2s, opacity .2s;
+  }
+  .cursor.active {
+    opacity: 1;
+  }
+  .cursor.big {
+    width: 64px;
+    height: 64px;
+    background: rgba(9, 9, 11, .15);
+  }
+}
 /* ================= Modern Easy & Responsive Header ================= */
 .nb-header {
   position: fixed;

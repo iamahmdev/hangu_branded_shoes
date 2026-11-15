@@ -4,10 +4,11 @@ export default function Cursor() {
   const r = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (typeof window === "undefined" || window.matchMedia("(hover: none)").matches) return;
+    if (typeof window === "undefined" || window.matchMedia("(hover: none)").matches || window.innerWidth <= 1024) return;
 
     const m = (e: MouseEvent) => {
       if (!r.current) return;
+      r.current.classList.add("active");
       r.current.style.left = e.clientX + "px";
       r.current.style.top = e.clientY + "px";
       const target = e.target as HTMLElement | null;
@@ -16,7 +17,7 @@ export default function Cursor() {
       }
     };
 
-    window.addEventListener("mousemove", m);
+    window.addEventListener("mousemove", m, { passive: true });
     return () => window.removeEventListener("mousemove", m);
   }, []);
 

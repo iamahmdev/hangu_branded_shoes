@@ -79,17 +79,17 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Clean Category Pill Bar */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+            {/* Clean Category Pill Bar (Flex-wrap so every category is 100% complete and never cut/cropped) */}
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-1">
               {categories.map((c) => (
                 <button
                   key={c.val}
                   type="button"
                   onClick={() => setSelectedCategory(c.val)}
-                  className={`px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold whitespace-nowrap transition-all ${
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${
                     selectedCategory === c.val
-                      ? "bg-zinc-950 text-white shadow-xs"
-                      : "bg-white text-zinc-700 hover:bg-zinc-100 border border-zinc-200/80"
+                      ? "bg-zinc-950 text-white shadow-xs scale-102"
+                      : "bg-white text-zinc-700 hover:bg-zinc-100 border border-zinc-200/80 shadow-2xs"
                   }`}
                 >
                   {c.label}

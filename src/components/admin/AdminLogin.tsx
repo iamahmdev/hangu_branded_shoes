@@ -6,6 +6,7 @@ import {
   User,
   ArrowRight,
   ArrowLeft,
+  ShieldCheck,
   Eye,
   EyeOff,
   KeyRound,
@@ -83,41 +84,58 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
   return (
     <>
       <Head>
-        <title>Admin Login — Hangu Branded Shoes</title>
+        <title>Super Admin Portal — Hangu Branded Shoes</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </Head>
 
       <div className="min-h-screen bg-slate-50 text-slate-800 font-sans flex flex-col justify-between p-4 md:p-6 relative">
-        {/* Top return button */}
-        <div className="w-full max-w-sm mx-auto flex items-center justify-start z-10 pt-4">
+        {/* Top return bar */}
+        <div className="w-full max-w-md mx-auto flex items-center justify-between z-10 pt-3">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-300 hover:border-slate-400 text-xs font-bold text-slate-800 hover:text-black shadow-xs hover:shadow-sm transition-all cursor-pointer group"
+            className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:border-slate-300 text-xs font-bold text-slate-700 hover:text-black shadow-2xs transition-all cursor-pointer group"
           >
-            <ArrowLeft size={16} className="text-slate-700 group-hover:-translate-x-0.5 transition-transform" />
+            <ArrowLeft size={15} className="text-slate-600 group-hover:-translate-x-0.5 transition-transform" />
             <span>Back to Website</span>
           </Link>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white border border-slate-200 text-[11px] font-bold text-slate-700 shadow-2xs">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            <span>Super Admin</span>
+          </div>
         </div>
 
         {/* Center Clean Card */}
-        <div className="w-full max-w-sm mx-auto my-auto z-10 py-6">
-          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-lg">
+        <div className="w-full max-w-md mx-auto my-auto z-10 py-6">
+          <div className="bg-white p-7 sm:p-9 rounded-3xl border border-slate-200 shadow-xl shadow-slate-200/50">
             <div className="text-center mb-6">
-              {/* Store Logo - Prominent & Clear */}
-              <img
-                src="/images/logo.png"
-                alt="Hangu Branded Shoes"
-                className="w-24 h-24 sm:w-28 sm:h-28 rounded-full object-contain mx-auto bg-white p-1.5 ring-2 ring-slate-200 shadow-md mb-4 transition-transform hover:scale-105"
-              />
+              {/* Store Logo - Prominent, Large & High Resolution */}
+              <div className="inline-block mx-auto mb-4">
+                <img
+                  src="/images/logo.png"
+                  alt="Hangu Branded Shoes"
+                  className="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-contain mx-auto bg-white p-2 ring-4 ring-emerald-500/15 shadow-md shadow-slate-300/40 transition-transform hover:scale-105"
+                />
+              </div>
 
-              <h1 className="text-2xl font-bold text-slate-900">
-                Admin Login
+              {/* Official Badge */}
+              <div className="flex justify-center mb-2">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-bold tracking-wider uppercase">
+                  <ShieldCheck size={13} className="text-emerald-600" />
+                  Super Admin Portal
+                </span>
+              </div>
+
+              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                Store Operations
               </h1>
+              <p className="text-slate-500 text-xs sm:text-sm mt-1.5 leading-relaxed">
+                Sign in to manage orders, customer deliveries, and product inventory.
+              </p>
             </div>
 
             {/* Success notification */}
             {successMsg && (
-              <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs mb-4 flex items-center gap-2 font-semibold">
+              <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs mb-4 flex items-center gap-2 font-semibold">
                 <CheckCircle2 size={16} className="shrink-0 text-emerald-600" />
                 <span>{successMsg}</span>
               </div>
@@ -125,7 +143,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
 
             {/* Error notification */}
             {error && (
-              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs mb-4 flex items-center gap-2 font-semibold">
+              <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs mb-4 flex items-center gap-2 font-semibold">
                 <span className="shrink-0 font-bold text-rose-600">⚠️</span>
                 <span>{error}</span>
               </div>
@@ -134,7 +152,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div>
                 <label className="text-xs font-bold text-slate-700 block mb-1.5">
-                  Username or Email
+                  Admin Username or Email
                 </label>
                 <div className="relative">
                   <input
@@ -142,8 +160,8 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                     required
                     value={form.usernameOrEmail}
                     onChange={(e) => setForm({ ...form, usernameOrEmail: e.target.value })}
-                    placeholder="Username or email"
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-slate-800 focus:bg-white rounded-xl pl-10 pr-4 py-2.5 text-slate-900 text-sm outline-none transition-colors placeholder:text-slate-400"
+                    placeholder="Enter your username or email"
+                    className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-slate-900 focus:bg-white rounded-xl pl-10 pr-4 py-2.5 text-slate-900 text-sm outline-none transition-colors placeholder:text-slate-400"
                   />
                   <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 </div>
@@ -157,7 +175,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                     onClick={() => setIsForgotModalOpen(true)}
                     className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
                   >
-                    Forgot?
+                    Forgot Password?
                   </button>
                 </div>
                 <div className="relative">
@@ -166,8 +184,8 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                     required
                     value={form.password}
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
-                    placeholder="Password"
-                    className="w-full bg-slate-50 border border-slate-200 focus:border-slate-800 focus:bg-white rounded-xl pl-10 pr-10 py-2.5 text-slate-900 text-sm outline-none transition-colors placeholder:text-slate-400"
+                    placeholder="Enter your password"
+                    className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-slate-900 focus:bg-white rounded-xl pl-10 pr-10 py-2.5 text-slate-900 text-sm outline-none transition-colors placeholder:text-slate-400"
                   />
                   <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                   <button
@@ -185,10 +203,10 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full h-11 mt-1 font-semibold text-sm bg-black hover:bg-black active:bg-black text-white rounded-xl inline-flex items-center justify-center gap-2 cursor-pointer transition-opacity hover:opacity-90 active:opacity-100 disabled:opacity-50"
+                className="w-full h-12 mt-1 font-bold text-sm bg-black hover:bg-black active:bg-black text-white rounded-xl shadow-md inline-flex items-center justify-center gap-2 cursor-pointer transition-opacity hover:opacity-90 active:opacity-100 disabled:opacity-50"
               >
-                <span>{loading ? "Signing In..." : "Sign In"}</span>
-                {!loading && <ArrowRight size={16} className="shrink-0" />}
+                <span>{loading ? "Signing In..." : "Sign In to Dashboard"}</span>
+                {!loading && <ArrowRight size={17} className="shrink-0" />}
               </button>
             </form>
           </div>

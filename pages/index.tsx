@@ -99,8 +99,8 @@ export default function Home() {
                   type="button"
                   onClick={() => setSelectedCategory(c.val)}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-bold transition-all ${selectedCategory === c.val
-                      ? "bg-zinc-950 text-white shadow-xs scale-102"
-                      : "bg-white text-zinc-700 hover:bg-zinc-100 border border-zinc-200/80 shadow-2xs"
+                    ? "bg-zinc-950 text-white shadow-xs scale-102"
+                    : "bg-white text-zinc-700 hover:bg-zinc-100 border border-zinc-200/80 shadow-2xs"
                     }`}
                 >
                   {c.label}

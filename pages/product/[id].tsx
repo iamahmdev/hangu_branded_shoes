@@ -24,9 +24,11 @@ import {
   RotateCcw,
   ShieldCheck,
   Box,
+  ZoomIn,
+  Maximize2,
+  X,
 } from "lucide-react";
 import { resolveProductImage } from "../../src/utils/image";
-import Shoe3DViewer from "../../src/components/Shoe3DViewer";
 
 export default function Product() {
   const { query, push } = useRouter();
@@ -35,9 +37,13 @@ export default function Product() {
   const [q, setQ] = useState<number>(1);
   const [err, setErr] = useState<boolean>(false);
   const [addedToast, setAddedToast] = useState<boolean>(false);
-  const [viewMode, setViewMode] = useState<"photo" | "3d">("photo");
   const [activeImgIndex, setActiveImgIndex] = useState<number>(0);
   const [isWishlisted, setIsWishlisted] = useState<boolean>(false);
+
+  // High-Resolution Zoom & Lightbox State
+  const [isZoomed, setIsZoomed] = useState<boolean>(false);
+  const [zoomPos, setZoomPos] = useState<{ x: number; y: number }>({ x: 50, y: 50 });
+  const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false);
 
   // TanStack Query hook
   const { data: p, isLoading, isError } = useProduct(query.id as string);
@@ -202,34 +208,45 @@ export default function Product() {
                   </div>
                 </div>
 
-                {/* Big Full Photo Canvas: 100% Edge-to-Edge Fill (Exact 3:4 Native Aspect Ratio, Zero Left/Right Gutters) */}
-                <div className="relative w-full aspect-[3/4] bg-[#f4f4f6] flex items-center justify-center overflow-hidden">
-                  {viewMode === "3d" ? (
-                    <div className="w-full h-full flex items-center justify-center">
-                      <Shoe3DViewer
-                        img={galleryImages[activeImgIndex] || p.img}
-                        name={p.name}
-                        className="w-full h-full"
-                        initialAutoRotate={true}
-                        allowZoom={true}
-                        showControls={true}
-                      />
-                    </div>
-                  ) : (
-                    <img
-                      key={activeImgIndex}
-                      src={galleryImages[activeImgIndex] || resolveProductImage(p.img)}
-                      alt={`${p.name} - Angle ${activeImgIndex + 1}`}
-                      className="w-full h-full object-cover select-none transition-transform duration-300 ease-out"
-                    />
-                  )}
+                {/* Big Full Photo Canvas: 100% Edge-to-Edge Fill with Hover Magnification & Tap Lightbox */}
+                <div
+                  onMouseEnter={() => setIsZoomed(true)}
+                  onMouseLeave={() => setIsZoomed(false)}
+                  onMouseMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    const x = ((e.clientX - rect.left) / rect.width) * 100;
+                    const y = ((e.clientY - rect.top) / rect.height) * 100;
+                    setZoomPos({ x, y });
+                  }}
+                  onClick={() => setIsLightboxOpen(true)}
+                  className="relative w-full aspect-[3/4] bg-[#f4f4f6] flex items-center justify-center overflow-hidden cursor-zoom-in group select-none"
+                  title="Click to view full-screen high-resolution photo"
+                >
+                  <img
+                    key={activeImgIndex}
+                    src={galleryImages[activeImgIndex] || resolveProductImage(p.img)}
+                    alt={`${p.name} - Angle ${activeImgIndex + 1}`}
+                    className={`w-full h-full object-cover select-none transition-transform duration-150 ease-out ${
+                      isZoomed ? "scale-175" : "scale-100"
+                    }`}
+                    style={
+                      isZoomed
+                        ? {
+                            transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
+                          }
+                        : undefined
+                    }
+                  />
 
                   {/* Left / Right Carousel Arrow Buttons */}
-                  {viewMode === "photo" && galleryImages.length > 1 && (
+                  {galleryImages.length > 1 && (
                     <>
                       <button
                         type="button"
-                        onClick={handlePrevImage}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handlePrevImage();
+                        }}
                         aria-label="Previous shoe angle"
                         className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-zinc-900 flex items-center justify-center shadow-md border border-zinc-200 transition-all z-20 cursor-pointer active:scale-95"
                       >
@@ -237,7 +254,10 @@ export default function Product() {
                       </button>
                       <button
                         type="button"
-                        onClick={handleNextImage}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleNextImage();
+                        }}
                         aria-label="Next shoe angle"
                         className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-zinc-900 flex items-center justify-center shadow-md border border-zinc-200 transition-all z-20 cursor-pointer active:scale-95"
                       >
@@ -245,10 +265,19 @@ export default function Product() {
                       </button>
                     </>
                   )}
+
+                  {/* Zoom Indicator Badge (Bottom Center) */}
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-20 pointer-events-none opacity-85 group-hover:opacity-100 transition-opacity">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-zinc-950/80 backdrop-blur-md text-white text-[10px] sm:text-xs font-semibold shadow-md border border-white/10">
+                      <ZoomIn size={12} className="text-emerald-400" />
+                      <span className="hidden sm:inline">Hover to Zoom • Click for Full View</span>
+                      <span className="sm:hidden">Tap for Fullscreen Zoom</span>
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              {/* Clean Gallery Thumbnails + 3D Toggle Bar (Placed OUTSIDE/BELOW the Photo Canvas) */}
+              {/* Clean Gallery Thumbnails + Fullscreen Action (Below Canvas) */}
               <div className="flex items-center justify-between gap-3 px-1 py-1">
                 {galleryImages.length > 1 ? (
                   <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
@@ -256,47 +285,37 @@ export default function Product() {
                       <button
                         key={idx}
                         type="button"
-                        onClick={() => {
-                          setViewMode("photo");
-                          setActiveImgIndex(idx);
-                        }}
-                        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-white p-1 border-2 transition-all overflow-hidden flex items-center justify-center cursor-pointer shrink-0 ${
-                          viewMode === "photo" && activeImgIndex === idx
+                        onClick={() => setActiveImgIndex(idx)}
+                        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-white p-0.5 border-2 transition-all overflow-hidden flex items-center justify-center cursor-pointer shrink-0 ${
+                          activeImgIndex === idx
                             ? "border-zinc-950 ring-2 ring-zinc-950/20 scale-102 shadow-xs"
-                            : "border-zinc-200 opacity-75 hover:opacity-100"
+                            : "border-zinc-200 opacity-70 hover:opacity-100"
                         }`}
                       >
                         <img
                           src={imgUrl}
                           alt={`${p.name} angle ${idx + 1}`}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-cover rounded-lg"
                         />
                       </button>
                     ))}
                   </div>
                 ) : (
-                  <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 font-medium">
+                  <div className="flex items-center gap-1.5 text-[11px] text-zinc-600 font-medium">
                     <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                     <span>100% Genuine Physical Store Photograph</span>
                   </div>
                 )}
 
-                {/* 3D Interactive Depth Switcher Button */}
+                {/* Fullscreen High-Res Trigger Button */}
                 <button
                   type="button"
-                  onClick={() => setViewMode(viewMode === "3d" ? "photo" : "3d")}
-                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold transition-all shadow-xs border cursor-pointer shrink-0 ml-auto ${
-                    viewMode === "3d"
-                      ? "bg-zinc-950 text-white border-zinc-950 scale-102"
-                      : "bg-white text-zinc-800 hover:text-zinc-950 border-zinc-300 hover:border-zinc-400"
-                  }`}
+                  onClick={() => setIsLightboxOpen(true)}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold text-zinc-700 bg-zinc-100 hover:bg-zinc-200 border border-zinc-200 transition-colors ml-auto cursor-pointer shrink-0"
+                  title="View Fullscreen High-Res Photo"
                 >
-                  <span
-                    className={`w-2 h-2 rounded-full ${
-                      viewMode === "3d" ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
-                    }`}
-                  />
-                  <span>{viewMode === "3d" ? "📷 View Photo" : "🔄 3D Depth View"}</span>
+                  <Maximize2 size={13} />
+                  <span>Photo {activeImgIndex + 1} of {galleryImages.length}</span>
                 </button>
               </div>
 
@@ -551,6 +570,92 @@ export default function Product() {
           </div>
         </div>
       </div>
+
+      {/* Fullscreen High-Resolution Lightbox Modal (Tap / Click to Inspect Leather & Stitching) */}
+      {isLightboxOpen && (
+        <div
+          className="fixed inset-0 z-[2000] bg-black/95 backdrop-blur-md flex flex-col items-center justify-center p-3 sm:p-6 animate-fadeIn"
+          onClick={() => setIsLightboxOpen(false)}
+        >
+          {/* Top Header Bar */}
+          <div className="absolute top-4 inset-x-4 flex items-center justify-between text-white z-30 pointer-events-auto">
+            <div className="flex items-center gap-2 bg-zinc-900/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-white/10 shadow-lg">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="text-xs font-bold truncate max-w-[180px] sm:max-w-xs">{p.name}</span>
+              <span className="text-zinc-500 text-xs">•</span>
+              <span className="text-zinc-300 text-xs font-mono">
+                {activeImgIndex + 1} / {galleryImages.length}
+              </span>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setIsLightboxOpen(false)}
+              className="w-10 h-10 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-white flex items-center justify-center border border-white/10 transition-colors cursor-pointer shadow-lg"
+              aria-label="Close Fullscreen View"
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          {/* Main High-Res Image Container */}
+          <div
+            className="relative max-w-4xl max-h-[82vh] w-full flex items-center justify-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <img
+              src={galleryImages[activeImgIndex] || resolveProductImage(p.img)}
+              alt={`${p.name} fullscreen`}
+              className="max-h-[78vh] sm:max-h-[82vh] max-w-full object-contain rounded-2xl shadow-2xl select-none"
+            />
+
+            {/* Prev / Next Arrows */}
+            {galleryImages.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={handlePrevImage}
+                  aria-label="Previous angle"
+                  className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 hover:bg-black/90 text-white flex items-center justify-center border border-white/20 transition-all cursor-pointer active:scale-95 shadow-xl"
+                >
+                  <ChevronLeft size={22} />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleNextImage}
+                  aria-label="Next angle"
+                  className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-black/70 hover:bg-black/90 text-white flex items-center justify-center border border-white/20 transition-all cursor-pointer active:scale-95 shadow-xl"
+                >
+                  <ChevronRight size={22} />
+                </button>
+              </>
+            )}
+          </div>
+
+          {/* Bottom Thumbnails Strip */}
+          {galleryImages.length > 1 && (
+            <div
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 p-1.5 bg-zinc-950/80 backdrop-blur-md rounded-2xl border border-white/10 z-30 overflow-x-auto max-w-[90vw]"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {galleryImages.map((imgUrl, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => setActiveImgIndex(idx)}
+                  className={`w-12 h-12 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
+                    activeImgIndex === idx
+                      ? "border-emerald-400 scale-105"
+                      : "border-transparent opacity-60 hover:opacity-100"
+                  }`}
+                >
+                  <img src={imgUrl} alt="Thumbnail" className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </Layout>
   );
 }

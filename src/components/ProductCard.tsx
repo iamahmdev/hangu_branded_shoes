@@ -4,7 +4,6 @@ import { useCart } from "../context/CartContext";
 import { Product } from "../types";
 import { Zap, ArrowRight } from "lucide-react";
 import { resolveProductImage } from "../utils/image";
-import Shoe3DModal from "./Shoe3DModal";
 
 interface ProductCardProps {
   p: Product;
@@ -12,7 +11,6 @@ interface ProductCardProps {
 
 export default function ProductCard({ p }: ProductCardProps) {
   const { openQuickOrder } = useCart();
-  const [is3DModalOpen, setIs3DModalOpen] = useState<boolean>(false);
   const [cardTilt, setCardTilt] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState<boolean>(false);
   const cardRef = useRef<HTMLDivElement>(null);
@@ -82,22 +80,6 @@ export default function ProductCard({ p }: ProductCardProps) {
               />
             )}
           </Link>
-
-          {/* 3D View Pill (Top Right) */}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIs3DModalOpen(true);
-            }}
-            className="absolute top-2 right-2 z-10 inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-zinc-950/85 hover:bg-zinc-950 text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase border border-white/20 shadow-xs backdrop-blur-md transition-all hover:scale-105 active:scale-95 shrink-0"
-            title="Open 3D Depth View"
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="hidden sm:inline">3D View</span>
-            <span className="sm:hidden font-mono">3D</span>
-          </button>
 
           {/* Status Badge (Top Left) */}
           {p.tag ? (
@@ -173,13 +155,6 @@ export default function ProductCard({ p }: ProductCardProps) {
           </div>
         </div>
       </div>
-
-      {/* Interactive 3D Model Modal */}
-      <Shoe3DModal
-        product={p}
-        isOpen={is3DModalOpen}
-        onClose={() => setIs3DModalOpen(false)}
-      />
     </>
   );
 }

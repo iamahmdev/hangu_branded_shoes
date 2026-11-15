@@ -191,8 +191,9 @@ export default function OrderDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fadeIn">
-      <div className="bg-white p-5 sm:p-7 md:p-8 rounded-3xl max-w-2xl w-full border border-slate-200/90 shadow-2xl relative my-6 text-slate-800">
+    <div className="fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm overflow-y-auto p-3 sm:p-6 animate-fadeIn">
+      <div className="min-h-full flex items-start sm:items-center justify-center py-4 sm:py-8">
+        <div className="bg-white p-5 sm:p-7 md:p-8 rounded-3xl max-w-2xl w-full border border-slate-200/90 shadow-2xl relative text-slate-800">
         {/* Top Header with Prominent Back Button */}
         <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-4 gap-3">
           <button
@@ -599,6 +600,7 @@ export default function OrderDetailModal({
           </button>
         </div>
       </div>
+    </div>
 
       {/* Fake Order & Block Confirmation Modal */}
       {fakeModalOpen && (

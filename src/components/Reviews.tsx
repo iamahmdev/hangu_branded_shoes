@@ -104,7 +104,7 @@ export default function Reviews() {
             <Stars n={Math.round(Number(avg))} />
             <p className="text-zinc-500 text-xs mt-1">Based on {totalReviews} customer reviews</p>
           </div>
-          <div className="flex flex-col gap-1.5 min-w-[240px]">
+          <div className="flex flex-col gap-1.5 w-full max-w-xs sm:w-auto">
             {[5, 4, 3, 2, 1].map((s) => {
               const count = reviewsList.filter((x) => x.r === s).length;
               const pct = totalReviews > 0 ? (count / totalReviews) * 100 : 0;

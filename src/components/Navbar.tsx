@@ -33,6 +33,17 @@ export default function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (mobileMenu) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileMenu]);
+
+  useEffect(() => {
     setMobileMenu(false);
   }, [router.asPath]);
 
@@ -135,58 +146,100 @@ export default function Navbar() {
             {/* Mobile Hamburger Toggle */}
             <button
               type="button"
-              onClick={() => setMobileMenu(!mobileMenu)}
+              onClick={() => setMobileMenu(true)}
               className="md:hidden p-2 text-zinc-900 hover:text-emerald-700 transition-colors"
               aria-label="Toggle menu"
             >
-              {mobileMenu ? <X size={22} /> : <Menu size={22} />}
+              <Menu size={22} />
             </button>
           </div>
         </div>
+      </header>
 
-        {/* Mobile Navigation Drawer */}
-        {mobileMenu && (
-          <div className="md:hidden border-t border-zinc-200 bg-white/98 backdrop-blur-xl px-5 py-5 flex flex-col gap-3 animate-fadeIn shadow-xl">
-            <div className="flex items-center justify-between pb-3 border-b border-zinc-100">
-              <span className="text-[11px] font-bold tracking-widest uppercase text-zinc-400">Navigation</span>
-              <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                Official Store
-              </span>
+      {/* Full-Screen Mobile Drawer Modal (Never pushes page, zero cut-off) */}
+      {mobileMenu && (
+        <div className="fixed inset-0 z-[1000] md:hidden">
+          {/* Dark Glass Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+            onClick={() => setMobileMenu(false)}
+          />
+
+          {/* Slide-over Drawer Panel */}
+          <div className="fixed inset-y-0 right-0 w-[85%] max-w-sm bg-white shadow-2xl flex flex-col justify-between p-6 z-10 overflow-y-auto">
+            <div>
+              {/* Drawer Header */}
+              <div className="flex items-center justify-between pb-4 border-b border-zinc-100">
+                <Link
+                  href="/"
+                  onClick={() => setMobileMenu(false)}
+                  className="flex items-center gap-2.5"
+                >
+                  <img
+                    src="/images/logo.png"
+                    alt="Hangu Branded Shoes"
+                    className="w-10 h-10 object-contain rounded-full shadow-xs ring-1 ring-zinc-200 bg-white"
+                  />
+                  <div>
+                    <span className="font-black text-sm tracking-[0.16em] text-zinc-950 uppercase leading-none block">
+                      HANGU.
+                    </span>
+                    <span className="text-[9px] font-bold tracking-[0.2em] text-zinc-500 uppercase mt-0.5 block">
+                      Branded Shoes
+                    </span>
+                  </div>
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenu(false)}
+                  className="w-9 h-9 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-700 flex items-center justify-center transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X size={18} />
+                </button>
+              </div>
+
+              {/* Navigation Links */}
+              <nav className="flex flex-col gap-1.5 py-5">
+                {NAV_LINKS.map((link) => {
+                  const isActive = router.pathname === link.href;
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      onClick={() => setMobileMenu(false)}
+                      className={`text-xs font-bold tracking-wider uppercase py-3 px-3.5 rounded-xl flex items-center justify-between transition-colors ${
+                        isActive
+                          ? "bg-zinc-950 text-white font-extrabold shadow-xs"
+                          : "text-zinc-700 hover:bg-zinc-100"
+                      }`}
+                    >
+                      <span>{link.label}</span>
+                      <ArrowUpRight size={14} className={isActive ? "text-white" : "text-zinc-400"} />
+                    </Link>
+                  );
+                })}
+              </nav>
             </div>
 
-            {NAV_LINKS.map((link) => {
-              const isActive = router.pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`text-xs font-bold tracking-wider uppercase py-2 flex items-center justify-between transition-colors ${
-                    isActive ? "text-zinc-950 font-extrabold" : "text-zinc-600 hover:text-zinc-950"
-                  }`}
-                >
-                  <span>{link.label}</span>
-                  <ArrowUpRight size={14} className={isActive ? "text-zinc-950" : "text-zinc-400"} />
-                </Link>
-              );
-            })}
-
-            <div className="pt-3 border-t border-zinc-100 flex flex-col gap-2">
+            {/* Drawer Bottom Actions */}
+            <div className="pt-4 border-t border-zinc-100 flex flex-col gap-2.5">
               <a
                 href={wa("Hello! I have an inquiry about Hangu Branded Shoes.")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition-colors"
+                className="w-full py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition-colors"
               >
                 <WhatsAppIcon size={16} color="#fff" />
                 <span>Chat on WhatsApp (+92 333 3147691)</span>
               </a>
-              <div className="text-center text-[11px] text-zinc-400 pt-1">
+              <div className="text-center text-[11px] text-zinc-400">
                 📍 Tahir Market, Hangu • Fast Nationwide Express
               </div>
             </div>
           </div>
-        )}
-      </header>
+        </div>
+      )}
     </>
   );
 }

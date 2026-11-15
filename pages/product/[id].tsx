@@ -170,45 +170,42 @@ export default function Product() {
             {/* ============================================================ */}
             {/* LEFT COLUMN: Visual Showcase & Gallery                       */}
             {/* ============================================================ */}
-            <div className="lg:col-span-6 flex flex-col gap-4">
-              {/* Warm Cream Luxury Showcase Card (100% Shoe Visibility Without Clipping) */}
-              <div className="relative w-full rounded-2xl sm:rounded-3xl bg-[#fbf4e6] border border-amber-200/60 p-4 sm:p-7 flex flex-col justify-between shadow-xs overflow-hidden min-h-[380px] sm:min-h-[480px] lg:min-h-[560px]">
-                {/* Top-Left Ribbon: Get X% Off */}
-                <div className="absolute top-0 left-4 sm:left-8 z-20">
-                  <div className="bg-[#f59e0b] text-white px-2.5 sm:px-3 py-2.5 sm:py-3.5 rounded-b-xl shadow-md flex flex-col items-center">
-                    <span className="text-[8px] sm:text-[9px] font-extrabold uppercase tracking-widest leading-none">
-                      Get
+            <div className="lg:col-span-6 flex flex-col gap-3">
+              {/* Pure Modern Showcase Frame (100% Full Unobstructed Shoe Display) */}
+              <div className="relative w-full rounded-2xl sm:rounded-3xl bg-white border border-zinc-200/90 shadow-xs overflow-hidden flex flex-col">
+                {/* Floating Badges Header (Top Row) */}
+                <div className="absolute top-3 inset-x-3 z-20 flex items-center justify-between pointer-events-none">
+                  {/* Discount Badge */}
+                  {discount > 0 && (
+                    <span className="bg-zinc-950 text-white text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider shadow-xs pointer-events-auto">
+                      {discount}% OFF
                     </span>
-                    <span className="text-xs sm:text-base font-black mt-0.5 leading-none">{discount}%</span>
-                    <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-wider leading-none mt-0.5">
-                      Off
+                  )}
+
+                  {/* Right: Category + Wishlist */}
+                  <div className="flex items-center gap-2 pointer-events-auto ml-auto">
+                    <span className="bg-white/95 backdrop-blur-md text-zinc-800 text-[10px] sm:text-xs font-bold px-3 py-1 rounded-full border border-zinc-200/80 shadow-2xs">
+                      {p.cat || "Footwear"}
                     </span>
+                    <button
+                      type="button"
+                      onClick={() => setIsWishlisted(!isWishlisted)}
+                      className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border transition-all ${
+                        isWishlisted
+                          ? "bg-rose-50 border-rose-300 text-rose-500 scale-105"
+                          : "bg-white/95 border-zinc-200 text-zinc-500 hover:text-zinc-900 shadow-2xs"
+                      }`}
+                      title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                    >
+                      <Heart size={16} fill={isWishlisted ? "currentColor" : "none"} />
+                    </button>
                   </div>
                 </div>
 
-                {/* Top-Right: Category Pill + Heart Wishlist Button */}
-                <div className="flex items-center justify-end gap-2 z-20">
-                  <span className="bg-white/90 backdrop-blur-xs text-zinc-800 text-[10px] sm:text-xs font-bold px-3 py-1 sm:py-1.5 rounded-full border border-amber-200/80 shadow-2xs">
-                    {p.cat || "Gen Z Fashion"}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center border transition-all ${
-                      isWishlisted
-                        ? "bg-rose-50 border-rose-300 text-rose-500 scale-105"
-                        : "bg-white border-amber-200 text-amber-500 hover:text-amber-600 hover:border-amber-300 shadow-2xs"
-                    }`}
-                    title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
-                  >
-                    <Heart size={16} fill={isWishlisted ? "currentColor" : "none"} />
-                  </button>
-                </div>
-
-                {/* Hero Showcase Center: Large, Bold Shoe Visual (100% Contained, Never Cut Off) */}
-                <div className="relative my-auto py-2 sm:py-4 flex items-center justify-center min-h-[260px] sm:min-h-[380px] lg:min-h-[440px] w-full">
+                {/* Big Full Photo Canvas: 100% visible, clean aspect ratio, no crop, no squish */}
+                <div className="relative w-full aspect-[4/5] sm:aspect-square bg-[#fbfbfb] flex items-center justify-center overflow-hidden">
                   {viewMode === "3d" ? (
-                    <div className="w-full h-72 sm:h-96 flex items-center justify-center">
+                    <div className="w-full h-full flex items-center justify-center p-4">
                       <Shoe3DViewer
                         img={galleryImages[activeImgIndex] || p.img}
                         name={p.name}
@@ -219,12 +216,12 @@ export default function Product() {
                       />
                     </div>
                   ) : (
-                    <div className="relative w-full h-full flex items-center justify-center px-2 sm:px-4">
+                    <div className="w-full h-full flex items-center justify-center p-2 sm:p-4">
                       <img
                         key={activeImgIndex}
                         src={galleryImages[activeImgIndex] || resolveProductImage(p.img)}
                         alt={`${p.name} - Angle ${activeImgIndex + 1}`}
-                        className="w-full max-h-[260px] sm:max-h-[380px] lg:max-h-[440px] object-contain drop-shadow-[0_16px_28px_rgba(0,0,0,0.18)] select-none transition-transform duration-300 ease-out"
+                        className="w-full h-full object-contain select-none transition-transform duration-300 ease-out"
                       />
                     </div>
                   )}
@@ -236,7 +233,7 @@ export default function Product() {
                         type="button"
                         onClick={handlePrevImage}
                         aria-label="Previous shoe angle"
-                        className="absolute left-1 sm:left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-zinc-900 flex items-center justify-center shadow-md border border-amber-200 transition-all z-20 cursor-pointer active:scale-95"
+                        className="absolute left-2.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-zinc-900 flex items-center justify-center shadow-md border border-zinc-200 transition-all z-20 cursor-pointer active:scale-95"
                       >
                         <ChevronLeft size={18} strokeWidth={2.5} />
                       </button>
@@ -244,65 +241,65 @@ export default function Product() {
                         type="button"
                         onClick={handleNextImage}
                         aria-label="Next shoe angle"
-                        className="absolute right-1 sm:right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-zinc-900 flex items-center justify-center shadow-md border border-amber-200 transition-all z-20 cursor-pointer active:scale-95"
+                        className="absolute right-2.5 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-11 sm:h-11 rounded-full bg-white/95 hover:bg-white text-zinc-900 flex items-center justify-center shadow-md border border-zinc-200 transition-all z-20 cursor-pointer active:scale-95"
                       >
                         <ChevronRight size={18} strokeWidth={2.5} />
                       </button>
                     </>
                   )}
                 </div>
+              </div>
 
-                {/* Bottom Row: Genuine Thumbnails / Details + 3D Toggle */}
-                <div className="flex flex-row items-center justify-between gap-2 pt-2.5 sm:pt-3 z-20 border-t border-amber-200/40 w-full overflow-x-auto no-scrollbar">
-                  {galleryImages.length > 1 ? (
-                    <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-                      {galleryImages.map((imgUrl, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => {
-                            setViewMode("photo");
-                            setActiveImgIndex(idx);
-                          }}
-                          className={`w-12 h-12 sm:w-18 sm:h-18 rounded-xl sm:rounded-2xl bg-white p-1.5 sm:p-2 border-2 transition-all overflow-hidden flex items-center justify-center cursor-pointer ${
-                            viewMode === "photo" && activeImgIndex === idx
-                              ? "border-amber-500 ring-2 sm:ring-4 ring-amber-300/80 scale-105 shadow-md"
-                              : "border-transparent hover:border-amber-300 opacity-80 hover:opacity-100 shadow-2xs"
-                          }`}
-                        >
-                          <img
-                            src={imgUrl}
-                            alt={`${p.name} angle ${idx + 1}`}
-                            className="w-full h-full object-contain"
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-1.5 text-[11px] sm:text-xs font-semibold text-zinc-700">
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                      <span>Authentic High-Resolution Photo</span>
-                    </div>
-                  )}
+              {/* Clean Gallery Thumbnails + 3D Toggle Bar (Placed OUTSIDE/BELOW the Photo Canvas) */}
+              <div className="flex items-center justify-between gap-3 px-1 py-1">
+                {galleryImages.length > 1 ? (
+                  <div className="flex items-center gap-2 overflow-x-auto no-scrollbar">
+                    {galleryImages.map((imgUrl, idx) => (
+                      <button
+                        key={idx}
+                        type="button"
+                        onClick={() => {
+                          setViewMode("photo");
+                          setActiveImgIndex(idx);
+                        }}
+                        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-white p-1 border-2 transition-all overflow-hidden flex items-center justify-center cursor-pointer shrink-0 ${
+                          viewMode === "photo" && activeImgIndex === idx
+                            ? "border-zinc-950 ring-2 ring-zinc-950/20 scale-102 shadow-xs"
+                            : "border-zinc-200 opacity-75 hover:opacity-100"
+                        }`}
+                      >
+                        <img
+                          src={imgUrl}
+                          alt={`${p.name} angle ${idx + 1}`}
+                          className="w-full h-full object-contain"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-1.5 text-[11px] text-zinc-500 font-medium">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span>100% Genuine Physical Store Photograph</span>
+                  </div>
+                )}
 
-                  {/* 3D 360° Switcher Pill */}
-                  <button
-                    type="button"
-                    onClick={() => setViewMode(viewMode === "3d" ? "photo" : "3d")}
-                    className={`inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-bold transition-all shadow-xs border cursor-pointer shrink-0 ${
-                      viewMode === "3d"
-                        ? "bg-zinc-950 text-white border-zinc-950 scale-105"
-                        : "bg-white/95 text-zinc-800 hover:text-zinc-950 border-amber-200 hover:border-amber-400"
+                {/* 3D 360° Switcher Button */}
+                <button
+                  type="button"
+                  onClick={() => setViewMode(viewMode === "3d" ? "photo" : "3d")}
+                  className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs font-bold transition-all shadow-xs border cursor-pointer shrink-0 ml-auto ${
+                    viewMode === "3d"
+                      ? "bg-zinc-950 text-white border-zinc-950 scale-102"
+                      : "bg-white text-zinc-800 hover:text-zinc-950 border-zinc-300 hover:border-zinc-400"
+                  }`}
+                >
+                  <span
+                    className={`w-2 h-2 rounded-full ${
+                      viewMode === "3d" ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
                     }`}
-                  >
-                    <span
-                      className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full ${
-                        viewMode === "3d" ? "bg-emerald-400 animate-pulse" : "bg-amber-400"
-                      }`}
-                    />
-                    <span>{viewMode === "3d" ? "📷 Photos" : "🔄 3D View"}</span>
-                  </button>
-                </div>
+                  />
+                  <span>{viewMode === "3d" ? "📷 View Photo" : "🔄 3D 360° View"}</span>
+                </button>
               </div>
 
               {/* Bottom Quick Trust Highlights */}

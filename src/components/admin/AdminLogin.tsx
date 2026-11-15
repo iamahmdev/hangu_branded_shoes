@@ -113,7 +113,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                 <img
                   src="/images/logo.png"
                   alt="Hangu Branded Shoes"
-                  className="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-contain mx-auto bg-white p-2 ring-4 ring-emerald-500/15 shadow-md shadow-slate-300/40 transition-transform hover:scale-105"
+                  className="w-36 h-36 sm:w-44 sm:h-44 rounded-full object-contain mx-auto bg-white p-2.5 ring-4 ring-emerald-500/20 shadow-xl shadow-slate-200/80 transition-transform hover:scale-105"
                 />
               </div>
 

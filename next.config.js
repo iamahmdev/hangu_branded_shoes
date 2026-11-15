@@ -12,7 +12,10 @@ try {
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  compress: true,
+  poweredByHeader: false,
   images: {
+    formats: ["image/avif", "image/webp"],
     domains: [
       "res.cloudinary.com",
       "images.unsplash.com",
@@ -53,6 +56,15 @@ const nextConfig = {
       },
       {
         source: "/fonts/:path*",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      {
+        source: "/_next/static/:path*",
         headers: [
           {
             key: "Cache-Control",

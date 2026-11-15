@@ -1,3 +1,4 @@
+import type { GetStaticProps } from "next";
 import { useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
@@ -8,10 +9,13 @@ import Reviews from "../src/components/Reviews";
 import { WhatsAppIcon } from "../src/components/WhatsAppButton";
 import { wa } from "../src/data/config";
 import { useProducts } from "../src/hooks/useApi";
+import { FALLBACK_PRODUCTS } from "../src/data/fallbackProducts";
+import { Product } from "../src/types";
 import { ArrowRight, Package, Sparkles, CheckCircle2, ShieldCheck, Truck, RotateCcw, Mail } from "lucide-react";
 
-export default function Home() {
+export default function Home({ initialProducts }: { initialProducts?: Product[] }) {
   const { data: products, isLoading } = useProducts();
+  const allProducts = products || initialProducts || FALLBACK_PRODUCTS;
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
 
   const categories = [
@@ -23,7 +27,7 @@ export default function Home() {
     { label: "Boots", val: "Boots" },
   ];
 
-  const filteredShoes = products?.filter((p) => {
+  const filteredShoes = allProducts.filter((p) => {
     if (selectedCategory === "All") return true;
     return p.cat?.toLowerCase() === selectedCategory.toLowerCase();
   });
@@ -243,3 +247,12 @@ export default function Home() {
     </Layout>
   );
 }
+
+export const getStaticProps: GetStaticProps = async () => {
+  return {
+    props: {
+      initialProducts: FALLBACK_PRODUCTS,
+    },
+    revalidate: 60,
+  };
+};

@@ -2,10 +2,40 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../src/lib/dbConnect";
 import Product from "../../../src/models/Product";
 import { FALLBACK_PRODUCTS } from "../../../src/data/fallbackProducts";
+import { verifyToken } from "../../../src/lib/jwt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === "POST") {
+    try {
+      const authHeader = req.headers.authorization;
+      if (!authHeader || !authHeader.startsWith("Bearer ")) {
+        return res.status(401).json({ success: false, message: "Authentication required" });
+      }
+
+      const token = authHeader.split(" ")[1];
+      const decoded = verifyToken(token);
+      if (!decoded) {
+        return res.status(401).json({ success: false, message: "Invalid or expired token" });
+      }
+
+      await dbConnect();
+      const body = req.body || {};
+
+      // Determine next numeric ID if not provided
+      if (!body.id) {
+        const lastProduct = await Product.findOne().sort({ id: -1 }).lean();
+        body.id = lastProduct && (lastProduct as any).id ? (lastProduct as any).id + 1 : Date.now();
+      }
+
+      const created = await Product.create(body);
+      return res.status(201).json({ success: true, data: created, message: "Product created successfully" });
+    } catch (err: any) {
+      return res.status(500).json({ success: false, message: err.message || "Failed to create product" });
+    }
+  }
+
   if (req.method !== "GET") {
-    res.setHeader("Allow", ["GET"]);
+    res.setHeader("Allow", ["GET", "POST"]);
     return res.status(405).json({ success: false, message: `Method ${req.method} Not Allowed` });
   }
 

@@ -138,14 +138,15 @@ export default function AdminLayout({
                 <RefreshCw size={16} className={isRefreshing ? "animate-spin text-emerald-600" : ""} />
               </button>
 
-              {/* Storefront Link */}
+              {/* Website Link */}
               <Link
                 href="/"
                 target="_blank"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium border border-slate-200 transition-colors"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold border border-slate-200 transition-colors"
+                title="Open Website in New Tab"
               >
                 <Store size={14} className="text-emerald-600" />
-                <span>Storefront</span>
+                <span>View Website</span>
                 <ExternalLink size={12} className="text-slate-400" />
               </Link>
 

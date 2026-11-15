@@ -245,10 +245,10 @@ export default function AdminSidebar({
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-lg bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 font-semibold transition-colors shadow-2xs"
-              title="Open Customer Storefront in New Tab"
+              title="Open Website in New Tab"
             >
               <ExternalLink size={12} />
-              <span>Storefront</span>
+              <span>View Website</span>
             </Link>
 
             <button

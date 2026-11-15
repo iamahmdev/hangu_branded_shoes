@@ -88,14 +88,14 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
       </Head>
 
       <div className="min-h-screen bg-slate-50 text-slate-800 font-sans flex flex-col justify-between p-4 md:p-6 relative">
-        {/* Top return link */}
-        <div className="w-full max-w-sm mx-auto flex items-center justify-between z-10 pt-2">
+        {/* Top return button */}
+        <div className="w-full max-w-sm mx-auto flex items-center justify-start z-10 pt-4">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-slate-300 hover:border-slate-400 text-xs font-bold text-slate-800 hover:text-black shadow-xs hover:shadow-sm transition-all cursor-pointer group"
           >
-            <ArrowLeft size={15} />
-            <span>Back to Store</span>
+            <ArrowLeft size={16} className="text-slate-700 group-hover:-translate-x-0.5 transition-transform" />
+            <span>Back to Website</span>
           </Link>
         </div>
 

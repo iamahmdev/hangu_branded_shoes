@@ -204,11 +204,10 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
                     <button
                       type="button"
                       onClick={() => setIsWishlisted(!isWishlisted)}
-                      className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border transition-all ${
-                        isWishlisted
-                          ? "bg-rose-50 border-rose-300 text-rose-500 scale-105"
-                          : "bg-white/95 border-zinc-200 text-zinc-500 hover:text-zinc-900 shadow-2xs"
-                      }`}
+                      className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full flex items-center justify-center border transition-all ${isWishlisted
+                        ? "bg-rose-50 border-rose-300 text-rose-500 scale-105"
+                        : "bg-white/95 border-zinc-200 text-zinc-500 hover:text-zinc-900 shadow-2xs"
+                        }`}
                       title={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
                     >
                       <Heart size={16} fill={isWishlisted ? "currentColor" : "none"} />
@@ -236,14 +235,13 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
                     alt={`${p.name} - Angle ${activeImgIndex + 1}`}
                     loading="eager"
                     decoding="async"
-                    className={`w-full h-full max-h-full max-w-full object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.1)] select-none transition-transform duration-150 ease-out ${
-                      isZoomed ? "scale-175" : "scale-100"
-                    }`}
+                    className={`w-full h-full max-h-full max-w-full object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.1)] select-none transition-transform duration-150 ease-out ${isZoomed ? "scale-175" : "scale-100"
+                      }`}
                     style={
                       isZoomed
                         ? {
-                            transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
-                          }
+                          transformOrigin: `${zoomPos.x}% ${zoomPos.y}%`,
+                        }
                         : undefined
                     }
                   />
@@ -282,11 +280,10 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
                       {galleryImages.map((_, idx) => (
                         <span
                           key={idx}
-                          className={`h-1.5 rounded-full transition-all duration-300 ${
-                            activeImgIndex === idx
-                              ? "w-6 bg-zinc-950 shadow-xs"
-                              : "w-1.5 bg-zinc-400/70"
-                          }`}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${activeImgIndex === idx
+                            ? "w-6 bg-zinc-950 shadow-xs"
+                            : "w-1.5 bg-zinc-400/70"
+                            }`}
                         />
                       ))}
                     </div>
@@ -312,11 +309,10 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
                         key={idx}
                         type="button"
                         onClick={() => setActiveImgIndex(idx)}
-                        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-white p-0.5 border-2 transition-all overflow-hidden flex items-center justify-center cursor-pointer shrink-0 ${
-                          activeImgIndex === idx
-                            ? "border-zinc-950 ring-2 ring-zinc-950/20 scale-102 shadow-xs"
-                            : "border-zinc-200 opacity-70 hover:opacity-100"
-                        }`}
+                        className={`w-14 h-14 sm:w-16 sm:h-16 rounded-xl bg-white p-0.5 border-2 transition-all overflow-hidden flex items-center justify-center cursor-pointer shrink-0 ${activeImgIndex === idx
+                          ? "border-zinc-950 ring-2 ring-zinc-950/20 scale-102 shadow-xs"
+                          : "border-zinc-200 opacity-70 hover:opacity-100"
+                          }`}
                       >
                         <img
                           src={imgUrl}
@@ -509,11 +505,10 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
                         setSize(s);
                         setErr(false);
                       }}
-                      className={`min-w-[48px] sm:min-w-[54px] h-11 sm:h-12 px-2.5 sm:px-3 rounded-xl font-bold text-xs sm:text-sm font-mono transition-all flex items-center justify-center cursor-pointer ${
-                        size === s
-                          ? "bg-zinc-950 text-white shadow-xs scale-102"
-                          : "bg-[#f4f4f6] text-zinc-800 hover:bg-zinc-200 border border-zinc-200/70"
-                      }`}
+                      className={`min-w-[48px] sm:min-w-[54px] h-11 sm:h-12 px-2.5 sm:px-3 rounded-xl font-bold text-xs sm:text-sm font-mono transition-all flex items-center justify-center cursor-pointer ${size === s
+                        ? "bg-zinc-950 text-white shadow-xs scale-102"
+                        : "bg-[#f4f4f6] text-zinc-800 hover:bg-zinc-200 border border-zinc-200/70"
+                        }`}
                     >
                       {s}
                     </button>
@@ -669,11 +664,10 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
                   key={idx}
                   type="button"
                   onClick={() => setActiveImgIndex(idx)}
-                  className={`w-12 h-12 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${
-                    activeImgIndex === idx
-                      ? "border-emerald-400 scale-105"
-                      : "border-transparent opacity-60 hover:opacity-100"
-                  }`}
+                  className={`w-12 h-12 rounded-xl overflow-hidden border-2 transition-all shrink-0 cursor-pointer ${activeImgIndex === idx
+                    ? "border-emerald-400 scale-105"
+                    : "border-transparent opacity-60 hover:opacity-100"
+                    }`}
                 >
                   <img src={imgUrl} alt="Thumbnail" className="w-full h-full object-cover" />
                 </button>

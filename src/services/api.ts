@@ -10,6 +10,7 @@ function getNormalizedApiBase(): string {
     if (!isLocal) {
       return `${window.location.origin}/api`;
     }
+    return "http://localhost:5001/api";
   }
 
   const envUrl = process.env.NEXT_PUBLIC_API_URL?.trim();
@@ -20,10 +21,9 @@ function getNormalizedApiBase(): string {
   return "http://localhost:5001/api";
 }
 
-let cachedApiBase: string = getNormalizedApiBase();
-
-async function requestApi(path: string, options?: RequestInit, timeoutMs: number = 10000): Promise<Response> {
+async function requestApi(path: string, options?: RequestInit, timeoutMs: number = 20000): Promise<Response> {
   const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  const base = getNormalizedApiBase();
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
@@ -33,19 +33,18 @@ async function requestApi(path: string, options?: RequestInit, timeoutMs: number
   };
 
   try {
-    const res = await fetch(`${cachedApiBase}${normalizedPath}`, fetchOptions);
+    const res = await fetch(`${base}${normalizedPath}`, fetchOptions);
     clearTimeout(timeoutId);
     return res;
   } catch (primaryErr: any) {
     clearTimeout(timeoutId);
     // Only attempt localhost port fallback during local development
-    if (cachedApiBase.includes("localhost") || cachedApiBase.includes("127.0.0.1")) {
-      const fallbackBase = cachedApiBase.includes("5000")
+    if (typeof window !== "undefined" && (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")) {
+      const fallbackBase = base.includes("5000")
         ? "http://localhost:5001/api"
         : "http://localhost:5000/api";
       try {
         const res = await fetch(`${fallbackBase}${normalizedPath}`, options);
-        cachedApiBase = fallbackBase;
         return res;
       } catch {
         // Fallback failed

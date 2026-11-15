@@ -151,7 +151,7 @@ export default function AdminLayout({
 
               {/* Admin Profile Pill (matching eMart Cyndy Littlebridge / Super Admin) */}
               <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
-                <div className="w-8 h-8 rounded-full bg-slate-900 text-emerald-400 font-bold text-xs flex items-center justify-center shadow-sm">
+                <div className="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
                   {(adminUser?.username || "A").charAt(0).toUpperCase()}
                 </div>
                 <div className="hidden sm:flex flex-col text-left">

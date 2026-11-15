@@ -403,10 +403,11 @@ export default function DashboardOverview({
                         <td className="p-3.5 text-right whitespace-nowrap">
                           <button
                             onClick={() => onInspectOrder(o)}
-                            className="p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-slate-900 transition-colors"
-                            title="Inspect Order Details"
+                            className="px-3 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs inline-flex items-center gap-1 shadow-xs transition-colors"
+                            title="Open Order Details"
                           >
-                            <Eye size={14} />
+                            <Eye size={12} />
+                            <span>Open</span>
                           </button>
                         </td>
                       </tr>

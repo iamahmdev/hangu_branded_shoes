@@ -317,10 +317,11 @@ export default function OrdersTab({
                         <div className="flex items-center justify-end gap-1.5">
                           <button
                             onClick={() => onSelectOrder(ord)}
-                            className="p-2 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-600 hover:text-emerald-700 border border-slate-200 transition-colors"
-                            title="Inspect Order Details & Verify Payment"
+                            className="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs inline-flex items-center gap-1.5 shadow-xs transition-colors"
+                            title="Open Order Details"
                           >
-                            <Eye size={14} />
+                            <Eye size={13} />
+                            <span>Open</span>
                           </button>
 
                           <button

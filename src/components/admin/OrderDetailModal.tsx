@@ -190,10 +190,10 @@ export default function OrderDetailModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[120] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
-      <div className="glass p-6 md:p-8 rounded-3xl max-w-2xl w-full border border-white/15 bg-zinc-950/95 shadow-2xl relative my-8">
+    <div className="fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fadeIn">
+      <div className="bg-white p-5 sm:p-7 md:p-8 rounded-3xl max-w-2xl w-full border border-slate-200/90 shadow-2xl relative my-6 text-slate-800">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-6">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
           <div className="flex items-center gap-2.5 flex-wrap">
             <span
               className={`px-3 py-1 rounded-full text-xs font-extrabold uppercase border ${statusMeta.bg} ${statusMeta.text} ${statusMeta.border}`}
@@ -201,19 +201,19 @@ export default function OrderDetailModal({
               {order.status.replace("_", " ")}
             </span>
             {isCod ? (
-              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center gap-1">
+              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
                 <Banknote size={13} /> Cash on Delivery
               </span>
             ) : (
-              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-red-500/20 text-red-300 border border-red-500/30 flex items-center gap-1">
+              <span className="px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide bg-red-50 text-red-700 border border-red-200 flex items-center gap-1">
                 <Smartphone size={13} /> JazzCash
               </span>
             )}
             <div>
-              <h2 className="text-lg md:text-xl font-bold text-white font-mono">
+              <h2 className="text-base sm:text-lg font-bold text-slate-900 font-mono">
                 Order #{order.orderId}
               </h2>
-              <span className="text-xs text-zinc-400 block mt-0.5">
+              <span className="text-[11px] text-slate-500 block">
                 Placed on {new Date(order.createdAt || Date.now()).toLocaleString("en-PK")}
               </span>
             </div>
@@ -221,7 +221,7 @@ export default function OrderDetailModal({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-white/10 text-zinc-400 hover:text-white transition-colors"
+            className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition-colors"
             aria-label="Close Modal"
           >
             <X size={20} />
@@ -229,33 +229,33 @@ export default function OrderDetailModal({
         </div>
 
         {/* Customer Information & Delivery Details */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-          <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-brand-gold block mb-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-5">
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-2">
               Customer Details
             </span>
             <div className="space-y-1.5 text-xs">
-              <div className="flex items-center gap-2 text-white font-semibold">
-                <User size={14} className="text-zinc-400 shrink-0" />
+              <div className="flex items-center gap-2 text-slate-900 font-bold">
+                <User size={14} className="text-slate-400 shrink-0" />
                 <span>{order.customer?.name}</span>
               </div>
-              <div className="flex items-center gap-2 text-zinc-300">
-                <Phone size={14} className="text-zinc-400 shrink-0" />
-                <span className="font-mono">{order.customer?.phone}</span>
+              <div className="flex items-center gap-2 text-slate-700">
+                <Phone size={14} className="text-slate-400 shrink-0" />
+                <span className="font-mono font-bold text-emerald-700">{order.customer?.phone}</span>
               </div>
             </div>
           </div>
 
-          <div className="p-4 rounded-2xl bg-white/5 border border-white/10">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-brand-gold block mb-2">
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block mb-2">
               Delivery Destination
             </span>
-            <div className="space-y-1.5 text-xs text-zinc-300">
-              <div className="flex items-center gap-2 text-white font-semibold">
-                <MapPin size={14} className="text-zinc-400 shrink-0" />
+            <div className="space-y-1.5 text-xs text-slate-700">
+              <div className="flex items-center gap-2 text-slate-900 font-bold">
+                <MapPin size={14} className="text-slate-400 shrink-0" />
                 <span>{order.customer?.city}</span>
               </div>
-              <p className="text-[11px] text-zinc-400 pl-5 leading-relaxed">
+              <p className="text-[11px] text-slate-600 pl-5 leading-relaxed">
                 {order.customer?.address}
               </p>
             </div>
@@ -264,34 +264,34 @@ export default function OrderDetailModal({
 
         {/* Payment Verification / Details Card */}
         {isCod ? (
-          <div className="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 mb-6">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-300 flex items-center gap-1.5">
+          <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 mb-5">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-amber-800 flex items-center gap-1.5">
                 <Banknote size={15} /> Cash on Delivery (COD) Details
               </span>
               <span
-                className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase border ${paymentMeta.bg} ${paymentMeta.text} ${paymentMeta.border}`}
+                className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border ${paymentMeta.bg} ${paymentMeta.text} ${paymentMeta.border}`}
               >
                 {paymentMeta.label}
               </span>
             </div>
 
             <div className="text-xs space-y-2">
-              <p className="text-zinc-300 leading-relaxed">
-                No advance payment received. Rider will collect exact cash of{" "}
-                <strong className="text-brand-gold font-mono font-bold text-sm">
+              <p className="text-slate-700 leading-relaxed">
+                Rider will collect exact cash of{" "}
+                <strong className="text-slate-900 font-mono font-bold text-sm">
                   Rs. {(order.totalAmount || 0).toLocaleString()}
                 </strong>{" "}
                 upon delivery at customer's doorstep.
               </p>
 
-              <div className="pt-2 flex flex-wrap items-center gap-2.5">
+              <div className="pt-2 flex flex-wrap items-center gap-2">
                 {!isPaid && (
                   <button
                     type="button"
                     disabled={cashCollectedLoading}
                     onClick={handleMarkCashCollected}
-                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-green-600 hover:bg-green-500 text-white disabled:opacity-40 flex items-center gap-1.5 transition-all shadow-md"
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-40 flex items-center gap-1.5 transition-all shadow-xs"
                   >
                     <CheckCircle2 size={14} />
                     <span>{cashCollectedLoading ? "Updating..." : "Mark Cash Collected (Delivered)"}</span>
@@ -302,7 +302,7 @@ export default function OrderDetailModal({
                   <button
                     type="button"
                     onClick={() => setFakeModalOpen(true)}
-                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-red-500/15 hover:bg-red-500/25 text-red-300 border border-red-500/30 flex items-center gap-1.5 transition-all"
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 flex items-center gap-1.5 transition-all"
                   >
                     <ShieldAlert size={14} />
                     <span>Mark as Fake / Unreachable</span>
@@ -312,31 +312,31 @@ export default function OrderDetailModal({
             </div>
           </div>
         ) : (
-          <div className="p-4 rounded-2xl bg-white/5 border border-white/10 mb-6">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-brand-gold flex items-center gap-1.5">
-                <ShieldCheck size={14} /> JazzCash Payment Verification
+          <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 mb-5">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                <ShieldCheck size={14} className="text-emerald-600" /> JazzCash Payment Verification
               </span>
               <span
-                className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase border ${paymentMeta.bg} ${paymentMeta.text} ${paymentMeta.border}`}
+                className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase border ${paymentMeta.bg} ${paymentMeta.text} ${paymentMeta.border}`}
               >
                 {paymentMeta.label}
               </span>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
-                <span className="text-zinc-400 block text-[11px]">Submitted JazzCash TID:</span>
-                <strong className="text-white font-mono text-sm block mt-0.5 bg-black/40 px-3 py-1.5 rounded-xl border border-white/10 w-fit">
+                <span className="text-slate-500 block text-[11px]">Submitted JazzCash TID:</span>
+                <strong className="text-slate-900 font-mono text-sm block mt-0.5 bg-white px-3 py-1.5 rounded-xl border border-slate-200 w-fit">
                   {order.transactionId || "No TID Provided"}
                 </strong>
 
-                <div className="mt-4 flex items-center gap-2">
+                <div className="mt-3 flex items-center gap-2">
                   <button
                     type="button"
                     disabled={paymentActionLoading || isPaid}
                     onClick={() => handlePaymentChange("paid")}
-                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-green-600 hover:bg-green-500 text-white disabled:opacity-40 flex items-center gap-1.5 transition-all shadow-md"
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-40 flex items-center gap-1.5 transition-all shadow-xs"
                   >
                     <CheckCircle2 size={14} />
                     <span>Mark as Paid</span>
@@ -346,7 +346,7 @@ export default function OrderDetailModal({
                     type="button"
                     disabled={paymentActionLoading || order.paymentStatus === "rejected"}
                     onClick={() => handlePaymentChange("rejected")}
-                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-red-600/80 hover:bg-red-500 text-white disabled:opacity-40 flex items-center gap-1.5 transition-all"
+                    className="px-3.5 py-2 rounded-xl text-xs font-bold bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 disabled:opacity-40 flex items-center gap-1.5 transition-all"
                   >
                     <XCircle size={14} />
                     <span>Reject Payment</span>
@@ -355,9 +355,9 @@ export default function OrderDetailModal({
               </div>
 
               <div>
-                <span className="text-zinc-400 block text-[11px] mb-1">Payment Receipt Screenshot:</span>
+                <span className="text-slate-500 block text-[11px] mb-1">Payment Receipt:</span>
                 {order.paymentScreenshot ? (
-                  <div className="relative group w-32 h-24 rounded-xl overflow-hidden border border-white/20 bg-zinc-900 cursor-pointer">
+                  <div className="relative group w-32 h-20 rounded-xl overflow-hidden border border-slate-200 bg-slate-100 cursor-pointer">
                     <img
                       src={order.paymentScreenshot}
                       alt="Payment Screenshot"
@@ -366,14 +366,14 @@ export default function OrderDetailModal({
                     />
                     <div
                       onClick={() => setScreenshotModalOpen(true)}
-                      className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[11px] font-bold transition-opacity"
+                      className="absolute inset-0 bg-slate-900/60 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white text-[11px] font-bold transition-opacity"
                     >
                       View Full
                     </div>
                   </div>
                 ) : (
-                  <p className="text-zinc-500 text-xs italic bg-white/5 p-3 rounded-xl border border-white/5">
-                    No payment screenshot uploaded. Customer should send receipt via WhatsApp.
+                  <p className="text-slate-500 text-xs italic bg-white p-2.5 rounded-xl border border-slate-200">
+                    No receipt uploaded. Customer can send receipt via WhatsApp.
                   </p>
                 )}
               </div>
@@ -382,31 +382,31 @@ export default function OrderDetailModal({
         )}
 
         {/* Ordered Footwear Items */}
-        <div className="mb-6">
-          <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider mb-3">
-            Ordered Items ({order.items?.length || 1})
+        <div className="mb-5">
+          <h4 className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-2">
+            Ordered Footwear ({order.items?.length || 1})
           </h4>
-          <div className="divide-y divide-white/10 border border-white/10 rounded-2xl overflow-hidden bg-black/40">
+          <div className="divide-y divide-slate-100 border border-slate-200 rounded-2xl overflow-hidden bg-slate-50/40">
             {(order.items || []).map((it: any, i: number) => (
-              <div key={i} className="p-3.5 flex items-center justify-between gap-4 text-xs">
+              <div key={i} className="p-3 flex items-center justify-between gap-3 text-xs">
                 <div className="flex items-center gap-3 min-w-0">
                   <img
                     src={resolveProductImage(it.img)}
                     alt={it.name}
-                    className="w-12 h-12 rounded-xl object-cover bg-zinc-900 border border-white/10 shrink-0"
+                    className="w-12 h-12 rounded-xl object-contain bg-white border border-slate-200 shrink-0 p-1"
                   />
                   <div className="min-w-0">
-                    <b className="text-white block truncate">{it.name}</b>
-                    <span className="text-zinc-400 text-[11px]">
-                      Size: <b className="text-brand-gold font-mono">{it.size}</b> | Qty: {it.quantity}
+                    <b className="text-slate-900 block truncate">{it.name}</b>
+                    <span className="text-slate-500 text-[11px]">
+                      Size: <b className="text-emerald-700 font-mono">{it.size}</b> | Qty: {it.quantity}
                     </span>
                   </div>
                 </div>
                 <div className="text-right shrink-0">
-                  <b className="text-brand-gold font-mono block">
+                  <b className="text-slate-900 font-mono block">
                     Rs. {(it.total || it.price * it.quantity || 0).toLocaleString()}
                   </b>
-                  <span className="text-[10px] text-zinc-500">
+                  <span className="text-[10px] text-slate-400">
                     Rs. {(it.price || 0).toLocaleString()} each
                   </span>
                 </div>
@@ -415,26 +415,26 @@ export default function OrderDetailModal({
           </div>
 
           {/* Pricing breakdown */}
-          <div className="mt-3 p-3.5 rounded-2xl bg-white/5 border border-white/10 space-y-1 text-xs">
-            <div className="flex justify-between text-zinc-400">
+          <div className="mt-2.5 p-3 rounded-2xl bg-slate-50 border border-slate-200 space-y-1 text-xs">
+            <div className="flex justify-between text-slate-600">
               <span>Subtotal:</span>
               <span className="font-mono">Rs. {(order.subtotal || 0).toLocaleString()}</span>
             </div>
-            <div className="flex justify-between text-zinc-400">
-              <span>Delivery Shipping:</span>
+            <div className="flex justify-between text-slate-600">
+              <span>Delivery Fee:</span>
               <span className="font-mono">
                 {order.shippingFee === 0 ? "FREE" : `Rs. ${order.shippingFee}`}
               </span>
             </div>
             {isCod && Number(order.codFee) > 0 && (
-              <div className="flex justify-between text-amber-300">
+              <div className="flex justify-between text-amber-700">
                 <span>COD Handling Fee:</span>
                 <span className="font-mono">Rs. {Number(order.codFee).toLocaleString()}</span>
               </div>
             )}
-            <div className="pt-2 border-t border-white/10 flex justify-between text-sm font-bold text-white">
+            <div className="pt-2 border-t border-slate-200 flex justify-between text-sm font-bold text-slate-900">
               <span>{isCod ? "Cash Due on Delivery:" : "Total Payable (JazzCash):"}</span>
-              <span className="text-brand-gold font-mono font-extrabold text-base">
+              <span className="text-emerald-700 font-mono font-extrabold text-base">
                 Rs. {(order.totalAmount || 0).toLocaleString()}
               </span>
             </div>
@@ -442,25 +442,26 @@ export default function OrderDetailModal({
         </div>
 
         {/* Courier & Tracking Logistics (Optional) */}
-        <div className="p-4 rounded-2xl bg-white/5 border border-white/10 mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-brand-gold flex items-center gap-1.5">
-              <Truck size={14} /> Shipping & Courier Logistics (Optional)
+        <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 mb-5">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+              <Truck size={14} className="text-emerald-600" /> Shipping & Courier Logistics (Optional)
             </span>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3">
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-2.5">
             <div>
-              <label className="text-[11px] font-semibold text-zinc-400 block mb-1">
-                Courier Company (Optional)
+              <label className="text-[11px] font-semibold text-slate-600 block mb-1">
+                Courier Company
               </label>
               <select
                 value={courierName}
                 onChange={(e) => setCourierName(e.target.value)}
-                className="w-full bg-zinc-900 border border-white/15 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-brand-gold"
+                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 outline-none focus:border-emerald-500"
               >
-                <option value="">No Courier Assigned / In-Person</option>
+                <option value="">No Courier Assigned / Rider</option>
                 {COURIER_OPTIONS.map((c) => (
-                  <option key={c} value={c} className="bg-zinc-950 text-white">
+                  <option key={c} value={c}>
                     {c}
                   </option>
                 ))}
@@ -468,63 +469,69 @@ export default function OrderDetailModal({
             </div>
 
             <div>
-              <label className="text-[11px] font-semibold text-zinc-400 block mb-1">
-                Tracking Number / Airway Bill (Optional)
+              <label className="text-[11px] font-semibold text-slate-600 block mb-1">
+                Tracking Number
               </label>
               <input
                 type="text"
                 value={trackingNumber}
                 onChange={(e) => setTrackingNumber(e.target.value)}
                 placeholder="e.g. 123456789"
-                className="w-full bg-zinc-900 border border-white/15 rounded-xl px-3 py-2 text-xs text-white font-mono outline-none focus:border-brand-gold"
+                className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 font-mono outline-none focus:border-emerald-500"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-[11px] font-semibold text-zinc-400 block mb-1">
-              Delivery Note (Optional, e.g. "Sent with local rider", "Deliver after 4 PM")
+            <label className="text-[11px] font-semibold text-slate-600 block mb-1">
+              Delivery Note (e.g. "Sent with local rider", "Deliver after 4 PM")
             </label>
             <input
               type="text"
               value={deliveryNote}
               onChange={(e) => setDeliveryNote(e.target.value)}
               placeholder="e.g. Sent with local rider"
-              className="w-full bg-zinc-900 border border-white/15 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-brand-gold"
+              className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 outline-none focus:border-emerald-500"
             />
           </div>
         </div>
 
-        {/* Status Actions */}
-        <div className="space-y-3 mb-6">
+        {/* Status Actions - Big Simple Buttons Like for a 10-Year-Old! */}
+        <div className="space-y-2 mb-5">
           <div className="flex items-center justify-between">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-zinc-400 block">
-              Update Order Status
+            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-600 block">
+              1-Click Status Update:
             </span>
             {!canConfirm && (
-              <span className="text-[11px] text-amber-400 flex items-center gap-1 font-medium">
-                <AlertTriangle size={13} /> JazzCash order requires "Paid" status before confirmation
+              <span className="text-[11px] text-amber-600 flex items-center gap-1 font-medium">
+                <AlertTriangle size={13} /> JazzCash order requires "Paid" status first
               </span>
             )}
           </div>
-          <div className="flex flex-wrap gap-2">
-            {["confirmed", "dispatched", "delivered", "cancelled"].map((st) => {
-              const cannotConfirm = st === "confirmed" && !canConfirm;
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+            {[
+              { id: "confirmed", label: "Confirm Order", color: "bg-blue-600 hover:bg-blue-700 text-white" },
+              { id: "dispatched", label: "Mark Dispatched", color: "bg-amber-500 hover:bg-amber-600 text-white" },
+              { id: "delivered", label: "Delivered & Paid", color: "bg-emerald-600 hover:bg-emerald-700 text-white" },
+              { id: "cancelled", label: "Cancel Order", color: "bg-rose-600 hover:bg-rose-700 text-white" },
+            ].map((st) => {
+              const isCurrent = order.status === st.id;
+              const cannotConfirm = st.id === "confirmed" && !canConfirm;
               return (
                 <button
-                  key={st}
-                  disabled={updating || order.status === st || cannotConfirm}
-                  onClick={() => handleStatusChange(st)}
-                  className={`px-3 py-2 rounded-xl text-xs font-bold uppercase transition-all ${
-                    order.status === st
-                      ? "bg-white/20 text-white cursor-default"
+                  key={st.id}
+                  disabled={updating || isCurrent || cannotConfirm}
+                  onClick={() => handleStatusChange(st.id)}
+                  className={`py-2.5 px-3 rounded-xl text-xs font-bold transition-all shadow-xs flex items-center justify-center text-center ${
+                    isCurrent
+                      ? "bg-slate-200 text-slate-500 cursor-default opacity-60 border border-slate-300"
                       : cannotConfirm
-                      ? "bg-white/5 text-zinc-600 border border-white/5 cursor-not-allowed opacity-50"
-                      : "bg-white/5 hover:bg-white/15 text-zinc-300 border border-white/10"
+                      ? "bg-slate-100 text-slate-400 cursor-not-allowed opacity-50"
+                      : st.color
                   }`}
                   title={cannotConfirm ? "JazzCash order requires payment verification first" : undefined}
                 >
-                  Mark {st}
+                  {isCurrent ? `✓ ${st.label}` : st.label}
                 </button>
               );
             })}
@@ -532,19 +539,19 @@ export default function OrderDetailModal({
         </div>
 
         {/* Footer Actions */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-4 border-t border-white/10">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-100">
           <div className="flex items-center gap-2">
             <button
               onClick={handleWhatsAppCustomer}
-              className="btn py-2.5 px-4 text-xs font-bold bg-[#25d366] hover:bg-[#20ba59] text-black inline-flex items-center gap-1.5 shadow-glow"
+              className="py-2 px-4 text-xs font-bold bg-[#25d366] hover:bg-[#20ba59] text-white rounded-xl inline-flex items-center gap-1.5 shadow-sm transition-colors"
             >
-              <WhatsAppIcon size={16} color="#000" />
+              <WhatsAppIcon size={16} color="#fff" />
               <span>WhatsApp Customer</span>
             </button>
 
             <button
               onClick={() => window.print()}
-              className="btn ghost py-2.5 px-3.5 text-xs text-zinc-300 hover:text-white inline-flex items-center gap-1.5"
+              className="py-2 px-3.5 text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl inline-flex items-center gap-1.5 transition-colors border border-slate-200"
             >
               <Printer size={14} />
               <span>Print Invoice</span>
@@ -558,7 +565,7 @@ export default function OrderDetailModal({
                 onClose();
               }
             }}
-            className="text-xs text-red-400 hover:text-red-300 flex items-center gap-1 p-2"
+            className="text-xs text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100 border border-rose-200 px-3 py-1.5 rounded-xl flex items-center gap-1 font-semibold transition-colors"
           >
             <Trash2 size={14} />
             <span>Delete Order</span>
@@ -568,35 +575,35 @@ export default function OrderDetailModal({
 
       {/* Fake Order & Block Confirmation Modal */}
       {fakeModalOpen && (
-        <div className="fixed inset-0 z-[140] bg-black/90 flex items-center justify-center p-4 animate-fadeIn">
-          <div className="glass max-w-md w-full p-6 rounded-3xl border border-red-500/30 bg-zinc-950">
-            <div className="flex items-center gap-3 text-red-400 mb-3">
+        <div className="fixed inset-0 z-[140] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn">
+          <div className="bg-white max-w-md w-full p-6 rounded-3xl border border-rose-200 shadow-2xl text-slate-800">
+            <div className="flex items-center gap-3 text-rose-600 mb-3">
               <ShieldAlert size={24} />
-              <h3 className="text-base font-bold text-white">Mark as Fake / Unreachable</h3>
+              <h3 className="text-base font-bold text-slate-900">Mark as Fake / Unreachable</h3>
             </div>
-            <p className="text-xs text-zinc-300 leading-relaxed mb-4">
+            <p className="text-xs text-slate-600 leading-relaxed mb-4">
               This action will <strong>cancel Order #{order.orderId}</strong> and <strong>immediately restore the shoe stock</strong> to your inventory.
             </p>
 
             <div className="mb-4">
-              <label className="text-xs text-zinc-400 block mb-1">Reason for cancellation:</label>
+              <label className="text-xs font-semibold text-slate-600 block mb-1">Reason for cancellation:</label>
               <input
                 type="text"
                 value={fakeReason}
                 onChange={(e) => setFakeReason(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-xs text-white outline-none focus:border-red-400"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-xs text-slate-800 outline-none focus:border-rose-400"
               />
             </div>
 
-            <label className="flex items-center gap-2.5 p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-xs text-red-200 cursor-pointer mb-5">
+            <label className="flex items-center gap-2.5 p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-900 cursor-pointer mb-5">
               <input
                 type="checkbox"
                 checked={blockPhoneChecked}
                 onChange={(e) => setBlockPhoneChecked(e.target.checked)}
-                className="rounded accent-red-500"
+                className="rounded accent-rose-600"
               />
               <span>
-                Block phone number <strong className="font-mono text-white">{order.customer?.phone}</strong> from placing future orders
+                Block phone number <strong className="font-mono text-rose-950 font-bold">{order.customer?.phone}</strong> from future orders
               </span>
             </label>
 
@@ -604,7 +611,7 @@ export default function OrderDetailModal({
               <button
                 type="button"
                 onClick={() => setFakeModalOpen(false)}
-                className="px-4 py-2 rounded-xl text-xs text-zinc-400 hover:text-white"
+                className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 hover:bg-slate-100 transition-colors"
               >
                 Cancel
               </button>
@@ -612,7 +619,7 @@ export default function OrderDetailModal({
                 type="button"
                 disabled={fakeActionLoading}
                 onClick={handleConfirmFakeOrder}
-                className="px-4 py-2 rounded-xl text-xs font-bold bg-red-600 hover:bg-red-500 text-white disabled:opacity-50"
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white disabled:opacity-50 transition-colors shadow-xs"
               >
                 {fakeActionLoading ? "Processing..." : "Confirm & Restore Stock"}
               </button>
@@ -624,10 +631,10 @@ export default function OrderDetailModal({
       {/* Full Screenshot Modal Preview */}
       {screenshotModalOpen && order.paymentScreenshot && (
         <div
-          className="fixed inset-0 z-[130] bg-black/90 flex items-center justify-center p-4 animate-fadeIn"
+          className="fixed inset-0 z-[130] bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 animate-fadeIn"
           onClick={() => setScreenshotModalOpen(false)}
         >
-          <div className="relative max-w-3xl max-h-[90vh] bg-zinc-950 p-2 rounded-2xl border border-white/20">
+          <div className="relative max-w-3xl max-h-[90vh] bg-white p-2 rounded-2xl border border-slate-200 shadow-2xl">
             <img
               src={order.paymentScreenshot}
               alt="Payment Screenshot Full Preview"
@@ -635,7 +642,7 @@ export default function OrderDetailModal({
             />
             <button
               onClick={() => setScreenshotModalOpen(false)}
-              className="absolute top-4 right-4 bg-black/80 hover:bg-black text-white p-2 rounded-full"
+              className="absolute top-4 right-4 bg-white/95 hover:bg-white text-slate-900 border border-slate-200 p-2 rounded-full shadow-lg transition-transform hover:scale-105"
             >
               <X size={18} />
             </button>

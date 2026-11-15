@@ -117,22 +117,22 @@ export default function ProductModal({
   };
 
   return (
-    <div className="fixed inset-0 z-[120] bg-black/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto animate-fadeIn">
-      <div className="glass p-6 md:p-8 rounded-3xl max-w-xl w-full border border-white/15 bg-zinc-950/95 shadow-2xl relative my-8">
-        <div className="flex items-center justify-between pb-4 border-b border-white/10 mb-5">
-          <h2 className="text-lg md:text-xl font-bold text-white">
-            {isEditing ? `Edit Product #${form.id}` : "Add New Footwear Model"}
+    <div className="fixed inset-0 z-[120] bg-black/60 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto animate-fadeIn">
+      <div className="bg-white p-5 sm:p-7 md:p-8 rounded-3xl max-w-xl w-full border border-slate-200/90 shadow-2xl relative my-6 text-slate-800">
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
+          <h2 className="text-base sm:text-lg font-bold text-slate-900">
+            {isEditing ? `Edit Shoe Model #${form.id}` : "Add New Shoe to Store"}
           </h2>
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-white/10 text-zinc-400 hover:text-white transition-colors"
+            className="p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-800 transition-colors"
           >
             <X size={20} />
           </button>
         </div>
 
         {error && (
-          <div className="p-3.5 rounded-2xl bg-red-500/15 border border-red-500/30 text-red-400 text-xs mb-4">
+          <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs mb-4">
             {error}
           </div>
         )}
@@ -141,25 +141,25 @@ export default function ProductModal({
           {/* Title & Category */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div className="sm:col-span-2">
-              <label className="text-zinc-300 font-semibold block mb-1">Product Title</label>
+              <label className="text-slate-700 font-semibold block mb-1">Shoe Name / Title</label>
               <input
                 type="text"
                 required
                 value={form.name}
                 onChange={(e) => setForm({ ...form, name: e.target.value })}
-                placeholder="e.g. Oxford Cap-Toe Royal Leather"
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-white outline-none focus:border-brand-gold"
+                placeholder="e.g. Royal Cap-Toe Leather Oxford"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 outline-none focus:border-emerald-500 focus:bg-white transition-colors"
               />
             </div>
             <div>
-              <label className="text-zinc-300 font-semibold block mb-1">Category</label>
+              <label className="text-slate-700 font-semibold block mb-1">Category</label>
               <select
                 value={form.cat}
                 onChange={(e) => setForm({ ...form, cat: e.target.value })}
-                className="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2.5 text-white outline-none focus:border-brand-gold"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-900 outline-none focus:border-emerald-500 focus:bg-white cursor-pointer"
               >
                 {CATEGORIES.map((c) => (
-                  <option key={c} value={c} className="bg-zinc-950 text-white">
+                  <option key={c} value={c}>
                     {c}
                   </option>
                 ))}
@@ -170,35 +170,35 @@ export default function ProductModal({
           {/* Pricing & Stock */}
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <label className="text-zinc-300 font-semibold block mb-1">Sale Price (Rs.)</label>
+              <label className="text-slate-700 font-semibold block mb-1">Price (Rs.)</label>
               <input
                 type="number"
                 required
                 min={0}
                 value={form.price}
                 onChange={(e) => setForm({ ...form, price: Number(e.target.value) })}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-brand-gold font-mono font-bold outline-none focus:border-brand-gold"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-emerald-700 font-mono font-bold outline-none focus:border-emerald-500 focus:bg-white"
               />
             </div>
             <div>
-              <label className="text-zinc-300 font-semibold block mb-1">Original Price (Rs.)</label>
+              <label className="text-slate-700 font-semibold block mb-1">Cut Price (Rs.)</label>
               <input
                 type="number"
                 min={0}
                 value={form.old}
                 onChange={(e) => setForm({ ...form, old: Number(e.target.value) })}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-zinc-400 font-mono outline-none focus:border-brand-gold"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-400 font-mono outline-none focus:border-emerald-500 focus:bg-white"
               />
             </div>
             <div>
-              <label className="text-zinc-300 font-semibold block mb-1">Inventory Stock</label>
+              <label className="text-slate-700 font-semibold block mb-1">Total Stock</label>
               <input
                 type="number"
                 required
                 min={0}
                 value={form.stock}
                 onChange={(e) => setForm({ ...form, stock: Number(e.target.value) })}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-white font-mono outline-none focus:border-brand-gold"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 font-mono font-bold outline-none focus:border-emerald-500 focus:bg-white"
               />
             </div>
           </div>
@@ -206,34 +206,34 @@ export default function ProductModal({
           {/* Badge & Brand */}
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-zinc-300 font-semibold block mb-1">Badge Tag</label>
+              <label className="text-slate-700 font-semibold block mb-1">Badge Tag</label>
               <select
                 value={form.tag || "None"}
                 onChange={(e) => setForm({ ...form, tag: e.target.value === "None" ? "" : e.target.value })}
-                className="w-full bg-zinc-900 border border-white/10 rounded-xl px-3 py-2.5 text-white outline-none focus:border-brand-gold"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-slate-900 outline-none focus:border-emerald-500 focus:bg-white cursor-pointer"
               >
                 {BADGES.map((b) => (
-                  <option key={b} value={b} className="bg-zinc-950 text-white">
+                  <option key={b} value={b}>
                     {b}
                   </option>
                 ))}
               </select>
             </div>
             <div>
-              <label className="text-zinc-300 font-semibold block mb-1">Brand Name</label>
+              <label className="text-slate-700 font-semibold block mb-1">Brand Name</label>
               <input
                 type="text"
                 value={form.brand || "Hangu Branded Shoes"}
                 onChange={(e) => setForm({ ...form, brand: e.target.value })}
-                className="w-full bg-white/5 border border-white/10 rounded-xl px-3.5 py-2.5 text-white outline-none focus:border-brand-gold"
+                className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 outline-none focus:border-emerald-500 focus:bg-white"
               />
             </div>
           </div>
 
           {/* Sizes Selection */}
           <div>
-            <label className="text-zinc-300 font-semibold block mb-1.5">
-              Available Shoe Sizes (EU / PK)
+            <label className="text-slate-700 font-semibold block mb-1.5">
+              Available Shoe Sizes (Click to toggle)
             </label>
             <div className="flex items-center gap-2 flex-wrap">
               {AVAILABLE_SIZES.map((sz) => {
@@ -243,10 +243,10 @@ export default function ProductModal({
                     type="button"
                     key={sz}
                     onClick={() => toggleSize(sz)}
-                    className={`w-9 h-9 rounded-xl font-bold font-mono text-xs transition-all ${
+                    className={`w-10 h-10 rounded-xl font-bold font-mono text-xs transition-all flex items-center justify-center cursor-pointer ${
                       isSelected
-                        ? "bg-brand-gold text-black shadow-glow"
-                        : "bg-white/5 text-zinc-400 hover:text-white border border-white/10"
+                        ? "bg-emerald-600 text-white shadow-xs scale-105"
+                        : "bg-slate-100 text-slate-600 hover:bg-slate-200 border border-slate-200"
                     }`}
                   >
                     {sz}
@@ -258,14 +258,14 @@ export default function ProductModal({
 
           {/* Image Upload & Preview */}
           <div>
-            <label className="text-zinc-300 font-semibold block mb-1.5">
-              Shoe Image (Cloudinary or Direct URL)
+            <label className="text-slate-700 font-semibold block mb-1.5">
+              Shoe Photo (Cloudinary or Direct Path)
             </label>
             <div className="flex items-center gap-3">
               <img
                 src={resolveProductImage(form.img)}
                 alt="Product Preview"
-                className="w-16 h-16 rounded-2xl object-cover bg-zinc-900 border border-white/15 shrink-0"
+                className="w-16 h-16 rounded-2xl object-contain bg-slate-50 border border-slate-200 shrink-0 p-1"
               />
               <div className="flex-1 space-y-2">
                 <input
@@ -273,10 +273,10 @@ export default function ProductModal({
                   value={form.img}
                   onChange={(e) => setForm({ ...form, img: e.target.value })}
                   placeholder="https://res.cloudinary.com/... or image path"
-                  className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-white font-mono text-[11px] outline-none focus:border-brand-gold"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 font-mono text-[11px] outline-none focus:border-emerald-500 focus:bg-white"
                 />
                 <div className="flex items-center gap-2">
-                  <label className="btn ghost py-1.5 px-3 text-[11px] font-bold cursor-pointer inline-flex items-center gap-1.5 hover:bg-white/10">
+                  <label className="py-1.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold cursor-pointer inline-flex items-center gap-1.5 border border-slate-200 transition-colors">
                     <Upload size={13} />
                     <span>{uploading ? "Uploading to Cloud..." : "Upload from Device"}</span>
                     <input
@@ -287,7 +287,7 @@ export default function ProductModal({
                       className="hidden"
                     />
                   </label>
-                  {uploading && <Loader2 size={14} className="animate-spin text-brand-gold" />}
+                  {uploading && <Loader2 size={14} className="animate-spin text-emerald-600" />}
                 </div>
               </div>
             </div>
@@ -295,25 +295,25 @@ export default function ProductModal({
 
           {/* Description */}
           <div>
-            <label className="text-zinc-300 font-semibold block mb-1">Product Description</label>
+            <label className="text-slate-700 font-semibold block mb-1">Product Description</label>
             <textarea
               required
               rows={3}
               value={form.desc}
               onChange={(e) => setForm({ ...form, desc: e.target.value })}
               placeholder="Comfortable handcrafted leather shoe with cushioned insole..."
-              className="w-full bg-white/5 border border-white/10 rounded-xl p-3 text-white text-xs outline-none focus:border-brand-gold"
+              className="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-slate-900 text-xs outline-none focus:border-emerald-500 focus:bg-white"
             />
           </div>
 
           {/* Status Active/Disabled Toggle */}
-          <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
+          <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-200">
             <div>
-              <b className="text-white block text-xs">Catalog Status</b>
-              <span className="text-[11px] text-zinc-400">
+              <b className="text-slate-900 block text-xs">Catalog Status</b>
+              <span className="text-[11px] text-slate-500">
                 {form.isActive !== false
-                  ? "Visible to customers in footwear catalog"
-                  : "Hidden from customer store catalog (Disabled)"}
+                  ? "Visible to customers in footwear catalog (Active)"
+                  : "Hidden from customers (Disabled)"}
               </span>
             </div>
             <label className="relative inline-flex items-center cursor-pointer">
@@ -323,23 +323,23 @@ export default function ProductModal({
                 onChange={(e) => setForm({ ...form, isActive: e.target.checked })}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-zinc-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-zinc-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-600"></div>
+              <div className="w-11 h-6 bg-slate-300 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-600"></div>
             </label>
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-2.5 pt-3 border-t border-white/10">
+          <div className="flex justify-end gap-2.5 pt-3 border-t border-slate-100">
             <button
               type="button"
               onClick={onClose}
-              className="btn ghost py-2.5 px-4 text-xs font-semibold"
+              className="py-2.5 px-4 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition-colors border border-slate-200"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting || uploading}
-              className="btn py-2.5 px-5 text-xs font-bold disabled:opacity-50 inline-flex items-center gap-1.5 shadow-glow"
+              className="py-2.5 px-5 rounded-xl text-xs font-bold bg-emerald-600 hover:bg-emerald-700 text-white disabled:opacity-50 inline-flex items-center gap-1.5 shadow-sm transition-colors"
             >
               {submitting ? (
                 <>

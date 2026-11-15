@@ -553,7 +553,7 @@ export default function SettingsTab({
             <button
               type="submit"
               disabled={passLoading}
-              className="py-2.5 px-5 text-xs font-bold inline-flex items-center gap-2 rounded-xl bg-slate-800 hover:bg-slate-900 text-white transition-colors"
+              className="py-2.5 px-5 text-xs font-bold inline-flex items-center gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs transition-colors"
             >
               <KeyRound size={14} />
               <span>{passLoading ? "Updating Password..." : "Change Password"}</span>

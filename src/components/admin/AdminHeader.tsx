@@ -33,7 +33,7 @@ export default function AdminHeader({
           <span className="text-xs text-zinc-400">
             Signed in as{" "}
             <span className="text-brand-gold font-mono font-semibold">
-              {adminUser?.username || "Admin"}
+              {adminUser?.name || "Store Owner"}
             </span>{" "}
             ({adminUser?.role ? adminUser.role.toUpperCase() : "ADMIN"}) •{" "}
             <span className="text-zinc-500">{adminUser?.email || "admin@hangubrandedshoes.com"}</span>

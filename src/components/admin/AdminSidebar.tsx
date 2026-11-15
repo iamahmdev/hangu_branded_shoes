@@ -7,6 +7,7 @@ import {
   Star,
   Settings,
   LogOut,
+  ShieldCheck,
   X,
 } from "lucide-react";
 
@@ -163,20 +164,22 @@ export default function AdminSidebar({
         <div className="p-3.5 border-t border-slate-100 bg-white flex items-center justify-between gap-2 shrink-0">
           <div className="flex items-center gap-2.5 min-w-0">
             <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-xs">
-              {(adminUser?.username || "A").charAt(0).toUpperCase()}
+              <ShieldCheck size={16} />
             </div>
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-bold text-slate-900 truncate">
-                {adminUser?.username || "Super Admin"}
+              <span className="text-xs font-extrabold text-slate-900 truncate">
+                Store Owner
               </span>
-              <span className="text-[10px] text-emerald-600 font-semibold truncate">Store Owner</span>
+              <span className="text-[10px] text-emerald-700 font-semibold truncate">
+                Super Administrator
+              </span>
             </div>
           </div>
 
           <button
             type="button"
             onClick={onLogout}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold transition-colors cursor-pointer shrink-0 shadow-2xs"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white text-xs font-bold transition-colors cursor-pointer shrink-0 shadow-2xs"
             title="Logout"
           >
             <LogOut size={13} />

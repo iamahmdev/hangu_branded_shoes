@@ -78,15 +78,15 @@ export default function QuickOrderModal() {
           <X size={18} />
         </button>
 
-        <div className="qorder-grid grid grid-cols-1 md:grid-cols-[320px_1fr] gap-5 md:gap-8">
+        <div className="qorder-grid grid grid-cols-1 md:grid-cols-[320px_1fr] gap-4 md:gap-8">
           {/* Left: Product Image */}
           <div className="qorder-img-col flex flex-col">
-            <div className="qorder-img-box relative bg-[#f4f4f6] rounded-2xl overflow-hidden border border-zinc-200 aspect-[3/4] sm:aspect-[4/5] min-h-[260px] sm:min-h-[340px] flex items-center justify-center p-2 sm:p-3">
-              <img src={resolveProductImage(p.img)} alt={p.name} className="w-full h-full object-contain drop-shadow-[0_12px_20px_rgba(0,0,0,0.1)]" />
-              {p.tag && <span className="qorder-tag absolute top-2.5 left-2.5 bg-brand-red text-white text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 sm:py-1 rounded-full uppercase">{p.tag}</span>}
-              <span className="qorder-discount absolute bottom-2.5 left-2.5 bg-white/95 backdrop-blur-md text-zinc-900 border border-zinc-200 text-[10px] sm:text-[11px] font-bold px-2.5 py-0.5 sm:py-1 rounded-full shadow-xs">Save {discount}%</span>
+            <div className="qorder-img-box relative bg-[#f4f4f6] rounded-2xl overflow-hidden border border-zinc-200 aspect-[4/3] sm:aspect-[4/5] min-h-[160px] sm:min-h-[320px] max-h-[220px] sm:max-h-none flex items-center justify-center p-2.5 sm:p-4">
+              <img src={resolveProductImage(p.img)} alt={p.name} className="w-full h-full max-h-full max-w-full object-contain drop-shadow-[0_8px_16px_rgba(0,0,0,0.1)]" />
+              {p.tag && <span className="qorder-tag absolute top-2.5 left-2.5 bg-zinc-950 text-white text-[9px] sm:text-[11px] font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full uppercase">{p.tag}</span>}
+              <span className="qorder-discount absolute bottom-2.5 left-2.5 bg-white/95 backdrop-blur-md text-zinc-900 border border-zinc-200 text-[9px] sm:text-[11px] font-bold px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full shadow-xs">Save {discount}%</span>
             </div>
-            <div className="qorder-quick-specs flex justify-around mt-2.5 text-xs text-zinc-500">
+            <div className="qorder-quick-specs flex justify-around mt-2 text-[11px] sm:text-xs text-zinc-500">
               <span>🌟 High Comfort Sole</span>
               <span>🧵 Premium Stitching</span>
             </div>
@@ -95,12 +95,12 @@ export default function QuickOrderModal() {
           {/* Right: Details & Order Actions */}
           <div className="qorder-info-col flex flex-col">
             <div className="qorder-header">
-              <span className="qorder-cat text-xs text-brand-red font-bold uppercase tracking-wider">{p.cat}</span>
-              <h2 className="qorder-title text-2xl md:text-3xl font-extrabold text-zinc-900 mt-1 mb-2">{p.name}</h2>
-              <div className="qorder-price-wrap flex items-baseline gap-3 flex-wrap mb-4">
-                <span className="qorder-price text-2xl font-extrabold text-zinc-900">Rs. {p.price.toLocaleString()}</span>
-                <s className="qorder-old-price text-sm text-zinc-400">Rs. {p.old.toLocaleString()}</s>
-                <span className="qorder-save-badge text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">Save Rs. {(p.old - p.price).toLocaleString()}</span>
+              <span className="qorder-cat text-xs text-zinc-500 font-bold uppercase tracking-wider">{p.cat}</span>
+              <h2 className="qorder-title text-xl sm:text-2xl md:text-3xl font-extrabold text-zinc-900 mt-0.5 mb-1.5">{p.name}</h2>
+              <div className="qorder-price-wrap flex items-baseline gap-2.5 flex-wrap mb-3">
+                <span className="qorder-price text-xl sm:text-2xl font-extrabold text-zinc-900 font-mono">Rs. {p.price.toLocaleString()}</span>
+                <s className="qorder-old-price text-xs sm:text-sm text-zinc-400 font-mono">Rs. {p.old.toLocaleString()}</s>
+                <span className="qorder-save-badge text-[11px] sm:text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full">Save Rs. {(p.old - p.price).toLocaleString()}</span>
               </div>
             </div>
 
@@ -192,20 +192,21 @@ export default function QuickOrderModal() {
               </a>
 
               {/* Standard Checkout / Add to Cart */}
-              <div className="qorder-sub-actions grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              <div className="qorder-sub-actions grid grid-cols-2 gap-2">
                 <button
                   type="button"
                   onClick={handleBuyNow}
-                  className="btn qorder-btn-buy inline-flex items-center justify-center gap-2 py-3 px-4 text-sm font-semibold rounded-xl text-white bg-zinc-950 hover:bg-zinc-800"
+                  className="inline-flex items-center justify-center gap-1.5 py-2.5 sm:py-3 px-3 text-xs sm:text-sm font-bold rounded-xl text-white bg-zinc-950 hover:bg-zinc-800 active:scale-98 transition-all"
                 >
-                  Proceed to Checkout <ArrowRight size={16} />
+                  <span>Checkout</span>
+                  <ArrowRight size={14} />
                 </button>
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  className="btn ghost qorder-btn-cart py-3 px-4 text-sm font-semibold rounded-xl border border-zinc-300 text-zinc-900 hover:bg-zinc-100 transition-colors"
+                  className="py-2.5 sm:py-3 px-3 text-xs sm:text-sm font-bold rounded-xl border border-zinc-300 text-zinc-900 hover:bg-zinc-100 active:scale-98 transition-colors"
                 >
-                  {addedToast ? "✓ Added to Cart!" : "Add to Cart"}
+                  {addedToast ? "✓ Added!" : "Add to Cart"}
                 </button>
               </div>
             </div>

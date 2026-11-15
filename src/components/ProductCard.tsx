@@ -50,7 +50,7 @@ export default function ProductCard({ p }: ProductCardProps) {
           onMouseMove={handleMouseMove}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={handleMouseLeave}
-          className="relative aspect-[4/5] sm:aspect-[3/4] w-full bg-[#f7f8fa] group-hover:bg-[#f0f2f5] overflow-hidden flex items-center justify-center p-1 sm:p-1.5 transition-colors duration-300"
+          className="relative aspect-[4/5] sm:aspect-[3/4] w-full bg-[#f7f8fa] group-hover:bg-[#f0f2f5] overflow-hidden flex items-center justify-center p-2 sm:p-2.5 transition-colors duration-300"
           style={{
             transform: isHovered
               ? `rotateX(${cardTilt.x}deg) rotateY(${cardTilt.y}deg) translateY(-2px)`
@@ -69,7 +69,7 @@ export default function ProductCard({ p }: ProductCardProps) {
               src={resolveProductImage(p.img)}
               alt={p.name}
               loading="lazy"
-              className="w-full h-full object-contain object-center transition-transform duration-300 ease-out group-hover:scale-105 drop-shadow-[0_12px_24px_rgba(0,0,0,0.12)]"
+              className="w-full h-full max-h-full max-w-full object-contain object-center transition-transform duration-300 ease-out group-hover:scale-105 drop-shadow-[0_8px_18px_rgba(0,0,0,0.1)]"
             />
 
             {/* Subtle Glare Light */}
@@ -91,7 +91,7 @@ export default function ProductCard({ p }: ProductCardProps) {
               e.stopPropagation();
               setIs3DModalOpen(true);
             }}
-            className="absolute top-2.5 right-2.5 z-10 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-zinc-950/85 hover:bg-zinc-950 text-white text-[10px] font-bold tracking-wider uppercase border border-white/20 shadow-md backdrop-blur-md transition-all hover:scale-105 active:scale-95 shrink-0"
+            className="absolute top-2 right-2 z-10 inline-flex items-center gap-1 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-full bg-zinc-950/85 hover:bg-zinc-950 text-white text-[9px] sm:text-[10px] font-bold tracking-wider uppercase border border-white/20 shadow-xs backdrop-blur-md transition-all hover:scale-105 active:scale-95 shrink-0"
             title="Open 3D 360° Interactive View"
           >
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -101,47 +101,47 @@ export default function ProductCard({ p }: ProductCardProps) {
 
           {/* Status Badge (Top Left) */}
           {p.tag ? (
-            <span className="absolute top-2.5 left-2.5 z-10 bg-zinc-950 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-md uppercase tracking-wider shadow-xs max-w-[60%] truncate pointer-events-none">
+            <span className="absolute top-2 left-2 z-10 bg-zinc-950 text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-md uppercase tracking-wider shadow-xs max-w-[65%] truncate pointer-events-none">
               {p.tag}
             </span>
           ) : discount > 0 ? (
-            <span className="absolute top-2.5 left-2.5 z-10 bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-md shadow-xs pointer-events-none">
-              -{discount}% OFF
+            <span className="absolute top-2 left-2 z-10 bg-emerald-600 text-white text-[9px] sm:text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs pointer-events-none">
+              -{discount}%
             </span>
           ) : null}
 
           {/* Bottom Left: Savings Tag */}
           {savings > 0 && p.tag && (
-            <span className="absolute bottom-2.5 left-2.5 z-10 bg-white/95 backdrop-blur-sm text-zinc-900 border border-zinc-200/80 text-[10px] font-bold px-2 py-0.5 rounded-md shadow-2xs pointer-events-none">
+            <span className="absolute bottom-2 left-2 z-10 bg-white/95 backdrop-blur-sm text-zinc-900 border border-zinc-200/80 text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md shadow-2xs pointer-events-none">
               Save Rs. {savings.toLocaleString()}
             </span>
           )}
         </div>
 
         {/* Bottom Details Box */}
-        <div className="p-3 sm:p-4 flex flex-col flex-1 justify-between bg-white border-t border-zinc-100">
+        <div className="p-2.5 sm:p-4 flex flex-col flex-1 justify-between bg-white border-t border-zinc-100">
           <div>
             <div className="flex items-center justify-between gap-1 mb-1">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-400 truncate">
+              <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-zinc-400 truncate">
                 {p.cat || "Footwear"}
               </span>
-              <span className="text-[10px] font-semibold text-emerald-600 shrink-0">
+              <span className="text-[9px] sm:text-[10px] font-semibold text-emerald-600 shrink-0">
                 ✓ In Stock
               </span>
             </div>
 
-            <h3 className="font-bold text-zinc-950 text-sm hover:text-emerald-700 transition-colors line-clamp-1">
+            <h3 className="font-bold text-zinc-950 text-xs sm:text-sm hover:text-emerald-700 transition-colors line-clamp-1">
               <Link href={"/product/" + p.id} title={p.name}>
                 {p.name}
               </Link>
             </h3>
 
-            <div className="flex items-baseline gap-2 mt-1.5">
-              <span className="font-extrabold text-zinc-950 text-base sm:text-lg font-mono">
+            <div className="flex items-baseline gap-1.5 sm:gap-2 mt-1 sm:mt-1.5 flex-wrap">
+              <span className="font-extrabold text-zinc-950 text-sm sm:text-base md:text-lg font-mono">
                 Rs. {p.price.toLocaleString()}
               </span>
               {p.old && p.old > p.price && (
-                <s className="text-zinc-400 text-xs font-normal font-mono">
+                <s className="text-zinc-400 text-[10px] sm:text-xs font-normal font-mono">
                   Rs. {p.old.toLocaleString()}
                 </s>
               )}
@@ -149,7 +149,7 @@ export default function ProductCard({ p }: ProductCardProps) {
           </div>
 
           {/* Action Row */}
-          <div className="mt-3.5 flex items-center gap-1.5">
+          <div className="mt-2.5 sm:mt-3.5 flex items-center gap-1.5">
             <button
               type="button"
               onClick={(e) => {
@@ -157,18 +157,18 @@ export default function ProductCard({ p }: ProductCardProps) {
                 e.stopPropagation();
                 openQuickOrder(p);
               }}
-              className="flex-1 py-2.5 px-3 rounded-xl bg-zinc-950 hover:bg-zinc-800 active:bg-zinc-900 text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1.5 active:scale-98"
+              className="flex-1 py-2 sm:py-2.5 px-2 sm:px-3 rounded-xl bg-zinc-950 hover:bg-zinc-800 active:bg-zinc-900 text-white text-[11px] sm:text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-1 active:scale-98"
             >
-              <Zap size={13} className="text-amber-400 fill-amber-400 shrink-0" />
-              <span>Quick Order</span>
+              <Zap size={12} className="text-amber-400 fill-amber-400 shrink-0" />
+              <span className="truncate">Quick Order</span>
             </button>
             <Link
               href={"/product/" + p.id}
-              className="p-2.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-700 transition-colors shrink-0 flex items-center justify-center"
+              className="p-2 sm:p-2.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-700 transition-colors shrink-0 flex items-center justify-center"
               title="View Product Details"
               aria-label={`View details for ${p.name}`}
             >
-              <ArrowRight size={15} />
+              <ArrowRight size={14} />
             </Link>
           </div>
         </div>

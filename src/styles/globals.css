@@ -2137,12 +2137,12 @@ footer{position:relative;width:100%}
   left: 0;
   right: 0;
   z-index: 95;
-  background: rgba(12, 12, 18, 0.92);
+  background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.6);
-  padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px));
+  border-top: 1px solid rgba(228, 228, 231, 0.9);
+  box-shadow: 0 -4px 25px rgba(0, 0, 0, 0.07);
+  padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px));
 }
 
 .bnav-container {
@@ -2158,16 +2158,17 @@ footer{position:relative;width:100%}
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
+  gap: 2px;
   background: transparent;
   border: none;
-  color: #94949e;
-  padding: 6px 12px;
+  color: #71717a;
+  padding: 5px 12px;
   border-radius: 12px;
   cursor: pointer;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .bnav-icon-wrap {
@@ -2177,27 +2178,32 @@ footer{position:relative;width:100%}
   justify-content: center;
   width: 24px;
   height: 24px;
+  transition: transform 0.2s ease;
 }
 
 .bnav-label {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.3px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
 .bnav-item.active {
-  color: var(--red);
+  color: #09090b;
 }
 
 .bnav-item.active .bnav-icon-wrap {
   transform: translateY(-2px);
 }
 
+.bnav-item.active .bnav-label {
+  font-weight: 700;
+}
+
 .bnav-badge {
   position: absolute;
-  top: -6px;
-  right: -10px;
-  background: var(--red);
+  top: -5px;
+  right: -9px;
+  background: #09090b;
   color: #fff;
   font-size: 10px;
   font-weight: 700;
@@ -2207,7 +2213,8 @@ footer{position:relative;width:100%}
   text-align: center;
   border-radius: 50%;
   padding: 0 4px;
-  box-shadow: 0 2px 8px rgba(225, 6, 0, 0.6);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  font-family: monospace;
 }
 
 .bnav-wa-pulse {
@@ -2216,7 +2223,7 @@ footer{position:relative;width:100%}
 
 @keyframes bnav-pulse {
   0% { transform: scale(1); filter: drop-shadow(0 0 0 rgba(37, 211, 102, 0)); }
-  100% { transform: scale(1.1); filter: drop-shadow(0 0 6px rgba(37, 211, 102, 0.7)); }
+  100% { transform: scale(1.08); filter: drop-shadow(0 0 5px rgba(37, 211, 102, 0.5)); }
 }
 
 @media (max-width: 768px) {
@@ -2224,13 +2231,11 @@ footer{position:relative;width:100%}
     display: block;
   }
   body {
-    padding-bottom: 70px;
+    padding-bottom: 68px;
   }
+  /* On mobile, BottomNav already has dedicated WhatsApp button; hide the floating .wab so it doesn't block content */
   .wab {
-    bottom: 78px !important;
-    right: 16px !important;
-    width: 48px !important;
-    height: 48px !important;
+    display: none !important;
   }
 }
 

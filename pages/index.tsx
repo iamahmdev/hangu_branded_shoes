@@ -80,13 +80,13 @@ export default function Home() {
             </div>
 
             {/* Clean Category Pill Bar */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1.5 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
               {categories.map((c) => (
                 <button
                   key={c.val}
                   type="button"
                   onClick={() => setSelectedCategory(c.val)}
-                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold whitespace-nowrap transition-all ${
+                  className={`px-3 sm:px-3.5 py-1.5 rounded-full text-[11px] sm:text-xs font-bold whitespace-nowrap transition-all ${
                     selectedCategory === c.val
                       ? "bg-zinc-950 text-white shadow-xs"
                       : "bg-white text-zinc-700 hover:bg-zinc-100 border border-zinc-200/80"
@@ -98,8 +98,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Full-Width Luxury 3-Column Product Grid (Big Prominent Shoe Cards) */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6 lg:gap-8">
+          {/* Full-Width Luxury Product Grid (2-Column on Mobile, 3-Column on Desktop) */}
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-8">
             {isLoading ? (
               [1, 2, 3, 4, 5, 6].map((i) => (
                 <div

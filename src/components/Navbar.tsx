@@ -48,17 +48,17 @@ export default function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-6">
           {/* 1. Brand Logo (Prominent Circular Seal + Minimalist Spaced Wordmark) */}
-          <Link href="/" className="flex items-center gap-3 sm:gap-3.5 group shrink-0">
+          <Link href="/" className="flex items-center gap-2.5 sm:gap-3.5 group shrink-0">
             <img
               src="/images/logo.png"
               alt="Hangu Branded Shoes"
-              className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain rounded-full shadow-sm ring-2 ring-zinc-200/80 group-hover:scale-105 transition-transform bg-white"
+              className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 object-contain rounded-full shadow-xs ring-2 ring-zinc-200/80 group-hover:scale-105 transition-transform bg-white"
             />
             <div className="flex flex-col justify-center">
-              <span className="font-extrabold text-lg sm:text-xl md:text-2xl tracking-[0.2em] text-zinc-950 group-hover:text-emerald-700 transition-colors uppercase leading-none">
-                H A N G U .
+              <span className="font-black text-base sm:text-xl md:text-2xl tracking-[0.16em] sm:tracking-[0.2em] text-zinc-950 group-hover:text-emerald-700 transition-colors uppercase leading-none">
+                HANGU.
               </span>
-              <span className="text-[10px] md:text-[11px] font-bold tracking-[0.22em] text-zinc-500 uppercase mt-1 hidden sm:block">
+              <span className="text-[9px] sm:text-[10px] md:text-[11px] font-bold tracking-[0.2em] text-zinc-500 uppercase mt-0.5 block leading-none">
                 Branded Shoes
               </span>
             </div>
@@ -85,7 +85,7 @@ export default function Navbar() {
           </nav>
 
           {/* 3. Right Utility Cluster (Search, WhatsApp, Cart with Badge) */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             {/* Quick Search Button */}
             <button
               type="button"
@@ -97,7 +97,7 @@ export default function Navbar() {
               <Search size={18} />
             </button>
 
-            {/* Quick WhatsApp Concierge */}
+            {/* Quick WhatsApp Concierge (Pill on Desktop, Compact Icon on Mobile) */}
             <a
               href={wa("Hello! I have an inquiry about Hangu Branded Shoes.")}
               target="_blank"
@@ -109,14 +109,25 @@ export default function Navbar() {
               <span>WhatsApp</span>
             </a>
 
-            {/* Shopping Cart Button with Circular Badge (matching ETQ top-right circle) */}
+            <a
+              href={wa("Hello! I have an inquiry about Hangu Branded Shoes.")}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="sm:hidden p-2 text-emerald-600 hover:text-emerald-700 transition-colors"
+              title="Chat on WhatsApp"
+              aria-label="WhatsApp"
+            >
+              <WhatsAppIcon size={18} color="#059669" />
+            </a>
+
+            {/* Shopping Cart Button with Circular Badge */}
             <Link
               href="/cart"
-              className="relative p-2 text-zinc-900 hover:text-emerald-700 transition-colors flex items-center gap-1.5"
+              className="relative p-2 text-zinc-900 hover:text-emerald-700 transition-colors flex items-center gap-1"
               aria-label="Shopping Cart"
             >
               <ShoppingBag size={20} />
-              <span className="w-5 h-5 rounded-full bg-zinc-950 text-white text-[11px] font-bold flex items-center justify-center font-mono">
+              <span className="w-4 h-4 sm:w-5 sm:h-5 rounded-full bg-zinc-950 text-white text-[10px] sm:text-[11px] font-bold flex items-center justify-center font-mono">
                 {count}
               </span>
             </Link>
@@ -135,28 +146,43 @@ export default function Navbar() {
 
         {/* Mobile Navigation Drawer */}
         {mobileMenu && (
-          <div className="md:hidden border-t border-zinc-200 bg-white px-5 py-6 flex flex-col gap-4 animate-fadeIn">
-            {NAV_LINKS.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className="text-sm font-semibold tracking-wider uppercase text-zinc-700 hover:text-zinc-950 py-1.5 border-b border-zinc-100 flex items-center justify-between"
-              >
-                <span>{link.label}</span>
-                <ArrowUpRight size={14} className="text-zinc-400" />
-              </Link>
-            ))}
+          <div className="md:hidden border-t border-zinc-200 bg-white/98 backdrop-blur-xl px-5 py-5 flex flex-col gap-3 animate-fadeIn shadow-xl">
+            <div className="flex items-center justify-between pb-3 border-b border-zinc-100">
+              <span className="text-[11px] font-bold tracking-widest uppercase text-zinc-400">Navigation</span>
+              <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                Official Store
+              </span>
+            </div>
 
-            <div className="pt-2">
+            {NAV_LINKS.map((link) => {
+              const isActive = router.pathname === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={`text-xs font-bold tracking-wider uppercase py-2 flex items-center justify-between transition-colors ${
+                    isActive ? "text-zinc-950 font-extrabold" : "text-zinc-600 hover:text-zinc-950"
+                  }`}
+                >
+                  <span>{link.label}</span>
+                  <ArrowUpRight size={14} className={isActive ? "text-zinc-950" : "text-zinc-400"} />
+                </Link>
+              );
+            })}
+
+            <div className="pt-3 border-t border-zinc-100 flex flex-col gap-2">
               <a
                 href={wa("Hello! I have an inquiry about Hangu Branded Shoes.")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full py-2.5 px-4 rounded-xl bg-emerald-600 text-white text-xs font-bold flex items-center justify-center gap-2"
+                className="w-full py-3 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-xs transition-colors"
               >
                 <WhatsAppIcon size={16} color="#fff" />
-                <span>Chat on WhatsApp</span>
+                <span>Chat on WhatsApp (+92 333 3147691)</span>
               </a>
+              <div className="text-center text-[11px] text-zinc-400 pt-1">
+                📍 Tahir Market, Hangu • Fast Nationwide Express
+              </div>
             </div>
           </div>
         )}

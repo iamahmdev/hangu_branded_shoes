@@ -219,14 +219,14 @@ export default function Product() {
                     setZoomPos({ x, y });
                   }}
                   onClick={() => setIsLightboxOpen(true)}
-                  className="relative w-full aspect-[3/4] bg-[#f4f4f6] flex items-center justify-center overflow-hidden cursor-zoom-in group select-none"
+                  className="relative w-full aspect-[3/4] bg-gradient-to-b from-[#fafafa] via-[#f4f4f6] to-[#eaebee] flex items-center justify-center p-2 sm:p-4 overflow-hidden cursor-zoom-in group select-none"
                   title="Click to view full-screen high-resolution photo"
                 >
                   <img
                     key={activeImgIndex}
                     src={galleryImages[activeImgIndex] || resolveProductImage(p.img)}
                     alt={`${p.name} - Angle ${activeImgIndex + 1}`}
-                    className={`w-full h-full object-cover select-none transition-transform duration-150 ease-out ${
+                    className={`w-full h-full max-h-full max-w-full object-contain drop-shadow-[0_15px_30px_rgba(0,0,0,0.1)] select-none transition-transform duration-150 ease-out ${
                       isZoomed ? "scale-175" : "scale-100"
                     }`}
                     style={
@@ -264,6 +264,22 @@ export default function Product() {
                         <ChevronRight size={18} strokeWidth={2.5} />
                       </button>
                     </>
+                  )}
+
+                  {/* Angle Pagination Dots (Center Bottom) */}
+                  {galleryImages.length > 1 && (
+                    <div className="absolute bottom-11 sm:bottom-12 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 pointer-events-none">
+                      {galleryImages.map((_, idx) => (
+                        <span
+                          key={idx}
+                          className={`h-1.5 rounded-full transition-all duration-300 ${
+                            activeImgIndex === idx
+                              ? "w-6 bg-zinc-950 shadow-xs"
+                              : "w-1.5 bg-zinc-400/70"
+                          }`}
+                        />
+                      ))}
+                    </div>
                   )}
 
                   {/* Zoom Indicator Badge (Bottom Center) */}

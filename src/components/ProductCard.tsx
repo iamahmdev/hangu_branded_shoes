@@ -67,7 +67,7 @@ export default function ProductCard({ p }: ProductCardProps) {
               src={resolveProductImage(p.img)}
               alt={p.name}
               loading="lazy"
-              className="w-full h-full object-cover object-center transition-transform duration-300 ease-out group-hover:scale-105"
+              className="w-full h-full object-contain p-2 transition-transform duration-300 ease-out group-hover:scale-105 drop-shadow-[0_8px_16px_rgba(0,0,0,0.08)]"
             />
 
             {/* Subtle Glare Light */}

@@ -79,13 +79,13 @@ export default function QuickOrderModal() {
         </button>
 
         <div className="qorder-grid grid grid-cols-1 md:grid-cols-[260px_1fr] gap-4 sm:gap-6 items-center">
-          {/* Left: Product Image (Full Edge-to-Edge 3:4 Native Ratio, Zero Empty Space) */}
+          {/* Left: Product Image (100% Uncropped Studio Display) */}
           <div className="qorder-img-col flex flex-col w-full">
-            <div className="relative bg-[#f4f4f6] rounded-2xl overflow-hidden border border-zinc-200 aspect-[3/4] w-full flex items-center justify-center p-0 shadow-xs">
+            <div className="qorder-img-box relative bg-gradient-to-b from-[#fafafa] to-[#f4f4f6] rounded-2xl overflow-hidden border border-zinc-200 aspect-[3/4] w-full flex items-center justify-center p-0 shadow-xs">
               <img
                 src={resolveProductImage(p.img)}
                 alt={p.name}
-                className="w-full h-full object-cover select-none"
+                className="w-full h-full max-h-full max-w-full object-contain p-2 select-none drop-shadow-[0_8px_16px_rgba(0,0,0,0.08)]"
               />
               {p.tag && (
                 <span className="absolute top-2.5 left-2.5 bg-zinc-950 text-white text-[9px] sm:text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider shadow-xs">

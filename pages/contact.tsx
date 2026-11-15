@@ -3,7 +3,7 @@ import Reveal from "../src/components/Reveal";
 import { WhatsAppIcon, FacebookIcon, TikTokIcon, InstagramIcon } from "../src/components/WhatsAppButton";
 import { SHOP, WA, wa, SOCIALS } from "../src/data/config";
 import { useStoreSettings } from "../src/hooks/useApi";
-import { Phone, MapPin, Clock, MessageCircle, ShieldCheck, Truck, RotateCcw } from "lucide-react";
+import { Phone, MapPin, Clock, MessageCircle, ShieldCheck, Truck, RotateCcw, Mail } from "lucide-react";
 
 export default function Contact() {
   const { data: storeSettingsData } = useStoreSettings();
@@ -99,6 +99,36 @@ export default function Contact() {
                 >
                   <Phone size={18} />
                   <span>Call Us Directly</span>
+                </a>
+              </div>
+            </Reveal>
+
+            {/* 3. Official Email Support */}
+            <Reveal delay={250}>
+              <div className="bg-white border border-zinc-200/80 shadow-sm p-7 rounded-3xl flex flex-col justify-between h-full relative overflow-hidden group hover:border-emerald-500 transition-all duration-300">
+                <div className="absolute top-0 right-0 w-36 h-36 bg-emerald-500/5 rounded-full blur-3xl pointer-events-none" />
+                <div>
+                  <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-5 text-emerald-600">
+                    <Mail size={24} />
+                  </div>
+                  <small className="text-emerald-600 text-xs font-bold uppercase tracking-wider block mb-1">
+                    Direct Email Support
+                  </small>
+                  <h3 className="text-2xl font-bold text-zinc-900 mb-2">Official Email</h3>
+                  <p className="text-zinc-600 text-xs leading-relaxed mb-4">
+                    Send us your corporate inquiries, feedback, order tracking queries, or general assistance requests anytime.
+                  </p>
+                  <div className="font-mono text-zinc-900 text-sm font-bold bg-zinc-50 border border-zinc-200 px-4 py-2 rounded-xl w-fit mb-5 truncate max-w-full">
+                    info@hangubrandedshoes.com
+                  </div>
+                </div>
+
+                <a
+                  href="mailto:info@hangubrandedshoes.com"
+                  className="btn ghost inline-flex items-center justify-center gap-2.5 w-full py-3.5 text-sm font-bold border-zinc-300 text-zinc-900 hover:border-zinc-900 hover:bg-zinc-50 transition-all"
+                >
+                  <Mail size={18} />
+                  <span>Send an Email</span>
                 </a>
               </div>
             </Reveal>

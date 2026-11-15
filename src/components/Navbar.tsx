@@ -233,6 +233,13 @@ export default function Navbar() {
                 <WhatsAppIcon size={16} color="#fff" />
                 <span>Chat on WhatsApp (+92 333 3147691)</span>
               </a>
+              <a
+                href="mailto:info@hangubrandedshoes.com"
+                className="w-full py-2.5 px-4 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-xs font-semibold flex items-center justify-center gap-2 transition-colors"
+              >
+                <span>✉️</span>
+                <span>info@hangubrandedshoes.com</span>
+              </a>
               <div className="text-center text-[11px] text-zinc-400">
                 📍 Tahir Market, Hangu • Fast Nationwide Express
               </div>

@@ -36,10 +36,10 @@ const SLIDES: SlideData[] = [
   },
   {
     id: 3,
-    badge: "FREE DELIVERY OVER RS. 5,000",
+    badge: "PREMIUM COMFORT",
     title: "Casual Slip-Ons.",
     highlight: "Effortless Fit.",
-    description: "Premium comfort footwear delivered nationwide with Cash on Delivery & size exchange.",
+    description: "Premium comfort footwear delivered nationwide with 7-day hassle-free size exchange.",
     ctaText: "Shop Casual Collection",
     ctaLink: "/shop?cat=Comfort",
     bgImage: "/images/h2.jpg",

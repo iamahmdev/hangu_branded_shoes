@@ -8,7 +8,7 @@ import Reviews from "../src/components/Reviews";
 import { WhatsAppIcon } from "../src/components/WhatsAppButton";
 import { wa } from "../src/data/config";
 import { useProducts } from "../src/hooks/useApi";
-import { ArrowRight, Package, Sparkles, CheckCircle2, ShieldCheck, Truck, RotateCcw } from "lucide-react";
+import { ArrowRight, Package, Sparkles, CheckCircle2, ShieldCheck, Truck, RotateCcw, Mail } from "lucide-react";
 
 export default function Home() {
   const { data: products, isLoading } = useProducts();
@@ -47,13 +47,16 @@ export default function Home() {
           <div className="flex items-center justify-around max-w-7xl mx-auto px-4 gap-6 overflow-x-auto no-scrollbar whitespace-nowrap">
             <span className="inline-flex items-center gap-2">
               <Truck size={14} className="text-emerald-600" />
-              <span>Free Delivery Over Rs. 5,000</span>
+              <span>Nationwide Express Delivery</span>
             </span>
             <span className="text-zinc-300">✦</span>
-            <span className="inline-flex items-center gap-2">
-              <CheckCircle2 size={14} className="text-emerald-600" />
-              <span>Cash on Delivery & JazzCash</span>
-            </span>
+            <a
+              href="mailto:info@hangubrandedshoes.com"
+              className="inline-flex items-center gap-2 hover:text-emerald-700 transition-colors"
+            >
+              <Mail size={14} className="text-emerald-600" />
+              <span>info@hangubrandedshoes.com</span>
+            </a>
             <span className="text-zinc-300">✦</span>
             <span className="inline-flex items-center gap-2">
               <RotateCcw size={14} className="text-emerald-600" />

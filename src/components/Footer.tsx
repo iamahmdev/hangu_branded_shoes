@@ -18,16 +18,16 @@ export default function Footer() {
         <div className="ft-perk">
           <span className="ft-perk-icon">🚚</span>
           <div>
-            <b>Free Nationwide Delivery</b>
-            <p>On all footwear orders over Rs. 5,000</p>
+            <b>Nationwide Express Delivery</b>
+            <p>Safe & tracked doorstep delivery across Pakistan</p>
           </div>
         </div>
 
         <div className="ft-perk">
-          <span className="ft-perk-icon">⚡</span>
+          <span className="ft-perk-icon">✉️</span>
           <div>
-            <b>Fast JazzCash & COD</b>
-            <p>Doorstep cash delivery or direct mobile transfer</p>
+            <b>Official Support & Help</b>
+            <p>info@hangubrandedshoes.com</p>
           </div>
         </div>
 
@@ -93,6 +93,17 @@ export default function Footer() {
               <div>
                 <small>Official WhatsApp Helpline</small>
                 <b>+{whatsappNum}</b>
+              </div>
+            </a>
+
+            <a
+              href="mailto:info@hangubrandedshoes.com"
+              className="ft-contact-item hover:text-emerald-400 transition-colors"
+            >
+              <span className="ft-icon text-emerald-400">✉️</span>
+              <div>
+                <small>Official Support Email</small>
+                <b>info@hangubrandedshoes.com</b>
               </div>
             </a>
 

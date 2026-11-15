@@ -13,17 +13,17 @@ interface Perk {
 const PERKS: Perk[] = [
   {
     icon: "🚚",
-    title: "Free Express Delivery",
-    desc: "Free on all orders over Rs. 5,000 nationwide",
+    title: "Nationwide Express Delivery",
+    desc: "Safe & tracked doorstep delivery across all Pakistan cities",
     badge: "Tracked Dispatch",
     color: "#e10600",
   },
   {
-    icon: "⚡",
-    title: "JazzCash Fast Pay",
-    desc: "Quick verified mobile payments with instant WhatsApp confirmation",
-    badge: "Direct & Safe",
-    color: "#d4a857",
+    icon: "✉️",
+    title: "Official Support & Care",
+    desc: "Direct assistance via info@hangubrandedshoes.com & WhatsApp",
+    badge: "Direct Help",
+    color: "#10b981",
   },
   {
     icon: "🔄",

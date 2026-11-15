@@ -5,14 +5,11 @@ import {
   Lock,
   User,
   ArrowRight,
-  ShieldCheck,
-  Sparkles,
-  Store,
+  ArrowLeft,
   Eye,
   EyeOff,
   KeyRound,
   X,
-  HelpCircle,
   CheckCircle2,
 } from "lucide-react";
 import { api } from "../../services/api";
@@ -86,55 +83,41 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
   return (
     <>
       <Head>
-        <title>Admin Portal Login — Hangu Branded Shoes</title>
+        <title>Admin Login — Hangu Branded Shoes</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-b from-white via-slate-50 to-slate-100/80 text-slate-800 font-sans flex flex-col justify-between p-4 md:p-6 relative overflow-hidden">
-        {/* Subtle modern ambient background glow */}
-        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/5 rounded-full blur-[140px] pointer-events-none" />
-
+      <div className="min-h-screen bg-slate-50 text-slate-800 font-sans flex flex-col justify-between p-4 md:p-6 relative">
         {/* Top return link */}
-        <div className="w-full max-w-md mx-auto flex items-center justify-between z-10 pt-2">
+        <div className="w-full max-w-sm mx-auto flex items-center justify-between z-10 pt-2">
           <Link
             href="/"
-            className="flex items-center gap-2 px-3.5 py-1.5 rounded-xl bg-white border border-slate-200/90 text-xs font-semibold text-slate-700 hover:text-emerald-700 hover:border-emerald-300 shadow-2xs transition-all"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 transition-colors"
           >
-            <Store size={14} className="text-emerald-600" />
-            <span>Back to Storefront</span>
+            <ArrowLeft size={15} />
+            <span>Back to Store</span>
           </Link>
-          <span className="text-[11px] text-slate-500 font-mono bg-white border border-slate-200/90 px-2.5 py-1 rounded-full shadow-2xs">
-            Hangu Shoes OS v2.0
-          </span>
         </div>
 
-        {/* Center Modern Luxury Card */}
-        <div className="w-full max-w-md mx-auto my-auto z-10 py-6">
-          <div className="bg-white p-7 sm:p-10 rounded-3xl border border-slate-200/90 shadow-xl shadow-slate-200/50">
-            <div className="text-center mb-7">
-              {/* Official Store Logo with Emerald Ring */}
+        {/* Center Clean Card */}
+        <div className="w-full max-w-sm mx-auto my-auto z-10 py-6">
+          <div className="bg-white p-6 sm:p-8 rounded-2xl border border-slate-200 shadow-lg">
+            <div className="text-center mb-6">
+              {/* Store Logo */}
               <img
                 src="/images/logo.png"
                 alt="Hangu Branded Shoes"
-                className="w-16 h-16 rounded-full object-contain mx-auto bg-white p-1 ring-4 ring-emerald-500/20 shadow-md mb-3.5"
+                className="w-16 h-16 rounded-full object-contain mx-auto bg-white p-1 ring-1 ring-slate-200 shadow-sm mb-3"
               />
 
-              <div className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/80 text-[10px] font-bold tracking-widest uppercase mb-2">
-                <ShieldCheck size={12} className="text-emerald-600" />
-                <span>STORE ADMINISTRATION</span>
-              </div>
-
-              <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                Admin Portal
+              <h1 className="text-2xl font-bold text-slate-900">
+                Admin Login
               </h1>
-              <p className="text-slate-500 text-xs mt-1.5 leading-relaxed">
-                Sign in with authorized administrator credentials to manage catalog, orders, and store operations.
-              </p>
             </div>
 
             {/* Success notification */}
             {successMsg && (
-              <div className="p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs mb-5 flex items-center gap-2 animate-fadeIn font-semibold">
+              <div className="p-3 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs mb-4 flex items-center gap-2 font-semibold">
                 <CheckCircle2 size={16} className="shrink-0 text-emerald-600" />
                 <span>{successMsg}</span>
               </div>
@@ -142,7 +125,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
 
             {/* Error notification */}
             {error && (
-              <div className="p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs mb-5 flex items-center gap-2 animate-fadeIn font-semibold">
+              <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs mb-4 flex items-center gap-2 font-semibold">
                 <span className="shrink-0 font-bold text-rose-600">⚠️</span>
                 <span>{error}</span>
               </div>
@@ -151,7 +134,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
               <div>
                 <label className="text-xs font-bold text-slate-700 block mb-1.5">
-                  Username or Official Email
+                  Username or Email
                 </label>
                 <div className="relative">
                   <input
@@ -159,10 +142,10 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                     required
                     value={form.usernameOrEmail}
                     onChange={(e) => setForm({ ...form, usernameOrEmail: e.target.value })}
-                    placeholder="Enter your username or email"
-                    className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-emerald-500 focus:bg-white rounded-2xl pl-11 pr-4 py-3 text-slate-900 text-sm outline-none transition-all font-sans placeholder:text-slate-400 shadow-2xs"
+                    placeholder="Username or email"
+                    className="w-full bg-slate-50 border border-slate-200 focus:border-slate-800 focus:bg-white rounded-xl pl-10 pr-4 py-2.5 text-slate-900 text-sm outline-none transition-colors placeholder:text-slate-400"
                   />
-                  <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <User size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                 </div>
               </div>
 
@@ -172,9 +155,9 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                   <button
                     type="button"
                     onClick={() => setIsForgotModalOpen(true)}
-                    className="text-xs font-semibold text-emerald-600 hover:text-emerald-700 transition-colors hover:underline"
+                    className="text-xs font-semibold text-slate-500 hover:text-slate-900 transition-colors"
                   >
-                    Forgot Password?
+                    Forgot?
                   </button>
                 </div>
                 <div className="relative">
@@ -183,14 +166,14 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                     required
                     value={form.password}
                     onChange={(e) => setForm({ ...form, password: e.target.value })}
-                    placeholder="Enter your password"
-                    className="w-full bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-emerald-500 focus:bg-white rounded-2xl pl-11 pr-11 py-3 text-slate-900 text-sm outline-none transition-all font-sans placeholder:text-slate-400 shadow-2xs"
+                    placeholder="Password"
+                    className="w-full bg-slate-50 border border-slate-200 focus:border-slate-800 focus:bg-white rounded-xl pl-10 pr-10 py-2.5 text-slate-900 text-sm outline-none transition-colors placeholder:text-slate-400"
                   />
-                  <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors p-1"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 p-1"
                     title={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
@@ -198,22 +181,21 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                 </div>
               </div>
 
+              {/* Solid Black Button - Clean Inline Arrow - No Hover Color Shift */}
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3.5 mt-2 font-bold tracking-wide text-sm disabled:opacity-50 inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white rounded-2xl shadow-md shadow-emerald-600/25 transition-all active:scale-98 cursor-pointer"
+                className="w-full h-11 mt-1 font-semibold text-sm bg-black hover:bg-black active:bg-black text-white rounded-xl inline-flex items-center justify-center gap-2 cursor-pointer transition-opacity hover:opacity-90 active:opacity-100 disabled:opacity-50"
               >
-                <span>{loading ? "Verifying Credentials..." : "Sign In to Admin Portal"}</span>
-                <ArrowRight size={16} />
+                <span>{loading ? "Signing In..." : "Sign In"}</span>
+                {!loading && <ArrowRight size={16} className="shrink-0" />}
               </button>
             </form>
           </div>
         </div>
 
-        {/* Footer info */}
-        <div className="text-center text-xs text-slate-500 pb-4 z-10">
-          Protected Administrative Area • Hangu Branded Shoes KP, Pakistan
-        </div>
+        {/* Minimal Bottom Spacer */}
+        <div className="py-2" />
       </div>
 
       {/* ---------------------------------------------------- */}
@@ -230,13 +212,13 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
               <X size={16} />
             </button>
 
-            <div className="text-center mb-6">
-              <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-600 mx-auto flex items-center justify-center border border-emerald-200 mb-3 shadow-2xs">
-                <KeyRound size={22} />
+            <div className="text-center mb-5">
+              <div className="w-11 h-11 rounded-2xl bg-slate-100 text-slate-800 mx-auto flex items-center justify-center border border-slate-200 mb-2.5">
+                <KeyRound size={20} />
               </div>
-              <h2 className="text-xl font-bold text-slate-900">Admin Account Recovery</h2>
+              <h2 className="text-lg font-bold text-slate-900">Reset Password</h2>
               <p className="text-xs text-slate-500 mt-1">
-                Enter your registered username/email and Store Recovery Key to set a new password.
+                Enter your credentials and recovery key.
               </p>
             </div>
 
@@ -249,7 +231,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
             <form onSubmit={handleRecoverySubmit} className="flex flex-col gap-3.5">
               <div>
                 <label className="text-xs font-semibold text-slate-700 block mb-1">
-                  Admin Email or Username
+                  Email or Username
                 </label>
                 <input
                   type="text"
@@ -257,7 +239,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                   value={recoveryForm.emailOrUser}
                   onChange={(e) => setRecoveryForm({ ...recoveryForm, emailOrUser: e.target.value })}
                   placeholder="admin@hangubrandedshoes.com"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-emerald-500 focus:bg-white font-sans transition-all"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-800 focus:bg-white font-sans transition-all"
                 />
               </div>
 
@@ -270,14 +252,14 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                   required
                   value={recoveryForm.recoveryKey}
                   onChange={(e) => setRecoveryForm({ ...recoveryForm, recoveryKey: e.target.value })}
-                  placeholder="Enter Store Recovery Key (from .env)"
-                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-emerald-500 focus:bg-white font-mono transition-all"
+                  placeholder="Enter recovery key"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-800 focus:bg-white font-mono transition-all"
                 />
               </div>
 
               <div>
                 <label className="text-xs font-semibold text-slate-700 block mb-1">
-                  New Strong Password
+                  New Password
                 </label>
                 <div className="relative">
                   <input
@@ -286,8 +268,8 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                     minLength={6}
                     value={recoveryForm.newPassword}
                     onChange={(e) => setRecoveryForm({ ...recoveryForm, newPassword: e.target.value })}
-                    placeholder="Enter new strong password"
-                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-3.5 pr-10 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-emerald-500 focus:bg-white font-sans transition-all"
+                    placeholder="Enter new password"
+                    className="w-full bg-slate-50 border border-slate-200 rounded-xl pl-3.5 pr-10 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-slate-800 focus:bg-white font-sans transition-all"
                   />
                   <button
                     type="button"
@@ -303,15 +285,15 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
                 <button
                   type="submit"
                   disabled={recoveryLoading}
-                  className="w-full py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs transition-colors shadow-sm disabled:opacity-50 cursor-pointer"
+                  className="w-full h-11 rounded-xl bg-black hover:bg-black active:bg-black text-white font-semibold text-xs transition-opacity hover:opacity-90 disabled:opacity-50 cursor-pointer"
                 >
-                  {recoveryLoading ? "Verifying & Updating..." : "Reset Admin Password"}
+                  {recoveryLoading ? "Updating..." : "Reset Password"}
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setIsForgotModalOpen(false)}
-                  className="w-full py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
+                  className="w-full h-10 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors"
                 >
                   Cancel
                 </button>

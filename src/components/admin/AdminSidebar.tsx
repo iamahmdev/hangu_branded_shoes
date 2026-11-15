@@ -160,11 +160,11 @@ export default function AdminSidebar({
         </div>
 
         {/* Bottom Logout Only */}
-        <div className="p-3 border-t border-slate-100 bg-white shrink-0">
+        <div className="p-3.5 border-t border-slate-100 bg-white shrink-0">
           <button
             type="button"
             onClick={onLogout}
-            className="w-full flex items-center justify-center gap-2 py-2.5 px-3 rounded-xl bg-rose-50 hover:bg-rose-100 active:bg-rose-200 text-rose-700 border border-rose-200 text-xs font-bold transition-all cursor-pointer shadow-2xs"
+            className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white text-xs font-bold transition-all cursor-pointer shadow-sm"
             title="Logout"
           >
             <LogOut size={15} />

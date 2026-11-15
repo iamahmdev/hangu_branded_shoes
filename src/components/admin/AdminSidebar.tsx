@@ -6,7 +6,6 @@ import {
   Package,
   Star,
   Settings,
-  LogOut,
   X,
 } from "lucide-react";
 
@@ -158,31 +157,6 @@ export default function AdminSidebar({
               );
             })}
           </nav>
-        </div>
-
-        {/* Bottom Profile with Direct 1-Click Logout */}
-        <div className="p-3 border-t border-slate-100 bg-white flex items-center justify-between gap-2 shrink-0">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-full bg-emerald-600 flex items-center justify-center text-white font-bold text-xs shrink-0 shadow-xs">
-              {(adminUser?.username || "A").charAt(0).toUpperCase()}
-            </div>
-            <div className="flex flex-col min-w-0">
-              <span className="text-xs font-bold text-slate-900 truncate">
-                {adminUser?.username || "Super Admin"}
-              </span>
-              <span className="text-[10px] text-emerald-600 font-semibold truncate">Store Owner</span>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            onClick={onLogout}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold transition-colors cursor-pointer shrink-0 border border-rose-200"
-            title="Logout"
-          >
-            <LogOut size={13} />
-            <span>Logout</span>
-          </button>
         </div>
       </aside>
     </>

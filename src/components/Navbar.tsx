@@ -240,8 +240,15 @@ export default function Navbar() {
                 <span>✉️</span>
                 <span>info@hangubrandedshoes.com</span>
               </a>
-              <div className="text-center text-[11px] text-zinc-400">
-                📍 Tahir Market, Hangu • Fast Delivery Across Pakistan
+              <div className="flex items-center justify-between text-[11px] text-zinc-400 pt-1">
+                <span>📍 Tahir Market, Hangu</span>
+                <Link
+                  href="/admin"
+                  onClick={() => setMobileMenu(false)}
+                  className="text-zinc-500 hover:text-zinc-900 font-semibold transition-colors"
+                >
+                  🔒 Admin Portal
+                </Link>
               </div>
             </div>
           </div>

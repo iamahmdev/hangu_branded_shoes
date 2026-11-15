@@ -276,6 +276,9 @@ export default function Footer() {
             <Link href="/size-guide">Size Guide</Link>
             <Link href="/reviews">Reviews</Link>
             <Link href="/contact">Contact</Link>
+            <Link href="/admin" className="text-zinc-400 hover:text-white flex items-center gap-1 font-medium transition-colors">
+              🔒 Admin Portal
+            </Link>
           </div>
         </div>
       </div>

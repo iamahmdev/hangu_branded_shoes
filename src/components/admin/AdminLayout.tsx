@@ -5,14 +5,9 @@ import AdminSidebar from "./AdminSidebar";
 import { AdminTab, AdminUser } from "./types";
 import {
   Menu,
-  RefreshCw,
   ExternalLink,
-  LogOut,
   Store,
   Search,
-  Bell,
-  CheckCircle2,
-  ShieldCheck,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -145,11 +140,6 @@ export default function AdminLayout({
                 <p className="text-xs text-slate-500 mt-1">
                   Dashboard <span className="text-slate-300">/</span> {activeTab}
                 </p>
-              </div>
-
-              <div className="flex items-center gap-2 text-xs text-slate-500 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm self-start sm:self-auto">
-                <CheckCircle2 size={14} className="text-emerald-500" />
-                <span>Auto-syncing real-time updates</span>
               </div>
             </div>
 

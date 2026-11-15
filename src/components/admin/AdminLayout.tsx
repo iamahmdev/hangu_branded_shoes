@@ -119,49 +119,18 @@ export default function AdminLayout({
               </div>
             </div>
 
-            {/* Right: Live Status, View Website, Profile & Logout */}
+            {/* Right: View Website Link */}
             <div className="flex items-center gap-2.5">
-              {/* Live DB Status Pill */}
-              <div className="hidden md:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span>Live DB</span>
-              </div>
-
-              {/* Website Link */}
               <Link
                 href="/"
                 target="_blank"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 shadow-2xs transition-colors"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 text-xs font-semibold border border-slate-200 shadow-2xs transition-colors"
                 title="Open Website in New Tab"
               >
                 <Store size={14} className="text-emerald-600" />
                 <span>View Website</span>
                 <ExternalLink size={12} className="text-slate-400" />
               </Link>
-
-              {/* Admin Profile Pill */}
-              <div className="flex items-center gap-2 pl-1 sm:pl-2 sm:border-l border-slate-200">
-                <div className="w-8 h-8 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
-                  {(adminUser?.username || "A").charAt(0).toUpperCase()}
-                </div>
-                <div className="hidden sm:flex flex-col text-left">
-                  <span className="text-xs font-bold text-slate-900 leading-tight">
-                    {adminUser?.username || "Admin"}
-                  </span>
-                  <span className="text-[10px] text-slate-500 font-medium">Super Admin</span>
-                </div>
-              </div>
-
-              {/* Top Header Logout Button - High Contrast Bold Red */}
-              <button
-                type="button"
-                onClick={onLogout}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white text-xs font-bold transition-all cursor-pointer shadow-xs shrink-0"
-                title="Log out of Admin Portal"
-              >
-                <LogOut size={14} />
-                <span>Logout</span>
-              </button>
             </div>
           </header>
 

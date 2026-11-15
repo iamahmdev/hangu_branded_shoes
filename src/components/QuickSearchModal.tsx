@@ -58,11 +58,11 @@ export default function QuickSearchModal() {
       onClick={closeSearch}
     >
       <div
-        className="qsearch-modal relative w-full max-w-2xl bg-[#12121a]/95 backdrop-blur-xl border border-white/15 rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 text-white"
+        className="qsearch-modal relative w-full max-w-2xl bg-white border border-zinc-200/90 rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 text-zinc-900"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Search Box */}
-        <div className="qsearch-header flex items-center gap-3 pb-4 border-b border-white/10">
+        <div className="qsearch-header flex items-center gap-3 pb-4 border-b border-zinc-100">
           <Search size={20} className="text-zinc-400 shrink-0" />
           <input
             ref={inputRef}
@@ -70,22 +70,22 @@ export default function QuickSearchModal() {
             placeholder="Search footwear by shoe name, category, or tag..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="qsearch-input w-full bg-transparent border-none outline-none text-white text-base placeholder:text-zinc-400 font-medium caret-white"
+            className="qsearch-input w-full bg-transparent border-none outline-none text-zinc-900 text-base placeholder:text-zinc-400 font-medium caret-zinc-900"
           />
           <button
             type="button"
             onClick={closeSearch}
-            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-zinc-300 hover:text-white flex items-center justify-center shrink-0 transition-colors"
+            className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-600 hover:text-zinc-950 flex items-center justify-center shrink-0 transition-colors"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Results Body */}
-        <div className="qsearch-results max-h-[60vh] overflow-y-auto mt-4 divide-y divide-white/10">
+        <div className="qsearch-results max-h-[60vh] overflow-y-auto mt-4 divide-y divide-zinc-100">
           {isLoading ? (
-            <div className="py-8 text-center text-zinc-300 text-xs">
-              <div className="inline-block w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin mb-2" />
+            <div className="py-8 text-center text-zinc-500 text-xs">
+              <div className="inline-block w-5 h-5 border-2 border-zinc-300 border-t-zinc-950 rounded-full animate-spin mb-2" />
               <p>Searching footwear database...</p>
             </div>
           ) : searchResults && searchResults.length > 0 ? (
@@ -93,22 +93,22 @@ export default function QuickSearchModal() {
               <div
                 key={p.id}
                 onClick={() => handleSelectProduct(p.id)}
-                className="qsearch-item py-3 flex items-center justify-between gap-4 cursor-pointer hover:bg-white/10 p-2.5 rounded-2xl transition-colors group"
+                className="qsearch-item py-3 flex items-center justify-between gap-4 cursor-pointer hover:bg-zinc-50 p-2.5 rounded-2xl transition-colors group"
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <img
                     src={resolveProductImage(p.img)}
                     alt={p.name}
-                    className="w-14 h-14 rounded-xl object-contain p-1 bg-white/5 border border-white/10 shrink-0"
+                    className="w-14 h-14 rounded-xl object-contain p-1 bg-[#f4f4f6] border border-zinc-200 shrink-0"
                   />
                   <div className="min-w-0">
-                    <span className="text-[10px] font-bold uppercase text-brand-red tracking-wider">
+                    <span className="text-[10px] font-bold uppercase text-amber-600 tracking-wider">
                       {p.cat}
                     </span>
-                    <b className="text-white text-sm block truncate group-hover:text-amber-300 transition-colors">
+                    <b className="text-zinc-900 text-sm block truncate group-hover:text-amber-600 transition-colors">
                       {p.name}
                     </b>
-                    <span className="text-xs font-mono font-bold text-emerald-400">
+                    <span className="text-xs font-mono font-bold text-emerald-700">
                       Rs. {p.price.toLocaleString()}
                     </span>
                   </div>
@@ -118,16 +118,16 @@ export default function QuickSearchModal() {
                   <button
                     type="button"
                     onClick={(e) => handleQuickBuy(e, p)}
-                    className="py-1.5 px-3.5 text-xs font-semibold rounded-xl bg-white/10 hover:bg-brand-red text-white border border-white/20 hover:border-brand-red transition-all shadow-xs"
+                    className="py-1.5 px-3.5 text-xs font-semibold rounded-xl bg-zinc-950 hover:bg-zinc-800 text-white transition-all shadow-xs"
                   >
                     Quick Order
                   </button>
-                  <ArrowRight size={16} className="text-zinc-500 group-hover:text-white group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight size={16} className="text-zinc-400 group-hover:text-zinc-950 group-hover:translate-x-1 transition-transform" />
                 </div>
               </div>
             ))
           ) : (
-            <div className="py-8 text-center text-zinc-300 text-xs">
+            <div className="py-8 text-center text-zinc-500 text-xs">
               No footwear matched "{query}". Try checking category names like Sneakers, Formal, Comfort or Loafers.
             </div>
           )}

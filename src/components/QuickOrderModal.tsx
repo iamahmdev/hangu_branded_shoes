@@ -95,7 +95,7 @@ export default function QuickOrderModal() {
           {/* Right: Details & Order Actions */}
           <div className="qorder-info-col flex flex-col">
             <div className="qorder-header">
-              <span className="qorder-cat text-xs text-zinc-500 font-bold uppercase tracking-wider">{p.cat}</span>
+              <span className="qorder-cat text-xs text-amber-600 font-bold uppercase tracking-wider">{p.cat}</span>
               <h2 className="qorder-title text-xl sm:text-2xl md:text-3xl font-extrabold text-zinc-900 mt-0.5 mb-1.5">{p.name}</h2>
               <div className="qorder-price-wrap flex items-baseline gap-2.5 flex-wrap mb-3">
                 <span className="qorder-price text-xl sm:text-2xl font-extrabold text-zinc-900 font-mono">Rs. {p.price.toLocaleString()}</span>
@@ -131,8 +131,8 @@ export default function QuickOrderModal() {
                     type="button"
                     className={`qorder-sz-btn min-w-[42px] h-[42px] rounded-xl font-semibold text-sm transition-all border ${
                       selectedSize === sz
-                        ? "active bg-zinc-950 border-zinc-950 text-white shadow-sm scale-105"
-                        : "bg-white border-zinc-200 text-zinc-700 hover:border-zinc-950 hover:text-zinc-950"
+                        ? "active bg-zinc-950 border-zinc-950 text-white shadow-sm scale-102"
+                        : "bg-zinc-100 border-zinc-200 text-zinc-800 hover:bg-zinc-200 hover:border-zinc-300 hover:text-zinc-900"
                     }`}
                     onClick={() => {
                       setSelectedSize(sz);
@@ -196,7 +196,7 @@ export default function QuickOrderModal() {
                 <button
                   type="button"
                   onClick={handleBuyNow}
-                  className="inline-flex items-center justify-center gap-1.5 py-2.5 sm:py-3 px-3 text-xs sm:text-sm font-bold rounded-xl text-white bg-zinc-950 hover:bg-zinc-800 active:scale-98 transition-all"
+                  className="qorder-btn-buy inline-flex items-center justify-center gap-1.5 py-2.5 sm:py-3 px-3 text-xs sm:text-sm font-bold rounded-xl text-white bg-zinc-950 hover:bg-zinc-800 active:scale-98 transition-all"
                 >
                   <span>Checkout</span>
                   <ArrowRight size={14} />
@@ -204,7 +204,7 @@ export default function QuickOrderModal() {
                 <button
                   type="button"
                   onClick={handleAddToCart}
-                  className="py-2.5 sm:py-3 px-3 text-xs sm:text-sm font-bold rounded-xl border border-zinc-300 text-zinc-900 hover:bg-zinc-100 active:scale-98 transition-colors"
+                  className="qorder-btn-cart py-2.5 sm:py-3 px-3 text-xs sm:text-sm font-bold rounded-xl border border-zinc-300 text-zinc-800 bg-white hover:bg-zinc-100 hover:text-zinc-950 active:scale-98 transition-colors"
                 >
                   {addedToast ? "✓ Added!" : "Add to Cart"}
                 </button>

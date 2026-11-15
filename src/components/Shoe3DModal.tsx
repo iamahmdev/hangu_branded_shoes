@@ -47,13 +47,13 @@ export default function Shoe3DModal({ product, isOpen, onClose }: Shoe3DModalPro
 
       {/* Modal Card */}
       <div className="relative w-full max-w-4xl bg-white rounded-3xl shadow-2xl overflow-hidden border border-zinc-200 z-10 flex flex-col max-h-[92vh]">
-        {/* Modal Header */}
-        <div className="px-5 py-3.5 bg-zinc-900 text-white flex items-center justify-between border-b border-zinc-800">
+        {/* Modal Header (Clean White Theme) */}
+        <div className="px-5 py-3.5 bg-white text-zinc-900 flex items-center justify-between border-b border-zinc-200">
           <div className="flex items-center gap-2.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
             <div>
-              <h3 className="font-bold text-sm tracking-tight">{product.name}</h3>
-              <p className="text-[10px] text-zinc-400 uppercase tracking-widest font-semibold">
+              <h3 className="font-bold text-sm tracking-tight text-zinc-950">{product.name}</h3>
+              <p className="text-[10px] text-zinc-500 uppercase tracking-widest font-semibold">
                 3D Interactive Model • {product.cat}
               </p>
             </div>
@@ -62,7 +62,7 @@ export default function Shoe3DModal({ product, isOpen, onClose }: Shoe3DModalPro
           <button
             type="button"
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-zinc-800 hover:bg-zinc-700 text-zinc-300 hover:text-white flex items-center justify-center transition-colors"
+            className="w-8 h-8 rounded-full bg-zinc-100 hover:bg-zinc-200 text-zinc-600 hover:text-zinc-950 flex items-center justify-center transition-colors"
             title="Close 3D View"
           >
             <X size={18} />

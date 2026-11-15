@@ -95,15 +95,13 @@ export default function HeroSlider() {
           return (
             <div
               key={slide.id}
-              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${
-                isActive ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
-              }`}
+              className={`absolute inset-0 transition-opacity duration-700 ease-in-out ${isActive ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
+                }`}
             >
               {/* Natural High-Definition Background Image */}
               <div
-                className={`absolute inset-0 bg-cover bg-center transition-transform duration-7000 ease-out ${
-                  isActive ? "scale-105" : "scale-100"
-                }`}
+                className={`absolute inset-0 bg-cover bg-center transition-transform duration-7000 ease-out ${isActive ? "scale-105" : "scale-100"
+                  }`}
                 style={{ backgroundImage: `url(${slide.bgImage})` }}
               />
 
@@ -189,11 +187,10 @@ export default function HeroSlider() {
               type="button"
               onClick={() => setCurrent(idx)}
               aria-label={`Slide ${idx + 1}`}
-              className={`transition-all duration-300 rounded-full ${
-                idx === current
-                  ? "w-4 sm:w-5 h-1 sm:h-1.5 bg-white"
-                  : "w-1 sm:w-1.5 h-1 sm:h-1.5 bg-white/40 hover:bg-white/70"
-              }`}
+              className={`transition-all duration-300 rounded-full ${idx === current
+                ? "w-4 sm:w-5 h-1 sm:h-1.5 bg-white"
+                : "w-1 sm:w-1.5 h-1 sm:h-1.5 bg-white/40 hover:bg-white/70"
+                }`}
             />
           ))}
         </div>

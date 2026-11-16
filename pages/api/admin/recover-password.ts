@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import dbConnect from "../../../src/lib/dbConnect";
 import { Admin } from "../../../src/models/Admin";
+import { sendPasswordResetAlert } from "../../../src/lib/email";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -42,9 +43,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     admin.resetPasswordExpires = undefined;
     await admin.save();
 
+    // Send professional Hostinger SMTP email alert to admin
+    const targetEmail = admin.email || process.env.ADMIN_EMAIL || "info@hangubrandedshoes.com";
+    try {
+      await sendPasswordResetAlert(targetEmail, admin.username || "Admin", "RECOVERED");
+    } catch (mailErr: any) {
+      console.warn("SMTP email notification warning:", mailErr.message);
+    }
+
     return res.status(200).json({
       success: true,
-      message: "Admin password successfully reset! You can now log in with your new password.",
+      message: "Admin password successfully reset! A confirmation email has been sent to " + targetEmail + ".",
     });
   } catch (error: any) {
     return res.status(500).json({ success: false, message: error.message || "Password recovery failed" });

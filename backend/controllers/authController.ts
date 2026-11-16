@@ -4,6 +4,7 @@ import crypto from "crypto";
 import { Admin } from "../models/Admin.js";
 import { AuthRequest } from "../middleware/auth.js";
 import { generateToken } from "../utils/generateToken.js";
+import { sendPasswordResetAlert } from "../utils/email.js";
 
 export async function login(req: Request, res: Response): Promise<void> {
   try {
@@ -213,7 +214,14 @@ export async function changePassword(req: AuthRequest, res: Response): Promise<v
     admin.passwordHash = await bcrypt.hash(newPassword, salt);
     await admin.save();
 
-    res.json({ success: true, message: "Password changed successfully" });
+    const targetEmail = admin.email || process.env.ADMIN_EMAIL || "info@hangubrandedshoes.com";
+    try {
+      await sendPasswordResetAlert(targetEmail, admin.username || "Admin", "CHANGED");
+    } catch (mailErr: any) {
+      console.warn("SMTP email notification warning:", mailErr.message);
+    }
+
+    res.json({ success: true, message: "Password changed successfully! A confirmation email has been sent to " + targetEmail + "." });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }
@@ -323,9 +331,16 @@ export async function recoverPassword(req: Request, res: Response): Promise<void
     admin.resetPasswordExpires = undefined;
     await admin.save();
 
+    const targetEmail = admin.email || process.env.ADMIN_EMAIL || "info@hangubrandedshoes.com";
+    try {
+      await sendPasswordResetAlert(targetEmail, admin.username || "Admin", "RECOVERED");
+    } catch (mailErr: any) {
+      console.warn("SMTP email notification warning:", mailErr.message);
+    }
+
     res.json({
       success: true,
-      message: "Admin password successfully reset! You can now log in with your new password.",
+      message: "Admin password successfully reset! A confirmation email has been sent to " + targetEmail + ".",
     });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });

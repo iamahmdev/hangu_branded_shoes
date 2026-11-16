@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import dbConnect from "../../../src/lib/dbConnect";
 import { Admin } from "../../../src/models/Admin";
 import { verifyToken } from "../../../src/lib/jwt";
+import { sendPasswordResetAlert } from "../../../src/lib/email";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "PUT") {
@@ -46,7 +47,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     admin.passwordHash = await bcrypt.hash(newPassword, salt);
     await admin.save();
 
-    return res.status(200).json({ success: true, message: "Password changed successfully" });
+    // Send professional Hostinger SMTP email alert to admin
+    const targetEmail = admin.email || process.env.ADMIN_EMAIL || "info@hangubrandedshoes.com";
+    try {
+      await sendPasswordResetAlert(targetEmail, admin.username || "Admin", "CHANGED");
+    } catch (mailErr: any) {
+      console.warn("SMTP email notification warning:", mailErr.message);
+    }
+
+    return res.status(200).json({ success: true, message: "Password changed successfully! A confirmation email has been sent to " + targetEmail + "." });
   } catch (error: any) {
     return res.status(500).json({ success: false, message: error.message || "Failed to change password" });
   }

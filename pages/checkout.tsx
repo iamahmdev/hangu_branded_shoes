@@ -540,9 +540,8 @@ export default function Checkout() {
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Full Name</label>
                   <input
-                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
                     required
-                    placeholder="e.g. Muhammad Ahmad"
                     value={f.name}
                     onChange={set("name")}
                   />
@@ -551,10 +550,9 @@ export default function Checkout() {
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Mobile / WhatsApp Number</label>
                   <input
-                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all font-mono"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all font-mono"
                     required
                     type="tel"
-                    placeholder="e.g. 0333 1234567"
                     value={f.phone}
                     onChange={set("phone")}
                   />
@@ -563,9 +561,8 @@ export default function Checkout() {
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Destination City</label>
                   <input
-                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
                     required
-                    placeholder="e.g. Hangu, Kohat, Peshawar, Islamabad, Lahore..."
                     value={f.city}
                     onChange={set("city")}
                   />
@@ -574,10 +571,9 @@ export default function Checkout() {
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Complete Delivery Address</label>
                   <textarea
-                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm placeholder:text-zinc-500 outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
                     required
                     rows={3}
-                    placeholder="House/Shop No, Street, Mohallah / Landmark"
                     value={f.address}
                     onChange={set("address")}
                   />

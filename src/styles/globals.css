@@ -30,6 +30,25 @@ a{color:inherit;text-decoration:none}img{max-width:100%;display:block}
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;
 }
+
+/* ================= Infinite Luxury Marquee ================= */
+@keyframes luxuryMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+.luxury-marquee {
+  display: flex;
+  width: max-content;
+  animation: luxuryMarquee 26s linear infinite;
+  will-change: transform;
+}
+.luxury-marquee:hover {
+  animation-play-state: paused;
+}
 .wrap{max-width:1200px;margin:auto;padding:0 20px}
 .glass{background:#ffffff;border:1px solid #e4e4e7;border-radius:20px;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
 .btn{display:inline-block;padding:12px 28px;border-radius:50px;font:600 14px Poppins;background:#09090b;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,0.12);transition:.25s;border:0;cursor:pointer}

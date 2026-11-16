@@ -46,36 +46,43 @@ export default function Home({ initialProducts }: { initialProducts?: Product[] 
         {/* 1. Cinematic Luxury Hero Slider */}
         <HeroSlider />
 
-        {/* 2. Sleek Clean Luxury Trust Bar */}
-        <div className="bg-white text-zinc-700 text-[11px] sm:text-xs font-semibold py-3 border-b border-zinc-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] overflow-hidden">
-          <div className="flex items-center justify-around max-w-7xl mx-auto px-4 gap-6 overflow-x-auto no-scrollbar whitespace-nowrap">
-            <span className="inline-flex items-center gap-2">
-              <Truck size={14} className="text-emerald-600" />
-              <span>Free Delivery Over Rs. 5,000</span>
-              <span>Fast Delivery Across Pakistan</span>
-            </span>
-            <span className="text-zinc-300">✦</span>
-            <span className="inline-flex items-center gap-2">
-              <CheckCircle2 size={14} className="text-emerald-600" />
-              <span>Cash on Delivery & JazzCash</span>
-            </span>
-            <a
-              href="mailto:info@hangubrandedshoes.com"
-              className="inline-flex items-center gap-2 hover:text-emerald-700 transition-colors"
-            >
-              <Mail size={14} className="text-emerald-600" />
-              <span>info@hangubrandedshoes.com</span>
-            </a>
-            <span className="text-zinc-300">✦</span>
-            <span className="inline-flex items-center gap-2">
-              <RotateCcw size={14} className="text-emerald-600" />
-              <span>7-Day Hassle-Free Size Exchange</span>
-            </span>
-            <span className="text-zinc-300">✦</span>
-            <span className="inline-flex items-center gap-2">
-              <ShieldCheck size={14} className="text-emerald-600" />
-              <span>100% Handcrafted Leather</span>
-            </span>
+        {/* 2. Infinite Modern Luxury Marquee Trust Ticker */}
+        <div className="bg-white text-zinc-800 text-[11px] sm:text-xs font-semibold py-3 border-b border-zinc-200/80 shadow-[0_1px_3px_rgba(0,0,0,0.03)] overflow-hidden select-none">
+          <div className="luxury-marquee items-center gap-8">
+            {[0, 1].map((copyIndex) => (
+              <div key={copyIndex} className="flex items-center gap-8 shrink-0">
+                <span className="inline-flex items-center gap-2">
+                  <Truck size={15} className="text-emerald-600" />
+                  <span>Free Delivery Over Rs. 5,000</span>
+                </span>
+                <span className="text-zinc-300">✦</span>
+                <span className="inline-flex items-center gap-2">
+                  <CheckCircle2 size={15} className="text-emerald-600" />
+                  <span>Cash on Delivery (COD) All Pakistan</span>
+                </span>
+                <span className="text-zinc-300">✦</span>
+                <span className="inline-flex items-center gap-2">
+                  <RotateCcw size={15} className="text-emerald-600" />
+                  <span>7-Day Hassle-Free Size Exchange</span>
+                </span>
+                <span className="text-zinc-300">✦</span>
+                <span className="inline-flex items-center gap-2">
+                  <ShieldCheck size={15} className="text-emerald-600" />
+                  <span>100% Handcrafted Real Leather</span>
+                </span>
+                <span className="text-zinc-300">✦</span>
+                <span className="inline-flex items-center gap-2">
+                  <Package size={15} className="text-emerald-600" />
+                  <span>Open Parcel Check on Delivery</span>
+                </span>
+                <span className="text-zinc-300">✦</span>
+                <span className="inline-flex items-center gap-2">
+                  <Sparkles size={15} className="text-amber-500" />
+                  <span>Soft &amp; Lightweight Comfort Sole</span>
+                </span>
+                <span className="text-zinc-300">✦</span>
+              </div>
+            ))}
           </div>
         </div>
 

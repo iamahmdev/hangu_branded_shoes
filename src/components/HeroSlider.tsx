@@ -89,7 +89,7 @@ export default function HeroSlider() {
       onTouchEnd={handleTouchEnd}
     >
       {/* Spacious High-Impact Flagship Banner */}
-      <div className="relative h-[370px] sm:h-[430px] md:h-[480px] lg:h-[530px] w-full">
+      <div className="relative h-[440px] sm:h-[500px] md:h-[560px] lg:h-[620px] w-full">
         {SLIDES.map((slide, idx) => {
           const isActive = idx === current;
           return (
@@ -100,7 +100,7 @@ export default function HeroSlider() {
             >
               {/* Natural High-Definition Background Image */}
               <div
-                className={`absolute inset-0 bg-cover bg-center transition-transform duration-7000 ease-out ${isActive ? "scale-105" : "scale-100"
+                className={`absolute inset-0 bg-cover bg-center transition-transform duration-7000 ease-out ${isActive ? "scale-102" : "scale-100"
                   }`}
                 style={{ backgroundImage: `url(${slide.bgImage})` }}
               />

@@ -144,6 +144,20 @@ export default function SEO({
 
   return (
     <Head>
+      {/* Google Search Console & Webmaster Verification */}
+      {process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION && (
+        <meta name="google-site-verification" content={process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION} />
+      )}
+      {process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION && (
+        <meta name="msvalidate.01" content={process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION} />
+      )}
+
+      {/* Regional & Geographic Meta (Pakistan) */}
+      <meta name="geo.region" content="PK-KP" />
+      <meta name="geo.placename" content="Hangu" />
+      <meta name="geo.position" content="33.5281;71.0575" />
+      <meta name="ICBM" content="33.5281, 71.0575" />
+
       {/* Basic SEO Meta */}
       <title>{finalTitle}</title>
       <meta name="description" content={description} />

@@ -1,5 +1,7 @@
 import { GetServerSideProps } from "next";
 import { FALLBACK_PRODUCTS } from "../src/data/fallbackProducts";
+import dbConnect from "../src/lib/dbConnect";
+import Product from "../src/models/Product";
 
 function generateSiteMap(
   products: Array<{ id: number | string; updatedAt?: string }>,
@@ -46,17 +48,19 @@ function generateSiteMap(
 
 export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   const baseUrl = (process.env.NEXT_PUBLIC_SITE_URL || "https://hangubrandedshoes.com").replace(/\/+$/, "");
-  const apiUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:5001").replace(/\/+$/, "");
 
   let products: Array<{ id: number | string; updatedAt?: string }> = FALLBACK_PRODUCTS;
 
   try {
-    const response = await fetch(`${apiUrl}/api/products`);
-    if (response.ok) {
-      const data = await response.json();
-      if (data && Array.isArray(data.data) && data.data.length > 0) {
-        products = data.data;
-      }
+    await dbConnect();
+    const liveProducts = await Product.find({ isActive: { $ne: false } })
+      .select("id updatedAt")
+      .lean();
+    if (liveProducts && liveProducts.length > 0) {
+      products = liveProducts.map((p: any) => ({
+        id: p.id,
+        updatedAt: p.updatedAt ? new Date(p.updatedAt).toISOString() : undefined,
+      }));
     }
   } catch (err) {
     // Fallback products safely utilized

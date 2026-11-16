@@ -88,8 +88,8 @@ export default function HeroSlider() {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Sleek Compact Height Banner */}
-      <div className="relative h-[290px] sm:h-[340px] md:h-[380px] lg:h-[410px] w-full">
+      {/* Spacious High-Impact Flagship Banner */}
+      <div className="relative h-[370px] sm:h-[430px] md:h-[480px] lg:h-[530px] w-full">
         {SLIDES.map((slide, idx) => {
           const isActive = idx === current;
           return (

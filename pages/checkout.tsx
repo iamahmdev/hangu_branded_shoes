@@ -665,7 +665,7 @@ export default function Checkout() {
                 </div>
               )}
 
-              {/* JazzCash Section (Public - Shows ONLY Account Title 'Muhammad Atif Ibrahim', NO Phone Number) */}
+              {/* JazzCash Section */}
               {effectiveMethod === "jazzcash" && (
                 <div className="p-5 sm:p-6 rounded-2xl border border-red-200 bg-red-50/40">
                   <div className="flex items-center justify-between pb-3.5 border-b border-red-200/70">
@@ -674,7 +674,7 @@ export default function Checkout() {
                         JC
                       </span>
                       <div>
-                        <b className="text-zinc-950 text-sm block">Pay via JazzCash</b>
+                        <b className="text-zinc-950 text-sm block">JazzCash Direct Transfer</b>
                         <span className="text-xs text-zinc-600">
                           Account Title:{" "}
                           <strong className="text-zinc-950 font-bold">
@@ -684,29 +684,44 @@ export default function Checkout() {
                       </div>
                     </div>
                     <div className="text-right">
-                      <span className="text-[10px] text-zinc-500 block uppercase font-mono font-semibold">Amount to Pay</span>
-                      <b className="text-zinc-950 text-base font-mono font-bold">Rs. {effectiveTotal.toLocaleString()}</b>
+                      <span className="text-[10px] text-zinc-500 block uppercase font-mono font-semibold">Total Amount</span>
+                      <b className="text-red-700 text-base font-mono font-extrabold">Rs. {effectiveTotal.toLocaleString()}</b>
                     </div>
                   </div>
 
-                  <div className="mt-4 p-4 rounded-xl bg-white border border-red-100 flex items-start gap-3 shadow-xs">
-                    <ShieldCheck className="text-red-600 shrink-0 mt-0.5" size={20} />
-                    <div className="text-xs leading-relaxed">
-                      <b className="text-zinc-950 text-xs block mb-0.5">Secure Payment Verification</b>
-                      <p className="text-zinc-600">
-                        To maintain payment security, our official JazzCash account number will be revealed immediately on the confirmation step after you confirm your order details.
-                      </p>
+                  {/* Clean 1-Click Copy Number Box */}
+                  <div className="mt-4 p-4 rounded-xl bg-white border border-red-200 shadow-xs flex items-center justify-between gap-3">
+                    <div>
+                      <span className="text-[10px] uppercase font-bold text-red-600 tracking-wider block">Official JazzCash Number</span>
+                      <span className="font-mono text-lg sm:text-xl font-extrabold text-zinc-950">{jazzcashNumber || "03275430305"}</span>
                     </div>
+                    <button
+                      type="button"
+                      onClick={handleCopyAccount}
+                      className="px-3.5 py-2 rounded-xl bg-red-600 hover:bg-red-700 text-white text-xs font-bold flex items-center gap-1.5 transition-all shadow-xs active:scale-95 cursor-pointer"
+                    >
+                      {copied ? (
+                        <>
+                          <Check size={14} />
+                          <span>Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy size={14} />
+                          <span>Copy Number</span>
+                        </>
+                      )}
+                    </button>
                   </div>
 
-                  <div className="mt-4 text-xs text-zinc-600 space-y-2">
-                    <p className="flex items-start gap-2">
-                      <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">1</span>
-                      <span>Enter your name and delivery address above.</span>
+                  <div className="mt-3.5 text-xs text-zinc-600 space-y-1.5">
+                    <p className="flex items-center gap-2">
+                      <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold">1</span>
+                      <span>Number copy karein aur JazzCash App ya <b>*786#</b> se <b>Rs. {effectiveTotal.toLocaleString()}</b> send karein.</span>
                     </p>
-                    <p className="flex items-start gap-2">
-                      <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">2</span>
-                      <span>Click <b>&quot;Confirm Order &amp; Get JazzCash Details&quot;</b> below to view official account number, one-click copy, and WhatsApp confirmation.</span>
+                    <p className="flex items-center gap-2">
+                      <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold">2</span>
+                      <span>Neeche <b>&quot;Confirm Order&quot;</b> dabayein aur 1-click WhatsApp par screenshot bhej dein.</span>
                     </p>
                   </div>
                 </div>
@@ -793,7 +808,7 @@ export default function Checkout() {
                 {createOrderMutation.isPending
                   ? "Recording Order..."
                   : effectiveMethod === "jazzcash"
-                  ? "Confirm Order & Get JazzCash Details 📱"
+                  ? "Place Order & Pay via JazzCash 📱"
                   : "Confirm Order (Cash on Delivery) 🚚"}
               </span>
               <ArrowRight size={14} />

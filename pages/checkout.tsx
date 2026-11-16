@@ -399,7 +399,7 @@ export default function Checkout() {
                   </div>
                   <p className="flex items-start gap-2">
                     <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">1</span>
-                    <span>Open your <b>JazzCash App</b> or dial <b>*786#</b>.</span>
+                    <span>Open your <b>JazzCash App</b>.</span>
                   </p>
                   <p className="flex items-start gap-2">
                     <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold mt-0.5">2</span>
@@ -717,7 +717,7 @@ export default function Checkout() {
                   <div className="mt-3.5 text-xs text-zinc-600 space-y-1.5">
                     <p className="flex items-center gap-2">
                       <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold">1</span>
-                      <span>Number copy karein aur JazzCash App ya <b>*786#</b> se <b>Rs. {effectiveTotal.toLocaleString()}</b> send karein.</span>
+                      <span>Number copy karein aur apni <b>JazzCash App</b> se <b>Rs. {effectiveTotal.toLocaleString()}</b> transfer karein.</span>
                     </p>
                     <p className="flex items-center gap-2">
                       <span className="w-4 h-4 rounded-full bg-red-600 text-white flex items-center justify-center text-[10px] shrink-0 font-bold">2</span>

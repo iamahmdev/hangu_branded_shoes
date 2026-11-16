@@ -61,7 +61,23 @@ export default function QuickOrderModal() {
   const buildWhatsAppOrderUrl = () => {
     const sizeText = selectedSize || "42";
     const totalAmount = (p.price * qty).toLocaleString();
-    const msg = `Hello Hangu Branded Shoes! 👟\n\nI want to order this footwear pair:\n\n*Product:* ${p.name}\n*Category:* ${p.cat}\n*Size (EU):* ${sizeText}\n*Quantity:* ${qty}\n*Price:* Rs. ${totalAmount}\n*Payment:* Cash on Delivery / JazzCash\n\nMy Delivery Details:\nName: \nPhone Number: \nCity: \nComplete Address: `;
+    const msg =
+      `🛍️ *NEW ORDER — HANGU BRANDED SHOES*\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `👟 *Ordered Shoes:*\n` +
+      `• *${p.name}*\n` +
+      `   Size: ${sizeText} | Qty: ${qty} | Rs. ${totalAmount}\n\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `Subtotal: Rs. ${totalAmount}\n` +
+      `Shipping Delivery: FREE\n` +
+      `💵 *CASH DUE ON DELIVERY:* Rs. ${totalAmount}\n` +
+      `🚚 *Payment Method:* Cash on Delivery (COD)\n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `👤 *Customer Name:* \n` +
+      `📞 *Phone / WhatsApp:* \n` +
+      `📍 *Delivery Address:* \n` +
+      `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+      `_Hello! I want to order this shoe with Cash on Delivery. Please confirm my order and dispatch it._`;
     return wa(msg);
   };
 

@@ -158,30 +158,32 @@ export default function OrderDetailModal({
     }
 
     const msg = isCod
-      ? `Hello *${custName}*! 👟\n\n` +
-        `Thank you for ordering at *Hangu Branded Shoes*.\n\n` +
-        `*Order ID:* #${order.orderId}\n` +
-        `*Order Status:* ${(order.status || "").replace("_", " ").toUpperCase()}\n` +
-        `*Payment Method:* Cash on Delivery (COD)\n` +
-        `*Amount to Pay Rider:* Rs. ${(order.totalAmount || 0).toLocaleString()}\n` +
-        (order.deliveryNote ? `*Delivery Note:* ${order.deliveryNote}\n` : "") +
-        (order.courierName ? `*Courier:* ${order.courierName}\n` : "") +
-        (order.trackingNumber ? `*Tracking Number:* ${order.trackingNumber}\n` : "") +
-        `\nPlease keep the exact cash ready when the rider arrives.\n` +
-        `You can track your order anytime at: www.hangubrandedshoes.com/track\n\n` +
-        `Let us know if you need to confirm or adjust anything!`
-      : `Hello *${custName}*! 👟\n\n` +
-        `Thank you for shopping at *Hangu Branded Shoes*.\n\n` +
-        `*Order ID:* #${order.orderId}\n` +
-        `*Order Status:* ${(order.status || "").replace("_", " ").toUpperCase()}\n` +
-        `*Payment Status:* ${paymentStateText}\n` +
-        `*JazzCash TID:* ${order.transactionId || "N/A"}\n` +
-        (order.deliveryNote ? `*Delivery Note:* ${order.deliveryNote}\n` : "") +
-        (order.courierName ? `*Courier:* ${order.courierName}\n` : "") +
-        (order.trackingNumber ? `*Tracking Number:* ${order.trackingNumber}\n` : "") +
-        `*Total Amount:* Rs. ${(order.totalAmount || 0).toLocaleString()}\n\n` +
-        `You can track your order anytime at: www.hangubrandedshoes.com/track\n\n` +
-        `Let us know if you have any questions!`;
+      ? `👟 *ORDER UPDATE — HANGU BRANDED SHOES*\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `Hello *${custName}*! Thank you for choosing us.\n\n` +
+        `📦 *Order ID:* #${order.orderId}\n` +
+        `📊 *Order Status:* ${(order.status || "").replace("_", " ").toUpperCase()}\n` +
+        `🚚 *Payment Method:* Cash on Delivery (COD)\n` +
+        `💵 *Amount Due to Rider:* Rs. ${(order.totalAmount || 0).toLocaleString()}\n` +
+        (order.courierName ? `🛵 *Courier:* ${order.courierName}\n` : "") +
+        (order.trackingNumber ? `📍 *Tracking Number:* ${order.trackingNumber}\n` : "") +
+        (order.deliveryNote ? `📝 *Delivery Note:* ${order.deliveryNote}\n` : "") +
+        `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `🔎 *Live Tracking:* https://hangubrandedshoes.com/track\n` +
+        `_Please keep the exact cash ready when the rider arrives at your doorstep._`
+      : `👟 *ORDER UPDATE — HANGU BRANDED SHOES*\n` +
+        `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `Hello *${custName}*! Thank you for choosing us.\n\n` +
+        `📦 *Order ID:* #${order.orderId}\n` +
+        `📊 *Order Status:* ${(order.status || "").replace("_", " ").toUpperCase()}\n` +
+        `💳 *Payment Status:* ${paymentStateText}\n` +
+        `🔖 *JazzCash TID:* ${order.transactionId || "N/A"}\n` +
+        `💰 *Total Amount:* Rs. ${(order.totalAmount || 0).toLocaleString()}\n` +
+        (order.courierName ? `🛵 *Courier:* ${order.courierName}\n` : "") +
+        (order.trackingNumber ? `📍 *Tracking Number:* ${order.trackingNumber}\n` : "") +
+        `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
+        `🔎 *Live Tracking:* https://hangubrandedshoes.com/track\n` +
+        `_Thank you for your business! Let us know if you need any assistance._`;
 
     const cleanPhone = (order.customer?.phone || "").replace(/[^0-9]/g, "");
     const waUrl = cleanPhone.startsWith("0")

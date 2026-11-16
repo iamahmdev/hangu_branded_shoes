@@ -571,7 +571,7 @@ export default function Checkout() {
                 <div>
                   <label className="text-xs font-semibold text-zinc-700 block mb-1">Complete Delivery Address</label>
                   <textarea
-                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
+                    className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 sm:py-3 text-zinc-950 font-medium text-base sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all resize-none"
                     required
                     rows={3}
                     value={f.address}

@@ -153,41 +153,50 @@ export default function Reviews() {
 
           {errorMsg && <div className="rerr text-brand-red text-xs">{errorMsg}</div>}
 
-          <input
-            className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-2.5 text-zinc-950 font-medium placeholder:text-zinc-500 text-xs sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
-            required
-            placeholder="Your full name"
-            value={form.n}
-            onChange={handleChange("n")}
-          />
+          <div>
+            <label className="text-[11px] font-semibold text-zinc-700 block mb-1">Full Name</label>
+            <input
+              className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 text-zinc-950 font-medium text-xs sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
+              required
+              value={form.n}
+              onChange={handleChange("n")}
+            />
+          </div>
 
-          <input
-            className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-2.5 text-zinc-950 font-medium placeholder:text-zinc-500 text-xs sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
-            placeholder="City (e.g. Peshawar, Lahore, Kohat)"
-            value={form.c}
-            onChange={handleChange("c")}
-          />
+          <div>
+            <label className="text-[11px] font-semibold text-zinc-700 block mb-1">City</label>
+            <input
+              className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 text-zinc-950 font-medium text-xs sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
+              value={form.c}
+              onChange={handleChange("c")}
+            />
+          </div>
 
-          <select
-            className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-2.5 text-zinc-950 font-medium text-xs sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all cursor-pointer"
-            value={form.p || products?.[0]?.name || ""}
-            onChange={handleChange("p")}
-          >
-            {products?.map((p) => (
-              <option key={p.id} value={p.name}>
-                {p.name}
-              </option>
-            ))}
-          </select>
+          <div>
+            <label className="text-[11px] font-semibold text-zinc-700 block mb-1">Shoe Model</label>
+            <select
+              className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 text-zinc-950 font-medium text-xs sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all cursor-pointer"
+              value={form.p || products?.[0]?.name || ""}
+              onChange={handleChange("p")}
+            >
+              {products?.map((p) => (
+                <option key={p.id} value={p.name}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
+          </div>
 
-          <textarea
-            className="w-full bg-white border border-zinc-300 rounded-xl px-4 py-2.5 text-zinc-950 font-medium placeholder:text-zinc-500 text-xs sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all"
-            required
-            rows={3}
-            placeholder="Tell us about the fit, sole cushioning and finish…"
-            value={form.t}
-            onChange={handleChange("t")}
-          />
+          <div>
+            <label className="text-[11px] font-semibold text-zinc-700 block mb-1">Your Review</label>
+            <textarea
+              className="w-full bg-white border border-zinc-300 rounded-xl px-3.5 py-2.5 text-zinc-950 font-medium text-xs sm:text-sm outline-none focus:border-zinc-950 focus:ring-2 focus:ring-zinc-950/10 shadow-xs transition-all resize-none"
+              required
+              rows={3}
+              value={form.t}
+              onChange={handleChange("t")}
+            />
+          </div>
 
           <button
             type="submit"

@@ -12,6 +12,9 @@ Allow: /reviews
 # Disallow private checkout, cart, API and administrative endpoints
 Disallow: /admin
 Disallow: /admin/
+Disallow: /dashboard
+Disallow: /dashboard/
+Disallow: /dashboad
 Disallow: /api/
 Disallow: /checkout
 Disallow: /cart

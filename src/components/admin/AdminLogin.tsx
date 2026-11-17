@@ -84,7 +84,7 @@ export default function AdminLogin({ onLogin }: AdminLoginProps) {
   return (
     <>
       <Head>
-        <title>Super Admin Portal — Hangu Branded Shoes</title>
+        <title>Dashboard Portal — Hangu Branded Shoes</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
       </Head>
 

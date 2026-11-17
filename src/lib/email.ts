@@ -104,8 +104,8 @@ export async function sendPasswordResetAlert(
                   <table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
                       <td align="center">
-                        <a href="https://hangubrandedshoes.com/admin" target="_blank" style="display: inline-block; background-color: #0f172a; color: #ffffff; text-decoration: none; font-size: 13px; font-weight: 700; padding: 14px 30px; border-radius: 12px; letter-spacing: 0.3px;">
-                          Open Admin Portal →
+                        <a href="https://hangubrandedshoes.com/dashboard" target="_blank" style="display: inline-block; background-color: #0f172a; color: #ffffff; text-decoration: none; font-size: 13px; font-weight: 700; padding: 14px 30px; border-radius: 12px; letter-spacing: 0.3px;">
+                          Open Admin Dashboard →
                         </a>
                       </td>
                     </tr>

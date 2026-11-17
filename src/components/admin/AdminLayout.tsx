@@ -67,7 +67,7 @@ export default function AdminLayout({
   return (
     <>
       <Head>
-        <title>{`Admin — ${current.title} | Hangu Branded Shoes`}</title>
+        <title>{`Dashboard — ${current.title} | Hangu Branded Shoes`}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="robots" content="noindex, nofollow" />
       </Head>

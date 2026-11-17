@@ -147,12 +147,7 @@ export default function AdminPage() {
     deliveryNote?: string
   ) => {
     if (!token) return;
-    await updateOrderStatusMutation.mutateAsync({
-      token,
-      orderId,
-      payload: { status, courierName, trackingNumber, deliveryNote },
-    });
-    // Keep local modal in sync
+    // Instant 0ms optimistic update for open modal
     if (selectedOrder && selectedOrder.orderId === orderId) {
       setSelectedOrder((prev: any) => ({
         ...prev,
@@ -162,6 +157,11 @@ export default function AdminPage() {
         deliveryNote: deliveryNote ?? prev.deliveryNote,
       }));
     }
+    updateOrderStatusMutation.mutate({
+      token,
+      orderId,
+      payload: { status, courierName, trackingNumber, deliveryNote },
+    });
   };
 
   const handleUpdatePaymentStatus = async (
@@ -169,23 +169,23 @@ export default function AdminPage() {
     paymentStatus: "paid" | "rejected"
   ) => {
     if (!token) return;
-    await updateOrderPaymentMutation.mutateAsync({
-      token,
-      orderId,
-      paymentStatus,
-    });
-    // Keep local modal in sync
+    // Instant 0ms optimistic update for open modal
     if (selectedOrder && selectedOrder.orderId === orderId) {
       setSelectedOrder((prev: any) => ({
         ...prev,
         paymentStatus,
       }));
     }
+    updateOrderPaymentMutation.mutate({
+      token,
+      orderId,
+      paymentStatus,
+    });
   };
 
   const handleMarkCashCollected = async (orderId: string, note?: string) => {
     if (!token) return;
-    await markCashCollectedMutation.mutateAsync({ token, orderId, note });
+    // Instant 0ms optimistic update for open modal
     if (selectedOrder && selectedOrder.orderId === orderId) {
       setSelectedOrder((prev: any) => ({
         ...prev,
@@ -193,6 +193,7 @@ export default function AdminPage() {
         status: "delivered",
       }));
     }
+    markCashCollectedMutation.mutate({ token, orderId, note });
   };
 
   const handleMarkFakeOrder = async (orderId: string, blockPhone?: boolean, reason?: string) => {

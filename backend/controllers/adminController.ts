@@ -11,10 +11,10 @@ export async function getDashboard(_req: AuthRequest, res: Response): Promise<vo
     const deliveredOrders = orders.filter((o) => o.status === "delivered").length;
     const pendingOrders = orders.filter((o) => o.status === "pending" || o.status === "awaiting_confirmation").length;
     const pendingPaymentsCount = orders.filter(
-      (o) => (o.paymentMethod === "easypaisa" || o.paymentMethod === "jazzcash") && o.paymentStatus === "pending_verification" && o.status !== "cancelled"
+      (o) => (o.paymentMethod === "easypaisa" || o.paymentMethod === "jazzcash") && o.paymentStatus === "pending_verification" && o.status !== "cancelled" && o.status !== "delivered"
     ).length;
     const codPendingCount = orders.filter(
-      (o) => o.paymentMethod === "cod" && (o.paymentStatus === "cod_pending" || o.status === "awaiting_confirmation") && o.status !== "cancelled"
+      (o) => o.paymentMethod === "cod" && o.paymentStatus === "cod_pending" && o.status !== "cancelled" && o.status !== "delivered"
     ).length;
     const totalOrders = orders.length;
 

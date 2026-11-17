@@ -59,6 +59,10 @@ export default function OrdersTab({
   isLoading = false,
 }: OrdersTabProps) {
   const filteredOrders = orders.filter((o) => {
+    // Order status filter
+    if (filterStatus && filterStatus !== "all" && o.status !== filterStatus) {
+      return false;
+    }
     // Payment method filter
     if (paymentMethodFilter !== "all" && (o.paymentMethod || "cod") !== paymentMethodFilter) {
       return false;

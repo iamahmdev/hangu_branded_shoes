@@ -122,7 +122,7 @@ export default function Shoe3DModal({ product, isOpen, onClose }: Shoe3DModalPro
             </button>
 
             <Link
-              href={`/product/${product.id}`}
+              href={`/product/${product.id ?? (product as any)._id}`}
               onClick={onClose}
               className="inline-flex items-center gap-1 px-3 py-2 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-800 text-xs font-semibold transition-colors border border-zinc-200"
             >

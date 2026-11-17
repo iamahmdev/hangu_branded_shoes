@@ -55,10 +55,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     if (status) {
       order.status = status;
+      if (status === "delivered" && (order.paymentMethod === "cod" || order.paymentStatus === "cod_pending")) {
+        order.paymentStatus = "paid";
+        (order as any).paidAt = new Date();
+      }
       order.timeline.push({
         status,
         timestamp: new Date(),
-        note: note || `Status updated to ${status}`,
+        note: note || (status === "delivered" ? "Delivered to customer and payment collected." : `Status updated to ${status}`),
       });
     }
 

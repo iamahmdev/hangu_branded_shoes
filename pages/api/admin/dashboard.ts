@@ -34,13 +34,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       (o: any) =>
         (o.paymentMethod === "easypaisa" || o.paymentMethod === "jazzcash") &&
         o.paymentStatus === "pending_verification" &&
-        o.status !== "cancelled"
+        o.status !== "cancelled" &&
+        o.status !== "delivered"
     ).length;
     const codPendingCount = orders.filter(
       (o: any) =>
         o.paymentMethod === "cod" &&
-        (o.paymentStatus === "cod_pending" || o.status === "awaiting_confirmation") &&
-        o.status !== "cancelled"
+        o.paymentStatus === "cod_pending" &&
+        o.status !== "cancelled" &&
+        o.status !== "delivered"
     ).length;
     const totalOrders = orders.length;
 

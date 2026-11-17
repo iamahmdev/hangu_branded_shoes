@@ -10,6 +10,8 @@ import { useProduct } from "../../src/hooks/useApi";
 import { WhatsAppIcon } from "../../src/components/WhatsAppButton";
 import { FALLBACK_PRODUCTS } from "../../src/data/fallbackProducts";
 import { Product as ProductType } from "../../src/types";
+import dbConnect from "../../src/lib/dbConnect";
+import ProductModel from "../../src/models/Product";
 import {
   Star,
   Tag,
@@ -50,7 +52,7 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
   const [isLightboxOpen, setIsLightboxOpen] = useState<boolean>(false);
 
   // TanStack Query hook - uses initialProduct directly so ZERO loading delay!
-  const { data: apiProduct, isError } = useProduct(query.id as string);
+  const { data: apiProduct, isError, isLoading } = useProduct(query.id as string);
   const p = apiProduct || initialProduct || (query.id ? FALLBACK_PRODUCTS.find((item) => item.id === Number(query.id)) : undefined);
 
   // Gallery images list: strictly uses genuine product images from database
@@ -72,7 +74,7 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
     return `${startStr}-${endStr}`;
   }, []);
 
-  if (!p) {
+  if (isLoading && !p) {
     return (
       <Layout>
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16 grid grid-cols-1 lg:grid-cols-12 gap-10">
@@ -89,7 +91,7 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
     );
   }
 
-  if (isError || !p) {
+  if (!p) {
     return (
       <Layout>
         <div className="max-w-xl mx-auto text-center py-28 px-5">
@@ -697,22 +699,49 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = FALLBACK_PRODUCTS.map((item) => ({
-    params: { id: String(item.id) },
-  }));
   return {
-    paths,
+    paths: [],
     fallback: "blocking",
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const id = params?.id;
-  const numId = Number(id);
-  const initialProduct = FALLBACK_PRODUCTS.find((item) => item.id === numId) || null;
-  if (!initialProduct) {
+  if (!id || typeof id !== "string") {
     return { notFound: true };
   }
+
+  const numId = Number(id);
+  let initialProduct: any = null;
+
+  try {
+    await dbConnect();
+    const matchConditions: any[] = [];
+    if (!isNaN(numId)) matchConditions.push({ id: numId });
+    if (id.match(/^[0-9a-fA-F]{24}$/)) matchConditions.push({ _id: id });
+
+    if (matchConditions.length > 0) {
+      const dbProduct = await ProductModel.findOne({ $or: matchConditions }).lean();
+      if (dbProduct) {
+        initialProduct = JSON.parse(JSON.stringify(dbProduct));
+      }
+    }
+  } catch (dbErr) {
+    console.warn("MongoDB fetch in getStaticProps failed, falling back:", dbErr);
+  }
+
+  // Fallback if not yet in MongoDB or offline
+  if (!initialProduct && !isNaN(numId)) {
+    const fallback = FALLBACK_PRODUCTS.find((item) => item.id === numId);
+    if (fallback) {
+      initialProduct = JSON.parse(JSON.stringify(fallback));
+    }
+  }
+
+  if (!initialProduct) {
+    return { notFound: true, revalidate: 10 };
+  }
+
   return {
     props: {
       initialProduct,

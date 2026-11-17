@@ -36,6 +36,8 @@ export default function ProductCard({ p }: ProductCardProps) {
     setCardTilt({ x: 0, y: 0 });
   };
 
+  const productUrl = "/product/" + (p.id ?? (p as any)._id);
+
   return (
     <>
       <div
@@ -59,7 +61,7 @@ export default function ProductCard({ p }: ProductCardProps) {
         >
           {/* Main Shoe Link */}
           <Link
-            href={"/product/" + p.id}
+            href={productUrl}
             prefetch={true}
             className="w-full h-full flex items-center justify-center relative cursor-pointer"
             title={`View ${p.name}`}
@@ -115,7 +117,7 @@ export default function ProductCard({ p }: ProductCardProps) {
             </div>
 
             <h3 className="font-bold text-zinc-950 text-xs sm:text-sm hover:text-emerald-700 transition-colors line-clamp-1">
-              <Link href={"/product/" + p.id} prefetch={true} title={p.name}>
+              <Link href={productUrl} prefetch={true} title={p.name}>
                 {p.name}
               </Link>
             </h3>
@@ -147,7 +149,7 @@ export default function ProductCard({ p }: ProductCardProps) {
               <span className="truncate">Quick Order</span>
             </button>
             <Link
-              href={"/product/" + p.id}
+              href={productUrl}
               className="p-2 sm:p-2.5 rounded-xl bg-zinc-100 hover:bg-zinc-200 text-zinc-700 transition-colors shrink-0 flex items-center justify-center"
               title="View Product Details"
               aria-label={`View details for ${p.name}`}

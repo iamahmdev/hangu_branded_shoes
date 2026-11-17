@@ -9,7 +9,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === "GET") {
     try {
       await dbConnect();
-      const orders = await Order.find().sort({ createdAt: -1 }).limit(50);
+      const { status, paymentStatus, paymentMethod, search } = req.query;
+      const query: any = {};
+      if (status && status !== "all") {
+        query.status = status;
+      }
+      if (paymentStatus && paymentStatus !== "all") {
+        query.paymentStatus = paymentStatus;
+      }
+      if (paymentMethod && paymentMethod !== "all") {
+        query.paymentMethod = paymentMethod;
+      }
+      if (search && typeof search === "string" && search.trim()) {
+        const s = search.trim();
+        query.$or = [
+          { orderId: { $regex: s, $options: "i" } },
+          { "customer.name": { $regex: s, $options: "i" } },
+          { "customer.phone": { $regex: s, $options: "i" } },
+          { "customer.city": { $regex: s, $options: "i" } },
+          { transactionId: { $regex: s, $options: "i" } },
+        ];
+      }
+      const orders = await Order.find(query).sort({ createdAt: -1 }).limit(100);
       return res.status(200).json({ success: true, count: orders.length, data: orders });
     } catch (err: any) {
       return res.status(500).json({ success: false, message: err.message || "Failed to fetch orders" });

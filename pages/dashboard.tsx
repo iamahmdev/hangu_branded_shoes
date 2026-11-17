@@ -152,16 +152,27 @@ export default function AdminPage() {
       setSelectedOrder((prev: any) => ({
         ...prev,
         status,
+        ...(status === "delivered" ? { paymentStatus: "paid" } : {}),
         courierName: courierName ?? prev.courierName,
         trackingNumber: trackingNumber ?? prev.trackingNumber,
         deliveryNote: deliveryNote ?? prev.deliveryNote,
       }));
     }
-    updateOrderStatusMutation.mutate({
-      token,
-      orderId,
-      payload: { status, courierName, trackingNumber, deliveryNote },
-    });
+    updateOrderStatusMutation.mutate(
+      {
+        token,
+        orderId,
+        payload: { status, courierName, trackingNumber, deliveryNote },
+      },
+      {
+        onSuccess: () => {
+          setToast({
+            type: "success",
+            text: `Order #${orderId} marked as ${status.replace("_", " ")}!`,
+          });
+        },
+      }
+    );
   };
 
   const handleUpdatePaymentStatus = async (
@@ -176,11 +187,21 @@ export default function AdminPage() {
         paymentStatus,
       }));
     }
-    updateOrderPaymentMutation.mutate({
-      token,
-      orderId,
-      paymentStatus,
-    });
+    updateOrderPaymentMutation.mutate(
+      {
+        token,
+        orderId,
+        paymentStatus,
+      },
+      {
+        onSuccess: () => {
+          setToast({
+            type: "success",
+            text: `Payment marked as ${paymentStatus}!`,
+          });
+        },
+      }
+    );
   };
 
   const handleMarkCashCollected = async (orderId: string, note?: string) => {
@@ -193,7 +214,18 @@ export default function AdminPage() {
         status: "delivered",
       }));
     }
-    markCashCollectedMutation.mutate({ token, orderId, note });
+    try {
+      await markCashCollectedMutation.mutateAsync({ token, orderId, note });
+      setToast({
+        type: "success",
+        text: `Order #${orderId} marked as Delivered and Cash Collected!`,
+      });
+    } catch (err: any) {
+      setToast({
+        type: "error",
+        text: err?.message || "Failed to mark cash collected.",
+      });
+    }
   };
 
   const handleMarkFakeOrder = async (orderId: string, blockPhone?: boolean, reason?: string) => {

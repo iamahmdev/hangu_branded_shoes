@@ -41,7 +41,7 @@ export default function QuickSearchModal() {
 
   if (!searchOpen) return null;
 
-  const handleSelectProduct = (id: number) => {
+  const handleSelectProduct = (id: number | string) => {
     closeSearch();
     router.push(`/product/${id}`);
   };
@@ -92,7 +92,7 @@ export default function QuickSearchModal() {
             searchResults.map((p) => (
               <div
                 key={p.id}
-                onClick={() => handleSelectProduct(p.id)}
+                onClick={() => handleSelectProduct(p.id ?? (p as any)._id)}
                 className="qsearch-item py-3 flex items-center justify-between gap-4 cursor-pointer hover:bg-zinc-50 p-2.5 rounded-2xl transition-colors group"
               >
                 <div className="flex items-center gap-3 min-w-0">

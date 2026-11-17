@@ -49,6 +49,13 @@ export default function AdminPage() {
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
   const [productModalOpen, setProductModalOpen] = useState<boolean>(false);
   const [editingProduct, setEditingProduct] = useState<ProductFormData | null>(null);
+  const [toast, setToast] = useState<{ type: "success" | "error"; text: string } | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const timer = setTimeout(() => setToast(null), 4000);
+    return () => clearTimeout(timer);
+  }, [toast]);
 
   // ----------------------------------------------------
   // TANSTACK QUERY HOOKS (Auto-refreshes every 15s)
@@ -231,9 +238,28 @@ export default function AdminPage() {
     adjustStockMutation.mutate({ token, id: productId, delta });
   };
 
-  const handleDeleteProduct = (productId: number) => {
-    if (!token) return;
-    deleteProductMutation.mutate({ token, id: productId });
+  const handleDeleteProduct = (productId: number | string) => {
+    if (!token) {
+      setToast({ type: "error", text: "Admin session expired. Please log in again." });
+      return;
+    }
+    deleteProductMutation.mutate(
+      { token, id: productId },
+      {
+        onSuccess: (data: any) => {
+          setToast({
+            type: "success",
+            text: data?.message || "Product successfully deleted from catalog!",
+          });
+        },
+        onError: (err: any) => {
+          setToast({
+            type: "error",
+            text: err?.message || "Failed to delete product. Please try again.",
+          });
+        },
+      }
+    );
   };
 
   const handleUploadProductImage = async (file: File) => {
@@ -416,6 +442,20 @@ export default function AdminPage() {
           onSave={handleSaveProduct}
           onUploadImage={handleUploadProductImage}
         />
+      )}
+
+      {/* Floating Action Toast Notification (Mobile & Desktop) */}
+      {toast && (
+        <div className="fixed bottom-6 right-6 z-[120] flex items-center gap-3 px-4 py-3 rounded-2xl bg-slate-900 text-white shadow-2xl border border-slate-700/80 text-xs font-semibold animate-slideUp">
+          <span>{toast.type === "success" ? "✅" : "⚠️"} {toast.text}</span>
+          <button
+            type="button"
+            onClick={() => setToast(null)}
+            className="text-slate-400 hover:text-white text-base leading-none ml-2"
+          >
+            &times;
+          </button>
+        </div>
       )}
     </>
   );

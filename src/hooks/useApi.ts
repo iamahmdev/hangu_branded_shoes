@@ -319,7 +319,17 @@ export function useAdminDeleteProduct() {
   return useMutation({
     mutationFn: ({ token, id }: { token: string; id: number | string }) =>
       api.adminDeleteProduct(token, id),
-    onSuccess: () => {
+    onMutate: async ({ id }) => {
+      await queryClient.cancelQueries({ queryKey: ["products"] });
+      // Optimistically remove from all product query variants
+      queryClient.setQueriesData({ queryKey: ["products"] }, (old: any) => {
+        if (!Array.isArray(old)) return old;
+        return old.filter(
+          (p: any) => p.id !== id && p._id !== id && String(p.id) !== String(id)
+        );
+      });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       queryClient.invalidateQueries({ queryKey: ["categories"] });
       queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });

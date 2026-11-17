@@ -9,7 +9,7 @@ interface ProductsTabProps {
   onSearchChange: (query: string) => void;
   onAddProduct: () => void;
   onEditProduct: (product: any) => void;
-  onDeleteProduct: (productId: number) => void;
+  onDeleteProduct: (productId: number | string) => void;
   onAdjustStock: (productId: number, delta: number) => void;
   onToggleActive?: (product: any) => void;
   isLoading?: boolean;
@@ -29,6 +29,7 @@ export default function ProductsTab({
   isLoading = false,
 }: ProductsTabProps) {
   const [selectedCat, setSelectedCat] = useState<string>("All");
+  const [productToDelete, setProductToDelete] = useState<any | null>(null);
 
   const filteredProducts = products.filter((p) => {
     const matchesCat = selectedCat === "All" || p.cat === selectedCat;
@@ -249,11 +250,7 @@ export default function ProductsTab({
                           </button>
 
                           <button
-                            onClick={() => {
-                              if (confirm(`Delete shoe "${p.name}"? This cannot be undone.`)) {
-                                onDeleteProduct(p.id);
-                              }
-                            }}
+                            onClick={() => setProductToDelete(p)}
                             className="p-2 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 transition-colors"
                             title="Delete Product from Catalog"
                           >
@@ -268,7 +265,158 @@ export default function ProductsTab({
             </tbody>
           </table>
         </div>
+
+        {/* Mobile Cards View (Visible on phones & tablets) */}
+        <div className="block md:hidden divide-y divide-slate-100">
+          {isLoading ? (
+            <div className="p-8 text-center text-slate-400 text-xs">
+              Loading shoes catalog from database...
+            </div>
+          ) : filteredProducts.length === 0 ? (
+            <div className="p-8 text-center text-slate-400 text-xs">
+              No shoes found. Click "Add Shoe" to create one.
+            </div>
+          ) : (
+            filteredProducts.map((p: any) => {
+              const stockNum = p.stock ?? p.stockCount ?? 0;
+              const isEnabled = p.isActive !== false;
+
+              return (
+                <div key={p.id || p._id} className="p-4 flex flex-col gap-3 bg-white">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={resolveProductImage(p.img)}
+                      alt={p.name}
+                      className="w-16 h-16 rounded-xl object-cover bg-slate-100 border border-slate-200 shrink-0"
+                    />
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center justify-between gap-1.5 mb-1">
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                          {p.cat}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => onToggleActive && onToggleActive(p)}
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase transition-all flex items-center gap-1 ${
+                            isEnabled
+                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200"
+                              : "bg-slate-100 text-slate-500 border border-slate-200"
+                          }`}
+                        >
+                          {isEnabled ? <CheckCircle2 size={10} /> : <EyeOff size={10} />}
+                          <span>{isEnabled ? "Active" : "Disabled"}</span>
+                        </button>
+                      </div>
+                      <b className="text-slate-900 text-xs block truncate">{p.name}</b>
+                      <b className="text-emerald-700 font-mono text-xs block mt-0.5">
+                        Rs. {(p.price || 0).toLocaleString()}
+                      </b>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between pt-2.5 border-t border-slate-100 gap-2">
+                    {/* Stock adjust */}
+                    <div className="flex items-center gap-1">
+                      <span className="text-[11px] text-slate-500 mr-1 font-medium">Stock:</span>
+                      <button
+                        onClick={() => onAdjustStock(p.id, -1)}
+                        disabled={stockNum <= 0}
+                        className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600 disabled:opacity-40"
+                      >
+                        <MinusCircle size={14} />
+                      </button>
+                      <span className="font-mono font-bold text-xs px-1.5 min-w-[24px] text-center text-slate-900">
+                        {stockNum}
+                      </span>
+                      <button
+                        onClick={() => onAdjustStock(p.id, 1)}
+                        className="p-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-600"
+                      >
+                        <PlusCircle size={14} />
+                      </button>
+                      <button
+                        onClick={() => onAdjustStock(p.id, 10)}
+                        className="px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 text-[10px] font-mono font-bold border border-emerald-200 ml-0.5"
+                      >
+                        +10
+                      </button>
+                    </div>
+
+                    {/* Action buttons */}
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => onEditProduct(p)}
+                        className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-emerald-50 text-slate-700 hover:text-emerald-700 border border-slate-200 text-xs font-semibold flex items-center gap-1 transition-colors"
+                      >
+                        <Edit2 size={13} />
+                        <span>Edit</span>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setProductToDelete(p)}
+                        className="px-3 py-1.5 rounded-xl bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 text-xs font-semibold flex items-center gap-1 transition-colors"
+                      >
+                        <Trash2 size={13} />
+                        <span>Delete</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
+
+      {/* Sleek In-App Delete Confirmation Modal (Cross-Device 100% reliable) */}
+      {productToDelete && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-200 transform animate-scaleUp">
+            <div className="w-14 h-14 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto mb-4 border border-rose-100 shadow-sm">
+              <Trash2 size={26} />
+            </div>
+
+            <h3 className="text-base font-bold text-slate-900 text-center mb-1.5">
+              Delete Shoe from Catalog?
+            </h3>
+            
+            <p className="text-xs text-slate-500 text-center mb-4 leading-relaxed">
+              Are you sure you want to permanently delete:
+              <br />
+              <strong className="text-slate-900 font-semibold text-xs mt-1 inline-block">
+                "{productToDelete.name}"
+              </strong>
+            </p>
+
+            <div className="bg-rose-50/70 rounded-xl p-3 mb-5 border border-rose-100 text-[11px] text-rose-700 text-center font-medium">
+              ⚠️ This will remove it from MongoDB Atlas and customer store view permanently.
+            </div>
+
+            <div className="flex gap-2.5">
+              <button
+                type="button"
+                onClick={() => setProductToDelete(null)}
+                className="flex-1 py-2.5 px-4 rounded-xl border border-slate-200 bg-white text-slate-700 font-semibold text-xs hover:bg-slate-50 transition-colors shadow-sm"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  const target = productToDelete;
+                  setProductToDelete(null);
+                  onDeleteProduct(target.id ?? target._id);
+                }}
+                className="flex-1 py-2.5 px-4 rounded-xl bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-semibold text-xs transition-colors shadow-sm"
+              >
+                Yes, Delete Shoe
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

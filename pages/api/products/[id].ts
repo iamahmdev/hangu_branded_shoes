@@ -22,8 +22,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       await dbConnect();
+      const matchConditions: any[] = [];
+      if (!isNaN(numId)) matchConditions.push({ id: numId });
+      if (typeof id === "string" && id.match(/^[0-9a-fA-F]{24}$/)) matchConditions.push({ _id: id });
+      if (matchConditions.length === 0) {
+        return res.status(400).json({ success: false, message: "Invalid product ID format." });
+      }
+
       const updated = await Product.findOneAndUpdate(
-        { $or: [{ id: numId }, { _id: typeof id === "string" && id.match(/^[0-9a-fA-F]{24}$/) ? id : null }] },
+        { $or: matchConditions },
         { $set: req.body },
         { new: true }
       );
@@ -52,9 +59,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       await dbConnect();
-      const deleted = await Product.findOneAndDelete({
-        $or: [{ id: numId }, { _id: typeof id === "string" && id.match(/^[0-9a-fA-F]{24}$/) ? id : null }],
-      });
+      const matchConditions: any[] = [];
+      if (!isNaN(numId)) matchConditions.push({ id: numId });
+      if (typeof id === "string" && id.match(/^[0-9a-fA-F]{24}$/)) matchConditions.push({ _id: id });
+      if (matchConditions.length === 0) {
+        return res.status(400).json({ success: false, message: "Invalid product ID format." });
+      }
+
+      const deleted = await Product.findOneAndDelete({ $or: matchConditions });
 
       if (!deleted) {
         return res.status(404).json({ success: false, message: "Product not found to delete" });

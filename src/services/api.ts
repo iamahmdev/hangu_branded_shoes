@@ -496,9 +496,16 @@ export const api = {
   async adminDeleteProduct(token: string, id: number | string): Promise<{ success: boolean; message?: string }> {
     const res = await requestApi(`/products/${id}`, {
       method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Cache-Control": "no-cache",
+      },
     });
-    return await res.json();
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.success === false) {
+      throw new Error(data.message || `Failed to delete product (HTTP ${res.status})`);
+    }
+    return data;
   },
 
   async adminGetReviews(token: string, params?: { status?: string; search?: string }): Promise<{ success: boolean; count?: number; data?: any[] }> {

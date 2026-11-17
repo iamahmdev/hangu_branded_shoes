@@ -39,7 +39,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ success: false, message: `Method ${req.method} Not Allowed` });
   }
 
-  const { cat, search, sort } = req.query;
+  const { cat, search, sort, fresh } = req.query;
+  const isFreshRequested = fresh === "true" || req.headers["cache-control"]?.includes("no-cache");
 
   try {
     await dbConnect();
@@ -66,7 +67,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const dbProducts = await Product.find(query).sort(sortOption).lean();
 
     if (dbProducts && dbProducts.length > 0) {
-      res.setHeader("Cache-Control", "public, s-maxage=1800, stale-while-revalidate=86400");
+      if (isFreshRequested) {
+        res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+      } else {
+        res.setHeader("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
+      }
       return res.status(200).json({
         success: true,
         count: dbProducts.length,

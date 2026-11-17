@@ -175,6 +175,8 @@ export function useAdminOrders(
         ? api.adminGetOrders(token, params)
         : Promise.resolve({ success: false, data: [] }),
     enabled: Boolean(token),
+    placeholderData: (prev) => prev,
+    staleTime: 1000 * 30, // 30s cache so tab switching is instant
     refetchInterval: 15000, // 15-second auto-refresh for real-time live updates
   });
 }
@@ -191,7 +193,28 @@ export function useAdminUpdateOrderStatus() {
       orderId: string;
       payload: { status?: string; courierName?: string; trackingNumber?: string; deliveryNote?: string; note?: string };
     }) => api.adminUpdateOrderStatus(token, orderId, payload),
-    onSuccess: () => {
+    onMutate: async ({ orderId, payload }) => {
+      await queryClient.cancelQueries({ queryKey: ["admin-orders"] });
+      queryClient.setQueriesData({ queryKey: ["admin-orders"] }, (old: any) => {
+        if (!old || !Array.isArray(old.data)) return old;
+        return {
+          ...old,
+          data: old.data.map((order: any) => {
+            if (order.orderId === orderId || order._id === orderId) {
+              return {
+                ...order,
+                ...(payload.status ? { status: payload.status } : {}),
+                ...(payload.courierName !== undefined ? { courierName: payload.courierName } : {}),
+                ...(payload.trackingNumber !== undefined ? { trackingNumber: payload.trackingNumber } : {}),
+                ...(payload.deliveryNote !== undefined ? { deliveryNote: payload.deliveryNote } : {}),
+              };
+            }
+            return order;
+          }),
+        };
+      });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
       queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
       queryClient.invalidateQueries({ queryKey: ["order-tracking"] });
@@ -211,7 +234,21 @@ export function useAdminMarkCashCollected() {
       orderId: string;
       note?: string;
     }) => api.adminMarkCashCollected(token, orderId, note),
-    onSuccess: () => {
+    onMutate: async ({ orderId }) => {
+      await queryClient.cancelQueries({ queryKey: ["admin-orders"] });
+      queryClient.setQueriesData({ queryKey: ["admin-orders"] }, (old: any) => {
+        if (!old || !Array.isArray(old.data)) return old;
+        return {
+          ...old,
+          data: old.data.map((order: any) =>
+            order.orderId === orderId || order._id === orderId
+              ? { ...order, paymentStatus: "paid", status: "delivered" }
+              : order
+          ),
+        };
+      });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
       queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
       queryClient.invalidateQueries({ queryKey: ["order-tracking"] });
@@ -257,7 +294,21 @@ export function useAdminUpdateOrderPayment() {
       paymentStatus: "pending_verification" | "paid" | "rejected";
       note?: string;
     }) => api.adminUpdateOrderPayment(token, orderId, paymentStatus, note),
-    onSuccess: () => {
+    onMutate: async ({ orderId, paymentStatus }) => {
+      await queryClient.cancelQueries({ queryKey: ["admin-orders"] });
+      queryClient.setQueriesData({ queryKey: ["admin-orders"] }, (old: any) => {
+        if (!old || !Array.isArray(old.data)) return old;
+        return {
+          ...old,
+          data: old.data.map((order: any) =>
+            order.orderId === orderId || order._id === orderId
+              ? { ...order, paymentStatus }
+              : order
+          ),
+        };
+      });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["admin-orders"] });
       queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
     },
@@ -307,7 +358,21 @@ export function useAdminAdjustStock() {
   return useMutation({
     mutationFn: ({ token, id, delta }: { token: string; id: number | string; delta: number }) =>
       api.adminAdjustStock(token, id, delta),
-    onSuccess: () => {
+    onMutate: async ({ id, delta }) => {
+      await queryClient.cancelQueries({ queryKey: ["products"] });
+      queryClient.setQueriesData({ queryKey: ["products"] }, (old: any) => {
+        if (!Array.isArray(old)) return old;
+        return old.map((p: any) => {
+          if (p.id === id || p._id === id || String(p.id) === String(id)) {
+            const currentStock = p.stock ?? p.stockCount ?? 0;
+            const newStock = Math.max(0, currentStock + delta);
+            return { ...p, stock: newStock, stockCount: newStock };
+          }
+          return p;
+        });
+      });
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["products"] });
       queryClient.invalidateQueries({ queryKey: ["admin-dashboard"] });
     },

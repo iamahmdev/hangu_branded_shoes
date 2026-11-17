@@ -60,6 +60,7 @@ export default function ProductCard({ p }: ProductCardProps) {
           {/* Main Shoe Link */}
           <Link
             href={"/product/" + p.id}
+            prefetch={true}
             className="w-full h-full flex items-center justify-center relative cursor-pointer"
             title={`View ${p.name}`}
           >
@@ -114,7 +115,7 @@ export default function ProductCard({ p }: ProductCardProps) {
             </div>
 
             <h3 className="font-bold text-zinc-950 text-xs sm:text-sm hover:text-emerald-700 transition-colors line-clamp-1">
-              <Link href={"/product/" + p.id} title={p.name}>
+              <Link href={"/product/" + p.id} prefetch={true} title={p.name}>
                 {p.name}
               </Link>
             </h3>

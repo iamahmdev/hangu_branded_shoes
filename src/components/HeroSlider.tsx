@@ -135,6 +135,7 @@ export default function HeroSlider() {
                   <div className="mt-3.5 sm:mt-5 flex items-center gap-2 sm:gap-3">
                     <Link
                       href={slide.ctaLink}
+                      prefetch={true}
                       className="px-4 sm:px-6 py-2 sm:py-3 rounded-full bg-white hover:bg-zinc-100 text-zinc-950 text-xs sm:text-sm font-bold inline-flex items-center gap-1.5 sm:gap-2 transition-all shadow-md hover:shadow-lg hover:scale-102 active:scale-97"
                     >
                       <span>{slide.ctaText}</span>
@@ -143,6 +144,7 @@ export default function HeroSlider() {
 
                     <Link
                       href="/shop"
+                      prefetch={true}
                       className="px-3.5 sm:px-5 py-2 sm:py-3 rounded-full bg-white/15 hover:bg-white/25 text-white text-xs sm:text-sm font-semibold border border-white/30 backdrop-blur-md transition-all active:scale-97"
                     >
                       View All

@@ -32,8 +32,8 @@ export default function ProductModal({
     cat: "Sneakers",
     price: 6499,
     old: 7999,
-    img: "/images/p1.jpg",
-    images: ["/images/p1.jpg"],
+    img: "",
+    images: [],
     colors: ["Black", "Brown"],
     tag: "New",
     stock: 25,
@@ -97,11 +97,11 @@ export default function ProductModal({
 
       if (uploadedUrls.length > 0) {
         setForm((prev) => {
-          const currentImages = prev.images && prev.images.length > 0 ? [...prev.images] : (prev.img ? [prev.img] : []);
+          const currentImages = (prev.images || []).filter((u) => u && u !== "/images/p1.jpg");
           const combined = [...currentImages, ...uploadedUrls.filter((u) => !currentImages.includes(u))];
           return {
             ...prev,
-            img: prev.img && prev.img !== "/images/p1.jpg" ? prev.img : combined[0],
+            img: combined[0] || "",
             images: combined,
           };
         });
@@ -207,8 +207,8 @@ export default function ProductModal({
       return;
     }
 
-    const currentImages = form.images && form.images.length > 0 ? form.images : (form.img ? [form.img] : ["/images/p1.jpg"]);
-    const coverImage = form.img && form.img !== "/images/p1.jpg" ? form.img : currentImages[0];
+    const currentImages = (form.images && form.images.length > 0 ? form.images : (form.img ? [form.img] : [])).filter((u) => u && u !== "/images/p1.jpg");
+    const coverImage = (form.img && form.img !== "/images/p1.jpg") ? form.img : (currentImages[0] || "/images/p1.jpg");
 
     setSubmitting(true);
     setError("");
@@ -217,7 +217,7 @@ export default function ProductModal({
       await onSave({
         ...form,
         img: coverImage,
-        images: currentImages,
+        images: currentImages.length > 0 ? currentImages : [coverImage],
         colors: form.colors && form.colors.length > 0 ? form.colors : ["Black", "Brown"],
       });
       onClose();

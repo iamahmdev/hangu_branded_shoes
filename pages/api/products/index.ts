@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../src/lib/dbConnect";
 import Product from "../../../src/models/Product";
+import Setting from "../../../src/models/Setting";
 import { FALLBACK_PRODUCTS } from "../../../src/data/fallbackProducts";
 import { verifyToken } from "../../../src/lib/jwt";
 
@@ -39,12 +40,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ success: false, message: `Method ${req.method} Not Allowed` });
   }
 
-  const { cat, search, sort, fresh } = req.query;
-  const isFreshRequested = fresh === "true" || req.headers["cache-control"]?.includes("no-cache");
+  const { cat, search, sort } = req.query;
 
   try {
     await dbConnect();
+
+    // Check for deletedProductIds & initialize seed if DB was never initialized
+    const setting = await Setting.findOne().select("deletedProductIds hasInitializedProducts").lean();
+    const deletedIds = (setting?.deletedProductIds || []).map(String);
+
+    if (!setting?.hasInitializedProducts) {
+      const existingCount = await Product.countDocuments();
+      if (existingCount === 0) {
+        const seedData = FALLBACK_PRODUCTS.filter((p) => !deletedIds.includes(String(p.id)));
+        if (seedData.length > 0) {
+          try {
+            await Product.insertMany(seedData, { ordered: false });
+          } catch {}
+        }
+        await Setting.findOneAndUpdate({}, { $set: { hasInitializedProducts: true } }, { upsert: true });
+      }
+    }
+
     const query: any = { isActive: { $ne: false } };
+
+    if (deletedIds.length > 0) {
+      const numericDeletedIds = deletedIds.map(Number).filter((n) => !isNaN(n));
+      query.id = { $nin: numericDeletedIds };
+    }
 
     if (cat && cat !== "All") {
       query.cat = { $regex: new RegExp(`^${String(cat)}$`, "i") };
@@ -66,23 +89,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const dbProducts = await Product.find(query).sort(sortOption).lean();
 
-    if (dbProducts && dbProducts.length > 0) {
-      if (isFreshRequested) {
-        res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
-      } else {
-        res.setHeader("Cache-Control", "public, s-maxage=60, stale-while-revalidate=300");
-      }
-      return res.status(200).json({
-        success: true,
-        count: dbProducts.length,
-        data: dbProducts,
-      });
-    }
+    // Always prevent stale browser / CDN caching so deletions reflect instantly
+    res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+    return res.status(200).json({
+      success: true,
+      count: dbProducts.length,
+      data: dbProducts,
+    });
   } catch (dbErr) {
     console.warn("MongoDB fetch failed in /api/products, falling back:", dbErr);
   }
 
-  // Fallback to static list if database is unreachable or empty
+  // Fallback to static list ONLY if database is completely unreachable
   let list = [...FALLBACK_PRODUCTS];
 
   if (cat && cat !== "All") {
@@ -107,7 +125,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     list.sort((a, b) => b.id - a.id);
   }
 
-  res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400");
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
   return res.status(200).json({
     success: true,
     count: list.length,

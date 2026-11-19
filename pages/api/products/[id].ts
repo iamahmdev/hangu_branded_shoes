@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import dbConnect from "../../../src/lib/dbConnect";
 import Product from "../../../src/models/Product";
+import Setting from "../../../src/models/Setting";
 import { FALLBACK_PRODUCTS } from "../../../src/data/fallbackProducts";
 import { verifyToken } from "../../../src/lib/jwt";
 
@@ -62,15 +63,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const matchConditions: any[] = [];
       if (!isNaN(numId)) matchConditions.push({ id: numId });
       if (typeof id === "string" && id.match(/^[0-9a-fA-F]{24}$/)) matchConditions.push({ _id: id });
-      if (matchConditions.length === 0) {
-        return res.status(400).json({ success: false, message: "Invalid product ID format." });
+
+      if (matchConditions.length > 0) {
+        await Product.deleteMany({ $or: matchConditions });
       }
 
-      const deleted = await Product.findOneAndDelete({ $or: matchConditions });
+      // Record permanently in Setting so fallback can never resurrect it
+      const idsToRecord: (string | number)[] = [String(id)];
+      if (!isNaN(numId)) idsToRecord.push(numId);
 
-      if (!deleted) {
-        return res.status(404).json({ success: false, message: "Product not found to delete" });
-      }
+      await Setting.findOneAndUpdate(
+        {},
+        { $addToSet: { deletedProductIds: { $each: idsToRecord } } },
+        { upsert: true }
+      );
 
       return res.status(200).json({ success: true, message: "Product deleted successfully" });
     } catch (err: any) {
@@ -85,12 +91,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     await dbConnect();
+    const setting = await Setting.findOne().select("deletedProductIds").lean();
+    const deletedIds = (setting?.deletedProductIds || []).map(String);
+
+    if (deletedIds.includes(String(id)) || (!isNaN(numId) && deletedIds.includes(String(numId)))) {
+      return res.status(404).json({ success: false, message: "Product not found" });
+    }
+
     const dbProduct = await Product.findOne({
       $or: [{ id: numId }, { _id: typeof id === "string" && id.match(/^[0-9a-fA-F]{24}$/) ? id : null }],
     }).lean();
 
     if (dbProduct) {
-      res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400");
+      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
       return res.status(200).json({
         success: true,
         data: dbProduct,
@@ -105,7 +118,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(404).json({ success: false, message: "Product not found" });
   }
 
-  res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400");
+  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
   return res.status(200).json({
     success: true,
     data: fallback,

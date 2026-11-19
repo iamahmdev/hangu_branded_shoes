@@ -67,7 +67,7 @@ export default function AdminPage() {
     paymentMethod: orderPaymentMethodFilter,
     search: orderSearch,
   });
-  const productsQuery = useProducts({ search: productSearch });
+  const productsQuery = useProducts({ search: productSearch, fresh: true });
   const reviewsQuery = useAdminReviews(token);
   const settingsQuery = useStoreSettings();
 
@@ -463,7 +463,7 @@ export default function AdminPage() {
         />
       )}
 
-      {/* Add / Edit Product Modal with Cloudinary Upload */}
+      {/* Add / Edit Product Modal */}
       {productModalOpen && (
         <ProductModal
           isOpen={productModalOpen}

@@ -109,6 +109,28 @@ export interface RecentSale {
   createdAt: string;
 }
 
+export function getLocalDeletedIds(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const raw = localStorage.getItem("hbs_deleted_product_ids");
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function addLocalDeletedId(id: string | number) {
+  if (typeof window === "undefined") return;
+  try {
+    const ids = getLocalDeletedIds();
+    const str = String(id);
+    if (!ids.includes(str)) {
+      ids.push(str);
+      localStorage.setItem("hbs_deleted_product_ids", JSON.stringify(ids));
+    }
+  } catch {}
+}
+
 export const api = {
   /**
    * Filter and retrieve cached static fallback products instantly with zero latency
@@ -120,7 +142,8 @@ export const api = {
     sort?: string;
     inStock?: boolean;
   }): LocalProduct[] {
-    let list = [...FALLBACK_PRODUCTS];
+    const deletedIds = getLocalDeletedIds();
+    let list = FALLBACK_PRODUCTS.filter((p) => !deletedIds.includes(String(p.id)));
     if (params?.cat && params.cat !== "All") {
       list = list.filter((p) => p.cat.toLowerCase() === params.cat!.toLowerCase());
     }
@@ -147,6 +170,8 @@ export const api = {
    * Retrieve single fallback product by numeric or string ID instantly
    */
   getFallbackProductById(id: number | string): LocalProduct | undefined {
+    const deletedIds = getLocalDeletedIds();
+    if (deletedIds.includes(String(id))) return undefined;
     const numId = Number(id);
     return FALLBACK_PRODUCTS.find((p) => p.id === numId);
   },
@@ -160,7 +185,9 @@ export const api = {
     size?: string;
     sort?: string;
     inStock?: boolean;
+    fresh?: boolean;
   }): Promise<LocalProduct[]> {
+    const deletedIds = getLocalDeletedIds();
     try {
       const qs = new URLSearchParams();
       if (params?.cat && params.cat !== "All") qs.append("cat", params.cat);
@@ -168,13 +195,21 @@ export const api = {
       if (params?.size && params.size !== "All") qs.append("size", params.size);
       if (params?.sort) qs.append("sort", params.sort);
       if (params?.inStock) qs.append("inStock", "true");
+      if (params?.fresh) qs.append("fresh", "true");
+      qs.append("_t", String(Date.now()));
 
       const path = `/products${qs.toString() ? `?${qs.toString()}` : ""}`;
-      const res = await requestApi(path, { headers: { "Content-Type": "application/json" } }, 3500);
+      const res = await requestApi(path, {
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
+        },
+      }, 5000);
+
       if (res.ok) {
         const json = await res.json();
-        if (Array.isArray(json.data) && json.data.length > 0) {
-          return json.data;
+        if (Array.isArray(json.data)) {
+          return json.data.filter((p: any) => !deletedIds.includes(String(p.id)) && !deletedIds.includes(String(p._id)));
         }
       }
     } catch {
@@ -494,6 +529,7 @@ export const api = {
   },
 
   async adminDeleteProduct(token: string, id: number | string): Promise<{ success: boolean; message?: string }> {
+    addLocalDeletedId(id);
     const res = await requestApi(`/products/${id}`, {
       method: "DELETE",
       headers: {

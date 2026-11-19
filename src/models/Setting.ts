@@ -18,6 +18,8 @@ export interface ISetting extends Document {
   enableCod: boolean;
   codFee: number;
   blockedPhoneNumbers: string[];
+  deletedProductIds?: (string | number)[];
+  hasInitializedProducts?: boolean;
 }
 
 const SettingSchema = new Schema<ISetting>(
@@ -42,6 +44,8 @@ const SettingSchema = new Schema<ISetting>(
     enableCod: { type: Boolean, default: true },
     codFee: { type: Number, default: 0, min: 0 },
     blockedPhoneNumbers: { type: [String], default: [] },
+    deletedProductIds: { type: [Schema.Types.Mixed], default: [] },
+    hasInitializedProducts: { type: Boolean, default: false },
   },
   { timestamps: true }
 );

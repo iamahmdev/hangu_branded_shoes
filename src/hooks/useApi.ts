@@ -17,12 +17,13 @@ export function useProducts(params?: {
   size?: string;
   sort?: string;
   inStock?: boolean;
+  fresh?: boolean;
 }) {
   return useQuery<Product[]>({
     queryKey: ["products", params],
     queryFn: () => api.getProducts(params),
     initialData: () => api.getFallbackProducts(params),
-    staleTime: 1000 * 60 * 2,
+    staleTime: params?.fresh ? 0 : 1000 * 15,
   });
 }
 

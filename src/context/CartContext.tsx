@@ -38,9 +38,9 @@ export function CartProvider({ children }: CartProviderProps) {
     }
   }, [items]);
 
-  const add = (p: Product, size: string, q: number = 1) => {
+  const add = (p: Product, size: string, q: number = 1, color?: string) => {
     setItems((prev) => {
-      const k = `${p.id}-${size}`;
+      const k = color ? `${p.id}-${size}-${color}` : `${p.id}-${size}`;
       const exists = prev.find((i) => i.k === k);
       if (exists) {
         return prev.map((i) => (i.k === k ? { ...i, q: i.q + q } : i));
@@ -54,6 +54,7 @@ export function CartProvider({ children }: CartProviderProps) {
           img: p.img,
           price: p.price,
           size,
+          color,
           q,
         },
       ];

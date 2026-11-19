@@ -416,7 +416,11 @@ export default function OrderDetailModal({
                   <div className="min-w-0">
                     <b className="text-slate-900 block truncate">{it.name}</b>
                     <span className="text-slate-500 text-[11px]">
-                      Size: <b className="text-emerald-700 font-mono">{it.size}</b> | Qty: {it.quantity}
+                      Size: <b className="text-emerald-700 font-mono">{it.size}</b>
+                      {it.color && (
+                        <> | Color: <b className="text-slate-800 font-medium">{it.color}</b></>
+                      )}{" "}
+                      | Qty: {it.quantity}
                     </span>
                   </div>
                 </div>

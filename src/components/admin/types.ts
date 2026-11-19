@@ -20,6 +20,8 @@ export interface ProductFormData {
   price: number;
   old: number;
   img: string;
+  images?: string[];
+  colors?: string[];
   tag?: string;
   stock: number;
   desc: string;

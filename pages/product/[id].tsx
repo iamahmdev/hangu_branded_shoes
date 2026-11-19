@@ -40,6 +40,7 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
   const { query, push } = useRouter();
   const { add } = useCart();
   const [size, setSize] = useState<string>("");
+  const [color, setColor] = useState<string>("");
   const [q, setQ] = useState<number>(1);
   const [err, setErr] = useState<boolean>(false);
   const [addedToast, setAddedToast] = useState<boolean>(false);
@@ -122,12 +123,18 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
     setActiveImgIndex((prev) => (prev === galleryImages.length - 1 ? 0 : prev + 1));
   };
 
+  const availableColors = (p && (p as any).colors && (p as any).colors.length > 0)
+    ? (p as any).colors
+    : ["Black", "Brown"];
+
+  const activeColor = color || availableColors[0] || "Standard";
+
   const go = (buy: boolean) => {
     if (!size) {
       setErr(true);
       return;
     }
-    add(p, size, q);
+    add(p, size, q, activeColor);
     if (buy) {
       push("/checkout");
     } else {
@@ -144,7 +151,7 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
       `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
       `👟 *Ordered Shoes:*\n` +
       `• *${p.name}*\n` +
-      `   Size: ${sizeText} | Qty: ${q} | Rs. ${totalAmount}\n\n` +
+      `   Color: ${activeColor} | Size: ${sizeText} | Qty: ${q} | Rs. ${totalAmount}\n\n` +
       `━━━━━━━━━━━━━━━━━━━━━━━━\n` +
       `Subtotal: Rs. ${totalAmount}\n` +
       `Shipping Delivery: FREE\n` +
@@ -489,6 +496,63 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
                   </button>
                 </div>
               </div>
+
+              {/* ============================================================ */}
+              {/* SELECT COLOR SECTION                                         */}
+              {/* ============================================================ */}
+              {availableColors && availableColors.length > 0 && (
+                <div className="mt-4 mb-2">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs sm:text-sm font-semibold text-zinc-700">
+                      Select Color:{" "}
+                      <b className="text-zinc-950 font-bold">{activeColor}</b>
+                    </span>
+                    <span className="text-[11px] text-zinc-400 font-medium">
+                      {availableColors.length} Color{availableColors.length > 1 ? "s" : ""} Available
+                    </span>
+                  </div>
+
+                  {/* Color Pills */}
+                  <div className="flex items-center gap-2 overflow-x-auto pb-1.5 scrollbar-none -mx-4 px-4 sm:mx-0 sm:px-0">
+                    {availableColors.map((c: string) => {
+                      const isSelected = activeColor.toLowerCase() === c.toLowerCase();
+                      return (
+                        <button
+                          key={c}
+                          type="button"
+                          onClick={() => setColor(c)}
+                          className={`px-3 sm:px-3.5 py-2 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer border ${
+                            isSelected
+                              ? "bg-zinc-950 text-white border-zinc-950 shadow-xs scale-102"
+                              : "bg-[#f4f4f6] text-zinc-800 hover:bg-zinc-200 border-zinc-200/70"
+                          }`}
+                        >
+                          <span
+                            className={`w-3 h-3 rounded-full border border-black/20 shrink-0 ${
+                              c.toLowerCase().includes("black")
+                                ? "bg-black"
+                                : c.toLowerCase().includes("brown")
+                                ? "bg-[#5c3a21]"
+                                : c.toLowerCase().includes("tan")
+                                ? "bg-[#d2b48c]"
+                                : c.toLowerCase().includes("white")
+                                ? "bg-white"
+                                : c.toLowerCase().includes("blue") || c.toLowerCase().includes("navy")
+                                ? "bg-[#1b2a4a]"
+                                : c.toLowerCase().includes("grey") || c.toLowerCase().includes("gray")
+                                ? "bg-zinc-500"
+                                : c.toLowerCase().includes("red") || c.toLowerCase().includes("maroon") || c.toLowerCase().includes("burgundy")
+                                ? "bg-[#800000]"
+                                : "bg-emerald-600"
+                            }`}
+                          />
+                          <span>{c}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               {/* ============================================================ */}
               {/* SELECT SIZE SECTION                                          */}

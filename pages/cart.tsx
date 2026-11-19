@@ -58,6 +58,9 @@ export default function Cart() {
                       <b className="text-zinc-900 text-xs sm:text-sm block truncate">{i.name}</b>
                       <span className="text-zinc-500 text-[11px] sm:text-xs block mt-0.5">
                         Size: <strong className="text-zinc-900 font-mono">{i.size}</strong>
+                        {i.color && (
+                          <> • Color: <strong className="text-zinc-900 font-medium">{i.color}</strong></>
+                        )}
                       </span>
                       <div className="text-zinc-950 font-bold font-mono text-xs sm:text-sm mt-0.5 sm:mt-1">
                         Rs. {i.price.toLocaleString()}

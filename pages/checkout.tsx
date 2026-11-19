@@ -130,7 +130,7 @@ export default function Checkout() {
     const itemsSummary = items
       .map(
         (i) =>
-          `• *${i.name}*\n   Size: ${i.size} | Qty: ${i.q} | Rs. ${(i.price * i.q).toLocaleString()}`
+          `• *${i.name}*\n   ${i.color ? `Color: ${i.color} | ` : ""}Size: ${i.size} | Qty: ${i.q} | Rs. ${(i.price * i.q).toLocaleString()}`
       )
       .join("\n");
 
@@ -188,6 +188,7 @@ export default function Checkout() {
           img: i.img,
           price: i.price,
           size: i.size,
+          color: i.color,
           quantity: i.q,
           total: i.price * i.q,
         })),
@@ -751,7 +752,11 @@ export default function Checkout() {
                   <div className="flex-1 min-w-0">
                     <b className="text-zinc-900 block truncate">{i.name}</b>
                     <span className="text-zinc-500">
-                      Size: <span className="font-mono text-zinc-800">{i.size}</span> × {i.q}
+                      Size: <span className="font-mono text-zinc-800">{i.size}</span>
+                      {i.color && (
+                        <> • Color: <span className="text-zinc-800 font-medium">{i.color}</span></>
+                      )}{" "}
+                      × {i.q}
                     </span>
                   </div>
                   <span className="text-zinc-900 font-mono font-semibold shrink-0">

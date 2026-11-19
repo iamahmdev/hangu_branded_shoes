@@ -413,6 +413,8 @@ export default function AdminPage() {
                 price: p.price,
                 old: p.old || p.price + 1000,
                 img: p.img,
+                images: p.images || (p.img ? [p.img] : []),
+                colors: (p as any).colors || ["Black", "Brown"],
                 tag: p.tag || "",
                 stock: p.stock ?? p.stockCount ?? 20,
                 desc: p.desc || "",

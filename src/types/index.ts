@@ -6,6 +6,7 @@ export interface Product {
   old: number;
   img: string;
   images?: string[];
+  colors?: string[];
   tag?: string;
   desc?: string;
   sizes?: string[];
@@ -29,6 +30,7 @@ export interface CartItem {
   img: string;
   price: number;
   size: string;
+  color?: string;
   q: number;
 }
 
@@ -50,7 +52,7 @@ export interface SocialLinks {
 
 export interface CartContextType {
   items: CartItem[];
-  add: (p: Product, size: string, q?: number) => void;
+  add: (p: Product, size: string, q?: number, color?: string) => void;
   setQ: (k: string, q: number) => void;
   clear: () => void;
   sub: number;

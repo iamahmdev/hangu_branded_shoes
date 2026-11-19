@@ -74,6 +74,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       stats: {
         totalRevenue,
         totalOrders,
+        totalProducts: products.length,
         pendingOrders,
         deliveredOrders,
         pendingPaymentsCount,

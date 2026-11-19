@@ -67,7 +67,7 @@ export default function DashboardOverview({
     {
       id: "total_items",
       title: "Total Footwear",
-      value: (stats as any)?.totalProducts || 12,
+      value: (stats as any)?.totalProducts ?? 0,
       subtitle: "Active catalog shoes",
       growth: "Catalog",
       bgClass: "bg-indigo-50/80 border-indigo-200/80 text-indigo-950",
@@ -78,7 +78,7 @@ export default function DashboardOverview({
     {
       id: "in_stock",
       title: "In Stock Pairs",
-      value: Math.max(0, ((stats as any)?.totalProducts || 12) - lowStockItems.length),
+      value: Math.max(0, ((stats as any)?.totalProducts ?? 0) - lowStockItems.length),
       subtitle: "Ready for quick dispatch",
       growth: "Available",
       bgClass: "bg-teal-50/80 border-teal-200/80 text-teal-950",

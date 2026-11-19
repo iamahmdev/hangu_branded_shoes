@@ -59,7 +59,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       imageBuffer = Buffer.from(imageDoc.data as any);
     }
 
-    res.setHeader("Content-Type", imageDoc.contentType || "image/webp");
+    let finalContentType = imageDoc.contentType || "image/webp";
+
+    // If stored as HEIC or generic octet-stream, dynamically convert to JPEG for browser support
+    const isHeic =
+      finalContentType.includes("octet-stream") ||
+      finalContentType.includes("heic") ||
+      imageDoc.filename?.toLowerCase().endsWith(".heic") ||
+      imageDoc.filename?.toLowerCase().endsWith(".heif");
+
+    if (isHeic && finalContentType !== "image/webp" && finalContentType !== "image/jpeg") {
+      try {
+        const heicConvert = require("heic-convert");
+        const converted = await heicConvert({
+          buffer: imageBuffer,
+          format: "JPEG",
+          quality: 0.9,
+        });
+        imageBuffer = Buffer.from(converted);
+        finalContentType = "image/jpeg";
+      } catch (err) {
+        console.error("HEIC dynamic conversion failed:", err);
+      }
+    }
+
+    res.setHeader("Content-Type", finalContentType);
     res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
     res.setHeader("Content-Length", String(imageBuffer.length));
 

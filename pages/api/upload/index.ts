@@ -41,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       // Read file into buffer
-      const fileBuffer = fs.readFileSync(file.filepath);
+      let fileBuffer = fs.readFileSync(file.filepath);
 
       // Clean up temp file immediately
       try {
@@ -50,7 +50,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Ignore temp cleanup errors
       }
 
-      // Optimize image with sharp
+      // Automatically convert iPhone HEIC/HEIF images to JPEG so browsers can display them
+      const originalName = (file.originalFilename || "").toLowerCase();
+      const isHeic =
+        originalName.endsWith(".heic") ||
+        originalName.endsWith(".heif") ||
+        file.mimetype?.includes("heic") ||
+        file.mimetype?.includes("heif");
+
+      if (isHeic) {
+        try {
+          const heicConvert = require("heic-convert");
+          const converted = await heicConvert({
+            buffer: fileBuffer,
+            format: "JPEG",
+            quality: 0.9,
+          });
+          fileBuffer = Buffer.from(converted);
+        } catch (heicErr) {
+          console.error("HEIC conversion failed:", heicErr);
+        }
+      }
+
+      // Optimize image with sharp to high-performance WebP
       let optimizedBuffer: Buffer;
       let contentType = "image/webp";
       try {

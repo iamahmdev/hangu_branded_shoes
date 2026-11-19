@@ -5,7 +5,15 @@ import { verifyToken } from "../../../../src/lib/jwt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
-  const idStr = String(id);
+  if (!id) {
+    return res.status(400).json({ success: false, message: "Order ID is required" });
+  }
+
+  const idStr = String(id).trim();
+  const isObjectId = /^[0-9a-fA-F]{24}$/.test(idStr);
+  const filter = isObjectId
+    ? { $or: [{ orderId: idStr }, { _id: idStr }] }
+    : { orderId: idStr };
 
   if (req.method === "DELETE") {
     try {
@@ -21,15 +29,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       await dbConnect();
-      const deleted = await Order.findOneAndDelete({
-        $or: [{ orderId: idStr }, { _id: idStr.match(/^[0-9a-fA-F]{24}$/) ? idStr : null }],
-      });
+      const deleted = await Order.findOneAndDelete(filter);
 
       if (!deleted) {
         return res.status(404).json({ success: false, message: "Order not found to delete" });
       }
 
-      return res.status(200).json({ success: true, message: "Order deleted successfully" });
+      return res.status(200).json({ success: true, message: `Order #${deleted.orderId || idStr} deleted successfully` });
     } catch (err: any) {
       return res.status(500).json({ success: false, message: err.message || "Failed to delete order" });
     }
@@ -38,9 +44,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   if (req.method === "GET") {
     try {
       await dbConnect();
-      const order = await Order.findOne({
-        $or: [{ orderId: idStr }, { _id: idStr.match(/^[0-9a-fA-F]{24}$/) ? idStr : null }],
-      }).lean();
+      const order = await Order.findOne(filter).lean();
 
       if (!order) {
         return res.status(404).json({ success: false, message: "Order not found" });

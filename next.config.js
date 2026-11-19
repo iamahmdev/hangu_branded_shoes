@@ -85,8 +85,8 @@ const nextConfig = {
     ];
   },
   async rewrites() {
-    const backendUrl = process.env.BACKEND_API_URL || process.env.NEXT_PUBLIC_API_URL;
-    if (backendUrl && !backendUrl.includes("localhost") && !backendUrl.includes("127.0.0.1")) {
+    const backendUrl = process.env.BACKEND_API_URL;
+    if (backendUrl && !backendUrl.includes("localhost") && !backendUrl.includes("127.0.0.1") && !backendUrl.includes("hangubrandedshoes.com")) {
       const cleanBase = backendUrl.replace(/\/+$/, "").replace(/\/api$/, "");
       return [
         {

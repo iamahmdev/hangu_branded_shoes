@@ -235,8 +235,28 @@ export default function AdminPage() {
   };
 
   const handleDeleteOrder = (orderId: string) => {
-    if (!token) return;
-    deleteOrderMutation.mutate({ token, orderId });
+    if (!token) {
+      setToast({ type: "error", text: "Admin session expired. Please log in again." });
+      return;
+    }
+    deleteOrderMutation.mutate(
+      { token, orderId },
+      {
+        onSuccess: (data: any) => {
+          setToast({
+            type: "success",
+            text: data?.message || `Order #${orderId} deleted successfully!`,
+          });
+          setSelectedOrder(null);
+        },
+        onError: (err: any) => {
+          setToast({
+            type: "error",
+            text: err?.message || `Failed to delete order #${orderId}. Please try again.`,
+          });
+        },
+      }
+    );
   };
 
   // Product Handlers

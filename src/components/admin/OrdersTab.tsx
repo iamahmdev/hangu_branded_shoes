@@ -329,7 +329,11 @@ export default function OrdersTab({
                           </button>
 
                           <button
-                            onClick={() => onDeleteOrder(ord.orderId)}
+                            onClick={() => {
+                              if (confirm(`Delete order #${ord.orderId}? This cannot be undone.`)) {
+                                onDeleteOrder(ord.orderId);
+                              }
+                            }}
                             className="p-2 rounded-xl bg-slate-100 hover:bg-rose-50 text-slate-600 hover:text-rose-700 border border-slate-200 transition-colors"
                             title="Delete Order"
                           >

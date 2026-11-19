@@ -262,17 +262,37 @@ export default function AdminPage() {
   // Product Handlers
   const handleSaveProduct = async (formData: ProductFormData) => {
     if (!token) return;
-    if (editingProduct?.id) {
-      await updateProductMutation.mutateAsync({
-        token,
-        id: editingProduct.id,
-        payload: formData,
+    try {
+      if (editingProduct?.id) {
+        const res = await updateProductMutation.mutateAsync({
+          token,
+          id: editingProduct.id,
+          payload: formData,
+        });
+        setToast({
+          type: "success",
+          text: (res as any)?.message || "Shoe updated successfully!",
+        });
+      } else {
+        const res = await createProductMutation.mutateAsync({
+          token,
+          payload: formData,
+        });
+        setToast({
+          type: "success",
+          text: (res as any)?.message || "New shoe added to catalog successfully!",
+        });
+      }
+      setProductModalOpen(false);
+      setEditingProduct(null);
+      await productsQuery.refetch();
+      await dashboardQuery.refetch();
+    } catch (err: any) {
+      setToast({
+        type: "error",
+        text: err?.message || "Failed to save product.",
       });
-    } else {
-      await createProductMutation.mutateAsync({
-        token,
-        payload: formData,
-      });
+      throw err;
     }
   };
 
@@ -304,6 +324,8 @@ export default function AdminPage() {
             type: "success",
             text: data?.message || "Product successfully deleted from catalog!",
           });
+          productsQuery.refetch();
+          dashboardQuery.refetch();
         },
         onError: (err: any) => {
           setToast({

@@ -22,7 +22,6 @@ export function useProducts(params?: {
   return useQuery<Product[]>({
     queryKey: ["products", params],
     queryFn: () => api.getProducts(params),
-    initialData: () => api.getFallbackProducts(params),
     staleTime: params?.fresh ? 0 : 1000 * 15,
   });
 }

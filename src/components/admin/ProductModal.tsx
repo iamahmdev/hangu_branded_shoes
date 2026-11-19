@@ -52,28 +52,49 @@ export default function ProductModal({
 
   useEffect(() => {
     if (initialData) {
-      const initialImages = Array.isArray(initialData.images) && initialData.images.length > 0
+      const initialImages = (Array.isArray(initialData.images) && initialData.images.length > 0
         ? initialData.images
-        : (initialData.img ? [initialData.img] : []);
+        : (initialData.img ? [initialData.img] : [])).filter((u) => u && u !== "/images/p1.jpg");
+
+      const coverImg = (initialData.img && initialData.img !== "/images/p1.jpg")
+        ? initialData.img
+        : (initialImages[0] || "");
 
       setForm({
         id: initialData.id,
         name: initialData.name || "",
         cat: initialData.cat || "Sneakers",
-        price: initialData.price || 6499,
-        old: initialData.old || 7999,
-        img: initialData.img || (initialImages[0] || "/images/p1.jpg"),
-        images: initialImages,
+        price: initialData.price || 3500,
+        old: initialData.old || 4999,
+        img: coverImg,
+        images: initialImages.length > 0 ? initialImages : (coverImg ? [coverImg] : []),
         colors: initialData.colors && initialData.colors.length > 0 ? initialData.colors : ["Black", "Brown"],
         tag: initialData.tag || "",
-        stock: initialData.stock || 25,
+        stock: initialData.stock ?? 25,
         desc: initialData.desc || "",
         brand: initialData.brand || "Hangu Branded Shoes",
         sizes: initialData.sizes && initialData.sizes.length > 0 ? initialData.sizes : ["40", "41", "42", "43", "44"],
         isActive: initialData.isActive !== false,
       });
+    } else {
+      setForm({
+        name: "",
+        cat: "Sneakers",
+        price: 3500,
+        old: 4999,
+        img: "",
+        images: [],
+        colors: ["Black", "Brown"],
+        tag: "New",
+        stock: 25,
+        desc: "",
+        brand: "Hangu Branded Shoes",
+        sizes: ["40", "41", "42", "43", "44"],
+        isActive: true,
+      });
     }
-  }, [initialData]);
+    setError("");
+  }, [initialData, isOpen]);
 
   // Handle multiple image uploads concurrently / sequentially
   const handleMultipleFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
@@ -117,25 +138,23 @@ export default function ProductModal({
 
   const handleSetMainImage = (url: string) => {
     setForm((prev) => {
-      const currentImages = prev.images && prev.images.length > 0 ? [...prev.images] : (prev.img ? [prev.img] : []);
-      const filtered = currentImages.filter((u) => u !== url);
+      const currentImages = (prev.images || []).filter((u) => u !== url && u !== "/images/p1.jpg");
       return {
         ...prev,
         img: url,
-        images: [url, ...filtered],
+        images: [url, ...currentImages],
       };
     });
   };
 
   const handleRemoveImage = (urlToRemove: string) => {
     setForm((prev) => {
-      const currentImages = prev.images && prev.images.length > 0 ? [...prev.images] : (prev.img ? [prev.img] : []);
-      const nextImages = currentImages.filter((u) => u !== urlToRemove);
-      const nextMain = prev.img === urlToRemove ? (nextImages[0] || "/images/p1.jpg") : prev.img;
+      const currentImages = (prev.images || []).filter((u) => u && u !== urlToRemove && u !== "/images/p1.jpg");
+      const nextMain = prev.img === urlToRemove ? (currentImages[0] || "") : prev.img;
       return {
         ...prev,
         img: nextMain,
-        images: nextImages,
+        images: currentImages,
       };
     });
   };
@@ -144,7 +163,7 @@ export default function ProductModal({
     const trimmed = customImageUrl.trim();
     if (!trimmed) return;
     setForm((prev) => {
-      const currentImages = prev.images && prev.images.length > 0 ? [...prev.images] : (prev.img ? [prev.img] : []);
+      const currentImages = (prev.images || []).filter((u) => u && u !== "/images/p1.jpg");
       if (currentImages.includes(trimmed)) return prev;
       const combined = [...currentImages, trimmed];
       return {
@@ -208,7 +227,11 @@ export default function ProductModal({
     }
 
     const currentImages = (form.images && form.images.length > 0 ? form.images : (form.img ? [form.img] : [])).filter((u) => u && u !== "/images/p1.jpg");
-    const coverImage = (form.img && form.img !== "/images/p1.jpg") ? form.img : (currentImages[0] || "/images/p1.jpg");
+    const coverImage = (form.img && form.img !== "/images/p1.jpg") ? form.img : (currentImages[0] || "");
+    if (!coverImage && currentImages.length === 0) {
+      setError("Please upload at least one photo for this shoe.");
+      return;
+    }
 
     setSubmitting(true);
     setError("");

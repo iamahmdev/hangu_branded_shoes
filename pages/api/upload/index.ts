@@ -1,7 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 import fs from "fs";
-import cloudinary from "../../../src/lib/cloudinary";
+import sharp from "sharp";
+import mongoose from "mongoose";
+import dbConnect from "../../../src/lib/dbConnect";
+import UploadedImage from "../../../src/models/UploadedImage";
 import { verifyToken } from "../../../src/lib/jwt";
 
 export const config = {
@@ -12,7 +15,7 @@ export const config = {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === "POST") {
-    // Check auth
+    // Check admin authentication
     const authHeader = req.headers.authorization;
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       return res.status(401).json({ success: false, message: "Authentication required" });
@@ -23,18 +26,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ success: false, message: "Invalid or expired token" });
     }
 
-    // Verify Cloudinary configuration
-    if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
-      return res.status(500).json({
-        success: false,
-        message: "Cloudinary credentials not configured in environment variables.",
-      });
-    }
-
     try {
       const form = formidable({
         keepExtensions: true,
-        maxFileSize: 10 * 1024 * 1024, // 10MB
+        maxFileSize: 15 * 1024 * 1024, // 15MB
       });
 
       const [, files] = await form.parse(req);
@@ -45,32 +40,54 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(400).json({ success: false, message: "No image file provided." });
       }
 
-      const uploadResult = await cloudinary.uploader.upload(file.filepath, {
-        folder: "hangu-branded-shoes",
-        resource_type: "image",
-      });
+      // Read file into buffer
+      const fileBuffer = fs.readFileSync(file.filepath);
 
-      // Remove temporary file
+      // Clean up temp file immediately
       try {
         fs.unlinkSync(file.filepath);
       } catch {
         // Ignore temp cleanup errors
       }
 
+      // Optimize image with sharp
+      let optimizedBuffer: Buffer;
+      let contentType = "image/webp";
+      try {
+        optimizedBuffer = await sharp(fileBuffer)
+          .rotate() // auto-orient based on EXIF
+          .resize({ width: 1200, height: 1200, fit: "inside", withoutEnlargement: true })
+          .webp({ quality: 85, effort: 4 })
+          .toBuffer();
+      } catch {
+        // Fallback to original buffer if sharp fails on rare formats
+        optimizedBuffer = fileBuffer;
+        contentType = file.mimetype || "image/jpeg";
+      }
+
+      // Save directly to MongoDB
+      await dbConnect();
+      const saved = await UploadedImage.create({
+        filename: file.originalFilename || `shoe_${Date.now()}.webp`,
+        contentType,
+        data: optimizedBuffer,
+        size: optimizedBuffer.length,
+      });
+
       return res.status(200).json({
         success: true,
         data: {
-          url: uploadResult.secure_url,
-          publicId: uploadResult.public_id,
-          format: uploadResult.format,
-          bytes: uploadResult.bytes,
+          url: `/api/images/${saved._id}`,
+          publicId: String(saved._id),
+          format: "webp",
+          bytes: optimizedBuffer.length,
         },
-        message: "Image uploaded to Cloudinary successfully",
+        message: "Image uploaded successfully",
       });
     } catch (err: any) {
-      return res.status(502).json({
+      return res.status(500).json({
         success: false,
-        message: `Cloudinary upload failed: ${err.message || "Upload error"}`,
+        message: `Image upload failed: ${err.message || "Unknown error"}`,
       });
     }
   }
@@ -88,20 +105,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const { publicId } = req.query;
     if (!publicId) {
-      return res.status(400).json({ success: false, message: "Cloudinary publicId is required for deletion." });
+      return res.status(400).json({ success: false, message: "Image ID is required for deletion." });
     }
 
     try {
-      const result = await cloudinary.uploader.destroy(String(publicId));
+      await dbConnect();
+      const cleanId = String(publicId).replace(/\.[a-zA-Z0-9]+$/, "");
+      if (mongoose.Types.ObjectId.isValid(cleanId)) {
+        await UploadedImage.findByIdAndDelete(cleanId);
+      }
       return res.status(200).json({
         success: true,
-        message: "Image deleted from Cloudinary successfully",
-        result,
+        message: "Image deleted successfully",
       });
     } catch (err: any) {
       return res.status(500).json({
         success: false,
-        message: err.message || "Failed to delete image from Cloudinary.",
+        message: err.message || "Failed to delete image.",
       });
     }
   }

@@ -552,7 +552,7 @@ export const api = {
   },
 
   /**
-   * Upload image to Cloudinary via backend API
+   * Upload image via backend API
    */
   async uploadImage(token: string, file: File): Promise<{ success: boolean; data?: { url: string; publicId: string; format: string; bytes: number }; message?: string }> {
     const formData = new FormData();
@@ -566,7 +566,7 @@ export const api = {
   },
 
   /**
-   * Delete image from Cloudinary via backend API
+   * Delete image via backend API
    */
   async deleteImage(token: string, publicId: string): Promise<{ success: boolean; message?: string }> {
     const res = await requestApi(`/upload/${encodeURIComponent(publicId)}`, {

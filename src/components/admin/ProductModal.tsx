@@ -75,7 +75,7 @@ export default function ProductModal({
       if (res.success && res.data?.url) {
         setForm((prev) => ({ ...prev, img: res.data!.url }));
       } else {
-        setError(res.message || "Failed to upload image to Cloudinary.");
+        setError(res.message || "Failed to upload image.");
       }
     } catch (err: any) {
       setError(err?.message || "Upload failed.");
@@ -271,7 +271,7 @@ export default function ProductModal({
           {/* Image Upload & Preview */}
           <div>
             <label className="text-slate-700 font-semibold block mb-1.5">
-              Shoe Photo (Cloudinary or Direct Path)
+              Shoe Photo (Direct Path or Upload)
             </label>
             <div className="flex items-center gap-3">
               <img
@@ -284,13 +284,13 @@ export default function ProductModal({
                   type="text"
                   value={form.img}
                   onChange={(e) => setForm({ ...form, img: e.target.value })}
-                  placeholder="https://res.cloudinary.com/... or image path"
+                  placeholder="e.g. /images/p1.jpg or click Upload from Device"
                   className="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2 text-slate-900 font-mono text-[11px] outline-none focus:border-emerald-500 focus:bg-white"
                 />
                 <div className="flex items-center gap-2">
                   <label className="py-1.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold cursor-pointer inline-flex items-center gap-1.5 border border-slate-200 transition-colors">
                     <Upload size={13} />
-                    <span>{uploading ? "Uploading to Cloud..." : "Upload from Device"}</span>
+                    <span>{uploading ? "Uploading Image..." : "Upload from Device"}</span>
                     <input
                       type="file"
                       accept="image/*"

@@ -16,6 +16,8 @@ import {
   ShieldAlert,
   Trash2,
   Plus,
+  Upload,
+  Image as ImageIcon,
 } from "lucide-react";
 
 interface SettingsTabProps {
@@ -23,6 +25,7 @@ interface SettingsTabProps {
   onSaveSettings: (settings: StoreSettingsFormData) => Promise<void>;
   onChangePassword?: (currentPassword: string, newPassword: string) => Promise<{ success: boolean; message?: string }>;
   isLoading?: boolean;
+  onUploadBanner?: (file: File) => Promise<{ success: boolean; data?: { url: string } }>;
 }
 
 export default function SettingsTab({
@@ -30,6 +33,7 @@ export default function SettingsTab({
   onSaveSettings,
   onChangePassword,
   isLoading = false,
+  onUploadBanner,
 }: SettingsTabProps) {
   const [form, setForm] = useState<StoreSettingsFormData>({
     shopName: "Hangu Branded Shoes",
@@ -49,12 +53,16 @@ export default function SettingsTab({
     jazzcashTitle: "Muhammad Atif Ibrahim",
     easypaisaNumber: "",
     easypaisaTitle: "",
+    heroBanner1: "/images/h3.jpg",
+    heroBanner2: "/images/h1.jpg",
+    heroBanner3: "/images/h2.jpg",
   });
 
   const [saving, setSaving] = useState<boolean>(false);
   const [savedToast, setSavedToast] = useState<boolean>(false);
   const [error, setError] = useState<string>("");
   const [newBlockedPhone, setNewBlockedPhone] = useState<string>("");
+  const [uploadingBanner, setUploadingBanner] = useState<1 | 2 | 3 | null>(null);
 
   // Change password states
   const [passwords, setPasswords] = useState({ current: "", next: "", confirm: "" });
@@ -74,9 +82,31 @@ export default function SettingsTab({
         easypaisaNumber: "",
         easypaisaTitle: "",
         shopTiming: initialSettings.shopTiming ?? prev.shopTiming,
+        heroBanner1: initialSettings.heroBanner1 || prev.heroBanner1 || "/images/h3.jpg",
+        heroBanner2: initialSettings.heroBanner2 || prev.heroBanner2 || "/images/h1.jpg",
+        heroBanner3: initialSettings.heroBanner3 || prev.heroBanner3 || "/images/h2.jpg",
       }));
     }
   }, [initialSettings]);
+
+  const handleBannerUpload = async (slideNum: 1 | 2 | 3, file: File) => {
+    if (!onUploadBanner) return;
+    try {
+      setUploadingBanner(slideNum);
+      const res = await onUploadBanner(file);
+      if (res.success && res.data?.url) {
+        if (slideNum === 1) setForm((prev) => ({ ...prev, heroBanner1: res.data!.url }));
+        if (slideNum === 2) setForm((prev) => ({ ...prev, heroBanner2: res.data!.url }));
+        if (slideNum === 3) setForm((prev) => ({ ...prev, heroBanner3: res.data!.url }));
+      } else {
+        setError("Failed to upload banner image.");
+      }
+    } catch (err: any) {
+      setError(err?.message || "Failed to upload banner image.");
+    } finally {
+      setUploadingBanner(null);
+    }
+  };
 
   const handleAddBlockedPhone = () => {
     const clean = newBlockedPhone.trim().replace(/[\s\-]/g, "");
@@ -253,7 +283,141 @@ export default function SettingsTab({
           </div>
         </div>
 
-        {/* Section 2: Delivery & Shipping Rates */}
+        {/* Section 2: Home Page Hero Banners */}
+        <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h4 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                <ImageIcon size={16} className="text-emerald-600" />
+                <span>Home Page Hero Banner Images</span>
+              </h4>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Upload or change the 3 sliding banner photos displayed at the top of your home page.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-xs">
+            {/* Banner 1 */}
+            <div className="border border-slate-200/90 rounded-2xl p-4 bg-slate-50/50 flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-slate-900">Slide 1: Main Banner</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-semibold">Primary</span>
+              </div>
+              <div className="relative aspect-[16/9] w-full bg-slate-200 rounded-xl overflow-hidden border border-slate-200 shadow-inner">
+                <img
+                  src={form.heroBanner1 || "/images/h3.jpg"}
+                  alt="Hero Banner 1"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <label className="text-slate-600 block mb-1 font-medium">Image URL or File Path</label>
+                <input
+                  type="text"
+                  value={form.heroBanner1 || ""}
+                  onChange={(e) => setForm({ ...form, heroBanner1: e.target.value })}
+                  placeholder="/images/h3.jpg or upload"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-900 font-mono text-[11px] outline-none focus:border-emerald-500"
+                />
+              </div>
+              <label className="w-full py-2 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-[11px] font-bold cursor-pointer flex items-center justify-center gap-2 border border-slate-200 shadow-xs transition-colors">
+                <Upload size={13} />
+                <span>{uploadingBanner === 1 ? "Uploading Banner..." : "Upload New Banner 1"}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={uploadingBanner !== null}
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) handleBannerUpload(1, f);
+                  }}
+                  className="hidden"
+                />
+              </label>
+            </div>
+
+            {/* Banner 2 */}
+            <div className="border border-slate-200/90 rounded-2xl p-4 bg-slate-50/50 flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-slate-900">Slide 2: Sneakers</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 font-semibold">Slide 2</span>
+              </div>
+              <div className="relative aspect-[16/9] w-full bg-slate-200 rounded-xl overflow-hidden border border-slate-200 shadow-inner">
+                <img
+                  src={form.heroBanner2 || "/images/h1.jpg"}
+                  alt="Hero Banner 2"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <label className="text-slate-600 block mb-1 font-medium">Image URL or File Path</label>
+                <input
+                  type="text"
+                  value={form.heroBanner2 || ""}
+                  onChange={(e) => setForm({ ...form, heroBanner2: e.target.value })}
+                  placeholder="/images/h1.jpg or upload"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-900 font-mono text-[11px] outline-none focus:border-emerald-500"
+                />
+              </div>
+              <label className="w-full py-2 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-[11px] font-bold cursor-pointer flex items-center justify-center gap-2 border border-slate-200 shadow-xs transition-colors">
+                <Upload size={13} />
+                <span>{uploadingBanner === 2 ? "Uploading Banner..." : "Upload New Banner 2"}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={uploadingBanner !== null}
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) handleBannerUpload(2, f);
+                  }}
+                  className="hidden"
+                />
+              </label>
+            </div>
+
+            {/* Banner 3 */}
+            <div className="border border-slate-200/90 rounded-2xl p-4 bg-slate-50/50 flex flex-col gap-3">
+              <div className="flex items-center justify-between">
+                <span className="font-bold text-slate-900">Slide 3: Casual / Slip-Ons</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-purple-100 text-purple-800 font-semibold">Slide 3</span>
+              </div>
+              <div className="relative aspect-[16/9] w-full bg-slate-200 rounded-xl overflow-hidden border border-slate-200 shadow-inner">
+                <img
+                  src={form.heroBanner3 || "/images/h2.jpg"}
+                  alt="Hero Banner 3"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div>
+                <label className="text-slate-600 block mb-1 font-medium">Image URL or File Path</label>
+                <input
+                  type="text"
+                  value={form.heroBanner3 || ""}
+                  onChange={(e) => setForm({ ...form, heroBanner3: e.target.value })}
+                  placeholder="/images/h2.jpg or upload"
+                  className="w-full bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-900 font-mono text-[11px] outline-none focus:border-emerald-500"
+                />
+              </div>
+              <label className="w-full py-2 px-3 rounded-xl bg-white hover:bg-slate-100 text-slate-700 text-[11px] font-bold cursor-pointer flex items-center justify-center gap-2 border border-slate-200 shadow-xs transition-colors">
+                <Upload size={13} />
+                <span>{uploadingBanner === 3 ? "Uploading Banner..." : "Upload New Banner 3"}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  disabled={uploadingBanner !== null}
+                  onChange={(e) => {
+                    const f = e.target.files?.[0];
+                    if (f) handleBannerUpload(3, f);
+                  }}
+                  className="hidden"
+                />
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Section 3: Delivery & Shipping Rates */}
         <div className="bg-white p-6 rounded-2xl border border-slate-200/80 shadow-sm">
           <h4 className="text-sm font-bold text-slate-900 mb-4 flex items-center gap-2">
             <Truck size={16} className="text-blue-600" />

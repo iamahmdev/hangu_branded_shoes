@@ -446,6 +446,7 @@ export default function AdminPage() {
             onSaveSettings={handleSaveSettings}
             onChangePassword={handleChangePassword}
             isLoading={settingsQuery.isLoading}
+            onUploadBanner={handleUploadProductImage}
           />
         )}
       </AdminLayout>

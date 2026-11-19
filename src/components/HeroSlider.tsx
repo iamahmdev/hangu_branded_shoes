@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, ArrowRight } from "lucide-react";
+import { useStoreSettings } from "../hooks/useApi";
 
 interface SlideData {
   id: number;
@@ -47,22 +48,39 @@ const SLIDES: SlideData[] = [
 ];
 
 export default function HeroSlider() {
+  const { data: settingsRes } = useStoreSettings();
+  const settingsData = settingsRes?.data;
   const [current, setCurrent] = useState<number>(0);
   const [isPaused, setIsPaused] = useState<boolean>(false);
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
 
+  const slides: SlideData[] = [
+    {
+      ...SLIDES[0],
+      bgImage: settingsData?.heroBanner1 || SLIDES[0].bgImage,
+    },
+    {
+      ...SLIDES[1],
+      bgImage: settingsData?.heroBanner2 || SLIDES[1].bgImage,
+    },
+    {
+      ...SLIDES[2],
+      bgImage: settingsData?.heroBanner3 || SLIDES[2].bgImage,
+    },
+  ];
+
   // Auto-play timer
   useEffect(() => {
     if (isPaused) return;
     const timer = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % SLIDES.length);
+      setCurrent((prev) => (prev + 1) % slides.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, [isPaused, current]);
+  }, [isPaused, current, slides.length]);
 
-  const nextSlide = () => setCurrent((prev) => (prev + 1) % SLIDES.length);
-  const prevSlide = () => setCurrent((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
+  const nextSlide = () => setCurrent((prev) => (prev + 1) % slides.length);
+  const prevSlide = () => setCurrent((prev) => (prev - 1 + slides.length) % slides.length);
 
   // Touch Swipe
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -90,7 +108,7 @@ export default function HeroSlider() {
     >
       {/* Spacious High-Impact Flagship Banner */}
       <div className="relative h-[440px] sm:h-[500px] md:h-[560px] lg:h-[620px] w-full">
-        {SLIDES.map((slide, idx) => {
+        {slides.map((slide, idx) => {
           const isActive = idx === current;
           return (
             <div
@@ -179,11 +197,11 @@ export default function HeroSlider() {
       {/* Sleek Minimal Progress Indicators */}
       <div className="absolute bottom-2.5 sm:bottom-4 right-3 sm:right-12 z-30 flex items-center gap-1.5 sm:gap-2 bg-black/30 backdrop-blur-md px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full border border-white/15">
         <span className="text-[10px] sm:text-[11px] font-bold tracking-wider text-white">
-          0{current + 1} <span className="text-white/40">/ 0{SLIDES.length}</span>
+          0{current + 1} <span className="text-white/40">/ 0{slides.length}</span>
         </span>
         <div className="w-px h-2.5 sm:h-3 bg-white/20 mx-0.5 sm:mx-1" />
         <div className="flex items-center gap-1 sm:gap-1.5">
-          {SLIDES.map((_, idx) => (
+          {slides.map((_, idx) => (
             <button
               key={idx}
               type="button"

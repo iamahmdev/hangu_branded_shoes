@@ -46,6 +46,9 @@ export interface StoreSettingsFormData {
   enableCod?: boolean;
   codFee?: number;
   blockedPhoneNumbers?: string[];
+  heroBanner1?: string;
+  heroBanner2?: string;
+  heroBanner3?: string;
 }
 
 export const ORDER_STATUS_COLORS: Record<string, { bg: string; text: string; border: string; label?: string }> = {

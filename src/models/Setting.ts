@@ -20,6 +20,9 @@ export interface ISetting extends Document {
   blockedPhoneNumbers: string[];
   deletedProductIds?: (string | number)[];
   hasInitializedProducts?: boolean;
+  heroBanner1?: string;
+  heroBanner2?: string;
+  heroBanner3?: string;
 }
 
 const SettingSchema = new Schema<ISetting>(
@@ -46,6 +49,9 @@ const SettingSchema = new Schema<ISetting>(
     blockedPhoneNumbers: { type: [String], default: [] },
     deletedProductIds: { type: [Schema.Types.Mixed], default: [] },
     hasInitializedProducts: { type: Boolean, default: false },
+    heroBanner1: { type: String, default: "/images/h3.jpg" },
+    heroBanner2: { type: String, default: "/images/h1.jpg" },
+    heroBanner3: { type: String, default: "/images/h2.jpg" },
   },
   { timestamps: true }
 );

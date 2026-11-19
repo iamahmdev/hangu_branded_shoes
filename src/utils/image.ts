@@ -7,6 +7,10 @@ export function resolveProductImage(img?: string | null, fallback: string = "/im
     return fallback;
   }
   let clean = img.trim();
+  // Support client-side blob: and inline data: URLs directly
+  if (clean.startsWith("blob:") || clean.startsWith("data:")) {
+    return clean;
+  }
   // Auto-optimize Cloudinary images: WebP/AVIF format, auto-quality, max 800px width
   if (clean.includes("res.cloudinary.com") && clean.includes("/upload/") && !clean.includes("/upload/f_auto")) {
     clean = clean.replace("/upload/", "/upload/f_auto,q_auto,w_800/");

@@ -25,6 +25,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Strip optional file extension (e.g., .webp, .jpg)
   const cleanId = rawId.replace(/\.[a-zA-Z0-9]+$/, "");
 
+  if (cleanId === "latest") {
+    try {
+      await dbConnect();
+      const latest = await UploadedImage.find().sort({ createdAt: -1 }).limit(5).select('_id filename contentType size createdAt').lean();
+      return res.status(200).json({ success: true, count: latest.length, data: latest });
+    } catch (e: any) {
+      return res.status(500).json({ success: false, message: e.message });
+    }
+  }
+
   if (!mongoose.Types.ObjectId.isValid(cleanId)) {
     return res.status(404).json({ success: false, message: "Invalid image ID" });
   }
@@ -37,20 +47,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ success: false, message: "Image not found" });
     }
 
-    // Convert Buffer if stored as Binary
-    const imageBuffer = Buffer.isBuffer(imageDoc.data)
-      ? imageDoc.data
-      : Buffer.from((imageDoc.data as any).buffer || imageDoc.data);
+    // Convert MongoDB Binary / Buffer reliably
+    let imageBuffer: Buffer;
+    if (Buffer.isBuffer(imageDoc.data)) {
+      imageBuffer = imageDoc.data;
+    } else if (typeof (imageDoc.data as any).value === "function") {
+      imageBuffer = (imageDoc.data as any).value(true);
+    } else if ((imageDoc.data as any).buffer) {
+      imageBuffer = Buffer.from((imageDoc.data as any).buffer);
+    } else {
+      imageBuffer = Buffer.from(imageDoc.data as any);
+    }
 
     res.setHeader("Content-Type", imageDoc.contentType || "image/webp");
     res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-    res.setHeader("Content-Length", imageBuffer.length);
+    res.setHeader("Content-Length", String(imageBuffer.length));
 
     if (req.method === "HEAD") {
       return res.status(200).end();
     }
 
-    return res.status(200).send(imageBuffer);
+    return res.status(200).end(imageBuffer);
   } catch (err: any) {
     return res.status(500).json({ success: false, message: err.message || "Failed to retrieve image" });
   }

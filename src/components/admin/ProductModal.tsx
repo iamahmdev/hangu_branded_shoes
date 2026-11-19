@@ -49,6 +49,7 @@ export default function ProductModal({
   const [error, setError] = useState<string>("");
   const [newColorInput, setNewColorInput] = useState<string>("");
   const [customImageUrl, setCustomImageUrl] = useState<string>("");
+  const [localPreviews, setLocalPreviews] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (initialData) {
@@ -101,20 +102,31 @@ export default function ProductModal({
     const files = Array.from(e.target.files || []);
     if (files.length === 0) return;
 
+    // Create immediate local object URLs for instant, zero-delay preview in browser
+    const previews = files.map((f) => ({
+      file: f,
+      blobUrl: URL.createObjectURL(f),
+    }));
+
     setUploading(true);
     setError("");
 
     const uploadedUrls: string[] = [];
+    const previewMap: Record<string, string> = {};
+
     try {
       for (let i = 0; i < files.length; i++) {
         setUploadStatus(`Uploading ${i + 1} of ${files.length}...`);
         const res = await onUploadImage(files[i]);
         if (res.success && res.data?.url) {
           uploadedUrls.push(res.data.url);
+          previewMap[res.data.url] = previews[i].blobUrl;
         } else {
           setError(res.message || `Failed to upload ${files[i].name}`);
         }
       }
+
+      setLocalPreviews((prev) => ({ ...prev, ...previewMap }));
 
       if (uploadedUrls.length > 0) {
         setForm((prev) => {
@@ -430,8 +442,19 @@ export default function ProductModal({
                         }`}
                       >
                         <img
-                          src={resolveProductImage(imgUrl)}
+                          src={localPreviews[imgUrl] || resolveProductImage(imgUrl)}
                           alt={`Shoe photo ${idx + 1}`}
+                          onError={(e) => {
+                            const target = e.currentTarget;
+                            if (!target.dataset.retried) {
+                              target.dataset.retried = "true";
+                              if (imgUrl.startsWith("/api/images/")) {
+                                target.src = `${window.location.origin}${imgUrl}?t=${Date.now()}`;
+                                return;
+                              }
+                            }
+                            target.src = "/images/p1.jpg";
+                          }}
                           className="w-full h-full object-contain p-1"
                         />
 

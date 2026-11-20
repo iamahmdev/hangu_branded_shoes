@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../src/lib/dbConnect";
-import Product from "../../../src/models/Product";
-import Setting from "../../../src/models/Setting";
+import { UnifiedProduct, UnifiedSetting } from "../../../src/lib/unifiedDb";
 import { FALLBACK_PRODUCTS } from "../../../src/data/fallbackProducts";
 import { verifyToken } from "../../../src/lib/jwt";
 
@@ -19,16 +17,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(401).json({ success: false, message: "Invalid or expired token" });
       }
 
-      await dbConnect();
       const body = req.body || {};
-
-      // Determine next numeric ID if not provided
-      if (!body.id) {
-        const lastProduct = await Product.findOne().sort({ id: -1 }).lean();
-        body.id = lastProduct && (lastProduct as any).id ? (lastProduct as any).id + 1 : Date.now();
-      }
-
-      const created = await Product.create(body);
+      const created = await UnifiedProduct.create(body);
       return res.status(201).json({ success: true, data: created, message: "Product created successfully" });
     } catch (err: any) {
       return res.status(500).json({ success: false, message: err.message || "Failed to create product" });
@@ -43,61 +33,46 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { cat, search, sort } = req.query;
 
   try {
-    await dbConnect();
-
-    // Check for deletedProductIds & initialize seed if DB was never initialized
-    const setting = await Setting.findOne().select("deletedProductIds hasInitializedProducts").lean();
+    const setting = await UnifiedSetting.get();
     const deletedIds = (setting?.deletedProductIds || []).map(String);
 
-    if (!setting?.hasInitializedProducts) {
-      const existingCount = await Product.countDocuments();
-      if (existingCount === 0) {
-        const seedData = FALLBACK_PRODUCTS.filter((p) => !deletedIds.includes(String(p.id)));
-        if (seedData.length > 0) {
-          try {
-            await Product.insertMany(seedData, { ordered: false });
-          } catch {}
-        }
-        await Setting.findOneAndUpdate({}, { $set: { hasInitializedProducts: true } }, { upsert: true });
-      }
-    }
-
-    const query: any = { isActive: { $ne: false } };
+    let allProducts = await UnifiedProduct.findAll(true);
 
     if (deletedIds.length > 0) {
-      const numericDeletedIds = deletedIds.map(Number).filter((n) => !isNaN(n));
-      query.id = { $nin: numericDeletedIds };
+      allProducts = allProducts.filter((p: any) => !deletedIds.includes(String(p.id)));
     }
 
     if (cat && cat !== "All") {
-      query.cat = { $regex: new RegExp(`^${String(cat)}$`, "i") };
+      const catStr = String(cat).toLowerCase();
+      allProducts = allProducts.filter((p: any) => (p.cat || "").toLowerCase() === catStr);
     }
 
     if (search) {
-      const q = String(search).trim();
-      query.$or = [
-        { name: { $regex: new RegExp(q, "i") } },
-        { cat: { $regex: new RegExp(q, "i") } },
-        { desc: { $regex: new RegExp(q, "i") } },
-      ];
+      const q = String(search).trim().toLowerCase();
+      allProducts = allProducts.filter((p: any) => {
+        const name = (p.name || "").toLowerCase();
+        const pCat = (p.cat || "").toLowerCase();
+        const desc = (p.desc || "").toLowerCase();
+        return name.includes(q) || pCat.includes(q) || desc.includes(q);
+      });
     }
 
-    let sortOption: any = { createdAt: -1 };
-    if (sort === "price-low") sortOption = { price: 1 };
-    else if (sort === "price-high") sortOption = { price: -1 };
-    else if (sort === "newest") sortOption = { id: -1 };
+    if (sort === "price-low") {
+      allProducts.sort((a: any, b: any) => (a.price || 0) - (b.price || 0));
+    } else if (sort === "price-high") {
+      allProducts.sort((a: any, b: any) => (b.price || 0) - (a.price || 0));
+    } else if (sort === "newest") {
+      allProducts.sort((a: any, b: any) => (b.id || 0) - (a.id || 0));
+    }
 
-    const dbProducts = await Product.find(query).sort(sortOption).lean();
-
-    // Always prevent stale browser / CDN caching so deletions reflect instantly
     res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
     return res.status(200).json({
       success: true,
-      count: dbProducts.length,
-      data: dbProducts,
+      count: allProducts.length,
+      data: allProducts,
     });
   } catch (dbErr) {
-    console.warn("MongoDB fetch failed in /api/products, falling back:", dbErr);
+    console.warn("MySQL fetch failed in /api/products, falling back:", dbErr);
   }
 
   // Fallback to static list ONLY if database is completely unreachable

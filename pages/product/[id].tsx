@@ -10,8 +10,7 @@ import { useProduct } from "../../src/hooks/useApi";
 import { WhatsAppIcon } from "../../src/components/WhatsAppButton";
 import { FALLBACK_PRODUCTS } from "../../src/data/fallbackProducts";
 import { Product as ProductType } from "../../src/types";
-import dbConnect from "../../src/lib/dbConnect";
-import ProductModel from "../../src/models/Product";
+import { UnifiedProduct } from "../../src/lib/unifiedDb";
 import {
   Star,
   Tag,
@@ -779,19 +778,12 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   let initialProduct: any = null;
 
   try {
-    await dbConnect();
-    const matchConditions: any[] = [];
-    if (!isNaN(numId)) matchConditions.push({ id: numId });
-    if (id.match(/^[0-9a-fA-F]{24}$/)) matchConditions.push({ _id: id });
-
-    if (matchConditions.length > 0) {
-      const dbProduct = await ProductModel.findOne({ $or: matchConditions }).lean();
-      if (dbProduct) {
-        initialProduct = JSON.parse(JSON.stringify(dbProduct));
-      }
+    const dbProduct = await UnifiedProduct.findById(id);
+    if (dbProduct) {
+      initialProduct = JSON.parse(JSON.stringify(dbProduct));
     }
   } catch (dbErr) {
-    console.warn("MongoDB fetch in getStaticProps failed, falling back:", dbErr);
+    console.warn("MySQL fetch in getStaticProps failed, falling back:", dbErr);
   }
 
   // Fallback if not yet in MongoDB or offline

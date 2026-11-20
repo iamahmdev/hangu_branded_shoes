@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../../src/lib/dbConnect";
-import Order from "../../../../src/models/Order";
+import { UnifiedOrder } from "../../../../src/lib/unifiedDb";
 import { verifyToken } from "../../../../src/lib/jwt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -26,17 +25,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ success: false, message: "Order ID is required" });
     }
 
-    const { status, courierName, trackingNumber, deliveryNote, note } = req.body || {};
+    const { status, note } = req.body || {};
 
-    await dbConnect();
-    const idStr = String(id);
-    const order = await Order.findOne({
-      $or: [
-        { orderId: idStr },
-        { _id: idStr.match(/^[0-9a-fA-F]{24}$/) ? idStr : null },
-      ],
-    });
-
+    const order = await UnifiedOrder.findByOrderId(String(id));
     if (!order) {
       return res.status(404).json({ success: false, message: "Order not found" });
     }
@@ -48,36 +39,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     ) {
       return res.status(400).json({
         success: false,
-        message:
-          "Order cannot be confirmed until payment status is marked as 'paid'. Please verify customer JazzCash transfer first.",
+        message: "Please verify online payment before confirming this order.",
       });
     }
 
-    if (status) {
-      order.status = status;
-      if (status === "delivered" && (order.paymentMethod === "cod" || order.paymentStatus === "cod_pending")) {
-        order.paymentStatus = "paid";
-        (order as any).paidAt = new Date();
-      }
-      order.timeline.push({
-        status,
-        timestamp: new Date(),
-        note: note || (status === "delivered" ? "Delivered to customer and payment collected." : `Status updated to ${status}`),
-      });
-    }
-
-    if (courierName !== undefined) order.courierName = courierName;
-    if (trackingNumber !== undefined) order.trackingNumber = trackingNumber;
-    if (deliveryNote !== undefined) order.deliveryNote = deliveryNote;
-
-    await order.save();
+    const statusNote = note || `Order status updated to ${status}`;
+    const updated = await UnifiedOrder.updateStatus(order.orderId, status, statusNote);
 
     return res.status(200).json({
       success: true,
-      data: order,
-      message: "Order status updated successfully",
+      data: updated,
+      message: `Order status changed to ${status}`,
     });
-  } catch (error: any) {
-    return res.status(500).json({ success: false, message: error.message || "Failed to update order" });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: err.message || "Failed to update order status" });
   }
 }

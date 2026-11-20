@@ -1,16 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../src/lib/dbConnect";
-import Order from "../../../src/models/Order";
+import { UnifiedOrder } from "../../../src/lib/unifiedDb";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    await dbConnect();
-    const orders = await Order.find({ status: { $ne: "cancelled" } })
-      .sort({ createdAt: -1 })
-      .limit(10)
-      .lean();
+    const orders = await UnifiedOrder.findAll(15);
+    const validOrders = orders.filter((o: any) => o.status !== "cancelled");
 
-    const recentSales = orders.flatMap((o: any) =>
+    const recentSales = validOrders.flatMap((o: any) =>
       (o.items || []).map((item: any, idx: number) => ({
         id: `${o.orderId}-${idx}`,
         customerName: o.customer?.name || "Customer",

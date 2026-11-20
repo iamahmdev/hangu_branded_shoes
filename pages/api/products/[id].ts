@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../src/lib/dbConnect";
-import Product from "../../../src/models/Product";
-import Setting from "../../../src/models/Setting";
+import { UnifiedProduct, UnifiedSetting } from "../../../src/lib/unifiedDb";
 import { FALLBACK_PRODUCTS } from "../../../src/data/fallbackProducts";
 import { verifyToken } from "../../../src/lib/jwt";
 
@@ -22,19 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(401).json({ success: false, message: "Invalid or expired token" });
       }
 
-      await dbConnect();
-      const matchConditions: any[] = [];
-      if (!isNaN(numId)) matchConditions.push({ id: numId });
-      if (typeof id === "string" && id.match(/^[0-9a-fA-F]{24}$/)) matchConditions.push({ _id: id });
-      if (matchConditions.length === 0) {
-        return res.status(400).json({ success: false, message: "Invalid product ID format." });
-      }
-
-      const updated = await Product.findOneAndUpdate(
-        { $or: matchConditions },
-        { $set: req.body },
-        { new: true }
-      );
+      const targetId = !isNaN(numId) ? numId : String(id);
+      const updated = await UnifiedProduct.update(targetId, req.body);
 
       if (!updated) {
         return res.status(404).json({ success: false, message: "Product not found to update" });
@@ -59,68 +46,49 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(401).json({ success: false, message: "Invalid or expired token" });
       }
 
-      await dbConnect();
-      const matchConditions: any[] = [];
-      if (!isNaN(numId)) matchConditions.push({ id: numId });
-      if (typeof id === "string" && id.match(/^[0-9a-fA-F]{24}$/)) matchConditions.push({ _id: id });
+      const targetId = !isNaN(numId) ? numId : String(id);
+      await UnifiedProduct.delete(targetId);
 
-      if (matchConditions.length > 0) {
-        await Product.deleteMany({ $or: matchConditions });
+      // Add to deletedProductIds so fallback list also excludes it permanently
+      const setting = await UnifiedSetting.get();
+      const currentDeleted = setting?.deletedProductIds || [];
+      if (!currentDeleted.includes(String(id))) {
+        await UnifiedSetting.update({
+          deletedProductIds: [...currentDeleted, String(id)],
+        });
       }
 
-      // Record permanently in Setting so fallback can never resurrect it
-      const idsToRecord: (string | number)[] = [String(id)];
-      if (!isNaN(numId)) idsToRecord.push(numId);
-
-      await Setting.findOneAndUpdate(
-        {},
-        { $addToSet: { deletedProductIds: { $each: idsToRecord } } },
-        { upsert: true }
-      );
-
-      return res.status(200).json({ success: true, message: "Product deleted successfully" });
+      return res.status(200).json({ success: true, message: `Product #${id} deleted successfully` });
     } catch (err: any) {
       return res.status(500).json({ success: false, message: err.message || "Failed to delete product" });
     }
   }
 
   if (req.method !== "GET") {
-    res.setHeader("Allow", ["GET", "PUT", "DELETE", "PATCH"]);
+    res.setHeader("Allow", ["GET", "PUT", "PATCH", "DELETE"]);
     return res.status(405).json({ success: false, message: `Method ${req.method} Not Allowed` });
   }
 
   try {
-    await dbConnect();
-    const setting = await Setting.findOne().select("deletedProductIds").lean();
-    const deletedIds = (setting?.deletedProductIds || []).map(String);
+    const targetId = !isNaN(numId) ? numId : String(id);
+    const product = await UnifiedProduct.findById(targetId);
 
-    if (deletedIds.includes(String(id)) || (!isNaN(numId) && deletedIds.includes(String(numId)))) {
-      return res.status(404).json({ success: false, message: "Product not found" });
-    }
-
-    const dbProduct = await Product.findOne({
-      $or: [{ id: numId }, { _id: typeof id === "string" && id.match(/^[0-9a-fA-F]{24}$/) ? id : null }],
-    }).lean();
-
-    if (dbProduct) {
-      res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-      return res.status(200).json({
-        success: true,
-        data: dbProduct,
-      });
+    if (product) {
+      res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+      return res.status(200).json({ success: true, data: product });
     }
   } catch (dbErr) {
-    console.warn("MongoDB fetch failed in /api/products/[id], falling back:", dbErr);
+    console.warn("MySQL fetch failed in /api/products/[id], falling back:", dbErr);
   }
 
-  const fallback = FALLBACK_PRODUCTS.find((p) => p.id === numId);
-  if (!fallback) {
-    return res.status(404).json({ success: false, message: "Product not found" });
+  // Fallback to static data if not found in MySQL
+  if (!isNaN(numId)) {
+    const fallback = FALLBACK_PRODUCTS.find((p) => p.id === numId);
+    if (fallback) {
+      res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+      return res.status(200).json({ success: true, data: fallback });
+    }
   }
 
-  res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-  return res.status(200).json({
-    success: true,
-    data: fallback,
-  });
+  return res.status(404).json({ success: false, message: "Product not found" });
 }

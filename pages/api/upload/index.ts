@@ -2,9 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 import fs from "fs";
 import sharp from "sharp";
-import mongoose from "mongoose";
-import dbConnect from "../../../src/lib/dbConnect";
-import UploadedImage from "../../../src/models/UploadedImage";
+import crypto from "crypto";
+import { UnifiedImage } from "../../../src/lib/unifiedDb";
 import { verifyToken } from "../../../src/lib/jwt";
 
 export const config = {
@@ -50,31 +49,32 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         // Ignore temp cleanup errors
       }
 
-      // Automatically convert iPhone HEIC/HEIF images to JPEG so browsers can display them
+      // Check if uploaded file is HEIC/HEIF
       const originalName = (file.originalFilename || "").toLowerCase();
       const isHeic =
         originalName.endsWith(".heic") ||
         originalName.endsWith(".heif") ||
-        file.mimetype?.includes("heic") ||
-        file.mimetype?.includes("heif");
+        file.mimetype === "image/heic" ||
+        file.mimetype === "image/heif" ||
+        (fileBuffer.length > 12 && fileBuffer.toString("ascii", 4, 12).includes("ftypheic"));
 
       if (isHeic) {
         try {
-          const heicConvert = require("heic-convert");
-          const converted = await heicConvert({
+          const convert = (await import("heic-convert")).default;
+          const jpegBuffer = await convert({
             buffer: fileBuffer,
             format: "JPEG",
             quality: 0.9,
           });
-          fileBuffer = Buffer.from(converted);
-        } catch (heicErr) {
-          console.error("HEIC conversion failed:", heicErr);
+          fileBuffer = Buffer.from(jpegBuffer);
+        } catch (heicErr: any) {
+          console.warn("HEIC pre-conversion warning:", heicErr.message);
         }
       }
 
-      // Optimize image with sharp to high-performance WebP
       let optimizedBuffer: Buffer;
       let contentType = "image/webp";
+
       try {
         optimizedBuffer = await sharp(fileBuffer)
           .rotate() // auto-orient based on EXIF
@@ -87,20 +87,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         contentType = file.mimetype || "image/jpeg";
       }
 
-      // Save directly to MongoDB
-      await dbConnect();
-      const saved = await UploadedImage.create({
-        filename: file.originalFilename || `shoe_${Date.now()}.webp`,
+      // Save directly to MySQL uploaded_images table
+      const newImageId = crypto.randomBytes(12).toString("hex");
+      await UnifiedImage.save(
+        newImageId,
+        file.originalFilename || `shoe_${Date.now()}.webp`,
         contentType,
-        data: optimizedBuffer,
-        size: optimizedBuffer.length,
-      });
+        optimizedBuffer
+      );
 
       return res.status(200).json({
         success: true,
         data: {
-          url: `/api/images/${saved._id}`,
-          publicId: String(saved._id),
+          url: `/api/images/${newImageId}`,
+          publicId: newImageId,
           format: "webp",
           bytes: optimizedBuffer.length,
         },
@@ -131,11 +131,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-      await dbConnect();
       const cleanId = String(publicId).replace(/\.[a-zA-Z0-9]+$/, "");
-      if (mongoose.Types.ObjectId.isValid(cleanId)) {
-        await UploadedImage.findByIdAndDelete(cleanId);
-      }
+      await UnifiedImage.delete(cleanId);
       return res.status(200).json({
         success: true,
         message: "Image deleted successfully",

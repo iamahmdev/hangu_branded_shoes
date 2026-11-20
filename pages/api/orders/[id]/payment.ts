@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../../src/lib/dbConnect";
-import Order from "../../../../src/models/Order";
+import { UnifiedOrder } from "../../../../src/lib/unifiedDb";
 import { verifyToken } from "../../../../src/lib/jwt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -22,44 +21,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const { id } = req.query;
-    const { paymentStatus, note } = req.body || {};
+    const { paymentStatus } = req.body || {};
 
     if (!paymentStatus) {
       return res.status(400).json({ success: false, message: "paymentStatus is required" });
     }
 
-    await dbConnect();
-    const idStr = String(id);
-    const order = await Order.findOne({
-      $or: [
-        { orderId: idStr },
-        { _id: idStr.match(/^[0-9a-fA-F]{24}$/) ? idStr : null },
-      ],
-    });
-
+    const order = await UnifiedOrder.findByOrderId(String(id));
     if (!order) {
       return res.status(404).json({ success: false, message: "Order not found" });
     }
 
-    order.paymentStatus = paymentStatus;
-    if (paymentStatus === "paid") {
-      (order as any).paidAt = new Date();
-    }
-
-    order.timeline.push({
-      status: order.status,
-      timestamp: new Date(),
-      note: note || `Payment marked as ${paymentStatus}`,
-    });
-
-    await order.save();
+    const updated = await UnifiedOrder.updatePaymentStatus(order.orderId, paymentStatus);
 
     return res.status(200).json({
       success: true,
-      data: order,
+      data: updated,
       message: `Payment status updated to ${paymentStatus}`,
     });
-  } catch (error: any) {
-    return res.status(500).json({ success: false, message: error.message || "Failed to update payment" });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: err.message || "Failed to update payment status" });
   }
 }

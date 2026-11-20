@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
-import dbConnect from "../../../src/lib/dbConnect";
-import { Admin } from "../../../src/models/Admin";
+import { UnifiedAdmin } from "../../../src/lib/unifiedDb";
 import { verifyToken } from "../../../src/lib/jwt";
 import { sendPasswordResetAlert } from "../../../src/lib/email";
 
@@ -32,8 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ success: false, message: "New password must be at least 6 characters." });
     }
 
-    await dbConnect();
-    const admin = await Admin.findById(decoded.id);
+    const admin = await UnifiedAdmin.findByUsername("admin");
     if (!admin) {
       return res.status(404).json({ success: false, message: "Admin not found." });
     }
@@ -44,19 +42,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const salt = await bcrypt.genSalt(10);
-    admin.passwordHash = await bcrypt.hash(newPassword, salt);
-    await admin.save();
+    const passwordHash = await bcrypt.hash(newPassword, salt);
+    await UnifiedAdmin.updatePassword(admin.id, passwordHash);
 
     // Send professional Hostinger SMTP email alert to admin
     const targetEmail = admin.email || process.env.ADMIN_EMAIL || "info@hangubrandedshoes.com";
     try {
       await sendPasswordResetAlert(targetEmail, admin.username || "Admin", "CHANGED");
     } catch (mailErr: any) {
-      console.warn("SMTP email notification warning:", mailErr.message);
+      console.warn("Could not dispatch email notification (non-fatal):", mailErr.message);
     }
 
-    return res.status(200).json({ success: true, message: "Password changed successfully! A confirmation email has been sent to " + targetEmail + "." });
+    return res.status(200).json({ success: true, message: "Password updated successfully" });
   } catch (error: any) {
-    return res.status(500).json({ success: false, message: error.message || "Failed to change password" });
+    return res.status(500).json({ success: false, message: error.message || "Failed to update password" });
   }
 }

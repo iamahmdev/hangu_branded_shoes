@@ -1,7 +1,6 @@
 import { GetServerSideProps } from "next";
 import { FALLBACK_PRODUCTS } from "../src/data/fallbackProducts";
-import dbConnect from "../src/lib/dbConnect";
-import Product from "../src/models/Product";
+import { UnifiedProduct } from "../src/lib/unifiedDb";
 
 function generateSiteMap(
   products: Array<{ id: number | string; updatedAt?: string }>,
@@ -52,10 +51,7 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
   let products: Array<{ id: number | string; updatedAt?: string }> = FALLBACK_PRODUCTS;
 
   try {
-    await dbConnect();
-    const liveProducts = await Product.find({ isActive: { $ne: false } })
-      .select("id updatedAt")
-      .lean();
+    const liveProducts = await UnifiedProduct.findAll(true);
     if (liveProducts && liveProducts.length > 0) {
       products = liveProducts.map((p: any) => ({
         id: p.id,
@@ -81,4 +77,3 @@ export const getServerSideProps: GetServerSideProps = async ({ res }) => {
 export default function SiteMap() {
   return null;
 }
-

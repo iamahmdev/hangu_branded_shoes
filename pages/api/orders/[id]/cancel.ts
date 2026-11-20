@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../../src/lib/dbConnect";
-import Order from "../../../../src/models/Order";
-import Product from "../../../../src/models/Product";
+import { UnifiedOrder, UnifiedProduct } from "../../../../src/lib/unifiedDb";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "PATCH" && req.method !== "POST") {
@@ -10,8 +8,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    await dbConnect();
-
     const { id } = req.query;
     const { reason } = req.body || {};
 
@@ -19,9 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ success: false, message: "Order ID is required." });
     }
 
-    const order = await Order.findOne({
-      $or: [{ orderId: id }, { _id: id.match(/^[0-9a-fA-F]{24}$/) ? id : null }],
-    });
+    const order = await UnifiedOrder.findByOrderId(id);
 
     if (!order) {
       return res.status(404).json({ success: false, message: "Order not found." });
@@ -42,34 +36,27 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Restore stock for all items
-    for (const item of order.items) {
-      if (item.productId) {
-        await Product.updateOne({ id: Number(item.productId) }, { $inc: { stock: Number(item.quantity) } });
+    if (Array.isArray(order.items)) {
+      for (const item of order.items) {
+        if (item.productId) {
+          const prod = await UnifiedProduct.findById(item.productId);
+          if (prod) {
+            await UnifiedProduct.update(item.productId, {
+              stock: (prod.stock || 0) + Number(item.quantity || 1),
+            });
+          }
+        }
       }
     }
 
-    order.status = "cancelled";
-    order.cancelledAt = new Date();
-    order.cancelReason = reason || "Cancelled by customer/admin";
-    order.timeline = order.timeline || [];
-    order.timeline.push({
-      status: "cancelled",
-      timestamp: new Date(),
-      note: reason || "Cancelled and inventory stock restored",
-    });
-
-    await order.save();
+    const note = reason ? `Customer cancelled: ${reason}` : "Cancelled by customer";
+    await UnifiedOrder.updateStatus(order.orderId, "cancelled", note);
 
     return res.status(200).json({
       success: true,
-      data: order,
-      message: "Order cancelled successfully and stock restored.",
+      message: "Your order has been cancelled successfully.",
     });
-  } catch (error: any) {
-    console.error("Order cancel error:", error);
-    return res.status(500).json({
-      success: false,
-      message: error.message || "Failed to cancel order",
-    });
+  } catch (err: any) {
+    return res.status(500).json({ success: false, message: err.message || "Failed to cancel order" });
   }
 }

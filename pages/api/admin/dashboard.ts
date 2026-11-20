@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../src/lib/dbConnect";
-import Order from "../../../src/models/Order";
-import Product from "../../../src/models/Product";
+import { UnifiedOrder, UnifiedProduct } from "../../../src/lib/unifiedDb";
 import { verifyToken } from "../../../src/lib/jwt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -22,9 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ success: false, message: "Invalid or expired token" });
     }
 
-    await dbConnect();
-    const orders = await Order.find().lean();
-    const products = await Product.find().lean();
+    const orders = await UnifiedOrder.findAll(500);
+    const products = await UnifiedProduct.findAll(false);
 
     const deliveredOrders = orders.filter((o: any) => o.status === "delivered").length;
     const pendingOrders = orders.filter(
@@ -55,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const todayOrders = orders.filter((o: any) => new Date(o.createdAt) >= startOfToday).length;
 
     const lowStockItems = products
-      .filter((p: any) => p.stock <= 10)
+      .filter((p: any) => (p.stock || 0) <= 10)
       .map((p: any) => ({
         id: p.id,
         name: p.name,
@@ -67,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }));
     const lowStockCount = lowStockItems.length;
 
-    const recentOrders = await Order.find().sort({ createdAt: -1 }).limit(6).lean();
+    const recentOrders = orders.slice(0, 6);
 
     return res.status(200).json({
       success: true,

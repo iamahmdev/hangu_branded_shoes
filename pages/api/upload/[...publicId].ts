@@ -1,7 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import mongoose from "mongoose";
-import dbConnect from "../../../src/lib/dbConnect";
-import UploadedImage from "../../../src/models/UploadedImage";
+import { UnifiedImage } from "../../../src/lib/unifiedDb";
 import { verifyToken } from "../../../src/lib/jwt";
 
 export const config = {
@@ -16,13 +14,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const cleanId = rawId.replace(/\.[a-zA-Z0-9]+$/, "");
 
   if (req.method === "GET") {
-    if (!cleanId || !mongoose.Types.ObjectId.isValid(cleanId)) {
+    if (!cleanId) {
       return res.status(404).json({ success: false, message: "Invalid image ID" });
     }
 
     try {
-      await dbConnect();
-      const imageDoc = await UploadedImage.findById(cleanId).lean();
+      const imageDoc = await UnifiedImage.findById(cleanId);
 
       if (!imageDoc || !imageDoc.data) {
         return res.status(404).json({ success: false, message: "Image not found" });
@@ -58,19 +55,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     try {
-      await dbConnect();
-      if (mongoose.Types.ObjectId.isValid(cleanId)) {
-        await UploadedImage.findByIdAndDelete(cleanId);
-      }
-      return res.status(200).json({
-        success: true,
-        message: "Image deleted successfully",
-      });
+      await UnifiedImage.delete(cleanId);
+      return res.status(200).json({ success: true, message: "Image deleted successfully" });
     } catch (err: any) {
-      return res.status(500).json({
-        success: false,
-        message: err.message || "Failed to delete image.",
-      });
+      return res.status(500).json({ success: false, message: err.message || "Failed to delete image." });
     }
   }
 

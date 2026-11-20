@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../src/lib/dbConnect";
-import { Admin } from "../../../src/models/Admin";
+import { UnifiedAdmin } from "../../../src/lib/unifiedDb";
 import { verifyToken } from "../../../src/lib/jwt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -21,8 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ success: false, message: "Invalid or expired token" });
     }
 
-    await dbConnect();
-    const admin = await Admin.findById(decoded.id).select("-passwordHash -password");
+    const admin = await UnifiedAdmin.findByUsername("admin");
     if (!admin) {
       return res.status(404).json({ success: false, message: "Admin not found" });
     }
@@ -30,7 +28,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(200).json({
       success: true,
       admin: {
-        id: admin._id,
+        id: admin.id,
         username: admin.username,
         email: admin.email,
         name: admin.name,

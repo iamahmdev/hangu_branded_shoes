@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../../src/lib/dbConnect";
-import Order from "../../../../src/models/Order";
+import { UnifiedOrder } from "../../../../src/lib/unifiedDb";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { id } = req.query;
@@ -8,20 +7,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ success: false, message: "Order ID or phone number is required" });
   }
 
-  const clean = id.trim();
+  const clean = id.trim().toLowerCase();
 
   try {
-    await dbConnect();
-    // Search by orderId or customer phone number
-    const order = await Order.findOne({
-      $or: [
-        { orderId: clean },
-        { orderId: clean.toUpperCase() },
-        { "customer.phone": clean },
-        { "customer.phone": clean.replace(/^0/, "92") },
-        { "customer.phone": clean.replace(/^92/, "0") },
-      ],
-    }).lean();
+    const orders = await UnifiedOrder.findAll(200);
+    const order = orders.find((o: any) => {
+      const oId = (o.orderId || "").toLowerCase();
+      const phone = (o.customer?.phone || "").toLowerCase();
+      const cleanPhone = phone.replace(/^0/, "92");
+      const zeroPhone = phone.replace(/^92/, "0");
+      return (
+        oId === clean ||
+        phone === clean ||
+        cleanPhone === clean ||
+        zeroPhone === clean
+      );
+    });
 
     if (!order) {
       return res.status(404).json({

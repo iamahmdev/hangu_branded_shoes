@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../../src/lib/dbConnect";
-import Order from "../../../../src/models/Order";
+import { UnifiedOrder } from "../../../../src/lib/unifiedDb";
 import { verifyToken } from "../../../../src/lib/jwt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -28,36 +27,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const { note } = req.body || {};
 
-    await dbConnect();
-    const idStr = String(id);
-    const order = await Order.findOne({
-      $or: [
-        { orderId: idStr },
-        { _id: idStr.match(/^[0-9a-fA-F]{24}$/) ? idStr : null },
-      ],
-    });
-
+    const order = await UnifiedOrder.findByOrderId(String(id));
     if (!order) {
       return res.status(404).json({ success: false, message: "Order not found" });
     }
 
-    order.paymentStatus = "paid";
-    order.status = "delivered";
-    (order as any).paidAt = new Date();
-    order.timeline.push({
-      status: "delivered",
-      timestamp: new Date(),
-      note: note || "Cash collected from customer upon delivery. Order completed.",
-    });
-
-    await order.save();
+    await UnifiedOrder.updatePaymentStatus(order.orderId, "paid");
+    await UnifiedOrder.updateStatus(
+      order.orderId,
+      "delivered",
+      note || "Cash collected from customer upon delivery. Order completed."
+    );
 
     return res.status(200).json({
       success: true,
-      data: order,
-      message: "Cash marked as collected and order marked as delivered.",
+      message: `Cash collected and order #${order.orderId} marked as Delivered!`,
     });
   } catch (err: any) {
-    return res.status(500).json({ success: false, message: err.message || "Failed to mark cash collected" });
+    return res.status(500).json({ success: false, message: err.message || "Failed to mark cash as collected" });
   }
 }

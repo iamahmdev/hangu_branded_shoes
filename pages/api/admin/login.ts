@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../../src/lib/dbConnect";
-import { Admin } from "../../../src/models/Admin";
+import { UnifiedAdmin } from "../../../src/lib/unifiedDb";
 import { generateToken } from "../../../src/lib/jwt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,7 +9,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    await dbConnect();
     const { usernameOrEmail, username, email, password } = req.body || {};
     const identifier = (usernameOrEmail || username || email || "").trim().toLowerCase();
     const cleanPassword = (password || "").trim();
@@ -19,24 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(400).json({ success: false, message: "Username/email and password are required." });
     }
 
-    const isAdminAlias =
-      identifier === "admin" ||
-      identifier === "hangu_admin" ||
-      identifier === "admin@hangubrandedshoes.com";
-
-    const admin = await Admin.findOne({
-      $or: [
-        { username: identifier },
-        { email: identifier },
-        ...(isAdminAlias
-          ? [
-              { username: "hangu_admin" },
-              { username: "admin" },
-              { email: "admin@hangubrandedshoes.com" },
-            ]
-          : []),
-      ],
-    });
+    const admin = await UnifiedAdmin.findByUsername(identifier);
 
     if (!admin) {
       return res.status(401).json({ success: false, message: "Invalid credentials." });
@@ -51,22 +32,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ success: false, message: "Invalid credentials." });
     }
 
-    admin.lastLogin = new Date();
-    await admin.save();
+    await UnifiedAdmin.updateLastLogin(admin.id);
 
-    const token = generateToken(admin._id.toString(), admin.role);
+    const token = generateToken(String(admin.id), admin.role);
 
     return res.status(200).json({
       success: true,
       token,
       admin: {
-        id: admin._id,
+        id: admin.id,
         username: admin.username,
         email: admin.email,
         name: admin.name,
         role: admin.role,
         permissions: admin.permissions,
-        lastLogin: admin.lastLogin,
+        lastLogin: new Date(),
       },
       message: "Logged in successfully",
     });

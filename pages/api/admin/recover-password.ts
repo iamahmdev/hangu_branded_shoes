@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
-import dbConnect from "../../../src/lib/dbConnect";
-import { Admin } from "../../../src/models/Admin";
+import { UnifiedAdmin } from "../../../src/lib/unifiedDb";
 import { sendPasswordResetAlert } from "../../../src/lib/email";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -25,37 +24,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(401).json({ success: false, message: "Invalid Store Recovery Key. Access denied." });
     }
 
-    await dbConnect();
-    const admin = await Admin.findOne({
-      $or: [
-        { email: email.trim().toLowerCase() },
-        { username: email.trim().toLowerCase() },
-      ],
-    });
+    const admin = await UnifiedAdmin.findByUsername(email.trim().toLowerCase());
 
     if (!admin) {
       return res.status(404).json({ success: false, message: "No admin account found matching that email or username." });
     }
 
     const salt = await bcrypt.genSalt(10);
-    admin.passwordHash = await bcrypt.hash(newPassword, salt);
-    admin.resetPasswordToken = undefined;
-    admin.resetPasswordExpires = undefined;
-    await admin.save();
+    const passwordHash = await bcrypt.hash(newPassword, salt);
+    await UnifiedAdmin.updatePassword(admin.id, passwordHash);
 
     // Send professional Hostinger SMTP email alert to admin
     const targetEmail = admin.email || process.env.ADMIN_EMAIL || "info@hangubrandedshoes.com";
     try {
       await sendPasswordResetAlert(targetEmail, admin.username || "Admin", "RECOVERED");
     } catch (mailErr: any) {
-      console.warn("SMTP email notification warning:", mailErr.message);
+      console.warn("Could not dispatch email notification (non-fatal):", mailErr.message);
     }
 
     return res.status(200).json({
       success: true,
-      message: "Admin password successfully reset! A confirmation email has been sent to " + targetEmail + ".",
+      message: "Password has been successfully reset. You can now login with your new password.",
     });
   } catch (error: any) {
-    return res.status(500).json({ success: false, message: error.message || "Password recovery failed" });
+    return res.status(500).json({ success: false, message: error.message || "Failed to reset password" });
   }
 }

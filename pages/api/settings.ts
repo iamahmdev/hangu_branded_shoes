@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import dbConnect from "../../src/lib/dbConnect";
-import Setting from "../../src/models/Setting";
+import { UnifiedSetting } from "../../src/lib/unifiedDb";
 import { verifyToken } from "../../src/lib/jwt";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -17,12 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(401).json({ success: false, message: "Invalid or expired token" });
       }
 
-      await dbConnect();
-      const updated = await Setting.findOneAndUpdate(
-        {},
-        { $set: req.body },
-        { new: true, upsert: true }
-      );
+      const updated = await UnifiedSetting.update(req.body);
 
       return res.status(200).json({ success: true, data: updated, message: "Settings updated successfully" });
     } catch (err: any) {
@@ -32,8 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   if (req.method === "GET") {
     try {
-      await dbConnect();
-      const settings = await Setting.findOne().lean();
+      const settings = await UnifiedSetting.get();
       if (settings) {
         return res.status(200).json({ success: true, data: settings });
       }
@@ -48,10 +41,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         whatsappNumber: "923333147691",
         address: "Hangu tall road tahir markit hangu brand shoes 👟",
         shopTiming: "8:00 AM to 5:00 PM",
+        phone: "+92 333 3147691",
+        email: "info@hangubrandedshoes.com",
+        shippingFee: 250,
         freeShippingThreshold: 5000,
-        standardShippingFee: 250,
-        heroSubtitle: "Handcrafted Luxury Footwear",
-        currency: "PKR",
+        announcementText: "🚚 Free delivery on orders over Rs. 5,000 across Pakistan!",
+        isStoreOpen: true,
+        jazzcashNumber: "03275430305",
+        jazzcashTitle: "Muhammad Atif Ibrahim",
+        easypaisaNumber: "",
+        easypaisaTitle: "",
+        enableCod: true,
+        codFee: 0,
       },
     });
   }
@@ -59,4 +60,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   res.setHeader("Allow", ["GET", "PUT", "PATCH"]);
   return res.status(405).json({ success: false, message: `Method ${req.method} Not Allowed` });
 }
-

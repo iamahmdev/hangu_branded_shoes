@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import formidable from "formidable";
 import fs from "fs";
+import path from "path";
 import sharp from "sharp";
 import crypto from "crypto";
 import { UnifiedImage } from "../../../src/lib/unifiedDb";
@@ -87,8 +88,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         contentType = file.mimetype || "image/jpeg";
       }
 
-      // Save directly to MySQL uploaded_images table
       const newImageId = crypto.randomBytes(12).toString("hex");
+
+      // 1. Save to Hostinger Disk Storage (public/uploads) -> unlimited 100GB+ space
+      try {
+        const uploadsDir = path.join(process.cwd(), "public", "uploads");
+        if (!fs.existsSync(uploadsDir)) {
+          fs.mkdirSync(uploadsDir, { recursive: true });
+        }
+        const ext = contentType === "image/webp" ? ".webp" : ".jpg";
+        fs.writeFileSync(path.join(uploadsDir, `${newImageId}${ext}`), optimizedBuffer);
+      } catch (diskErr: any) {
+        console.warn("Hostinger disk write warning:", diskErr.message);
+      }
+
+      // 2. Also save to MySQL database for guaranteed redundancy
       await UnifiedImage.save(
         newImageId,
         file.originalFilename || `shoe_${Date.now()}.webp`,
@@ -132,7 +146,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     try {
       const cleanId = String(publicId).replace(/\.[a-zA-Z0-9]+$/, "");
+      
+      // Delete from disk if present
+      try {
+        const uploadsDir = path.join(process.cwd(), "public", "uploads");
+        const candidates = [`${cleanId}.webp`, `${cleanId}.jpg`, `${cleanId}.jpeg`, `${cleanId}.png`];
+        for (const c of candidates) {
+          const filePath = path.join(uploadsDir, c);
+          if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+          }
+        }
+      } catch {}
+
+      // Delete from MySQL
       await UnifiedImage.delete(cleanId);
+      
       return res.status(200).json({
         success: true,
         message: "Image deleted successfully",

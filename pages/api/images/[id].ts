@@ -1,4 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
+import fs from "fs";
+import path from "path";
 import { UnifiedImage } from "../../../src/lib/unifiedDb";
 
 export const config = {
@@ -23,6 +25,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Strip optional file extension (e.g., .webp, .jpg)
   const cleanId = rawId.replace(/\.[a-zA-Z0-9]+$/, "");
 
+  // 1. FAST DISK CACHE: Check Hostinger Disk (public/uploads) first
+  try {
+    const uploadsDir = path.join(process.cwd(), "public", "uploads");
+    const candidates = [
+      { file: `${cleanId}.webp`, mime: "image/webp" },
+      { file: `${cleanId}.jpg`, mime: "image/jpeg" },
+      { file: `${cleanId}.jpeg`, mime: "image/jpeg" },
+      { file: `${cleanId}.png`, mime: "image/png" },
+    ];
+
+    for (const c of candidates) {
+      const diskPath = path.join(uploadsDir, c.file);
+      if (fs.existsSync(diskPath)) {
+        const fileBuf = fs.readFileSync(diskPath);
+        res.setHeader("Content-Type", c.mime);
+        res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        res.setHeader("Content-Length", fileBuf.length);
+        return res.status(200).send(fileBuf);
+      }
+    }
+  } catch (diskErr) {
+    // If disk check fails, safely proceed to MySQL lookup
+  }
+
+  // 2. MySQL DATABASE FALLBACK: If not yet on disk, fetch from MySQL and cache to disk
   try {
     const imageDoc = await UnifiedImage.findById(cleanId);
 
@@ -30,13 +57,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ success: false, message: "Image not found" });
     }
 
-    const imageBuffer = Buffer.isBuffer(imageDoc.data)
+    let imageBuffer = Buffer.isBuffer(imageDoc.data)
       ? imageDoc.data
       : Buffer.from((imageDoc.data as any).buffer || imageDoc.data);
 
+    let contentType = imageDoc.contentType || "image/webp";
+
     // Dynamic HEIC conversion guard
     const isHeic =
-      (imageDoc.contentType && imageDoc.contentType.includes("heic")) ||
+      contentType.includes("heic") ||
       (imageDoc.filename && imageDoc.filename.toLowerCase().endsWith(".heic")) ||
       (imageBuffer.length > 12 && imageBuffer.toString("ascii", 4, 12).includes("ftypheic"));
 
@@ -48,17 +77,24 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           format: "JPEG",
           quality: 0.85,
         });
-        const outBuf = Buffer.from(converted);
-        res.setHeader("Content-Type", "image/jpeg");
-        res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
-        res.setHeader("Content-Length", outBuf.length);
-        return res.status(200).send(outBuf);
+        imageBuffer = Buffer.from(converted);
+        contentType = "image/jpeg";
       } catch (convErr: any) {
         console.warn("Dynamic HEIC conversion failed, sending original buffer:", convErr.message);
       }
     }
 
-    res.setHeader("Content-Type", imageDoc.contentType || "image/webp");
+    // Auto-cache to Hostinger disk for future lightning-fast requests
+    try {
+      const uploadsDir = path.join(process.cwd(), "public", "uploads");
+      if (!fs.existsSync(uploadsDir)) {
+        fs.mkdirSync(uploadsDir, { recursive: true });
+      }
+      const ext = contentType.includes("png") ? ".png" : contentType.includes("jpeg") ? ".jpg" : ".webp";
+      fs.writeFileSync(path.join(uploadsDir, `${cleanId}${ext}`), imageBuffer);
+    } catch {}
+
+    res.setHeader("Content-Type", contentType);
     res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
     res.setHeader("Content-Length", imageBuffer.length);
 

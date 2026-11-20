@@ -7,21 +7,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(400).json({ success: false, message: "Order ID or phone number is required" });
   }
 
-  const clean = id.trim().toLowerCase();
+  const queryRaw = id.trim().toLowerCase();
+  const queryDigits = queryRaw.replace(/\D/g, ""); // extract only numeric digits e.g. 03359348844 -> 3359348844
 
   try {
-    const orders = await UnifiedOrder.findAll(200);
+    const orders = await UnifiedOrder.findAll(500);
     const order = orders.find((o: any) => {
       const oId = (o.orderId || "").toLowerCase();
       const phone = (o.customer?.phone || "").toLowerCase();
-      const cleanPhone = phone.replace(/^0/, "92");
-      const zeroPhone = phone.replace(/^92/, "0");
-      return (
-        oId === clean ||
-        phone === clean ||
-        cleanPhone === clean ||
-        zeroPhone === clean
-      );
+      const phoneDigits = phone.replace(/\D/g, "");
+
+      // 1. Direct Order ID match (full or partial e.g. HBS-261120-84CCE0 or 84CCE0 or numeric id)
+      if (oId === queryRaw || oId.replace(/-/g, "") === queryRaw.replace(/-/g, "") || String(o.id) === queryRaw) {
+        return true;
+      }
+      if (queryRaw.length >= 6 && oId.includes(queryRaw)) {
+        return true;
+      }
+
+      // 2. Flexible phone number matching (e.g. 03359348844, +923359348844, 923359348844)
+      if (queryDigits && queryDigits.length >= 7) {
+        const qLast9 = queryDigits.slice(-9);
+        const pLast9 = phoneDigits.slice(-9);
+        if (qLast9 === pLast9) {
+          return true;
+        }
+      }
+
+      return false;
     });
 
     if (!order) {

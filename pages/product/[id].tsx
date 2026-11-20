@@ -530,18 +530,38 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
                             className={`w-3 h-3 rounded-full border border-black/20 shrink-0 ${
                               c.toLowerCase().includes("black")
                                 ? "bg-black"
+                                : c.toLowerCase().includes("dark brown") || c.toLowerCase().includes("coffee")
+                                ? "bg-[#3e2723]"
                                 : c.toLowerCase().includes("brown")
                                 ? "bg-[#5c3a21]"
-                                : c.toLowerCase().includes("tan")
+                                : c.toLowerCase().includes("tan") || c.toLowerCase().includes("camel")
                                 ? "bg-[#d2b48c]"
-                                : c.toLowerCase().includes("white")
+                                : c.toLowerCase().includes("khaki")
+                                ? "bg-[#c3b091]"
+                                : c.toLowerCase().includes("white") || c.toLowerCase().includes("silver")
                                 ? "bg-white"
-                                : c.toLowerCase().includes("blue") || c.toLowerCase().includes("navy")
+                                : c.toLowerCase().includes("navy") || c.toLowerCase().includes("dark blue")
                                 ? "bg-[#1b2a4a]"
+                                : c.toLowerCase().includes("blue")
+                                ? "bg-[#2563eb]"
+                                : c.toLowerCase().includes("charcoal")
+                                ? "bg-[#374151]"
+                                : c.toLowerCase().includes("light grey")
+                                ? "bg-[#d1d5db]"
                                 : c.toLowerCase().includes("grey") || c.toLowerCase().includes("gray")
                                 ? "bg-zinc-500"
-                                : c.toLowerCase().includes("red") || c.toLowerCase().includes("maroon") || c.toLowerCase().includes("burgundy")
+                                : c.toLowerCase().includes("olive")
+                                ? "bg-[#556b2f]"
+                                : c.toLowerCase().includes("army") || c.toLowerCase().includes("green")
+                                ? "bg-[#2e7d32]"
+                                : c.toLowerCase().includes("burgundy") || c.toLowerCase().includes("maroon")
                                 ? "bg-[#800000]"
+                                : c.toLowerCase().includes("red")
+                                ? "bg-[#dc2626]"
+                                : c.toLowerCase().includes("beige")
+                                ? "bg-[#f5f5dc]"
+                                : c.toLowerCase().includes("yellow") || c.toLowerCase().includes("mustard")
+                                ? "bg-[#eab308]"
                                 : "bg-emerald-600"
                             }`}
                           />

@@ -14,7 +14,30 @@ interface ProductModalProps {
 const CATEGORIES = ["Sneakers", "Formal", "Loafers", "Comfort"];
 const AVAILABLE_SIZES = ["39", "40", "41", "42", "43", "44"];
 const BADGES = ["None", "New", "Hot", "Sale", "Bestseller", "Limited"];
-const PRESET_COLORS = ["Black", "Brown", "Tan", "White", "Navy Blue", "Dark Brown", "Grey", "Beige"];
+const PRESET_COLORS = [
+  "Black",
+  "Brown",
+  "Dark Brown",
+  "Tan",
+  "White",
+  "Navy Blue",
+  "Royal Blue",
+  "Grey",
+  "Light Grey",
+  "Dark Grey",
+  "Beige",
+  "Camel",
+  "Olive Green",
+  "Army Green",
+  "Burgundy",
+  "Maroon",
+  "Red",
+  "Mustard Yellow",
+  "Khaki",
+  "Charcoal",
+  "Coffee",
+  "Silver"
+];
 
 export default function ProductModal({
   isOpen,

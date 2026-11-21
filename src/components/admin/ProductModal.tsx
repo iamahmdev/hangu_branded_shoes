@@ -583,7 +583,7 @@ export default function ProductModal({
               </div>
 
               {/* Selected custom chips & Input */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <input
                   type="text"
                   value={newColorInput}
@@ -595,14 +595,14 @@ export default function ProductModal({
                     }
                   }}
                   placeholder="Type custom color (e.g. Olive, Burgundy) & Enter..."
-                  className="flex-1 bg-white border border-slate-200 rounded-xl px-3 py-2 text-slate-900 text-xs outline-none focus:border-emerald-500"
+                  className="w-full sm:flex-1 bg-white border border-slate-200 rounded-xl px-3.5 py-2.5 text-slate-900 text-xs outline-none focus:border-emerald-500"
                 />
                 <button
                   type="button"
                   onClick={() => handleAddCustomColor()}
-                  className="py-2 px-3 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold text-xs transition-colors shrink-0"
+                  className="py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-black text-white font-bold text-xs transition-colors shrink-0 flex items-center justify-center gap-1 shadow-xs cursor-pointer"
                 >
-                  + Add
+                  + Add Color
                 </button>
               </div>
 

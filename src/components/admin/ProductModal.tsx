@@ -33,6 +33,8 @@ const PRESET_COLORS = [
   "Maroon",
   "Red",
   "Mustard Yellow",
+  "Dark Yellow",
+  "Yellow",
   "Khaki",
   "Charcoal",
   "Coffee",

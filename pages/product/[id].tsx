@@ -560,7 +560,9 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
                                 ? "bg-[#dc2626]"
                                 : c.toLowerCase().includes("beige")
                                 ? "bg-[#f5f5dc]"
-                                : c.toLowerCase().includes("yellow") || c.toLowerCase().includes("mustard")
+                                : c.toLowerCase().includes("dark yellow") || c.toLowerCase().includes("mustard")
+                                ? "bg-[#c89209]"
+                                : c.toLowerCase().includes("yellow")
                                 ? "bg-[#eab308]"
                                 : "bg-emerald-600"
                             }`}

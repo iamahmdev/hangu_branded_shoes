@@ -257,9 +257,7 @@ export default function Home({ initialProducts }: { initialProducts?: Product[] 
 
 export const getStaticProps: GetStaticProps = async () => {
   return {
-    props: {
-      initialProducts: FALLBACK_PRODUCTS,
-    },
-    revalidate: 60,
+    props: {},
+    revalidate: 1,
   };
 };

@@ -22,7 +22,9 @@ export function useProducts(params?: {
   return useQuery<Product[]>({
     queryKey: ["products", params],
     queryFn: () => api.getProducts(params),
-    staleTime: params?.fresh ? 0 : 1000 * 15,
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 }
 

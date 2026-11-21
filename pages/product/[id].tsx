@@ -550,6 +550,8 @@ export default function Product({ initialProduct }: { initialProduct?: ProductTy
                                 ? "bg-[#d1d5db]"
                                 : c.toLowerCase().includes("grey") || c.toLowerCase().includes("gray")
                                 ? "bg-zinc-500"
+                                : c.toLowerCase().includes("dark olive")
+                                ? "bg-[#3b4724]"
                                 : c.toLowerCase().includes("olive")
                                 ? "bg-[#556b2f]"
                                 : c.toLowerCase().includes("army") || c.toLowerCase().includes("green")

@@ -28,6 +28,7 @@ const PRESET_COLORS = [
   "Beige",
   "Camel",
   "Olive Green",
+  "Dark Olive",
   "Army Green",
   "Burgundy",
   "Maroon",

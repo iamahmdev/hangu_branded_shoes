@@ -110,25 +110,11 @@ export interface RecentSale {
 }
 
 export function getLocalDeletedIds(): string[] {
-  if (typeof window === "undefined") return [];
-  try {
-    const raw = localStorage.getItem("hbs_deleted_product_ids");
-    return raw ? JSON.parse(raw) : [];
-  } catch {
-    return [];
-  }
+  return [];
 }
 
 export function addLocalDeletedId(id: string | number) {
-  if (typeof window === "undefined") return;
-  try {
-    const ids = getLocalDeletedIds();
-    const str = String(id);
-    if (!ids.includes(str)) {
-      ids.push(str);
-      localStorage.setItem("hbs_deleted_product_ids", JSON.stringify(ids));
-    }
-  } catch {}
+  // disabled: rely purely on MySQL database deletion
 }
 
 export const api = {
